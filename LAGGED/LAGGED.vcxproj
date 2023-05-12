@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{c4b46334-7fec-4381-b040-e80490feb70c}</ProjectGuid>
+    <RootNamespace>LAGGED</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>Engine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)\Build\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)\Intermediate\$(ProjectName)\$(Platform)\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>DEBUG;BUILD_DLL;PLATFORM_WINDOWS;PLATFORM_DIRECTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)External\DirectX\SimpleMath;$(SolutionDir)External\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;BUILD_DLL;PLATFORM_WINDOWS;PLATFORM_DIRECTX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)External\DirectX\SimpleMath;$(SolutionDir)External\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>NotSet</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Renderer\DirectX\DX12_CommandQueue.h" />
+    <ClInclude Include="src\Utility\Logger.h" />
+    <ClInclude Include="src\Events\WindowEvents.h" />
+    <ClInclude Include="src\Renderer\DirectX\DX12_Common.h" />
+    <ClInclude Include="src\Renderer\DirectX\DX12_Renderer.h" />
+    <ClInclude Include="src\Renderer\DirectX\Exceptions\DX12_InfoQueueManager.h" />
+    <ClInclude Include="src\Renderer\DirectX\Exceptions\DX12_Exception.h" />
+    <ClInclude Include="External\DirectX\d3dx12.h" />
+    <ClInclude Include="src\Core\Engine.h" />
+    <ClInclude Include="src\Renderer\DirectX\d3dx12.h" />
+    <ClInclude Include="src\Renderer\DirectX\Exceptions\DX12_ExceptionMacros.h" />
+    <ClInclude Include="src\Renderer\DirectX\DX12_Utility.h" />
+    <ClInclude Include="src\Platform\ExceptionBase.h" />
+    <ClInclude Include="src\Core\Defines.h" />
+    <ClInclude Include="src\Core\ApplicationInterface.h" />
+    <ClInclude Include="src\Core\EntryPoint.h" />
+    <ClInclude Include="src\Events\EventBase.h" />
+    <ClInclude Include="src\Utility\FreeList.h" />
+    <ClInclude Include="src\Window\WIN32\Exceptions\WIN32_ExceptionMacros.h" />
+    <ClInclude Include="src\Precomp.h" />
+    <ClInclude Include="src\Platform\RendererBase.h" />
+    <ClInclude Include="src\Platform\WindowBase.h" />
+    <ClInclude Include="src\Platform\PlatformIncludes.h" />
+    <ClInclude Include="src\Window\WIN32\WIN32_Window.h" />
+    <ClInclude Include="src\Window\WIN32\WIN32_WindowClass.h" />
+    <ClInclude Include="src\Window\WIN32\Exceptions\WIN32_Exception.h" />
+    <ClInclude Include="src\Utility\Timer.h" />
+    <ClInclude Include="src\Utility\StackTrace.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Renderer\DirectX\DX12_CommandQueue.cpp" />
+    <ClCompile Include="src\Utility\Logger.cpp" />
+    <ClCompile Include="src\Core\Engine.cpp" />
+    <ClCompile Include="src\Renderer\DirectX\DX12_Renderer.cpp" />
+    <ClCompile Include="src\Renderer\DirectX\Exceptions\DX12_Exception.cpp" />
+    <ClCompile Include="src\Renderer\DirectX\Exceptions\DX12_InfoQueueManager.cpp" />
+    <ClCompile Include="src\Renderer\DirectX\DX12_Utility.cpp" />
+    <ClCompile Include="src\Platform\ExceptionBase.cpp" />
+    <ClCompile Include="src\Window\WIN32\Exceptions\WIN32_Exception.cpp" />
+    <ClCompile Include="src\Window\WIN32\WIN32_Window.cpp" />
+    <ClCompile Include="src\Window\WIN32\WIN32_WindowClass.cpp" />
+    <ClCompile Include="src\Utility\Timer.cpp" />
+    <ClCompile Include="src\Utility\StackTrace.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
