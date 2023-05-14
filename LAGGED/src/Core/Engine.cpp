@@ -85,7 +85,11 @@ namespace LAG
 		Window::SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
 		//Setup renderer
-		Renderer::Initialize();
+		if (!Renderer::Initialize())
+		{
+			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
+			return false;
+		}
 
 		////Setup rendering surface
 		//m_RenderSurface = Renderer::CreateSurface(m_Window);

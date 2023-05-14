@@ -296,6 +296,12 @@ namespace LAG::Renderer
 
 	bool Initialize()
 	{
+		if (!DirectX::XMVerifyCPUSupport())
+		{
+			Logger::Critical("XMVerifyCPUSupport returned false: No DirectXMath support.");
+			return false;
+		}
+
 		if (renderData == nullptr)
 			renderData = std::make_unique<RendererData>();
 		else Logger::Error("Pointer to render struct already exists.");
