@@ -99,6 +99,9 @@
     <ClInclude Include="src\Renderer\DirectX\DX12_CommandQueue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utility\Clamp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Window\WIN32\WIN32_Window.cpp">
@@ -140,5 +143,9 @@
     <ClCompile Include="src\Renderer\DirectX\DX12_CommandQueue.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="res\Shaders\VertexShader.hlsl" />
+    <FxCompile Include="res\Shaders\PixelShader.hlsl" />
   </ItemGroup>
 </Project>

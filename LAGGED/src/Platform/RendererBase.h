@@ -17,8 +17,6 @@ namespace LAG::Renderer
 
 	LAG_API void SetPipelineState(int pipelineID);
 
-
-
 	//// ===== Render surface functions =====
 
 	//class Surface

@@ -30,6 +30,5 @@ void Game::Shutdown()
 
 void Game::Update()
 {
-	//printf("Update\n");
-	LAG::Renderer::SetPipelineState(0);
+
 }
