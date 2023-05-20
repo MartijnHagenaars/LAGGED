@@ -20,7 +20,7 @@ namespace LAG::Renderer
 		ComPtr<ID3D12Device5> device = nullptr;
 
 		ComPtr<IDXGISwapChain4> swapChain = nullptr;
-		static const UINT64 totalSwapChainBackBuffers = 3;
+		static const UINT64 totalSwapChainBackBuffers = 3; //Not very good
 		ComPtr<ID3D12Resource> swapChainBackBuffers[totalSwapChainBackBuffers];
 
 		ComPtr<ID3D12Fence1> fence = nullptr;
@@ -461,5 +461,16 @@ namespace LAG::Renderer
 	ComPtr<ID3D12Device5> GetDevice() 
 	{ 
 		return renderData->device; 
+	}
+
+	ComPtr<ID3D12CommandQueue> GetCommandQueue()
+	{
+		//TODO: ADD!
+		return ComPtr<ID3D12CommandQueue>();
+	}
+
+	const UINT64 GetTotalSwapChains()
+	{
+		return renderData->totalSwapChainBackBuffers;
 	}
 }

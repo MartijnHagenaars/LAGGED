@@ -93,7 +93,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\MeshBase.h" />
+    <ClInclude Include="src\Renderer\DirectX\DX12_Mesh.h" />
     <ClInclude Include="src\Renderer\DirectX\DX12_CommandQueue.h" />
     <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
