@@ -18,7 +18,7 @@ namespace LAG::Renderer
 
 		//Executes the assigned command list. 
 		//Returns a fence value, which can be used to wait for the executing command list.
-		UINT64 ExecuteCommandList(ComPtr<ID3D12GraphicsCommandList7> commandList);
+		UINT64 ExecuteCommandList(ComPtr<ID3D12GraphicsCommandList5> commandList);
 
 		UINT64 Signal();
 		void WaitForFenceValue(UINT64 fenceValue);
@@ -27,12 +27,12 @@ namespace LAG::Renderer
 		//Reset the command queue to its initial state
 		void Flush();
 
-		ComPtr<ID3D12GraphicsCommandList7> GetCommandList();
+		ComPtr<ID3D12GraphicsCommandList5> GetCommandList();
 		ComPtr<ID3D12CommandQueue> GetCommandQueue() const { return m_CommandQueue; }
 
 	private:
 		ComPtr<ID3D12CommandAllocator> CreateCommandAllocator(ComPtr<ID3D12Device5> device);
-		ComPtr<ID3D12GraphicsCommandList7> CreateCommandList(ComPtr<ID3D12Device5> device, ComPtr<ID3D12CommandAllocator> commandAllocator);
+		ComPtr<ID3D12GraphicsCommandList5> CreateCommandList(ComPtr<ID3D12Device5> device, ComPtr<ID3D12CommandAllocator> commandAllocator);
 
 	private:
 
@@ -53,7 +53,7 @@ namespace LAG::Renderer
 			ComPtr<ID3D12CommandAllocator> commandAllocator;
 		};
 		std::queue<CommandAllocatorEntry> m_CommandAllocatorQueue;
-		std::queue<ComPtr<ID3D12GraphicsCommandList7>> m_CommandListQueue;
+		std::queue<ComPtr<ID3D12GraphicsCommandList5>> m_CommandListQueue;
 
 	};
 }

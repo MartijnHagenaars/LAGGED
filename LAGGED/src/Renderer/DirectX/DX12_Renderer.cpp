@@ -23,14 +23,9 @@ namespace LAG::Renderer
 		static const UINT64 totalSwapChainBackBuffers = 3; //Not very good
 		ComPtr<ID3D12Resource> swapChainBackBuffers[totalSwapChainBackBuffers];
 
-		ComPtr<ID3D12Fence1> fence = nullptr;
-		UINT64 fenceValue = 0;
-		HANDLE fenceEventHandle;
-		UINT64 frameFenceValues[totalSwapChainBackBuffers] = {};
-
-		ComPtr<ID3D12CommandQueue> commandQueue = nullptr;
-		ComPtr<ID3D12CommandAllocator> commandAllocator[totalSwapChainBackBuffers];
-		ComPtr<ID3D12GraphicsCommandList5> commandList = nullptr;
+		std::shared_ptr<DX12_CommandQueue> directCommandQueue = nullptr;
+		std::shared_ptr<DX12_CommandQueue> copyCommandQueue = nullptr;
+		std::shared_ptr<DX12_CommandQueue> computeCommandQueue = nullptr;
 
 		UINT rtvDescSize = 0;
 		ComPtr<ID3D12DescriptorHeap> RTVDescHeap = nullptr; //Temp location
@@ -153,7 +148,7 @@ namespace LAG::Renderer
 		return allowTearing == TRUE;
 	}
 
-	ComPtr<IDXGISwapChain4> CreateSwapChain(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<IDXGIFactory7> factory, UINT32 bufferCount)
+	ComPtr<IDXGISwapChain4> CreateSwapChain(std::shared_ptr<DX12_CommandQueue> directCommandQueue, ComPtr<IDXGIFactory7> factory, UINT32 bufferCount)
 	{
 		ComPtr<IDXGISwapChain4> swapChain;
 
@@ -174,7 +169,7 @@ namespace LAG::Renderer
 		fullScreenDesc.Windowed = true;
 
 		ComPtr<IDXGISwapChain1> swapChainTemp;
-		LAG_GRAPHICS_EXCEPTION(factory->CreateSwapChainForHwnd(commandQueue.Get(), static_cast<const LAG::Window::WIN32Data*>(Window::GetWindowData())->hWnd, &swapChainDesc, &fullScreenDesc, nullptr, &swapChainTemp));
+		LAG_GRAPHICS_EXCEPTION(factory->CreateSwapChainForHwnd(directCommandQueue->GetCommandQueue().Get(), static_cast<const LAG::Window::WIN32Data*>(Window::GetWindowData())->hWnd, &swapChainDesc, &fullScreenDesc, nullptr, &swapChainTemp));
 		LAG_GRAPHICS_EXCEPTION(swapChainTemp.As(&swapChain));
 
 		return swapChain;
@@ -287,13 +282,6 @@ namespace LAG::Renderer
 		return fenceEvent; 
 	}
 
-	//Used to ensure that any commands previously executed on the GPU have finished executing before the CPU thread is allowed to continue processing.
-	void Flush(ComPtr<ID3D12CommandQueue> commandQueue, ComPtr<ID3D12Fence1> fence, UINT64& fenceValue, HANDLE fenceEvent)
-	{
-		UINT64 fenceValueForSignal = SignalFence(fence, commandQueue, fenceValue);
-		WaitForFenceValue(fence, fenceValueForSignal, fenceEvent);
-	}
-
 	bool Initialize()
 	{
 		if (!DirectX::XMVerifyCPUSupport())
@@ -321,8 +309,11 @@ namespace LAG::Renderer
 		renderData->adapter = CreateDXGIAdapter(renderData->factory);
 		renderData->device = CreateDevice(renderData->adapter);
 
-		renderData->commandQueue = CreateCommandQueue(renderData->device, D3D12_COMMAND_LIST_TYPE_DIRECT);
-		renderData->swapChain = CreateSwapChain(renderData->commandQueue, renderData->factory, renderData->totalSwapChainBackBuffers);
+		renderData->directCommandQueue = std::make_shared<DX12_CommandQueue>(renderData->device, D3D12_COMMAND_LIST_TYPE_DIRECT);
+		renderData->copyCommandQueue = std::make_shared<DX12_CommandQueue>(renderData->device, D3D12_COMMAND_LIST_TYPE_COPY);
+		renderData->computeCommandQueue = std::make_shared<DX12_CommandQueue>(renderData->device, D3D12_COMMAND_LIST_TYPE_COMPUTE);
+
+		renderData->swapChain = CreateSwapChain(renderData->directCommandQueue, renderData->factory, renderData->totalSwapChainBackBuffers);
 		renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
 
 		renderData->RTVDescHeap = CreateDescriptorHeap(renderData->device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, renderData->totalSwapChainBackBuffers);
@@ -330,23 +321,14 @@ namespace LAG::Renderer
 
 		UpdateRenderTargetViews(renderData->device, renderData->swapChain, renderData->RTVDescHeap);
 
-		for (int i = 0; i < renderData->totalSwapChainBackBuffers; ++i)
-		{
-			renderData->commandAllocator[i] = CreateCommandAllocator(renderData->device, D3D12_COMMAND_LIST_TYPE_DIRECT);
-		}
-		renderData->commandList = CreateCommandList(renderData->device,
-			renderData->commandAllocator[renderData->currentBackBufferIndex], D3D12_COMMAND_LIST_TYPE_DIRECT);
-
-		renderData->fence = CreateFence(renderData->device);
-		renderData->fenceEventHandle = CreateEventHandle();
-
 		return true;
 	}
 
 	bool Shutdown()
 	{
-		Flush(renderData->commandQueue, renderData->fence, renderData->fenceValue, renderData->fenceEventHandle);
-
+		renderData->directCommandQueue->Flush();
+		renderData->copyCommandQueue->Flush();
+		renderData->computeCommandQueue->Flush();
 
 		renderData->device.Reset();
 		renderData->adapter.Reset();
@@ -372,14 +354,12 @@ namespace LAG::Renderer
 
 	void Render()
 	{
-		ComPtr<ID3D12CommandAllocator> commandAllocator = renderData->commandAllocator[renderData->currentBackBufferIndex];
 		ComPtr<ID3D12Resource> backBuffer = renderData->swapChainBackBuffers[renderData->currentBackBufferIndex];
 
-		//Prepare the command allocator and list for the next frame. Reset the two to their initial state. 
-		LAG_GRAPHICS_EXCEPTION(commandAllocator->Reset());
-		LAG_GRAPHICS_EXCEPTION(renderData->commandList->Reset(commandAllocator.Get(), nullptr));
 
-		//Next, clear the render target
+		ComPtr<ID3D12GraphicsCommandList5> directCommandList = renderData->directCommandQueue->GetCommandList();
+
+		//First, clear the render target
 		{
 			//Before the render target can be cleared, it must be in the RENDER_TARGET state. 
 			//Change the resource state of the backbuffer.
@@ -389,7 +369,7 @@ namespace LAG::Renderer
 			//If there is more than a single resource barrier to insert into the command list, it is recommended to store all barriers in a list and 
 			// execute them all at the same time before an operation that requires the resource to be in a particular state is executed. 
 			//In this case, there is only one barrier.
-			renderData->commandList->ResourceBarrier(1, &resBarrier);
+			directCommandList->ResourceBarrier(1, &resBarrier);
 			
 			FLOAT clearColor[] = { 0.4f, 0.6f, 0.9f, 1.0f };
 
@@ -398,7 +378,7 @@ namespace LAG::Renderer
 				renderData->currentBackBufferIndex, renderData->rtvDescSize);
 
 			//Clear the render target view and use the clear color
-			renderData->commandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
+			directCommandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
 		}
 
 		//Now we can present stuff!
@@ -407,23 +387,18 @@ namespace LAG::Renderer
 			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
 				backBuffer.Get(),
 				D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-			renderData->commandList->ResourceBarrier(1, &barrier);
+			directCommandList->ResourceBarrier(1, &barrier);
 
 
 			//The command list must always be closed before being executed on the command queue
-			LAG_GRAPHICS_EXCEPTION(renderData->commandList->Close());
-
-			//Now execute all the command lists...
-			ID3D12CommandList* const commandLists[] = {
-				renderData->commandList.Get()
-			};
-			renderData->commandQueue->ExecuteCommandLists(_countof(commandLists), commandLists);
+			LAG_GRAPHICS_EXCEPTION(directCommandList->Close());
 
 			UINT syncInterval = renderData->useVSync ? 1 : 0;
 			UINT presentFlags = renderData->isTearingSupported && !renderData->useVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
 			LAG_GRAPHICS_EXCEPTION(renderData->swapChain->Present(syncInterval, presentFlags));
 
-			renderData->frameFenceValues[renderData->currentBackBufferIndex] = SignalFence(renderData->fence, renderData->commandQueue, renderData->fenceValue);
+			renderData->directCommandQueue->Signal();
+			//renderData->frameFenceValues[renderData->currentBackBufferIndex] = SignalFence(renderData->fence, renderData->commandQueue, renderData->fenceValue);
 
 
 			for (int i = 0; i < renderData->totalSwapChainBackBuffers; ++i)
@@ -431,7 +406,7 @@ namespace LAG::Renderer
 				// Any references to the back buffers must be released
 				// before the swap chain can be resized.
 				renderData->swapChainBackBuffers[i].Reset();
-				renderData->frameFenceValues[i] = renderData->frameFenceValues[renderData->currentBackBufferIndex];
+				//renderData->frameFenceValues[i] = renderData->frameFenceValues[renderData->currentBackBufferIndex];
 			}
 
 			DXGI_SWAP_CHAIN_DESC swapChainDesc = {};

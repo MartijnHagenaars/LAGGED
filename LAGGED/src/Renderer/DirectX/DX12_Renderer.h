@@ -1,6 +1,7 @@
 #pragma once
 #include "Platform/RendererBase.h"
 #include "DX12_Common.h"
+#include "DX12_CommandQueue.h"
 
 namespace LAG::Renderer
 {

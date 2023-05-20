@@ -25,7 +25,7 @@ namespace LAG::Renderer
 	{
 	}
 
-	UINT64 DX12_CommandQueue::ExecuteCommandList(ComPtr<ID3D12GraphicsCommandList7> commandList)
+	UINT64 DX12_CommandQueue::ExecuteCommandList(ComPtr<ID3D12GraphicsCommandList5> commandList)
 	{
 		//The recording state has finished, so close the list. 
 		commandList->Close();
@@ -51,10 +51,16 @@ namespace LAG::Renderer
 		return fenceValue;
 	}
 
-	ComPtr<ID3D12GraphicsCommandList7> DX12_CommandQueue::GetCommandList()
+	void DX12_CommandQueue::Flush()
+	{
+		UINT64 fenceValueForSignal = Signal();
+		WaitForFenceValue(fenceValueForSignal);
+	}
+
+	ComPtr<ID3D12GraphicsCommandList5> DX12_CommandQueue::GetCommandList()
 	{
 		ComPtr<ID3D12CommandAllocator> commandAllocator;
-		ComPtr<ID3D12GraphicsCommandList7> commandList;
+		ComPtr<ID3D12GraphicsCommandList5> commandList;
 
 		//First, get a valid command allocator
 		if (!m_CommandAllocatorQueue.empty() && HasFenceCompleted(m_CommandAllocatorQueue.front().fenceValue))
@@ -95,9 +101,9 @@ namespace LAG::Renderer
 		return commandAllocator;
 	}
 
-	ComPtr<ID3D12GraphicsCommandList7> DX12_CommandQueue::CreateCommandList(ComPtr<ID3D12Device5> device, ComPtr<ID3D12CommandAllocator> commandAllocator)
+	ComPtr<ID3D12GraphicsCommandList5> DX12_CommandQueue::CreateCommandList(ComPtr<ID3D12Device5> device, ComPtr<ID3D12CommandAllocator> commandAllocator)
 	{
-		ComPtr<ID3D12GraphicsCommandList7> commandList;
+		ComPtr<ID3D12GraphicsCommandList5> commandList;
 		LAG_GRAPHICS_EXCEPTION(device->CreateCommandList(0, m_CommandListType, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
 		return commandList;
 	}
