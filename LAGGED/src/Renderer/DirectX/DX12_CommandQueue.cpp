@@ -31,9 +31,11 @@ namespace LAG::Renderer
 		commandList->Close();
 
 		//Get the command allocator
-		ComPtr<ID3D12CommandAllocator> commandAllocator = nullptr;
-		UINT commandAllocDataSize = sizeof(ID3D12CommandAllocator);
-		LAG_GRAPHICS_EXCEPTION(commandList->GetPrivateData(__uuidof(ID3D12CommandAllocator), &commandAllocDataSize, commandAllocator.Get()));
+		//ComPtr<ID3D12CommandAllocator> commandAllocator = nullptr;
+		//UINT commandAllocDataSize = sizeof(ID3D12CommandAllocator*);
+		ID3D12CommandAllocator* commandAllocator = nullptr;
+		UINT commandAllocDataSize = sizeof(commandAllocator);
+		LAG_GRAPHICS_EXCEPTION(commandList->GetPrivateData(__uuidof(ID3D12CommandAllocator), &commandAllocDataSize, &commandAllocator));
 
 		//Now create an array of lists for executing...
 		ID3D12CommandList* lists[] = { commandList.Get() };
@@ -54,7 +56,7 @@ namespace LAG::Renderer
 	void DX12_CommandQueue::Flush()
 	{
 		UINT64 fenceValueForSignal = Signal();
-		WaitForFenceValue(fenceValueForSignal);
+		HasFenceCompleted(fenceValueForSignal);
 	}
 
 	ComPtr<ID3D12GraphicsCommandList5> DX12_CommandQueue::GetCommandList()
@@ -111,17 +113,17 @@ namespace LAG::Renderer
 
 	UINT64 DX12_CommandQueue::Signal()
 	{
-		++m_FenceValue;
-		m_CommandQueue->Signal(m_Fence.Get(), m_FenceValue);
-		return m_FenceValue;
+		UINT64 fenceValue = ++m_FenceValue;
+		m_CommandQueue->Signal(m_Fence.Get(), fenceValue);
+		return fenceValue;
 	}
 
 	void DX12_CommandQueue::WaitForFenceValue(UINT64 fenceValue)
 	{
 		//Wait if the completed value is lower than the m_FenceValue
-		if (m_Fence->GetCompletedValue() < m_FenceValue)
+		if (m_Fence->GetCompletedValue() < fenceValue)
 		{
-			m_Fence->SetEventOnCompletion(m_FenceValue, m_FenceEvent);
+			m_Fence->SetEventOnCompletion(fenceValue, m_FenceEvent);
 			::WaitForSingleObject(m_FenceEvent, static_cast<DWORD>(std::chrono::milliseconds::max().count()));
 		}
 	}

@@ -15,6 +15,8 @@ namespace LAG::Renderer
 	LAG_API void Render();
 	LAG_API void Clear();
 
+	void OnResize();
+
 	LAG_API void SetPipelineState(int pipelineID);
 
 }

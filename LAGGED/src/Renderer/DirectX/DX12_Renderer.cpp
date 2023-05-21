@@ -23,6 +23,7 @@ namespace LAG::Renderer
 		static const UINT64 totalSwapChainBackBuffers = 3; //Not very good
 		ComPtr<ID3D12Resource> swapChainBackBuffers[totalSwapChainBackBuffers];
 
+		UINT64 fenceValues[totalSwapChainBackBuffers];
 		std::shared_ptr<DX12_CommandQueue> directCommandQueue = nullptr;
 		std::shared_ptr<DX12_CommandQueue> copyCommandQueue = nullptr;
 		std::shared_ptr<DX12_CommandQueue> computeCommandQueue = nullptr;
@@ -294,6 +295,10 @@ namespace LAG::Renderer
 			renderData = std::make_unique<RendererData>();
 		else Logger::Error("Pointer to render struct already exists.");
 
+		ComPtr<ID3D12Debug> debugInterface;
+		LAG_GRAPHICS_EXCEPTION(D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface)));
+		debugInterface->EnableDebugLayer();
+
 		//Initialize the exception info queue
 		InfoQueueManager::Initialize();
 
@@ -321,14 +326,22 @@ namespace LAG::Renderer
 
 		UpdateRenderTargetViews(renderData->device, renderData->swapChain, renderData->RTVDescHeap);
 
+		//Ensure that the RTVs are off the right size. 
+		OnResize();
+
 		return true;
 	}
 
-	bool Shutdown()
+	void FlushCommandQueues()
 	{
 		renderData->directCommandQueue->Flush();
 		renderData->copyCommandQueue->Flush();
 		renderData->computeCommandQueue->Flush();
+	}
+
+	bool Shutdown()
+	{
+		FlushCommandQueues();
 
 		renderData->device.Reset();
 		renderData->adapter.Reset();
@@ -355,9 +368,8 @@ namespace LAG::Renderer
 	void Render()
 	{
 		ComPtr<ID3D12Resource> backBuffer = renderData->swapChainBackBuffers[renderData->currentBackBufferIndex];
-
-
 		ComPtr<ID3D12GraphicsCommandList5> directCommandList = renderData->directCommandQueue->GetCommandList();
+		UINT64 currentBackBufferIndex = renderData->currentBackBufferIndex;
 
 		//First, clear the render target
 		{
@@ -372,6 +384,8 @@ namespace LAG::Renderer
 			directCommandList->ResourceBarrier(1, &resBarrier);
 			
 			FLOAT clearColor[] = { 0.4f, 0.6f, 0.9f, 1.0f };
+
+			auto fucker = renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart();
 
 			//No clue how this works... 
 			CD3DX12_CPU_DESCRIPTOR_HANDLE rtv(renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart(),
@@ -390,34 +404,21 @@ namespace LAG::Renderer
 			directCommandList->ResourceBarrier(1, &barrier);
 
 
-			//The command list must always be closed before being executed on the command queue
-			LAG_GRAPHICS_EXCEPTION(directCommandList->Close());
+			////The command list must always be closed before being executed on the command queue
+			//LAG_GRAPHICS_EXCEPTION(directCommandList->Close());
+
+
+
+			renderData->fenceValues[currentBackBufferIndex] = renderData->directCommandQueue->ExecuteCommandList(directCommandList);
 
 			UINT syncInterval = renderData->useVSync ? 1 : 0;
 			UINT presentFlags = renderData->isTearingSupported && !renderData->useVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
 			LAG_GRAPHICS_EXCEPTION(renderData->swapChain->Present(syncInterval, presentFlags));
-
-			renderData->directCommandQueue->Signal();
-			//renderData->frameFenceValues[renderData->currentBackBufferIndex] = SignalFence(renderData->fence, renderData->commandQueue, renderData->fenceValue);
-
-
-			for (int i = 0; i < renderData->totalSwapChainBackBuffers; ++i)
-			{
-				// Any references to the back buffers must be released
-				// before the swap chain can be resized.
-				renderData->swapChainBackBuffers[i].Reset();
-				//renderData->frameFenceValues[i] = renderData->frameFenceValues[renderData->currentBackBufferIndex];
-			}
-
-			DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-			LAG_GRAPHICS_EXCEPTION(renderData->swapChain->GetDesc(&swapChainDesc));
-			(renderData->swapChain->ResizeBuffers(static_cast<UINT>(renderData->totalSwapChainBackBuffers), Window::GetWidth(), Window::GetHeight(),
-				swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
-			LAG_GRAPHICS_EXCEPTION_PREV();
-
 			renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
+			
+			renderData->directCommandQueue->WaitForFenceValue(renderData->fenceValues[currentBackBufferIndex]);
 
-			UpdateRenderTargetViews(renderData->device, renderData->swapChain, renderData->RTVDescHeap);
+			//renderData->frameFenceValues[renderData->currentBackBufferIndex] = SignalFence(renderData->fence, renderData->commandQueue, renderData->fenceValue);
 		}
 
 
@@ -426,6 +427,29 @@ namespace LAG::Renderer
 	void Clear()
 	{
 
+	}
+
+	void OnResize()
+	{
+		FlushCommandQueues();
+
+		for (int i = 0; i < renderData->totalSwapChainBackBuffers; ++i)
+		{
+			// Any references to the back buffers must be released
+			// before the swap chain can be resized.
+			renderData->swapChainBackBuffers[i].Reset();
+			//renderData->frameFenceValues[i] = renderData->frameFenceValues[renderData->currentBackBufferIndex];
+		}
+
+		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
+		LAG_GRAPHICS_EXCEPTION(renderData->swapChain->GetDesc(&swapChainDesc));
+		LAG_GRAPHICS_EXCEPTION(renderData->swapChain->ResizeBuffers(static_cast<UINT>(renderData->totalSwapChainBackBuffers), Window::GetWidth(), Window::GetHeight(),
+			swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
+		LAG_GRAPHICS_EXCEPTION_PREV();
+
+		renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
+
+		UpdateRenderTargetViews(renderData->device, renderData->swapChain, renderData->RTVDescHeap);
 	}
 
 	void SetPipelineState(int pipelineID)

@@ -14,7 +14,7 @@ Game::Game()
 
 Game::~Game()
 {
-	printf("Destruc\n");
+	printf("Destruct\n");
 }
 
 void Game::Initialize()
