@@ -1,6 +1,7 @@
 #include "Precomp.h"
 #include "DX12_Mesh.h"
 #include "Platform/WindowBase.h"
+#include "DX12_CommandQueue.h"
 
 namespace LAG::Renderer
 {
@@ -56,8 +57,93 @@ namespace LAG::Renderer
 			m_Indices.insert(m_Indices.end(), &indicies[0], &indicies[sizeof(indicies) / sizeof(unsigned short)]);
 		}
 
-		auto device = GetDevice();
-		//auto commandQueue = GetCommandQueue
+		ComPtr<ID3D12Device5> device = GetDevice();
+		std::shared_ptr<DX12_CommandQueue> commandQueue = GetCommandQueue(D3D12_COMMAND_LIST_TYPE_DIRECT);
+		ComPtr<ID3D12GraphicsCommandList5> commandList = commandQueue->GetCommandList();
+
+
+		//Upload the vertex buffer
+
+		//intermediateVertexResource is an intermediate resource used for transferring the vertex buffer data from the CPU to the GPU. 
+		//m_VertexBuffer is the destination resource, which is used for rendering the mesh. 
+		ComPtr<ID3D12Resource> intermediateVertexResource;
+		UpdateBufferResource(commandList, &m_VertexBuffer, &intermediateVertexResource, m_Vertices.size(), sizeof(VertexData), m_Vertices.data());
+
+		m_VertexBufferView.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();	//Address of the buffer
+		m_VertexBufferView.SizeInBytes = sizeof(m_Vertices.data());					//Size (in bytes) of the buffer
+		m_VertexBufferView.StrideInBytes = sizeof(VertexData);						//Size (in bytes) if each vertex entry
+
+		
+		//Upload the index buffer
+		ComPtr<ID3D12Resource> intermediateIndexResource;
+		UpdateBufferResource(commandList, &m_IndexBuffer, &intermediateIndexResource, m_Indices.size(), sizeof(unsigned short), m_Indices.data());
+		
+		m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
+		m_IndexBufferView.Format = DXGI_FORMAT_R16_UINT;
+		m_IndexBufferView.SizeInBytes = sizeof(m_Indices.data());
+
+		m_DSVHeap = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, false, 1); 
+
+		ComPtr<ID3DBlob> vertexShaderBlob;
+		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"VertexShader.cso", &vertexShaderBlob));
+
+		ComPtr<ID3DBlob> pixelShaderBlob;
+		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"PixelShader.cso", &pixelShaderBlob));
+
+		//Describe the input layout of the shader
+		D3D12_INPUT_ELEMENT_DESC inputLayout[] =
+		{
+			//Semantic name (HLSL semantic associated with this element), semantic index (only needed when there is more than one element of the same semantic), 
+			//format (specifies element data format), input slot (identifies the input-assembler or something?), aligned byte offset (Offset in bytes between each element. D3D12_APPEND_ALIGNED_ELEMENT can be used to define the current element after the previous one), 
+			//input slot class (Identifies if the input data class is for a single input slot), instance data step rate (Number of instances to draw uisng the same per-instance data (defined by the previous arg) before advancing in the buffer by one element. Should be set to 0 for an element that contains per-vertex data)
+			{"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
+			{"COLOR", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D12_APPEND_ALIGNED_ELEMENT, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
+		};
+
+		//Now create the root signature
+		D3D12_FEATURE_DATA_ROOT_SIGNATURE rootSigVersion = {};
+		rootSigVersion.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_1;
+
+		//If root signature v1.1 is not supported, fall back to version 1.0
+		if (device->CheckFeatureSupport(D3D12_FEATURE_ROOT_SIGNATURE, &rootSigVersion, sizeof(rootSigVersion)) != S_OK)
+			rootSigVersion.HighestVersion = D3D_ROOT_SIGNATURE_VERSION_1_0;
+
+		//Now that we have that set up, we have to define the root signature flags. Here, we want to deny access to certain pipepine stages. 
+		//Only the vertex shader currently needs access to the root signature. Denying root signature access to some shader stages results in minor optimizations.
+		D3D12_ROOT_SIGNATURE_FLAGS rootSigFlags = 
+			D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT |
+			D3D12_ROOT_SIGNATURE_FLAG_DENY_HULL_SHADER_ROOT_ACCESS |
+			D3D12_ROOT_SIGNATURE_FLAG_DENY_DOMAIN_SHADER_ROOT_ACCESS |
+			D3D12_ROOT_SIGNATURE_FLAG_DENY_GEOMETRY_SHADER_ROOT_ACCESS |
+			D3D12_ROOT_SIGNATURE_FLAG_DENY_PIXEL_SHADER_ROOT_ACCESS; //Deny the pixel shader access to the root signature
+
+		//The root signature uses a single 32-bit constant parameter (??). We must describe this. 
+		CD3DX12_ROOT_PARAMETER1 rootParameters[1];
+		//1 - num32BitValues: The number of 32-bit constants. In the case of XMMATRIX, 16 32-bit floating point values are used.
+		//2 - Shader register to bind to: in this case, we bind it to b0. 
+		//3 - The register space to bind to. Since no shader register space was specified in the vertex shader, it default to space0. 
+		//4 - Shader visibility: Specifies the shader stages that are allowed to access the contents at that root signature slot. In this case, the visibility of the constant is restricted to the vertex shader stage. 
+		rootParameters[0].InitAsConstants(sizeof(DirectX::XMMATRIX) / 4, 0, 0, D3D12_SHADER_VISIBILITY_VERTEX);
+
+		//After describing the parameters and samplers that are used by the root sig, we now need to create the root signature description. 
+		CD3DX12_VERSIONED_ROOT_SIGNATURE_DESC rootSigDesc;
+		//1 - Number of root parameters in the root signature
+		//2 - The array of parameters
+		//3 - Number of static samplers in the root signature (in this case, it's zero)
+		//4 - The array of static samplers (here, there is none)
+		//5 - Flags that determine the root signature visiblity to the various shader stages.
+		// TODO: SHOULD I NOT DO THIS? rootSigDesc.Init_1_1(_countof(rootParameters), &rootParameters[0], 0, nullptr, rootSigFlags);
+		rootSigDesc.Init_1_1(_countof(rootParameters), rootParameters, 0, nullptr, rootSigFlags);
+
+		//The final step for creating the root sig is to serialize the root signature description into a binary object that can be used to create the actual root signature. 
+		ComPtr<ID3DBlob> rootSignatureBlob;
+		ComPtr<ID3DBlob> errorBlob; 
+		//First, we need to serialize the root signature. Serializing the root sig description turns it into a binary object that can be used to create the actual signature. 
+		LAG_GRAPHICS_EXCEPTION(D3DX12SerializeVersionedRootSignature(&rootSigDesc, rootSigVersion.HighestVersion, &rootSignatureBlob, &errorBlob));
+		//Next, create the root signature!
+		LAG_GRAPHICS_EXCEPTION(device->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature)));
+
+
 	}
 
 	LAG_API void Mesh::UnloadContent()

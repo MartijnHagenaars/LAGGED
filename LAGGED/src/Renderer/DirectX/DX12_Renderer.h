@@ -9,8 +9,9 @@ namespace LAG::Renderer
 
 	//Returns a ComPtr to the device
 	ComPtr<ID3D12Device5> GetDevice();
-	ComPtr<ID3D12CommandQueue> GetCommandQueue();
+	std::shared_ptr<DX12_CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE type);
 
+	ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(ComPtr<ID3D12Device5> device, D3D12_DESCRIPTOR_HEAP_TYPE type, bool shaderVisible, UINT32 totalDescriptors);
 
 	const UINT64 GetTotalSwapChains();
 }

@@ -178,7 +178,7 @@ namespace LAG::Renderer
 
 	//Returns a ComPtr containing a descriptor heap
 	//A descriptor heap can be considered an array of resource views (such as RTVs, SRVs, UAVs, CBVs, etc.)
-	ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(ComPtr<ID3D12Device5> device, D3D12_DESCRIPTOR_HEAP_TYPE type, UINT32 totalDescriptors)
+	ComPtr<ID3D12DescriptorHeap> CreateDescriptorHeap(ComPtr<ID3D12Device5> device, D3D12_DESCRIPTOR_HEAP_TYPE type, bool shaderVisible, UINT32 totalDescriptors)
 	{
 		ComPtr<ID3D12DescriptorHeap> descriptorHeap;
 
@@ -186,6 +186,11 @@ namespace LAG::Renderer
 		desc.NumDescriptors = totalDescriptors;
 		desc.Type = type;
 		desc.NodeMask = 0; 
+
+		//D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE only applies to CBV, SRV, UAV and samplers. Because of that, always disable it for other desc. heap types. 
+		if (type != D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV)
+			shaderVisible = false; 
+		desc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
 		LAG_GRAPHICS_EXCEPTION(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&descriptorHeap)));
 
@@ -462,10 +467,19 @@ namespace LAG::Renderer
 		return renderData->device; 
 	}
 
-	ComPtr<ID3D12CommandQueue> GetCommandQueue()
+	std::shared_ptr<DX12_CommandQueue> GetCommandQueue(D3D12_COMMAND_LIST_TYPE type)
 	{
-		//TODO: ADD!
-		return ComPtr<ID3D12CommandQueue>();
+		switch (type)
+		{
+		case D3D12_COMMAND_LIST_TYPE_DIRECT:
+			return renderData->directCommandQueue;
+		case D3D12_COMMAND_LIST_TYPE_COPY:
+			return renderData->copyCommandQueue;
+		case D3D12_COMMAND_LIST_TYPE_COMPUTE:
+			return renderData->computeCommandQueue;
+		default: 
+			return std::shared_ptr<DX12_CommandQueue>();
+		}
 	}
 
 	const UINT64 GetTotalSwapChains()
