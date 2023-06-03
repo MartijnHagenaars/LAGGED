@@ -2,7 +2,7 @@ struct VertexPosColor
 {
 	float3 position : POSITION;
 	float3 color : COLOR;
-	float3 bump : WANK;
+	//float3 bump : WANK;
 };
 
 struct VSOut

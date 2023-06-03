@@ -21,9 +21,10 @@ namespace LAG::Renderer
 
 	void Mesh::Render()
 	{
+		
 	}
 
-	LAG_API void Mesh::LoadContent()
+	LAG_API bool Mesh::LoadContent()
 	{
 		//Load vertex and index data
 		{
@@ -144,6 +145,41 @@ namespace LAG::Renderer
 		LAG_GRAPHICS_EXCEPTION(device->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature)));
 
 
+
+
+		//Before we can create the PSO (Pipeline state object), the number of render targets and the render target formats need to be defined
+		D3D12_RT_FORMAT_ARRAY rtvFormats = {};
+		rtvFormats.NumRenderTargets = 1;
+		rtvFormats.RTFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+
+		//Now we can describe the pipeline state object, which is used to describe how to configure the PSO
+		//Here, we apply the properties of the PSO with the various objects that have been described earlier. 
+		m_PipelineStateStream = std::make_unique<PipelineStateStream>();
+		m_PipelineStateStream->rootSignature = m_RootSignature.Get();
+		m_PipelineStateStream->inputLayout = { inputLayout, _countof(inputLayout) };
+		m_PipelineStateStream->primitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		m_PipelineStateStream->VS = CD3DX12_SHADER_BYTECODE(vertexShaderBlob.Get());
+		m_PipelineStateStream->PS = CD3DX12_SHADER_BYTECODE(pixelShaderBlob.Get());
+		m_PipelineStateStream->RTVFormats = rtvFormats;
+		m_PipelineStateStream->DSVFormat = DXGI_FORMAT_D32_FLOAT;
+
+		//Now that the pipeline state stream struct is complete, we can create the actual pipeline state object. 
+		D3D12_PIPELINE_STATE_STREAM_DESC pssDesc = {};
+		pssDesc.SizeInBytes = sizeof(PipelineStateStream);
+		pssDesc.pPipelineStateSubobjectStream = &m_PipelineStateStream;
+
+		LAG_GRAPHICS_EXCEPTION(device->CreatePipelineState(&pssDesc, IID_PPV_ARGS(&m_PipelineState)));
+
+
+
+		//Before we finish loading the content, the command list must be executed on the command queue to ensure that the index and vertex buffers are uploaded to the GPU resources before rendering
+		UINT64 fenceValue = commandQueue->ExecuteCommandList(commandList);
+		commandQueue->WaitForFenceValue(fenceValue);
+
+		//TODO: Confirm that this returns the client width and height, and not the non-client window sizes
+		ResizeDepthBuffer(Window::GetWidth(), Window::GetHeight());
+
+		return true; 
 	}
 
 	LAG_API void Mesh::UnloadContent()
@@ -238,5 +274,7 @@ namespace LAG::Renderer
 
 	void Mesh::ResizeDepthBuffer(int width, int height)
 	{
+
+
 	}
 }

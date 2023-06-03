@@ -8,6 +8,17 @@
 
 namespace LAG::Renderer
 {
+	struct PipelineStateStream
+	{
+		CD3DX12_PIPELINE_STATE_STREAM_ROOT_SIGNATURE rootSignature; //Wrapper for pointer to ID3D12RootSignature
+		CD3DX12_PIPELINE_STATE_STREAM_INPUT_LAYOUT inputLayout; //Wrapper for D3D12_INPUT_LAYOUT_DESC, which specifies the input layout for the input assembly stage
+		CD3DX12_PIPELINE_STATE_STREAM_PRIMITIVE_TOPOLOGY primitiveTopologyType; //Wrapper for D3D12_PRIMITIVE_TOPOLOGY_TYPE, which specifies the primitive topology type (point, line triangle, etc)
+		CD3DX12_PIPELINE_STATE_STREAM_VS VS; //Wrapper for D3D12_SHADER_BYTECODE, which specifies the compiled VS
+		CD3DX12_PIPELINE_STATE_STREAM_PS PS; //Wrapper for D3D12_SHADER_BTYECODE, which specifies the PS
+		CD3DX12_PIPELINE_STATE_STREAM_DEPTH_STENCIL_FORMAT DSVFormat; //Wrapper for DXGI_FORMAT enum, which describes the format of the depth stencil buffer
+		CD3DX12_PIPELINE_STATE_STREAM_RENDER_TARGET_FORMATS RTVFormats; //Wrapper for D3D12_RT_FORMAT_ARRAY struct, which is a wrapper for an array of render target formats
+	};
+
 	struct VertexData
 	{
 		DirectX::SimpleMath::Vector3 Position;
@@ -22,7 +33,7 @@ namespace LAG::Renderer
 
 		void Render();
 
-		LAG_API void LoadContent(); 
+		LAG_API bool LoadContent(); 
 		LAG_API void UnloadContent();
 
 		void TransitionResource(ComPtr<ID3D12GraphicsCommandList5> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
@@ -38,7 +49,7 @@ namespace LAG::Renderer
 			size_t numElements, size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
 
 		//Resize the depth buffer to the same size as the window
-		void ResizeDepthBuffer(int width, int height);
+		void ResizeDepthBuffer(unsigned int width, unsigned int height);
 
 	private: 
 		std::vector<VertexData> m_Vertices;
@@ -60,6 +71,8 @@ namespace LAG::Renderer
 
 		D3D12_VIEWPORT m_Viewport;
 		D3D12_RECT m_ScissorRect;
+
+		std::unique_ptr<PipelineStateStream> m_PipelineStateStream = nullptr;
 
 		float m_FOV = 45.f; //NEEDS TO BE MOVED TO A CAMERA CLASS
 		
