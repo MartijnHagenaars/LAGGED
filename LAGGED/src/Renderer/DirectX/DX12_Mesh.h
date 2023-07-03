@@ -51,6 +51,10 @@ namespace LAG::Renderer
 		//Resize the depth buffer to the same size as the window
 		void ResizeDepthBuffer(unsigned int width, unsigned int height);
 
+		//These variables should be private, but currently changing them in the renderer class. Don't ask why. 
+		D3D12_VIEWPORT m_Viewport;
+		D3D12_RECT m_ScissorRect;
+
 	private: 
 		std::vector<VertexData> m_Vertices;
 		std::vector<unsigned short> m_Indices;
@@ -68,9 +72,6 @@ namespace LAG::Renderer
 
 		ComPtr<ID3D12RootSignature> m_RootSignature;
 		ComPtr<ID3D12PipelineState> m_PipelineState;
-
-		D3D12_VIEWPORT m_Viewport;
-		D3D12_RECT m_ScissorRect;
 
 		std::unique_ptr<PipelineStateStream> m_PipelineStateStream = nullptr;
 

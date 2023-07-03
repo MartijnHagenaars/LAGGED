@@ -133,20 +133,22 @@ namespace LAG::Window
 			//Get window sizes
 			unsigned int newWinWidth = LOWORD(lParam);
 			unsigned int newWinHeight = HIWORD(lParam);
-			winData->windowWidth = newWinWidth, winData->windowHeight = newWinHeight;
 
-			//Calculate non-client sizes
-			RECT nonClientRect = { 0 };
-			GetWindowRect(winData->hWnd, &nonClientRect);
+			if (newWinWidth != winData->windowWidth || newWinHeight != winData->windowHeight)
+			{
+				winData->windowWidth = newWinWidth, winData->windowHeight = newWinHeight;
 
-			WindowResizeEvent newEvent = WindowResizeEvent(newWinWidth, newWinHeight, nonClientRect.right - nonClientRect.left, nonClientRect.bottom - nonClientRect.top);
+				//Calculate non-client sizes
+				RECT nonClientRect = { 0 };
+				GetWindowRect(winData->hWnd, &nonClientRect);
 
-			Renderer::OnResize();
+				WindowResizeEvent newEvent = WindowResizeEvent(newWinWidth, newWinHeight, nonClientRect.right - nonClientRect.left, nonClientRect.bottom - nonClientRect.top);
 
-			Callback(newEvent);
-			
+				Renderer::OnResize();
+				Callback(newEvent);
 
-			std::cout << "Window resize: " << newWinWidth << ", " << newWinHeight << std::endl;
+				std::cout << "Window resize: " << newWinWidth << ", " << newWinHeight << std::endl;
+			}
 		}
 		break;
 		case WM_MOVE:

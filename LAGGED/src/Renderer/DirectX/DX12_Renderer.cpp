@@ -8,6 +8,9 @@
 #include <array>
 #include <mutex>
 
+//TODO: REMOVE THIS!
+#include "DX12_Mesh.h"
+
 using namespace LAG::Utility;
 //#define LAG::Utility::Logger Logger;
 
@@ -38,6 +41,9 @@ namespace LAG::Renderer
 		BOOL isTearingSupported = false;
 
 		UINT64 currentBackBufferIndex = 0; 
+
+		//TODO: THIS IS TEMPORARY. REMOVE SOON.
+		Mesh* tempMesh = nullptr;
 	};
 	std::unique_ptr<RendererData> renderData = nullptr;
 
@@ -335,6 +341,8 @@ namespace LAG::Renderer
 
 		//Ensure that the RTVs are off the right size. 
 		OnResize();
+		
+		renderData->tempMesh = new Mesh();
 
 		return true;
 	}
@@ -455,7 +463,8 @@ namespace LAG::Renderer
 		LAG_GRAPHICS_EXCEPTION_PREV();
 
 		renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
-
+		renderData->tempMesh->m_Viewport = CD3DX12_VIEWPORT(0.f, 0.f, FLOAT(Window::GetWidth()), FLOAT(Window::GetHeight()));
+		
 		UpdateRenderTargetViews(renderData->device, renderData->swapChain, renderData->RTVDescHeap);
 	}
 
