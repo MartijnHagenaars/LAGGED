@@ -339,10 +339,10 @@ namespace LAG::Renderer
 
 		UpdateRenderTargetViews(renderData->device, renderData->swapChain, renderData->RTVDescHeap);
 
+		renderData->tempMesh = new Mesh();
+
 		//Ensure that the RTVs are off the right size. 
 		OnResize();
-		
-		renderData->tempMesh = new Mesh();
 
 		return true;
 	}
