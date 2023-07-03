@@ -133,12 +133,13 @@ namespace LAG::Window
 			//Get window sizes
 			unsigned int newWinWidth = LOWORD(lParam);
 			unsigned int newWinHeight = HIWORD(lParam);
+			winData->windowWidth = newWinWidth, winData->windowHeight = newWinHeight;
 
-			//Calculate client sizes
-			RECT clientRect = { 0 };
-			GetClientRect(winData->hWnd, &clientRect);
+			//Calculate non-client sizes
+			RECT nonClientRect = { 0 };
+			GetWindowRect(winData->hWnd, &nonClientRect);
 
-			WindowResizeEvent newEvent = WindowResizeEvent(newWinWidth, newWinHeight, clientRect.right, clientRect.bottom);
+			WindowResizeEvent newEvent = WindowResizeEvent(newWinWidth, newWinHeight, nonClientRect.right - nonClientRect.left, nonClientRect.bottom - nonClientRect.top);
 
 			Renderer::OnResize();
 
@@ -184,17 +185,17 @@ namespace LAG::Window
 		return winData->windowHeight;
 	}
 
-	LAG_API unsigned int GetClientWidth()
+	LAG_API unsigned int GetNonClientWidth()
 	{
 		RECT betterRect = { 0 };
-		GetClientRect(winData->hWnd, &betterRect);
+		GetWindowRect(winData->hWnd, &betterRect);
 		return betterRect.right;
 	}
 
-	LAG_API unsigned int GetClientHeight()
+	LAG_API unsigned int GetNonClientHeight()
 	{
 		RECT betterRect = { 0 };
-		GetClientRect(winData->hWnd, &betterRect);
+		GetWindowRect(winData->hWnd, &betterRect);
 		return betterRect.bottom;
 	}
 

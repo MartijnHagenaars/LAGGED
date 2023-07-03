@@ -6,14 +6,15 @@ namespace LAG
 	class WindowResizeEvent : public EventBase
 	{
 	public:
-		WindowResizeEvent(unsigned int newWinWidth, unsigned int newWinHeight, unsigned int winClientWidth, unsigned int winClientHeight) :
-			EventBase(EventType::WindowResize), windowWidth(newWinWidth), windowHeight(newWinHeight)
+		WindowResizeEvent(unsigned int newWinWidth, unsigned int newWinHeight, unsigned int winNonClientWidth, unsigned int winNonClientHeight) :
+			EventBase(EventType::WindowResize), windowWidth(newWinWidth), windowHeight(newWinHeight), 
+			windowNonClientWidth(winNonClientWidth), windowNonClientHeight(winNonClientHeight)
 		{
 			aspectRatio = static_cast<float>(windowHeight) / windowWidth;
 		}
 
 		unsigned int windowWidth = 0, windowHeight = 0;
-		unsigned int windowClientWidth = 0, windowClientHeight = 0;
+		unsigned int windowNonClientWidth = 0, windowNonClientHeight = 0;
 		float aspectRatio = 0.f;
 	};
 

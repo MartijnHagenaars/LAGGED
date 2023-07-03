@@ -286,8 +286,8 @@ namespace LAG::Renderer
 			//It is important to the depth buffer is not being references in any command list (while it is being executed on a command list) so we need to flush the command queues. 
 			Renderer::FlushCommandQueues();
 
-			auto bufferWidth = Window::GetClientWidth();
-			auto bufferHeight = Window::GetClientHeight();
+			auto bufferWidth = Window::GetWidth();
+			auto bufferHeight = Window::GetHeight();
 
 			//Depth buffers can never have a size of 0, so we must ensure that it's always valid. 
 			if (bufferWidth <= 0)
