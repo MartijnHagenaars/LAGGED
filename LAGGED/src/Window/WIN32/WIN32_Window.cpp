@@ -7,6 +7,8 @@
 #include "Events/WindowEvents.h"
 #include "Utility/Logger.h"
 
+#include "Platform/RendererBase.h"
+
 namespace LAG::Window
 {
 	WIN32Data* winData = nullptr;
@@ -128,10 +130,20 @@ namespace LAG::Window
 		break;
 		case WM_SIZE:
 		{
+			//Get window sizes
 			unsigned int newWinWidth = LOWORD(lParam);
 			unsigned int newWinHeight = HIWORD(lParam);
-			WindowResizeEvent newEvent = WindowResizeEvent(newWinWidth, newWinHeight);
+
+			//Calculate client sizes
+			RECT clientRect = { 0 };
+			GetClientRect(winData->hWnd, &clientRect);
+
+			WindowResizeEvent newEvent = WindowResizeEvent(newWinWidth, newWinHeight, clientRect.right, clientRect.bottom);
+
+			Renderer::OnResize();
+
 			Callback(newEvent);
+			
 
 			std::cout << "Window resize: " << newWinWidth << ", " << newWinHeight << std::endl;
 		}
@@ -174,18 +186,16 @@ namespace LAG::Window
 
 	LAG_API unsigned int GetClientWidth()
 	{
-		LPRECT rect = { 0 };
-		GetClientRect(winData->hWnd, rect);
-		
-		return rect->right;
+		RECT betterRect = { 0 };
+		GetClientRect(winData->hWnd, &betterRect);
+		return betterRect.right;
 	}
 
 	LAG_API unsigned int GetClientHeight()
 	{
-		LPRECT rect = { 0 };
-		GetClientRect(winData->hWnd, rect);
-
-		return rect->bottom;
+		RECT betterRect = { 0 };
+		GetClientRect(winData->hWnd, &betterRect);
+		return betterRect.bottom;
 	}
 
 	const void* GetWindowData()
