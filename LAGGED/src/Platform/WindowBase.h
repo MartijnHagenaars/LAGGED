@@ -21,5 +21,9 @@ namespace LAG::Window
 
 	LAG_API unsigned int GetWidth();
 	LAG_API unsigned int GetHeight();
+
+	LAG_API unsigned int GetClientWidth();
+	LAG_API unsigned int GetClientHeight();
+
 	const void* GetWindowData();
 }

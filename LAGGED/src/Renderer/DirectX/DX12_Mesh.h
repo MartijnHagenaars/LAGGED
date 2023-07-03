@@ -74,6 +74,7 @@ namespace LAG::Renderer
 
 		std::unique_ptr<PipelineStateStream> m_PipelineStateStream = nullptr;
 
+		bool m_HasLoadedContent = false;
 		float m_FOV = 45.f; //NEEDS TO BE MOVED TO A CAMERA CLASS
 		
 		DirectX::SimpleMath::Matrix m_ModelMatrix;

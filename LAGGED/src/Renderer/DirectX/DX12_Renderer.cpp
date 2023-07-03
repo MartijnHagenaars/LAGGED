@@ -202,7 +202,8 @@ namespace LAG::Renderer
 		UINT descHeapSize = device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV); //Get the size of a single descriptor. Should not be hardcoded.
 		CD3DX12_CPU_DESCRIPTOR_HANDLE rtvHandle(descHeap->GetCPUDescriptorHandleForHeapStart()); //In order to iterate the descriptors in a descriptor heap, a handle to the first descriptor in the heap is retrieved. 
 
-		for (int i = 0; i < renderData->totalSwapChainBackBuffers; i++)
+		int totalLoops = static_cast<int>(renderData->totalSwapChainBackBuffers);
+		for (int i = 0; i < totalLoops; i++)
 		{
 			ComPtr<ID3D12Resource2> backBuffer;
 			LAG_GRAPHICS_EXCEPTION(swapChain->GetBuffer(i, IID_PPV_ARGS(&backBuffer))); //Get a pointer to the swapchain's backbuffer
@@ -212,6 +213,7 @@ namespace LAG::Renderer
 			//Second parameter is a pointer to a D3D12_RENDER_TARGET_VIEW_DESC. Here, it's set to nullptr since the resource's internal description is used to create the RTV. 
 			//Third parameter is the handle to the descriptor where the view is placed. 
 			device->CreateRenderTargetView(backBuffer.Get(), nullptr, rtvHandle); 
+			LAG_GRAPHICS_EXCEPTION_PREV();
 
 			//Now, we store the resource so that it can be transitioned to the correct state that'll be shown later. 
 			renderData->swapChainBackBuffers[i] = backBuffer;

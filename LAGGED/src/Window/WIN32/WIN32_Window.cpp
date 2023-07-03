@@ -172,6 +172,22 @@ namespace LAG::Window
 		return winData->windowHeight;
 	}
 
+	LAG_API unsigned int GetClientWidth()
+	{
+		LPRECT rect = { 0 };
+		GetClientRect(winData->hWnd, rect);
+		
+		return rect->right;
+	}
+
+	LAG_API unsigned int GetClientHeight()
+	{
+		LPRECT rect = { 0 };
+		GetClientRect(winData->hWnd, rect);
+
+		return rect->bottom;
+	}
+
 	const void* GetWindowData()
 	{
 		return static_cast<void*>(winData);

@@ -3,6 +3,10 @@
 #include "Platform/WindowBase.h"
 #include "DX12_CommandQueue.h"
 
+#include "Utility/Clamp.h"
+
+#pragma comment(lib, "D3DCompiler.lib")
+
 namespace LAG::Renderer
 {
 	Mesh::Mesh()
@@ -24,7 +28,7 @@ namespace LAG::Renderer
 		
 	}
 
-	LAG_API bool Mesh::LoadContent()
+	bool Mesh::LoadContent()
 	{
 		//Load vertex and index data
 		{
@@ -179,10 +183,11 @@ namespace LAG::Renderer
 		//TODO: Confirm that this returns the client width and height, and not the non-client window sizes
 		ResizeDepthBuffer(Window::GetWidth(), Window::GetHeight());
 
-		return true; 
+		m_HasLoadedContent = true;
+		return m_HasLoadedContent;
 	}
 
-	LAG_API void Mesh::UnloadContent()
+	void Mesh::UnloadContent()
 	{
 		
 	}
@@ -272,9 +277,50 @@ namespace LAG::Renderer
 
 	}
 
-	void Mesh::ResizeDepthBuffer(int width, int height)
+	void Mesh::ResizeDepthBuffer(unsigned int width, unsigned int height)
 	{
+		if (m_HasLoadedContent)
+		{
+			auto device = Renderer::GetDevice();
 
+			//It is important to the depth buffer is not being references in any command list (while it is being executed on a command list) so we need to flush the command queues. 
+			Renderer::FlushCommandQueues();
+
+			auto bufferWidth = Window::GetClientWidth();
+			auto bufferHeight = Window::GetClientHeight();
+
+			//Depth buffers can never have a size of 0, so we must ensure that it's always valid. 
+			if (bufferWidth <= 0)
+				bufferWidth = 1;
+			if (bufferHeight <= 0)
+				bufferHeight = 1;
+			
+			//Describe the clear value
+			D3D12_CLEAR_VALUE clearValue; 
+			clearValue.Format = DXGI_FORMAT_D32_FLOAT;
+			clearValue.DepthStencil = { 1.f, 0 };
+
+			//Here, we create a depth buffer. Since the depth buffer is a 2D texture, we use the CD3DX12_RESOURCE_DESC::Tex2D helper function to describe what that'll look like. 
+			CD3DX12_RESOURCE_DESC tex2D = CD3DX12_RESOURCE_DESC::Tex2D(DXGI_FORMAT_D32_FLOAT, bufferWidth, bufferHeight, 1, 0, 1, 0, D3D12_RESOURCE_FLAG_ALLOW_DEPTH_STENCIL);
+			CD3DX12_HEAP_PROPERTIES heapProps = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_DEFAULT);
+			(device->CreateCommittedResource(
+				&heapProps,
+				D3D12_HEAP_FLAG_NONE,
+				&tex2D,
+				D3D12_RESOURCE_STATE_DEPTH_WRITE, 
+				&clearValue, 
+				IID_PPV_ARGS(&m_DepthBuffer)));
+
+			D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc;
+			dsvDesc.Format = DXGI_FORMAT_D32_FLOAT;
+			dsvDesc.ViewDimension = D3D12_DSV_DIMENSION_TEXTURE2D;
+			dsvDesc.Flags = D3D12_DSV_FLAG_NONE;
+			dsvDesc.Texture2D.MipSlice = 0; 
+
+			device->CreateDepthStencilView(m_DepthBuffer.Get(), &dsvDesc, m_DSVHeap->GetCPUDescriptorHandleForHeapStart());
+
+		}
+		else Utility::Logger::Warning("Cannot resize depth buffer because content has not yet been loaded.");
 
 	}
 }
