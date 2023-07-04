@@ -3,6 +3,8 @@
 #include "Platform/WindowBase.h"
 #include "DX12_CommandQueue.h"
 
+#include ""
+
 #include "Utility/Clamp.h"
 
 #pragma comment(lib, "D3DCompiler.lib")
@@ -12,7 +14,7 @@ namespace LAG::Renderer
 	Mesh::Mesh()
 	{
 		m_FenceValues.reserve(Renderer::GetTotalSwapChains());
-		
+
 		//Uesd for making out a rectangular region of th screen which'll allow for rendering. We just want to cover the whole screen so we set it to the max.
 		m_ScissorRect = CD3DX12_RECT(0, 0, LONG_MAX, LONG_MAX);
 		m_Viewport = CD3DX12_VIEWPORT(0.f, 0.f, FLOAT(Window::GetWidth()), FLOAT(Window::GetHeight()));
@@ -25,7 +27,20 @@ namespace LAG::Renderer
 
 	void Mesh::Render()
 	{
-		
+		//Update the model matrix
+		float modelAngle = static_cast<float>(0.01f * 90.f);
+		const DirectX::XMVECTOR modelRotationAxis = DirectX::XMVectorSet(0, 1, 1, 0);
+		m_ModelMatrix = DirectX::XMMatrixRotationAxis(modelRotationAxis, DirectX::XMConvertToRadians(modelAngle));
+
+		//Update the view matrix
+		const DirectX::XMVECTOR eyePosition = DirectX::XMVectorSet(0, 0, -10, 1);
+		const DirectX::XMVECTOR focusPoint  = DirectX::XMVectorSet(0, 0, 0, 1);
+		const DirectX::XMVECTOR upDirection = DirectX::XMVectorSet(0, 1, 0, 0);
+		m_ViewMatrix = DirectX::XMMatrixLookAtLH(eyePosition, focusPoint, upDirection);
+
+		//Update the projection matrix
+		float aspectRatio = Window::GetWidth() / static_cast<float>(Window::GetHeight());
+		m_ProjMatrix = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(m_FOV), aspectRatio, 0.1f, 100.0f);
 	}
 
 	bool Mesh::LoadContent()

@@ -51,7 +51,7 @@ namespace LAG
 				elapsedTime += timer.Mark();
 				if (elapsedTime >= 1.f)
 				{
-					std::cout << frames / elapsedTime << "fps" << std::endl;
+					Utility::Logger::Info("FPS: {0}", frames / elapsedTime);
 					elapsedTime = 0.f;
 					frames = 0;
 				}
