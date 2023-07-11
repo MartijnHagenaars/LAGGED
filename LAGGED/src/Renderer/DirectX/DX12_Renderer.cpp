@@ -340,6 +340,7 @@ namespace LAG::Renderer
 		UpdateRenderTargetViews(renderData->device, renderData->swapChain, renderData->RTVDescHeap);
 
 		renderData->tempMesh = new Mesh();
+		renderData->tempMesh->LoadContent();
 
 		//Ensure that the RTVs are off the right size. 
 		OnResize();
@@ -386,54 +387,60 @@ namespace LAG::Renderer
 		ComPtr<ID3D12GraphicsCommandList5> directCommandList = renderData->directCommandQueue->GetCommandList();
 		UINT64 currentBackBufferIndex = renderData->currentBackBufferIndex;
 
-		//First, clear the render target
+		Mesh* meshRef = renderData->tempMesh;
+		meshRef->Render();
+
+		//Old rendering method. Remove when done. 
 		{
-			//Before the render target can be cleared, it must be in the RENDER_TARGET state. 
-			//Change the resource state of the backbuffer.
-			CD3DX12_RESOURCE_BARRIER resBarrier = CD3DX12_RESOURCE_BARRIER::Transition(backBuffer.Get(), 
-				D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET); //Left is the before state, right is the after state. 
+			////First, clear the render target
+			//{
+			//	//Before the render target can be cleared, it must be in the RENDER_TARGET state. 
+			//	//Change the resource state of the backbuffer.
+			//	CD3DX12_RESOURCE_BARRIER resBarrier = CD3DX12_RESOURCE_BARRIER::Transition(backBuffer.Get(), 
+			//		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET); //Left is the before state, right is the after state. 
 
-			//If there is more than a single resource barrier to insert into the command list, it is recommended to store all barriers in a list and 
-			// execute them all at the same time before an operation that requires the resource to be in a particular state is executed. 
-			//In this case, there is only one barrier.
-			directCommandList->ResourceBarrier(1, &resBarrier);
-			
-			FLOAT clearColor[] = { 0.4f, 0.6f, 0.9f, 1.0f };
+			//	//If there is more than a single resource barrier to insert into the command list, it is recommended to store all barriers in a list and 
+			//	// execute them all at the same time before an operation that requires the resource to be in a particular state is executed. 
+			//	//In this case, there is only one barrier.
+			//	directCommandList->ResourceBarrier(1, &resBarrier);
+			//	
+			//	FLOAT clearColor[] = { 0.4f, 0.6f, 0.9f, 1.0f };
 
-			auto fucker = renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart();
+			//	auto fucker = renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart();
 
-			//No clue how this works... 
-			CD3DX12_CPU_DESCRIPTOR_HANDLE rtv(renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart(),
-				renderData->currentBackBufferIndex, renderData->rtvDescSize);
+			//	//No clue how this works... 
+			//	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv(renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart(),
+			//		renderData->currentBackBufferIndex, renderData->rtvDescSize);
 
-			//Clear the render target view and use the clear color
-			directCommandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
-		}
+			//	//Clear the render target view and use the clear color
+			//	directCommandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
+			//}
 
-		//Now we can present stuff!
-		{
-			//First, we need to transition to the present state.
-			CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-				backBuffer.Get(),
-				D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-			directCommandList->ResourceBarrier(1, &barrier);
-
-
-			////The command list must always be closed before being executed on the command queue
-			//LAG_GRAPHICS_EXCEPTION(directCommandList->Close());
+			////Now we can present stuff!
+			//{
+			//	//First, we need to transition to the present state.
+			//	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
+			//		backBuffer.Get(),
+			//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+			//	directCommandList->ResourceBarrier(1, &barrier);
 
 
+			//	////The command list must always be closed before being executed on the command queue
+			//	//LAG_GRAPHICS_EXCEPTION(directCommandList->Close());
 
-			renderData->fenceValues[currentBackBufferIndex] = renderData->directCommandQueue->ExecuteCommandList(directCommandList);
 
-			UINT syncInterval = renderData->useVSync ? 1 : 0;
-			UINT presentFlags = renderData->isTearingSupported && !renderData->useVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
-			LAG_GRAPHICS_EXCEPTION(renderData->swapChain->Present(syncInterval, presentFlags));
-			renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
-			
-			renderData->directCommandQueue->WaitForFenceValue(renderData->fenceValues[currentBackBufferIndex]);
 
-			//renderData->frameFenceValues[renderData->currentBackBufferIndex] = SignalFence(renderData->fence, renderData->commandQueue, renderData->fenceValue);
+			//	renderData->fenceValues[currentBackBufferIndex] = renderData->directCommandQueue->ExecuteCommandList(directCommandList);
+
+			//	UINT syncInterval = renderData->useVSync ? 1 : 0;
+			//	UINT presentFlags = renderData->isTearingSupported && !renderData->useVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
+			//	LAG_GRAPHICS_EXCEPTION(renderData->swapChain->Present(syncInterval, presentFlags));
+			//	renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
+			//	
+			//	renderData->directCommandQueue->WaitForFenceValue(renderData->fenceValues[currentBackBufferIndex]);
+
+			//	//renderData->frameFenceValues[renderData->currentBackBufferIndex] = SignalFence(renderData->fence, renderData->commandQueue, renderData->fenceValue);
+			//}
 		}
 
 
@@ -473,7 +480,18 @@ namespace LAG::Renderer
 
 	}
 
-	ComPtr<ID3D12Device5> GetDevice() 
+	UINT64 Present()
+	{
+		
+		UINT syncInterval = renderData->useVSync ? 1 : 0;
+		UINT presentFlags = renderData->isTearingSupported && !renderData->useVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
+		LAG_GRAPHICS_EXCEPTION(renderData->swapChain->Present(syncInterval, presentFlags));
+		renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
+
+		return renderData->currentBackBufferIndex;
+	}
+
+	ComPtr<ID3D12Device5> GetDevice()
 	{ 
 		return renderData->device; 
 	}
@@ -496,5 +514,20 @@ namespace LAG::Renderer
 	const UINT64 GetTotalSwapChains()
 	{
 		return renderData->totalSwapChainBackBuffers;
+	}
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentRenderTargetView()
+	{
+		return CD3DX12_CPU_DESCRIPTOR_HANDLE(renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart(), renderData->currentBackBufferIndex, renderData->rtvDescSize);
+	}
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> GetCurrentBackBuffer()
+	{
+		return renderData->swapChainBackBuffers[renderData->currentBackBufferIndex];
+	}
+
+	UINT64 GetCurrentBackBufferIndex()
+	{
+		return renderData->currentBackBufferIndex;
 	}
 }

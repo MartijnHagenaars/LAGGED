@@ -3,10 +3,12 @@
 #include "Platform/WindowBase.h"
 #include "DX12_CommandQueue.h"
 
-#include ""
+#include <iostream>
+#include <filesystem>
 
+#include "Utility/Logger.h"
 #include "Utility/Clamp.h"
-
+       
 #pragma comment(lib, "D3DCompiler.lib")
 
 namespace LAG::Renderer
@@ -27,20 +29,82 @@ namespace LAG::Renderer
 
 	void Mesh::Render()
 	{
-		//Update the model matrix
-		float modelAngle = static_cast<float>(0.01f * 90.f);
-		const DirectX::XMVECTOR modelRotationAxis = DirectX::XMVectorSet(0, 1, 1, 0);
-		m_ModelMatrix = DirectX::XMMatrixRotationAxis(modelRotationAxis, DirectX::XMConvertToRadians(modelAngle));
+		//FIRST, recalculate the MVP. Doing this here, since the Mesh class shouldn't have an update function
+		{
+			//Update the model matrix
+			float modelAngle = static_cast<float>(0.01f * 90.f);
+			const DirectX::XMVECTOR modelRotationAxis = DirectX::XMVectorSet(0, 1, 1, 0);
+			m_ModelMatrix = DirectX::XMMatrixRotationAxis(modelRotationAxis, DirectX::XMConvertToRadians(modelAngle));
 
-		//Update the view matrix
-		const DirectX::XMVECTOR eyePosition = DirectX::XMVectorSet(0, 0, -10, 1);
-		const DirectX::XMVECTOR focusPoint  = DirectX::XMVectorSet(0, 0, 0, 1);
-		const DirectX::XMVECTOR upDirection = DirectX::XMVectorSet(0, 1, 0, 0);
-		m_ViewMatrix = DirectX::XMMatrixLookAtLH(eyePosition, focusPoint, upDirection);
+			//Update the view matrix
+			const DirectX::XMVECTOR eyePosition = DirectX::XMVectorSet(0, 0, -10, 1);
+			const DirectX::XMVECTOR focusPoint = DirectX::XMVectorSet(0, 0, 0, 1);
+			const DirectX::XMVECTOR upDirection = DirectX::XMVectorSet(0, 1, 0, 0);
+			m_ViewMatrix = DirectX::XMMatrixLookAtLH(eyePosition, focusPoint, upDirection);
 
-		//Update the projection matrix
-		float aspectRatio = Window::GetWidth() / static_cast<float>(Window::GetHeight());
-		m_ProjMatrix = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(m_FOV), aspectRatio, 0.1f, 100.0f);
+			//Update the projection matrix
+			float aspectRatio = Window::GetWidth() / static_cast<float>(Window::GetHeight());
+			m_ProjMatrix = DirectX::XMMatrixPerspectiveFovLH(DirectX::XMConvertToRadians(m_FOV), aspectRatio, 0.1f, 100.0f);
+		}
+
+
+		//Now do the actual rendering stuff
+		{
+			auto commandQueue = Renderer::GetCommandQueue(D3D12_COMMAND_LIST_TYPE_DIRECT); 
+			auto commandList = commandQueue->GetCommandList();
+			auto currentBackBuffer = Renderer::GetCurrentBackBuffer();
+			auto currentRenderTargetView = Renderer::GetCurrentRenderTargetView();
+			auto depthCPUDescHandle = m_DSVHeap->GetCPUDescriptorHandleForHeapStart();
+
+			//First, clear the render target
+			float clearColor[] = { 0.4f, 0.5f, 0.6f, 1.f };
+			TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+			ClearRTV(commandList, currentRenderTargetView, clearColor);
+			ClearDepth(commandList, depthCPUDescHandle, 1.f);
+
+			//Now we prepare the rendering pipeline for rendering
+			commandList->SetPipelineState(m_PipelineState.Get()); //Bind the PSO, which sets all defined shader stages.
+			commandList->SetGraphicsRootSignature(m_RootSignature.Get()); //Need to reassign the RS again, otherwise DX12 will complain. 
+
+			//Setup the input assembler. Required, as this tells the input assembler how to interpret the vertex and index data. 
+			commandList->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+			commandList->IASetVertexBuffers(0, 1, &m_VertexBufferView); //2nd argument set to "1" since we're only using one vertex buffer view
+			commandList->IASetIndexBuffer(&m_IndexBufferView);
+
+			//Setup the rasterizer state
+			commandList->RSSetViewports(1, &m_Viewport);
+			commandList->RSSetScissorRects(1, &m_ScissorRect); //Scissor rect must always be set. Failing to do so might result in a blank screen
+
+			//Binding the render targets for the output merger
+			//The render target must be bound to the output merger before drawing
+			//Note to self: On 3dgep, it is stated that the "false" argument is something related descriptors to bind are contiguous in memory. WHAT DOES THIS MEAN?!?
+			commandList->OMSetRenderTargets(1, &currentRenderTargetView, false, &depthCPUDescHandle);
+
+			//Now, whenever the root signature changes, the arguments that were previously bound to the pipeline need to be rebound. 
+			//Any root arguments that've been changed between draw calls also need to be updated. 
+			//In this case, the transformation matrix needs to be updated. 
+			DirectX::XMMATRIX mvpMatrix = DirectX::XMMatrixMultiply(m_ModelMatrix, m_ViewMatrix);
+			mvpMatrix = DirectX::XMMatrixMultiply(mvpMatrix, m_ProjMatrix);
+			commandList->SetGraphicsRoot32BitConstants(0, sizeof(DirectX::XMMATRIX) / 4, &mvpMatrix, 0); //Upload the matrix to the GPU
+
+
+			//Now the rendering pipeline is properly set up, and we can start drawing a cube!
+
+			//Execute the draw method on the command list. This will cause vertices bound to the IA stage to be pushed through the graphics rendering pipeline that's configured above. 
+			//The result will be the final rendered geometry being recorded into the render targets bound to the output merger stage.
+			commandList->DrawIndexedInstanced(m_Indices.size(), 1, 0, 0, 0);
+
+
+			//Now present the render!
+			TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
+
+			m_FenceValues[Renderer::GetCurrentBackBufferIndex()] = commandQueue->ExecuteCommandList(commandList);
+			UINT64 newBackBufferIndex = Renderer::Present();
+			commandQueue->WaitForFenceValue(m_FenceValues[newBackBufferIndex]);
+
+		}
+
+
 	}
 
 	bool Mesh::LoadContent()
@@ -97,15 +161,19 @@ namespace LAG::Renderer
 		//Upload the index buffer
 		ComPtr<ID3D12Resource> intermediateIndexResource;
 		UpdateBufferResource(commandList, &m_IndexBuffer, &intermediateIndexResource, m_Indices.size(), sizeof(unsigned short), m_Indices.data());
-		
+		//hello
 		m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
 		m_IndexBufferView.Format = DXGI_FORMAT_R16_UINT;
 		m_IndexBufferView.SizeInBytes = sizeof(m_Indices.data());
 
 		m_DSVHeap = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, false, 1); 
 
+		std::filesystem::path cwd = std::filesystem::current_path();
+		std::cout << "Current path is " << std::filesystem::current_path() << '\n'; // (1)
 		ComPtr<ID3DBlob> vertexShaderBlob;
-		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"VertexShader.cso", &vertexShaderBlob));
+
+		//Utility::Logger::Info("Does vertex shader exist at \"..\\res\\Shaders\\VertexShader.cso\"? : {0}", std::filesystem::exists("..\\res\\Shaders\\VertexShader.cso") ? "yes" : "no");
+		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"..\\res\\Shaders\\VertexShader.cso", &vertexShaderBlob));
 
 		ComPtr<ID3DBlob> pixelShaderBlob;
 		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"PixelShader.cso", &pixelShaderBlob));
@@ -209,14 +277,21 @@ namespace LAG::Renderer
 
 	void Mesh::TransitionResource(ComPtr<ID3D12GraphicsCommandList5> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState)
 	{
+		//Before a resource can be used, it needs to be in the correct state. Transitioning from one state to another is done using a resource barrier. This can be done by inserting a resource barrier into the command list
+		//Needs to be done when, for example, using the swapchains back buffer as a render target. Slso needs to be done before presenting, as it needs to be transitioned to the PRESENT state.
+
+		CD3DX12_RESOURCE_BARRIER resBarrier = CD3DX12_RESOURCE_BARRIER::Transition(resource.Get(), beforeState, afterState);
+		commandList->ResourceBarrier(1, &resBarrier);
 	}
 
 	void Mesh::ClearRTV(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor)
 	{
+		commandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr); //Using nullptr to clear the entire resource view
 	}
 
 	void Mesh::ClearDepth(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv, float depth)
 	{
+		commandList->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH, depth, 0, 0, nullptr);
 	}
 
 	void Mesh::UpdateBufferResource(ComPtr<ID3D12GraphicsCommandList5> commandList, 
