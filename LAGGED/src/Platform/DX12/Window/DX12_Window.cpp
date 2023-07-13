@@ -1,13 +1,13 @@
 #include "Precomp.h"
-#include "WIN32_Window.h"
+#include "DX12_Window.h"
 
-#include "Window/WIN32/WIN32_WindowClass.h"
-#include "Window/WIN32/Exceptions/WIN32_ExceptionMacros.h"
+#include "DX12_WindowClass.h"
+#include "Exceptions/DX12_WindowExceptionMacros.h"
 
 #include "Events/WindowEvents.h"
 #include "Utility/Logger.h"
 
-#include "Platform/RendererBase.h"
+#include "Platform/Base/RendererBase.h"
 
 namespace LAG::Window
 {

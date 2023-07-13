@@ -1,5 +1,5 @@
 #include "Precomp.h"
-#include "WIN32_Exception.h"
+#include "DX12_WindowException.h"
 #include <sstream>
 
 namespace LAG

@@ -1,6 +1,6 @@
 #include "Precomp.h"
 #include "Engine.h"
-#include "Platform/ExceptionBase.h"
+#include "Platform/Base/ExceptionBase.h"
 
 #include "Utility/Timer.h"
 #include "Utility/Logger.h"

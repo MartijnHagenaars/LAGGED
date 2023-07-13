@@ -3,8 +3,8 @@
 #include "Defines.h"
 
 #include "Core/ApplicationInterface.h"
-#include "Platform/WindowBase.h"
-#include "Platform/RendererBase.h"
+#include "Platform/Base/WindowBase.h"
+#include "Platform/Base/RendererBase.h"
 
 namespace LAG
 {

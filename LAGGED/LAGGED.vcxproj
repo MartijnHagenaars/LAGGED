@@ -103,50 +103,50 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Renderer\DirectX\DX12_Mesh.h" />
-    <ClInclude Include="src\Renderer\DirectX\DX12_CommandQueue.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Mesh.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_CommandQueue.h" />
     <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
     <ClInclude Include="src\Events\WindowEvents.h" />
-    <ClInclude Include="src\Renderer\DirectX\DX12_Common.h" />
-    <ClInclude Include="src\Renderer\DirectX\DX12_Renderer.h" />
-    <ClInclude Include="src\Renderer\DirectX\Exceptions\DX12_InfoQueueManager.h" />
-    <ClInclude Include="src\Renderer\DirectX\Exceptions\DX12_Exception.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Common.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Renderer.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.h" />
     <ClInclude Include="External\DirectX\d3dx12.h" />
     <ClInclude Include="src\Core\Engine.h" />
-    <ClInclude Include="src\Renderer\DirectX\d3dx12.h" />
-    <ClInclude Include="src\Renderer\DirectX\Exceptions\DX12_ExceptionMacros.h" />
-    <ClInclude Include="src\Renderer\DirectX\DX12_Utility.h" />
-    <ClInclude Include="src\Platform\ExceptionBase.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\d3dx12.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderExceptionMacros.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Utility.h" />
+    <ClInclude Include="src\Platform\Base\ExceptionBase.h" />
     <ClInclude Include="src\Core\Defines.h" />
     <ClInclude Include="src\Core\ApplicationInterface.h" />
     <ClInclude Include="src\Core\EntryPoint.h" />
     <ClInclude Include="src\Events\EventBase.h" />
     <ClInclude Include="src\Utility\FreeList.h" />
-    <ClInclude Include="src\Window\WIN32\Exceptions\WIN32_ExceptionMacros.h" />
+    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowExceptionMacros.h" />
     <ClInclude Include="src\Precomp.h" />
-    <ClInclude Include="src\Platform\RendererBase.h" />
-    <ClInclude Include="src\Platform\WindowBase.h" />
-    <ClInclude Include="src\Platform\PlatformIncludes.h" />
-    <ClInclude Include="src\Window\WIN32\WIN32_Window.h" />
-    <ClInclude Include="src\Window\WIN32\WIN32_WindowClass.h" />
-    <ClInclude Include="src\Window\WIN32\Exceptions\WIN32_Exception.h" />
+    <ClInclude Include="src\Platform\Base\RendererBase.h" />
+    <ClInclude Include="src\Platform\Base\WindowBase.h" />
+    <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
+    <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h" />
+    <ClInclude Include="src\Platform\DX12\Window\DX12_WindowClass.h" />
+    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.h" />
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Utility\StackTrace.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Renderer\DirectX\DX12_CommandQueue.cpp" />
-    <ClCompile Include="src\Renderer\DirectX\DX12_Mesh.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_CommandQueue.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Mesh.cpp" />
     <ClCompile Include="src\Utility\Logger.cpp" />
     <ClCompile Include="src\Core\Engine.cpp" />
-    <ClCompile Include="src\Renderer\DirectX\DX12_Renderer.cpp" />
-    <ClCompile Include="src\Renderer\DirectX\Exceptions\DX12_Exception.cpp" />
-    <ClCompile Include="src\Renderer\DirectX\Exceptions\DX12_InfoQueueManager.cpp" />
-    <ClCompile Include="src\Renderer\DirectX\DX12_Utility.cpp" />
-    <ClCompile Include="src\Platform\ExceptionBase.cpp" />
-    <ClCompile Include="src\Window\WIN32\Exceptions\WIN32_Exception.cpp" />
-    <ClCompile Include="src\Window\WIN32\WIN32_Window.cpp" />
-    <ClCompile Include="src\Window\WIN32\WIN32_WindowClass.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Renderer.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Utility.cpp" />
+    <ClCompile Include="src\Platform\Base\ExceptionBase.cpp" />
+    <ClCompile Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.cpp" />
+    <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp" />
+    <ClCompile Include="src\Platform\DX12\Window\DX12_WindowClass.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Utility\StackTrace.cpp" />
   </ItemGroup>

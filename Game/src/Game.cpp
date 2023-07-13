@@ -3,7 +3,7 @@
 #include "Core/EntryPoint.h"
 
 #include "Core/Engine.h"
-#include "Platform/RendererBase.h"
+#include "Platform/Base/RendererBase.h"
 
 ENTRY_APP(Game)
 

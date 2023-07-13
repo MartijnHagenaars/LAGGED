@@ -1,5 +1,5 @@
 #pragma once
-#include "Platform/ExceptionBase.h"
+#include "Platform/Base/ExceptionBase.h"
 #include <vector>
 
 namespace LAG

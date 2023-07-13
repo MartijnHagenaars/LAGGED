@@ -1,5 +1,5 @@
 #pragma once
-#include "Window/WIN32/Exceptions/WIN32_Exception.h"
+#include "DX12_WindowException.h"
 
 #ifdef DEBUG
 	#define LAG_WINDOW_EXCEPTION(hResult) if(FAILED(hResult)) throw WindowException(__LINE__, __FILE__, hResult);

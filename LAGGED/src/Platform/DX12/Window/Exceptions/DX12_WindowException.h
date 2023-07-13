@@ -1,6 +1,6 @@
 #pragma once
-#include "Platform/ExceptionBase.h"
-#include "Platform/PlatformIncludes.h"
+#include "Platform/Base/ExceptionBase.h"
+#include "Platform/Base/PlatformIncludes.h"
 
 namespace LAG
 {

@@ -66,7 +66,7 @@
 	#include <DirectXMath.h>
 	
 	//DirectX12 extensions: 
-	#include "Renderer/DirectX/d3dx12.h"
+	#include "Platform/DX12/Renderer/d3dx12.h"
 	#include "SimpleMath.h"
 
 #endif

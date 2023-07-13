@@ -10,11 +10,11 @@
 using Microsoft::WRL::ComPtr;
 
 //Debugging / Exception includes
-#include "Renderer/DirectX/Exceptions/DX12_ExceptionMacros.h"
-#include "Renderer/DirectX/Exceptions/DX12_InfoQueueManager.h"
+#include "Exceptions/DX12_RenderExceptionMacros.h"
+#include "Exceptions/DX12_InfoQueueManager.h"
 
 //Additional includes
-#include "Renderer/DirectX/DX12_Utility.h"
+#include "DX12_Utility.h"
 #include "Utility/Logger.h"
 
 

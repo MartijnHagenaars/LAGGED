@@ -1,6 +1,6 @@
 #include "Precomp.h"
 #include "DX12_InfoQueueManager.h"
-#include "DX12_ExceptionMacros.h"
+#include "DX12_RenderExceptionMacros.h"
 
 //Including this lib solves some of the linker issues related to the extern DXGI_DEBUG_ALL
 #pragma comment(lib, "dxguid.lib")

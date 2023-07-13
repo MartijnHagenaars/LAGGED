@@ -1,5 +1,5 @@
 #include "Precomp.h"
-#include "DX12_Exception.h"
+#include "DX12_RenderException.h"
 #include "DX12_InfoQueueManager.h"
 
 namespace LAG
