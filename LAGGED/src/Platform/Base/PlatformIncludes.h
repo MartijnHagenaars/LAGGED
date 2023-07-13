@@ -70,3 +70,7 @@
 	#include "SimpleMath.h"
 
 #endif
+
+#ifdef PLATFORM_OPENGL
+
+#endif
