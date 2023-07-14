@@ -173,10 +173,10 @@ namespace LAG::Renderer
 		ComPtr<ID3DBlob> vertexShaderBlob;
 
 		//Utility::Logger::Info("Does vertex shader exist at \"..\\res\\Shaders\\VertexShader.cso\"? : {0}", std::filesystem::exists("..\\res\\Shaders\\VertexShader.cso") ? "yes" : "no");
-		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"..\\res\\Shaders\\VertexShader.cso", &vertexShaderBlob));
+		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"res/Shaders/VertexShader.cso", &vertexShaderBlob));
 
 		ComPtr<ID3DBlob> pixelShaderBlob;
-		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"PixelShader.cso", &pixelShaderBlob));
+		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"res/Shaders/PixelShader.cso", &pixelShaderBlob));
 
 		//Describe the input layout of the shader
 		D3D12_INPUT_ELEMENT_DESC inputLayout[] =

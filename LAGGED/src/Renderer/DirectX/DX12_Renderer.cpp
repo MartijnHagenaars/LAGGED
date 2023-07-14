@@ -308,9 +308,11 @@ namespace LAG::Renderer
 			renderData = std::make_unique<RendererData>();
 		else Logger::Error("Pointer to render struct already exists.");
 
+#ifdef DEBUG
 		ComPtr<ID3D12Debug> debugInterface;
 		LAG_GRAPHICS_EXCEPTION(D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface)));
 		debugInterface->EnableDebugLayer();
+#endif
 
 		//Initialize the exception info queue
 		InfoQueueManager::Initialize();
