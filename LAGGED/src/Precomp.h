@@ -11,3 +11,4 @@
 #include <string>
 #include <sstream>
 
+#include "Utility/Logger.h"

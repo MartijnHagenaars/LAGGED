@@ -15,7 +15,7 @@ namespace LAG::Window
 
 	static LRESULT HandleWindowProcedure(HWND, UINT, WPARAM, LPARAM);
 
-	void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
+	bool Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
 	{
 		if (winData == nullptr)
 		{
@@ -79,6 +79,8 @@ namespace LAG::Window
 		{
 			MessageBox(nullptr, ex.what(), "Standard Exception thrown!", MB_OK | MB_ICONEXCLAMATION);
 		}
+
+		return true;
 	}
 
 	void Shutdown()

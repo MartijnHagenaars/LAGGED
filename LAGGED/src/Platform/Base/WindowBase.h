@@ -7,7 +7,7 @@ namespace LAG::Window
 {
 	using WindowEventCallbackFunc = std::function<void(EventBase&)>;
 
-	void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true);
+	bool Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true);
 	void Shutdown(); 
 
 	// Handles the message pump
