@@ -73,8 +73,6 @@ namespace LAG::Renderer
 		ComPtr<ID3D12RootSignature> m_RootSignature;
 		ComPtr<ID3D12PipelineState> m_PipelineState;
 
-		std::unique_ptr<PipelineStateStream> m_PipelineStateStream = nullptr;
-
 		bool m_HasLoadedContent = false;
 		float m_FOV = 45.f; //NEEDS TO BE MOVED TO A CAMERA CLASS
 		
