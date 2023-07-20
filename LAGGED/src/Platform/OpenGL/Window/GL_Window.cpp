@@ -48,23 +48,19 @@ namespace LAG::Window
 
 	bool HandleWindowMessages(int& exitCodeOut)
 	{
-		while (!glfwWindowShouldClose(winData->window))
+		if (glfwWindowShouldClose(winData->window))
 		{
-			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			glfwSwapBuffers(winData->window);
-			glfwPollEvents();
+			exitCodeOut = 0;
+			return false;
 		}
 
-		exitCodeOut = 0;
-		return false;
+		return true;
 	}
 
 
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
 	{
-
+		winData->winEventCallback = callbackFunc;
 	}
 
 	const void* GetWindowData()

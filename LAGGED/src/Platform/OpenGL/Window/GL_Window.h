@@ -9,5 +9,6 @@ namespace LAG::Window
 	struct WindowData
 	{
 		GLFWwindow* window = nullptr;
+		WindowEventCallbackFunc winEventCallback = NULL;
 	};
 }
