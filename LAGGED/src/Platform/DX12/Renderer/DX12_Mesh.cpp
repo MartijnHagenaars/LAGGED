@@ -1,6 +1,6 @@
 #include "Precomp.h"
 #include "DX12_Mesh.h"
-#include "Platform/WindowBase.h"
+#include "Platform/Base/WindowBase.h"
 #include "DX12_CommandQueue.h"
 
 #include <iostream>

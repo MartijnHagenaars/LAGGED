@@ -1,5 +1,5 @@
 #pragma once
-#include "DX12_Exception.h"
+#include "DX12_RenderException.h"
 
 #ifdef DEBUG
 	#define LAG_GRAPHICS_EXCEPTION(hResult) if(FAILED(hResult)) throw GraphicsException(__LINE__, __FILE__, HRESULT(hResult) );

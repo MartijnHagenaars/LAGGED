@@ -1,6 +1,6 @@
 #pragma once
-#include "Platform/PlatformIncludes.h"
-#include "Platform/WindowBase.h"
+#include "Platform/Base/PlatformIncludes.h"
+#include "Platform/Base/WindowBase.h"
 
 namespace LAG::Window
 {

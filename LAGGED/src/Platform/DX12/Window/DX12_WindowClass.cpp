@@ -1,6 +1,6 @@
 #include "Precomp.h"
-#include "WIN32_WindowClass.h"
-#include "Window/WIN32/Exceptions/WIN32_ExceptionMacros.h"
+#include "DX12_WindowClass.h"
+#include "Exceptions/DX12_WindowExceptionMacros.h"
 
 namespace LAG
 {

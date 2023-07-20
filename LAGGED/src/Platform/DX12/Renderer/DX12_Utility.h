@@ -1,5 +1,5 @@
 #pragma once
-#include "Renderer/DirectX/DX12_Common.h"
+#include "DX12_Common.h"
 
 namespace LAG::Renderer
 {

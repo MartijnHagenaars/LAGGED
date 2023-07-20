@@ -3,7 +3,7 @@
 #include "DX12_Common.h"
 
 //Used to retrieve the WIN32Data struct
-#include "Window/WIN32/WIN32_Window.h"
+#include "Platform/DX12/Window/DX12_Window.h"
 
 #include <array>
 #include <mutex>
