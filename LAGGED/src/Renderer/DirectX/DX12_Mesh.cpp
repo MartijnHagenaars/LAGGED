@@ -30,7 +30,7 @@ namespace LAG::Renderer
 		//FIRST, recalculate the MVP. Doing this here, since the Mesh class shouldn't have an update function
 		{
 			//Update the model matrix
-			float modelAngle = static_cast<float>(0.01f * 90.f);
+			float modelAngle = static_cast<float>(0.1f * m_ObjectLifetime.GetSeconds());
 			const DirectX::XMVECTOR modelRotationAxis = DirectX::XMVectorSet(0, 1, 1, 0);
 			m_ModelMatrix = DirectX::XMMatrixRotationAxis(modelRotationAxis, DirectX::XMConvertToRadians(modelAngle));
 
@@ -177,11 +177,8 @@ namespace LAG::Renderer
 		dsvHeapDesc.NumDescriptors = 1;
 		dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 		LAG_GRAPHICS_EXCEPTION(device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_DSVHeap)));
-		//m_DSVHeap = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, false, 1); 
-
+		
 		ComPtr<ID3DBlob> vertexShaderBlob;
-
-		//Utility::Logger::Info("Does vertex shader exist at \"..\\res\\Shaders\\VertexShader.cso\"? : {0}", std::filesystem::exists("..\\res\\Shaders\\VertexShader.cso") ? "yes" : "no");
 		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"res/Shaders/VertexShader.cso", &vertexShaderBlob));
 
 		ComPtr<ID3DBlob> pixelShaderBlob;

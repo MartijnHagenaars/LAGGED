@@ -5,6 +5,7 @@
 #include "Renderer/DirectX/DX12_Common.h"
 
 #include "Renderer/DirectX/DX12_Renderer.h"
+#include "Utility/Timer.h"
 
 namespace LAG::Renderer
 {
@@ -80,6 +81,8 @@ namespace LAG::Renderer
 		DirectX::SimpleMath::Matrix m_ModelMatrix;
 		DirectX::SimpleMath::Matrix m_ViewMatrix;
 		DirectX::SimpleMath::Matrix m_ProjMatrix;
+
+		Utility::Timer m_ObjectLifetime;
 
 	};
 }
