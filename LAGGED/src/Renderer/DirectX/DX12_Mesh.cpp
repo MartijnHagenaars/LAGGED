@@ -15,8 +15,6 @@ namespace LAG::Renderer
 {
 	Mesh::Mesh()
 	{
-		m_FenceValues.resize(Renderer::GetTotalSwapChains());
-
 		//Uesd for making out a rectangular region of th screen which'll allow for rendering. We just want to cover the whole screen so we set it to the max.
 		m_ScissorRect = CD3DX12_RECT(0, 0, LONG_MAX, LONG_MAX);
 		m_Viewport = CD3DX12_VIEWPORT(0.f, 0.f, FLOAT(Window::GetWidth()), FLOAT(Window::GetHeight()));
@@ -55,13 +53,16 @@ namespace LAG::Renderer
 			auto currentBackBuffer = Renderer::GetCurrentBackBuffer();
 			auto currentRenderTargetView = Renderer::GetCurrentRenderTargetView();
 			auto depthCPUDescHandle = m_DSVHeap->GetCPUDescriptorHandleForHeapStart();
+			auto currentBackBufferIndex = Renderer::GetCurrentBackBufferIndex();
 			LAG_GRAPHICS_EXCEPTION_PREV();
 
-			//First, clear the render target
-			float clearColor[] = { 0.4f, 0.5f, 0.6f, 1.f };
-			TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-			ClearRTV(commandList, currentRenderTargetView, clearColor);
-			ClearDepth(commandList, depthCPUDescHandle, 1.f);
+			{
+				//First, clear the render target
+				float clearColor[] = { 0.4f, 0.5f, 0.6f, 1.f };
+				TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+				ClearRTV(commandList, currentRenderTargetView, clearColor);
+				ClearDepth(commandList, depthCPUDescHandle, 1.f);
+			}
 
 			//Now we prepare the rendering pipeline for rendering
 			commandList->SetPipelineState(m_PipelineState.Get()); //Bind the PSO, which sets all defined shader stages.
@@ -94,13 +95,15 @@ namespace LAG::Renderer
 			//The result will be the final rendered geometry being recorded into the render targets bound to the output merger stage.
 			commandList->DrawIndexedInstanced(m_Indices.size(), 1, 0, 0, 0);
 
+			{
+				//Now present the render!
+				TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
-			//Now present the render!
-			TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-
-			m_FenceValues[Renderer::GetCurrentBackBufferIndex()] = commandQueue->ExecuteCommandList(commandList);
-			UINT64 newBackBufferIndex = Renderer::Present();
-			commandQueue->WaitForFenceValue(m_FenceValues[newBackBufferIndex]);
+				//Memory leak is caused by this function
+				m_FenceValues[currentBackBufferIndex] = commandQueue->ExecuteCommandList(commandList);
+				currentBackBufferIndex = Renderer::Present();
+				commandQueue->WaitForFenceValue(m_FenceValues[currentBackBufferIndex]);
+			}
 
 		}
 
@@ -143,7 +146,7 @@ namespace LAG::Renderer
 
 		ComPtr<ID3D12Device5> device = GetDevice();
 		std::shared_ptr<DX12_CommandQueue> commandQueue = GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
-		ComPtr<ID3D12GraphicsCommandList5> commandList = commandQueue->GetCommandList();
+		ComPtr<ID3D12GraphicsCommandList2> commandList = commandQueue->GetCommandList();
 
 
 		//Upload the vertex buffer
@@ -164,7 +167,7 @@ namespace LAG::Renderer
 		
 		m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
 		m_IndexBufferView.Format = DXGI_FORMAT_R16_UINT;
-		m_IndexBufferView.SizeInBytes = sizeof(m_Indices.data());
+		m_IndexBufferView.SizeInBytes = m_Indices.size() * sizeof(unsigned short);
 
 
 		//Create the descriptor heap? 
@@ -284,7 +287,7 @@ namespace LAG::Renderer
 		
 	}
 
-	void Mesh::TransitionResource(ComPtr<ID3D12GraphicsCommandList5> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState)
+	void Mesh::TransitionResource(ComPtr<ID3D12GraphicsCommandList2> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState)
 	{
 		//Before a resource can be used, it needs to be in the correct state. Transitioning from one state to another is done using a resource barrier. This can be done by inserting a resource barrier into the command list
 		//Needs to be done when, for example, using the swapchains back buffer as a render target. Slso needs to be done before presenting, as it needs to be transitioned to the PRESENT state.
@@ -294,19 +297,19 @@ namespace LAG::Renderer
 		LAG_GRAPHICS_EXCEPTION_PREV();
 	}
 
-	void Mesh::ClearRTV(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor)
+	void Mesh::ClearRTV(ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor)
 	{
 		commandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr); //Using nullptr to clear the entire resource view
 		LAG_GRAPHICS_EXCEPTION_PREV();
 	}
 
-	void Mesh::ClearDepth(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv, float depth)
+	void Mesh::ClearDepth(ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv, float depth)
 	{
 		commandList->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH, depth, 0, 0, nullptr);
 		LAG_GRAPHICS_EXCEPTION_PREV();
 	}
 
-	void Mesh::UpdateBufferResource(ComPtr<ID3D12GraphicsCommandList5> commandList, 
+	void Mesh::UpdateBufferResource(ComPtr<ID3D12GraphicsCommandList2> commandList, 
 		ID3D12Resource** destinationResource, ID3D12Resource** intermediateResource, 
 		size_t numElements, size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags)
 	{
