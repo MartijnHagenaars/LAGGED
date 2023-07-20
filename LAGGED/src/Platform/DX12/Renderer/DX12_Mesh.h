@@ -2,9 +2,9 @@
 #include "Core/Defines.h"
 
 //!! Contents of this function are temporarily hardcoded to work for DX12. Will be changed after I figure out how to do this !!
-#include "Renderer/DirectX/DX12_Common.h"
+#include "DX12_Common.h"
+#include "DX12_Renderer.h"
 
-#include "Renderer/DirectX/DX12_Renderer.h"
 #include "Utility/Timer.h"
 
 namespace LAG::Renderer
