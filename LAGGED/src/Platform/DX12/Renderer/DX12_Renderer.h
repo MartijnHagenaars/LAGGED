@@ -18,11 +18,11 @@ namespace LAG::Renderer
 
 	void FlushCommandQueues();
 
-	const UINT64 GetTotalSwapChains();
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentRenderTargetView();
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetCurrentBackBuffer();
+	
+	const UINT64 GetTotalSwapChains();
 	UINT64 GetCurrentBackBufferIndex(); 
-
 }
 

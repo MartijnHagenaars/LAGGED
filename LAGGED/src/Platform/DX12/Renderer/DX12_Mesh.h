@@ -3,8 +3,9 @@
 
 //!! Contents of this function are temporarily hardcoded to work for DX12. Will be changed after I figure out how to do this !!
 #include "DX12_Common.h"
-
 #include "DX12_Renderer.h"
+
+#include "Utility/Timer.h"
 
 namespace LAG::Renderer
 {
@@ -36,16 +37,16 @@ namespace LAG::Renderer
 		LAG_API bool LoadContent(); 
 		LAG_API void UnloadContent();
 
-		void TransitionResource(ComPtr<ID3D12GraphicsCommandList5> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
+		void TransitionResource(ComPtr<ID3D12GraphicsCommandList2> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
 
-		void ClearRTV(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor);
-		void ClearDepth(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv, float depth = 1.f);
+		void ClearRTV(ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor);
+		void ClearDepth(ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv, float depth = 1.f);
 
 		//Create a resource that is large enough to hold buffer data, as well as creating an intermediate upload buffer that sticks around till the command list is finished uploaded the resource to the destination buffer on the GPU.
 		//commandList: Required for transfering buffer data to the destination resource
 		//destinationResource & intermediateResource: Used to store the destination and intermediate resources that are created in this function
 		//numElements, elementSize & bufferData: Information about the CPU buffer that is passed to the GPU resource
-		void UpdateBufferResource(ComPtr<ID3D12GraphicsCommandList5> commandList, ID3D12Resource** destinationResource, ID3D12Resource** intermediateResource,
+		void UpdateBufferResource(ComPtr<ID3D12GraphicsCommandList2> commandList, ID3D12Resource** destinationResource, ID3D12Resource** intermediateResource,
 			size_t numElements, size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags = D3D12_RESOURCE_FLAG_NONE);
 
 		//Resize the depth buffer to the same size as the window
@@ -59,7 +60,8 @@ namespace LAG::Renderer
 		std::vector<VertexData> m_Vertices;
 		std::vector<unsigned short> m_Indices;
 
-		std::vector<UINT64> m_FenceValues; //TODO: Change this to a std::array at some point. 
+		uint64_t m_FenceValues[3] = {}; //TODO: FUCKING FIX THIS HARDCODED NONSENSE. 
+		//std::vector<UINT64> m_FenceValues; //TODO: Change this to a std::array at some point. 
 
 		ComPtr<ID3D12Resource> m_VertexBuffer;
 		ComPtr<ID3D12Resource> m_IndexBuffer;
@@ -73,14 +75,14 @@ namespace LAG::Renderer
 		ComPtr<ID3D12RootSignature> m_RootSignature;
 		ComPtr<ID3D12PipelineState> m_PipelineState;
 
-		std::unique_ptr<PipelineStateStream> m_PipelineStateStream = nullptr;
-
 		bool m_HasLoadedContent = false;
 		float m_FOV = 45.f; //NEEDS TO BE MOVED TO A CAMERA CLASS
 		
 		DirectX::SimpleMath::Matrix m_ModelMatrix;
 		DirectX::SimpleMath::Matrix m_ViewMatrix;
 		DirectX::SimpleMath::Matrix m_ProjMatrix;
+
+		Utility::Timer m_ObjectLifetime;
 
 	};
 }

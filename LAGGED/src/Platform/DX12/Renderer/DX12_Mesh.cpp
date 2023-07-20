@@ -15,8 +15,6 @@ namespace LAG::Renderer
 {
 	Mesh::Mesh()
 	{
-		m_FenceValues.reserve(Renderer::GetTotalSwapChains());
-
 		//Uesd for making out a rectangular region of th screen which'll allow for rendering. We just want to cover the whole screen so we set it to the max.
 		m_ScissorRect = CD3DX12_RECT(0, 0, LONG_MAX, LONG_MAX);
 		m_Viewport = CD3DX12_VIEWPORT(0.f, 0.f, FLOAT(Window::GetWidth()), FLOAT(Window::GetHeight()));
@@ -32,7 +30,7 @@ namespace LAG::Renderer
 		//FIRST, recalculate the MVP. Doing this here, since the Mesh class shouldn't have an update function
 		{
 			//Update the model matrix
-			float modelAngle = static_cast<float>(0.01f * 90.f);
+			float modelAngle = static_cast<float>(0.1f * m_ObjectLifetime.GetSeconds());
 			const DirectX::XMVECTOR modelRotationAxis = DirectX::XMVectorSet(0, 1, 1, 0);
 			m_ModelMatrix = DirectX::XMMatrixRotationAxis(modelRotationAxis, DirectX::XMConvertToRadians(modelAngle));
 
@@ -55,12 +53,16 @@ namespace LAG::Renderer
 			auto currentBackBuffer = Renderer::GetCurrentBackBuffer();
 			auto currentRenderTargetView = Renderer::GetCurrentRenderTargetView();
 			auto depthCPUDescHandle = m_DSVHeap->GetCPUDescriptorHandleForHeapStart();
+			auto currentBackBufferIndex = Renderer::GetCurrentBackBufferIndex();
+			LAG_GRAPHICS_EXCEPTION_PREV();
 
-			//First, clear the render target
-			float clearColor[] = { 0.4f, 0.5f, 0.6f, 1.f };
-			TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
-			ClearRTV(commandList, currentRenderTargetView, clearColor);
-			ClearDepth(commandList, depthCPUDescHandle, 1.f);
+			{
+				//First, clear the render target
+				float clearColor[] = { 0.4f, 0.5f, 0.6f, 1.f };
+				TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET);
+				ClearRTV(commandList, currentRenderTargetView, clearColor);
+				ClearDepth(commandList, depthCPUDescHandle, 1.f);
+			}
 
 			//Now we prepare the rendering pipeline for rendering
 			commandList->SetPipelineState(m_PipelineState.Get()); //Bind the PSO, which sets all defined shader stages.
@@ -87,20 +89,21 @@ namespace LAG::Renderer
 			mvpMatrix = DirectX::XMMatrixMultiply(mvpMatrix, m_ProjMatrix);
 			commandList->SetGraphicsRoot32BitConstants(0, sizeof(DirectX::XMMATRIX) / 4, &mvpMatrix, 0); //Upload the matrix to the GPU
 
-
 			//Now the rendering pipeline is properly set up, and we can start drawing a cube!
 
 			//Execute the draw method on the command list. This will cause vertices bound to the IA stage to be pushed through the graphics rendering pipeline that's configured above. 
 			//The result will be the final rendered geometry being recorded into the render targets bound to the output merger stage.
 			commandList->DrawIndexedInstanced(m_Indices.size(), 1, 0, 0, 0);
 
+			{
+				//Now present the render!
+				TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
 
-			//Now present the render!
-			TransitionResource(commandList, currentBackBuffer, D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-
-			m_FenceValues[Renderer::GetCurrentBackBufferIndex()] = commandQueue->ExecuteCommandList(commandList);
-			UINT64 newBackBufferIndex = Renderer::Present();
-			commandQueue->WaitForFenceValue(m_FenceValues[newBackBufferIndex]);
+				//Memory leak is caused by this function
+				m_FenceValues[currentBackBufferIndex] = commandQueue->ExecuteCommandList(commandList);
+				currentBackBufferIndex = Renderer::Present();
+				commandQueue->WaitForFenceValue(m_FenceValues[currentBackBufferIndex]);
+			}
 
 		}
 
@@ -142,8 +145,8 @@ namespace LAG::Renderer
 		}
 
 		ComPtr<ID3D12Device5> device = GetDevice();
-		std::shared_ptr<DX12_CommandQueue> commandQueue = GetCommandQueue(D3D12_COMMAND_LIST_TYPE_DIRECT);
-		ComPtr<ID3D12GraphicsCommandList5> commandList = commandQueue->GetCommandList();
+		std::shared_ptr<DX12_CommandQueue> commandQueue = GetCommandQueue(D3D12_COMMAND_LIST_TYPE_COPY);
+		ComPtr<ID3D12GraphicsCommandList2> commandList = commandQueue->GetCommandList();
 
 
 		//Upload the vertex buffer
@@ -154,29 +157,32 @@ namespace LAG::Renderer
 		UpdateBufferResource(commandList, &m_VertexBuffer, &intermediateVertexResource, m_Vertices.size(), sizeof(VertexData), m_Vertices.data());
 
 		m_VertexBufferView.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();	//Address of the buffer
-		m_VertexBufferView.SizeInBytes = sizeof(m_Vertices.data());					//Size (in bytes) of the buffer
+		m_VertexBufferView.SizeInBytes = sizeof(m_Vertices[0]) * m_Vertices.size();	//Size (in bytes) of the buffer
 		m_VertexBufferView.StrideInBytes = sizeof(VertexData);						//Size (in bytes) if each vertex entry
 
 		
 		//Upload the index buffer
 		ComPtr<ID3D12Resource> intermediateIndexResource;
 		UpdateBufferResource(commandList, &m_IndexBuffer, &intermediateIndexResource, m_Indices.size(), sizeof(unsigned short), m_Indices.data());
-		//hello
+		
 		m_IndexBufferView.BufferLocation = m_IndexBuffer->GetGPUVirtualAddress();
 		m_IndexBufferView.Format = DXGI_FORMAT_R16_UINT;
-		m_IndexBufferView.SizeInBytes = sizeof(m_Indices.data());
+		m_IndexBufferView.SizeInBytes = m_Indices.size() * sizeof(unsigned short);
 
-		m_DSVHeap = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, false, 1); 
 
-		std::filesystem::path cwd = std::filesystem::current_path();
-		std::cout << "Current path is " << std::filesystem::current_path() << '\n'; // (1)
+		//Create the descriptor heap? 
+		D3D12_DESCRIPTOR_HEAP_DESC dsvHeapDesc = {};
+		dsvHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_DSV;
+		dsvHeapDesc.NodeMask = 0; 
+		dsvHeapDesc.NumDescriptors = 1;
+		dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+		LAG_GRAPHICS_EXCEPTION(device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_DSVHeap)));
+		
 		ComPtr<ID3DBlob> vertexShaderBlob;
-
-		//Utility::Logger::Info("Does vertex shader exist at \"..\\res\\Shaders\\VertexShader.cso\"? : {0}", std::filesystem::exists("..\\res\\Shaders\\VertexShader.cso") ? "yes" : "no");
-		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"..\\res\\Shaders\\VertexShader.cso", &vertexShaderBlob));
+		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"res/Shaders/VertexShader.cso", &vertexShaderBlob));
 
 		ComPtr<ID3DBlob> pixelShaderBlob;
-		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"PixelShader.cso", &pixelShaderBlob));
+		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"res/Shaders/PixelShader.cso", &pixelShaderBlob));
 
 		//Describe the input layout of the shader
 		D3D12_INPUT_ELEMENT_DESC inputLayout[] =
@@ -241,19 +247,19 @@ namespace LAG::Renderer
 
 		//Now we can describe the pipeline state object, which is used to describe how to configure the PSO
 		//Here, we apply the properties of the PSO with the various objects that have been described earlier. 
-		m_PipelineStateStream = std::make_unique<PipelineStateStream>();
-		m_PipelineStateStream->rootSignature = m_RootSignature.Get();
-		m_PipelineStateStream->inputLayout = { inputLayout, _countof(inputLayout) };
-		m_PipelineStateStream->primitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
-		m_PipelineStateStream->VS = CD3DX12_SHADER_BYTECODE(vertexShaderBlob.Get());
-		m_PipelineStateStream->PS = CD3DX12_SHADER_BYTECODE(pixelShaderBlob.Get());
-		m_PipelineStateStream->RTVFormats = rtvFormats;
-		m_PipelineStateStream->DSVFormat = DXGI_FORMAT_D32_FLOAT;
+		PipelineStateStream pipelineStateStream;
+		pipelineStateStream.rootSignature = m_RootSignature.Get();
+		pipelineStateStream.inputLayout = { inputLayout, _countof(inputLayout) };
+		pipelineStateStream.primitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
+		pipelineStateStream.VS = CD3DX12_SHADER_BYTECODE(vertexShaderBlob.Get());
+		pipelineStateStream.PS = CD3DX12_SHADER_BYTECODE(pixelShaderBlob.Get());
+		pipelineStateStream.RTVFormats = rtvFormats;
+		pipelineStateStream.DSVFormat = DXGI_FORMAT_D32_FLOAT;
 
 		//Now that the pipeline state stream struct is complete, we can create the actual pipeline state object. 
 		D3D12_PIPELINE_STATE_STREAM_DESC pssDesc = {};
 		pssDesc.SizeInBytes = sizeof(PipelineStateStream);
-		pssDesc.pPipelineStateSubobjectStream = &m_PipelineStateStream;
+		pssDesc.pPipelineStateSubobjectStream = &pipelineStateStream;
 
 		LAG_GRAPHICS_EXCEPTION(device->CreatePipelineState(&pssDesc, IID_PPV_ARGS(&m_PipelineState)));
 
@@ -263,10 +269,11 @@ namespace LAG::Renderer
 		UINT64 fenceValue = commandQueue->ExecuteCommandList(commandList);
 		commandQueue->WaitForFenceValue(fenceValue);
 
+		m_HasLoadedContent = true;
+
 		//TODO: Confirm that this returns the client width and height, and not the non-client window sizes
 		ResizeDepthBuffer(Window::GetWidth(), Window::GetHeight());
 
-		m_HasLoadedContent = true;
 		return m_HasLoadedContent;
 	}
 
@@ -275,26 +282,29 @@ namespace LAG::Renderer
 		
 	}
 
-	void Mesh::TransitionResource(ComPtr<ID3D12GraphicsCommandList5> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState)
+	void Mesh::TransitionResource(ComPtr<ID3D12GraphicsCommandList2> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState)
 	{
 		//Before a resource can be used, it needs to be in the correct state. Transitioning from one state to another is done using a resource barrier. This can be done by inserting a resource barrier into the command list
 		//Needs to be done when, for example, using the swapchains back buffer as a render target. Slso needs to be done before presenting, as it needs to be transitioned to the PRESENT state.
 
 		CD3DX12_RESOURCE_BARRIER resBarrier = CD3DX12_RESOURCE_BARRIER::Transition(resource.Get(), beforeState, afterState);
 		commandList->ResourceBarrier(1, &resBarrier);
+		LAG_GRAPHICS_EXCEPTION_PREV();
 	}
 
-	void Mesh::ClearRTV(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor)
+	void Mesh::ClearRTV(ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE rtv, FLOAT* clearColor)
 	{
 		commandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr); //Using nullptr to clear the entire resource view
+		LAG_GRAPHICS_EXCEPTION_PREV();
 	}
 
-	void Mesh::ClearDepth(ComPtr<ID3D12GraphicsCommandList5> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv, float depth)
+	void Mesh::ClearDepth(ComPtr<ID3D12GraphicsCommandList2> commandList, D3D12_CPU_DESCRIPTOR_HANDLE dsv, float depth)
 	{
 		commandList->ClearDepthStencilView(dsv, D3D12_CLEAR_FLAG_DEPTH, depth, 0, 0, nullptr);
+		LAG_GRAPHICS_EXCEPTION_PREV();
 	}
 
-	void Mesh::UpdateBufferResource(ComPtr<ID3D12GraphicsCommandList5> commandList, 
+	void Mesh::UpdateBufferResource(ComPtr<ID3D12GraphicsCommandList2> commandList, 
 		ID3D12Resource** destinationResource, ID3D12Resource** intermediateResource, 
 		size_t numElements, size_t elementSize, const void* bufferData, D3D12_RESOURCE_FLAGS flags)
 	{
