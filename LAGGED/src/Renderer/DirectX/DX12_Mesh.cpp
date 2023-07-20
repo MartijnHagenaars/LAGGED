@@ -157,7 +157,7 @@ namespace LAG::Renderer
 		UpdateBufferResource(commandList, &m_VertexBuffer, &intermediateVertexResource, m_Vertices.size(), sizeof(VertexData), m_Vertices.data());
 
 		m_VertexBufferView.BufferLocation = m_VertexBuffer->GetGPUVirtualAddress();	//Address of the buffer
-		m_VertexBufferView.SizeInBytes = sizeof(m_Vertices.data());					//Size (in bytes) of the buffer
+		m_VertexBufferView.SizeInBytes = sizeof(m_Vertices[0]) * m_Vertices.size();	//Size (in bytes) of the buffer
 		m_VertexBufferView.StrideInBytes = sizeof(VertexData);						//Size (in bytes) if each vertex entry
 
 		
