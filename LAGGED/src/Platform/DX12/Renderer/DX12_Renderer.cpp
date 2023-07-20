@@ -240,9 +240,9 @@ namespace LAG::Renderer
 		return commandAllocator;
 	}
 
-	ComPtr<ID3D12GraphicsCommandList5> CreateCommandList(ComPtr<ID3D12Device5> device, ComPtr<ID3D12CommandAllocator> commandAllocator, D3D12_COMMAND_LIST_TYPE type)
+	ComPtr<ID3D12GraphicsCommandList2> CreateCommandList(ComPtr<ID3D12Device5> device, ComPtr<ID3D12CommandAllocator> commandAllocator, D3D12_COMMAND_LIST_TYPE type)
 	{
-		ComPtr<ID3D12GraphicsCommandList5> commandList;
+		ComPtr<ID3D12GraphicsCommandList2> commandList;
 
 		LAG_GRAPHICS_EXCEPTION(device->CreateCommandList(0, type, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
 		
@@ -271,20 +271,20 @@ namespace LAG::Renderer
 	}
 
 
-	//Stall the CPU thread to wait for the GPU queue to finish executing commands that write to resources before being reused. 
-	//Example: before reusing a swapchain's backbuffer resource, any commands that are using that resource as a render target must be complete before that back buffer resource can be reused. 
-	// 
-	//	Note:	Any resources that are never used as a writeable target (for example; material textures) do noit need to be double buffered and do not require stalling the CPU thread before being reused as read-only resources in a shader. 
-	//			Writable resource such as render targets do need to be synchronized to protect the resource from being modified by multiple queues at the same time.
-	void WaitForFenceValue(ComPtr<ID3D12Fence> fence, UINT64 fenceValue, HANDLE fenceEventHandle, std::chrono::milliseconds waitDuration = std::chrono::milliseconds::max())
-	{
-		//If the fence has not yet reached the fence value, an event object is registered with the fence and is in turn signaled once the fence has reached the specified value. 
-		if (fence->GetCompletedValue() < fenceValue)
-		{
-			fence->SetEventOnCompletion(fenceValue, fenceEventHandle);
-			::WaitForSingleObject(fenceEventHandle, static_cast<DWORD>(waitDuration.count()));
-		}
-	}
+	////Stall the CPU thread to wait for the GPU queue to finish executing commands that write to resources before being reused. 
+	////Example: before reusing a swapchain's backbuffer resource, any commands that are using that resource as a render target must be complete before that back buffer resource can be reused. 
+	//// 
+	////	Note:	Any resources that are never used as a writeable target (for example; material textures) do noit need to be double buffered and do not require stalling the CPU thread before being reused as read-only resources in a shader. 
+	////			Writable resource such as render targets do need to be synchronized to protect the resource from being modified by multiple queues at the same time.
+	//void WaitForFenceValue(ComPtr<ID3D12Fence> fence, UINT64 fenceValue, HANDLE fenceEventHandle, std::chrono::milliseconds waitDuration = std::chrono::milliseconds::max())
+	//{
+	//	//If the fence has not yet reached the fence value, an event object is registered with the fence and is in turn signaled once the fence has reached the specified value. 
+	//	if (fence->GetCompletedValue() < fenceValue)
+	//	{
+	//		fence->SetEventOnCompletion(fenceValue, fenceEventHandle);
+	//		::WaitForSingleObject(fenceEventHandle, static_cast<DWORD>(waitDuration.count()));
+	//	}
+	//}
 
 	//Returns an event handle
 	//The Event Handle is used to block the CPU thread. 
@@ -308,9 +308,11 @@ namespace LAG::Renderer
 			renderData = std::make_unique<RendererData>();
 		else Logger::Error("Pointer to render struct already exists.");
 
+#ifdef DEBUG
 		ComPtr<ID3D12Debug> debugInterface;
 		LAG_GRAPHICS_EXCEPTION(D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface)));
 		debugInterface->EnableDebugLayer();
+#endif
 
 		//Initialize the exception info queue
 		InfoQueueManager::Initialize();
@@ -342,8 +344,8 @@ namespace LAG::Renderer
 		renderData->tempMesh = new Mesh();
 		renderData->tempMesh->LoadContent();
 
-		//Ensure that the RTVs are off the right size. 
-		OnResize();
+		////Ensure that the RTVs are off the right size. 
+		//OnResize();
 
 		return true;
 	}
@@ -351,8 +353,13 @@ namespace LAG::Renderer
 	void FlushCommandQueues()
 	{
 		renderData->directCommandQueue->Flush();
-		renderData->copyCommandQueue->Flush();
+		printf("");
+
 		renderData->computeCommandQueue->Flush();
+		printf("");
+
+		renderData->copyCommandQueue->Flush();
+		printf("");
 	}
 
 	bool Shutdown()
@@ -383,67 +390,8 @@ namespace LAG::Renderer
 
 	void Render()
 	{
-		ComPtr<ID3D12Resource> backBuffer = renderData->swapChainBackBuffers[renderData->currentBackBufferIndex];
-		ComPtr<ID3D12GraphicsCommandList5> directCommandList = renderData->directCommandQueue->GetCommandList();
-		UINT64 currentBackBufferIndex = renderData->currentBackBufferIndex;
-
 		Mesh* meshRef = renderData->tempMesh;
 		meshRef->Render();
-
-		//Old rendering method. Remove when done. 
-		{
-			////First, clear the render target
-			//{
-			//	//Before the render target can be cleared, it must be in the RENDER_TARGET state. 
-			//	//Change the resource state of the backbuffer.
-			//	CD3DX12_RESOURCE_BARRIER resBarrier = CD3DX12_RESOURCE_BARRIER::Transition(backBuffer.Get(), 
-			//		D3D12_RESOURCE_STATE_PRESENT, D3D12_RESOURCE_STATE_RENDER_TARGET); //Left is the before state, right is the after state. 
-
-			//	//If there is more than a single resource barrier to insert into the command list, it is recommended to store all barriers in a list and 
-			//	// execute them all at the same time before an operation that requires the resource to be in a particular state is executed. 
-			//	//In this case, there is only one barrier.
-			//	directCommandList->ResourceBarrier(1, &resBarrier);
-			//	
-			//	FLOAT clearColor[] = { 0.4f, 0.6f, 0.9f, 1.0f };
-
-			//	auto fucker = renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart();
-
-			//	//No clue how this works... 
-			//	CD3DX12_CPU_DESCRIPTOR_HANDLE rtv(renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart(),
-			//		renderData->currentBackBufferIndex, renderData->rtvDescSize);
-
-			//	//Clear the render target view and use the clear color
-			//	directCommandList->ClearRenderTargetView(rtv, clearColor, 0, nullptr);
-			//}
-
-			////Now we can present stuff!
-			//{
-			//	//First, we need to transition to the present state.
-			//	CD3DX12_RESOURCE_BARRIER barrier = CD3DX12_RESOURCE_BARRIER::Transition(
-			//		backBuffer.Get(),
-			//		D3D12_RESOURCE_STATE_RENDER_TARGET, D3D12_RESOURCE_STATE_PRESENT);
-			//	directCommandList->ResourceBarrier(1, &barrier);
-
-
-			//	////The command list must always be closed before being executed on the command queue
-			//	//LAG_GRAPHICS_EXCEPTION(directCommandList->Close());
-
-
-
-			//	renderData->fenceValues[currentBackBufferIndex] = renderData->directCommandQueue->ExecuteCommandList(directCommandList);
-
-			//	UINT syncInterval = renderData->useVSync ? 1 : 0;
-			//	UINT presentFlags = renderData->isTearingSupported && !renderData->useVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
-			//	LAG_GRAPHICS_EXCEPTION(renderData->swapChain->Present(syncInterval, presentFlags));
-			//	renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
-			//	
-			//	renderData->directCommandQueue->WaitForFenceValue(renderData->fenceValues[currentBackBufferIndex]);
-
-			//	//renderData->frameFenceValues[renderData->currentBackBufferIndex] = SignalFence(renderData->fence, renderData->commandQueue, renderData->fenceValue);
-			//}
-		}
-
-
 	}
 
 	void Clear()
@@ -518,7 +466,7 @@ namespace LAG::Renderer
 
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCurrentRenderTargetView()
 	{
-		return CD3DX12_CPU_DESCRIPTOR_HANDLE(renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart(), renderData->currentBackBufferIndex, renderData->rtvDescSize);
+		return CD3DX12_CPU_DESCRIPTOR_HANDLE(renderData->RTVDescHeap->GetCPUDescriptorHandleForHeapStart(), GetCurrentBackBufferIndex(), renderData->rtvDescSize);
 	}
 
 	Microsoft::WRL::ComPtr<ID3D12Resource> GetCurrentBackBuffer()

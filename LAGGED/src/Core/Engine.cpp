@@ -107,7 +107,6 @@ namespace LAG
 	bool Engine::Shutdown()
 	{
 		m_App.reset();
-		//Renderer::RemoveSurface(m_RenderSurface->GetID()); //TODO: This fucking sucks
 		Renderer::Shutdown();
 		Window::Shutdown();
 		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
