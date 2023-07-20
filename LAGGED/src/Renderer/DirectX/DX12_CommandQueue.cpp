@@ -18,7 +18,6 @@ namespace LAG::Renderer
 		LAG_GRAPHICS_EXCEPTION(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence)));
 
 		m_FenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
-		assert(m_FenceEvent && "Failed to create fence event handle.");
 	}
 
 	DX12_CommandQueue::~DX12_CommandQueue()
@@ -27,40 +26,9 @@ namespace LAG::Renderer
 
 	UINT64 DX12_CommandQueue::ExecuteCommandList(ComPtr<ID3D12GraphicsCommandList2> commandList)
 	{
-		////The recording state has finished, so close the list. 
-		//commandList->Close();
-
-		////Get the command allocator
-		////ComPtr<ID3D12CommandAllocator> commandAllocator = nullptr;
-		////UINT commandAllocDataSize = sizeof(ID3D12CommandAllocator*);
-		//ID3D12CommandAllocator* commandAllocator = nullptr;
-		//UINT commandAllocDataSize = sizeof(commandAllocator);
-
-		//HRESULT hresGetterShit = commandList->GetPrivateData(__uuidof(ID3D12CommandAllocator), &commandAllocDataSize, &commandAllocator);
-
-		////Now create an array of lists for executing...
-		//ID3D12CommandList* const lists[] = { 
-		//	commandList.Get() 
-		//};
-
-		//m_CommandQueue->ExecuteCommandLists(1, lists);
-		//UINT64 fenceValue = Signal(); //Get the fence value so that we wait for the command allocator to be ready for reuse. 
-
-		////Add all the data to the queues
-		//m_CommandAllocatorQueue.push(CommandAllocatorEntry({ fenceValue, commandAllocator}));
-		//m_CommandListQueue.push(commandList);
-
-		////Since the contents of this ComPtr have been moved to the m_CommandAllocatorQueue, and since it was a temporary ComPtr, we can release it.
-		////Calling this releases the interface pointer.
-		//HRESULT hresFucker = commandAllocator->Release();
-		//LAG_GRAPHICS_EXCEPTION(hresFucker);
-		//LAG_GRAPHICS_EXCEPTION_PREV();
-
-		//commandAllocator->SetName(L"Dead cunt");
-		//return fenceValue;
-
 		commandList->Close();
 
+		//Get the command allocator
 		ID3D12CommandAllocator* commandAllocator;
 		UINT dataSize = sizeof(commandAllocator);
 		LAG_GRAPHICS_EXCEPTION(commandList->GetPrivateData(__uuidof(ID3D12CommandAllocator), &dataSize, &commandAllocator));
@@ -72,22 +40,18 @@ namespace LAG::Renderer
 		m_CommandQueue->ExecuteCommandLists(1, ppCommandLists);
 		uint64_t fenceValue = Signal();
 
+		//Add all the data to the queues
 		m_CommandAllocatorQueue.emplace(CommandAllocatorEntry{ fenceValue, commandAllocator });
-		printf("Executing command allocator...\n");
 		m_CommandListQueue.push(commandList);
 
-		// The ownership of the command allocator has been transferred to the ComPtr
-		// in the command allocator queue. It is safe to release the reference 
-		// in this temporary COM pointer here.
+		//Since the contents of this ComPtr have been moved to the m_CommandAllocatorQueue, and since it was a temporary ComPtr, we can release it.
+		//Calling this releases the interface pointer.
 		commandAllocator->Release();
 		return fenceValue;
 	}
 
 	void DX12_CommandQueue::Flush()
 	{
-		/*UINT64 fenceValueForSignal = Signal();
-		HasFenceCompleted(fenceValueForSignal);*/
-
 		WaitForFenceValue(Signal());
 	}
 
@@ -95,9 +59,6 @@ namespace LAG::Renderer
 	{
 		ComPtr<ID3D12CommandAllocator> commandAllocator;
 		ComPtr<ID3D12GraphicsCommandList2> commandList;
-		
-		int kutzooi = m_CommandAllocatorQueue.size();
-		printf("");
 
 		//First, get a valid command allocator
 		bool isAllocatorQueueNotEmpty = !m_CommandAllocatorQueue.empty();
@@ -111,13 +72,10 @@ namespace LAG::Renderer
 			m_CommandAllocatorQueue.pop();
 
 			LAG_GRAPHICS_EXCEPTION(commandAllocator->Reset()); //Re-use memory associated with this command alloc
-
-			printf("Getting command allocator...\n");
 		}
 		else
 		{
 			commandAllocator = CreateCommandAllocator();
-			printf("Creating command allocator...\n");
 		}
 
 		//Next, get a valid command list
@@ -176,6 +134,5 @@ namespace LAG::Renderer
 	bool DX12_CommandQueue::HasFenceCompleted(UINT64 fenceValue)
 	{
 		return m_Fence->GetCompletedValue() >= fenceValue;
-		//return m_Fence->GetCompletedValue() >= m_FenceValue;
 	}
 }

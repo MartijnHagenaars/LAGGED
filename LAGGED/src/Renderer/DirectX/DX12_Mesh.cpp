@@ -179,8 +179,6 @@ namespace LAG::Renderer
 		LAG_GRAPHICS_EXCEPTION(device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_DSVHeap)));
 		//m_DSVHeap = CreateDescriptorHeap(GetDevice(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, false, 1); 
 
-		std::filesystem::path cwd = std::filesystem::current_path();
-		std::cout << "Current path is " << std::filesystem::current_path() << '\n'; // (1)
 		ComPtr<ID3DBlob> vertexShaderBlob;
 
 		//Utility::Logger::Info("Does vertex shader exist at \"..\\res\\Shaders\\VertexShader.cso\"? : {0}", std::filesystem::exists("..\\res\\Shaders\\VertexShader.cso") ? "yes" : "no");
