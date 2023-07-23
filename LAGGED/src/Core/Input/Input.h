@@ -72,8 +72,6 @@ namespace LAG::Input
 		LAG_PAUSE,
 		LAG_END,
 		LAG_HOME,
-		LAG_SELECT,
-		LAG_PRINT,
 		LAG_PRINTSCREEN,
 		LAG_INSERT,
 
