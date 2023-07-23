@@ -86,26 +86,6 @@ namespace LAG::Input
 		LAG_UNKNOWN
 	};
 
-	struct InputActionID
-	{
-		int ID = -1;
-		
-		//Fix: https://stackoverflow.com/questions/73059564/using-a-struct-as-key-for-stdunordered-map
-		bool operator==(const InputActionID& other) const
-		{
-			return (this->ID == other.ID);
-		}
-
-		std::size_t operator()(const InputActionID& k) const
-		{
-			// Compute individual hash values for first,
-			// second and third and combine them using XOR
-			// and bit shifting:
-
-			return (std::hash<int>()(k.ID));
-		}
-	};
-
 	struct InputActionData
 	{
 		InputActionData(InputType& type, size_t ID, const char* actionName = "Undef") :
@@ -122,8 +102,8 @@ namespace LAG::Input
 
 
 
-	bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName = "InputAction");
-	bool IsActionPressed(Utility::String actionName);
+	LAG_API bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName = "InputAction");
+	LAG_API bool IsActionPressed(Utility::String actionName);
 
 	InputDeviceType GetInputDeviceType(InputType& inputType);
 }

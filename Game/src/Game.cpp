@@ -19,8 +19,7 @@ Game::~Game()
 
 void Game::Initialize()
 {
-	printf("Init\n");
-
+	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::Utility::String("TestButton"));
 }
 
 void Game::Shutdown()
@@ -30,5 +29,8 @@ void Game::Shutdown()
 
 void Game::Update()
 {
-
+	if (LAG::Input::IsActionPressed(LAG::Utility::String("TestButton")))
+	{
+		LAG::Utility::Logger::Info("Button is being pressed!!");
+	}
 }

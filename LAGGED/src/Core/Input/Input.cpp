@@ -2,6 +2,7 @@
 #include "Input.h"
 
 #include <unordered_map>
+#include "Platform/Base/WindowBase.h"
 
 namespace LAG::Input
 {
@@ -11,8 +12,8 @@ namespace LAG::Input
 
 	bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName)
 	{
-		//size_t hashedID = std::hash<std::string>{}(actionName);
-		if (inputActions.find(actionName.GetValue()) == inputActions.end())
+		//Check if input action already exists
+		if (inputActions.find(actionName.GetValue()) != inputActions.end())
 		{
 			Utility::Logger::Warning("Input action with ID \"{0}\" already exists.", actionName.GetValue());
 			return false;
@@ -38,9 +39,7 @@ namespace LAG::Input
 		}
 		else
 		{
-			//TODO: Add implementation for checking input here
-			it->second.type;
-			return true;
+			return Window::CheckButtonPress(it->second);
 		}
 	}
 

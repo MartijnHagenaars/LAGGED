@@ -3,6 +3,8 @@
 #include "Events/WindowEvents.h"
 #include <functional>
 
+#include "Core/Input/Input.h"
+
 namespace LAG::Window
 {
 	using WindowEventCallbackFunc = std::function<void(EventBase&)>;
@@ -16,6 +18,9 @@ namespace LAG::Window
 	bool HandleWindowMessages(int& exitCodeOut);
 
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc);
+
+	bool CheckButtonPress(Input::InputActionData& inputType);
+
 
 	LAG_API void SetWindowName(const char* windowName);
 

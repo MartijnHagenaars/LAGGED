@@ -1,6 +1,8 @@
 #include "Precomp.h"
 #include "GL_Window.h"
 
+#include "GL_InputEnumConversion.h"
+
 namespace LAG::Window
 {
 	WindowData* winData = nullptr;
@@ -57,10 +59,32 @@ namespace LAG::Window
 		return true;
 	}
 
-
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
 	{
 		winData->winEventCallback = callbackFunc;
+	}
+
+	bool CheckButtonPress(Input::InputActionData& inputType)
+	{
+		
+		if (GetInputDeviceType(inputType.type) != Input::InputDeviceType::LAG_KEYBOARD)
+			return false;
+
+		int buttonType = ConvertLAGInputToGLFWInput(inputType.type);
+		int buttonState = glfwGetKey(winData->window, buttonType);
+
+		GLFW_RELEASE;
+		GLFW_PRESS;
+		GLFW_REPEAT;
+
+		printf("Button state: %i\n", buttonState);
+
+		if (buttonState != GLFW_RELEASE || buttonState != GLFW_FALSE)
+		{
+			return true;
+		}
+		else return false;
+
 	}
 
 	const void* GetWindowData()
