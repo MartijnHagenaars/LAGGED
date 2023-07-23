@@ -38,7 +38,9 @@ namespace LAG::Input
 		}
 		else
 		{
+			//TODO: Add implementation for checking input here
 			it->second.type;
+			return true;
 		}
 	}
 
