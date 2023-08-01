@@ -29,21 +29,42 @@ namespace LAG::Input
 		return true;
 	}
 
-	bool IsActionPressed(Utility::String actionName)
+	bool IsInputActionValid(size_t actionValue, std::unordered_map<size_t, LAG::Input::InputActionData>::iterator& iteratorOut)
 	{
-		auto it = inputActions.find(actionName.GetValue());
-		if (it == inputActions.end())
+		iteratorOut = inputActions.find(actionValue);
+		if (iteratorOut == inputActions.end())
 		{
-			Utility::Logger::Error("Input action with ID \"{0}\" not found.", actionName.GetValue());
+			Utility::Logger::Error("Input action with ID \"{0}\" not found.", actionValue);
 			return false;
 		}
-		else
-		{
-			return Window::CheckButtonPress(it->second);
-		}
+		else return true;
 	}
 
-	InputDeviceType GetInputDeviceType(InputType& inputType)
+	const InputActionData* GetInputAction(size_t inputID)
+	{
+		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
+		if (IsInputActionValid(inputID, it))
+			return &it->second;
+		else return nullptr;
+	}
+
+	bool IsActionPressed(Utility::String actionName)
+	{
+		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
+		if (IsInputActionValid(actionName.GetValue(), it))
+			return Window::CheckButtonPress(it->second, false);
+		else return false;
+	}
+
+	bool IsActionPressedOnce(Utility::String actionName)
+	{
+		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
+		if (IsInputActionValid(actionName.GetValue(), it))
+			return Window::CheckButtonPress(it->second, true);
+		else return false;
+	}
+
+	InputDeviceType GetInputDeviceType(const InputType& inputType)
 	{
 		if (inputType >= InputType::LAG_LMB && inputType <= InputType::LAG_MMB)
 			return InputDeviceType::LAG_MOUSE;

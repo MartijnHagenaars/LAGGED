@@ -12,6 +12,8 @@ namespace LAG::Window
 	bool Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true);
 	void Shutdown(); 
 
+	void Update(); 
+
 	// Handles the message pump
 	// &exitCodeOut: when program wants to exit, the exit code is assigned to the referenced argument. 
 	// Return value: returns FALSE when the program wants to exit
@@ -19,8 +21,7 @@ namespace LAG::Window
 
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc);
 
-	bool CheckButtonPress(Input::InputActionData& inputType);
-
+	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress);
 
 	LAG_API void SetWindowName(const char* windowName);
 

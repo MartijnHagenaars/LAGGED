@@ -2,9 +2,11 @@
 #include "GL_Window.h"
 
 #include "GL_InputEnumConversion.h"
+#include <unordered_set>
 
 namespace LAG::Window
 {
+	std::unordered_set<size_t> pressedButtonIDs(8); //Note: This is going to be moved when I add the window class, so ignore this for now. 
 	WindowData* winData = nullptr;
 
 	bool Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
@@ -37,7 +39,6 @@ namespace LAG::Window
 		}
 		glfwMakeContextCurrent(winData->window);
 
-
 		//glGetString(GL_VERSION);
 
 		return true;
@@ -64,27 +65,41 @@ namespace LAG::Window
 		winData->winEventCallback = callbackFunc;
 	}
 
-	bool CheckButtonPress(Input::InputActionData& inputType)
+	void Update()
 	{
-		
+		if (pressedButtonIDs.size() > 0)
+		{
+			for (auto it = pressedButtonIDs.begin(); it != pressedButtonIDs.end();)
+			{
+				if (!CheckButtonPress(*Input::GetInputAction(*it), false))
+					it = pressedButtonIDs.erase(it);
+				else ++it;
+			}
+		}
+
+	}
+
+	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
+	{
 		if (GetInputDeviceType(inputType.type) != Input::InputDeviceType::LAG_KEYBOARD)
 			return false;
 
 		int buttonType = ConvertLAGInputToGLFWInput(inputType.type);
 		int buttonState = glfwGetKey(winData->window, buttonType);
 
-		GLFW_RELEASE;
-		GLFW_PRESS;
-		GLFW_REPEAT;
-
-		printf("Button state: %i\n", buttonState);
-
-		if (buttonState != GLFW_RELEASE || buttonState != GLFW_FALSE)
+		if (buttonState > 0)
 		{
+			if (onlyDetectSinglePress)
+			{
+				if (pressedButtonIDs.find(inputType.actionID) == pressedButtonIDs.end())
+					pressedButtonIDs.emplace(inputType.actionID);
+				else return false;
+			}
+			
 			return true;
 		}
-		else return false;
 
+		return false;
 	}
 
 	const void* GetWindowData()
