@@ -3,7 +3,7 @@
 
 namespace LAG::Input
 {
-	enum class InputType
+	enum class InputType : unsigned char
 	{
 		//Mouse input types
 		LAG_LMB = 0,
@@ -72,8 +72,6 @@ namespace LAG::Input
 		LAG_PAUSE,
 		LAG_END,
 		LAG_HOME,
-		LAG_SELECT,
-		LAG_PRINT,
 		LAG_PRINTSCREEN,
 		LAG_INSERT,
 
@@ -88,31 +86,11 @@ namespace LAG::Input
 		LAG_UNKNOWN
 	};
 
-	struct InputActionID
-	{
-		int ID = -1;
-		
-		//Fix: https://stackoverflow.com/questions/73059564/using-a-struct-as-key-for-stdunordered-map
-		bool operator==(const InputActionID& other) const
-		{
-			return (this->ID == other.ID);
-		}
-
-		std::size_t operator()(const InputActionID& k) const
-		{
-			// Compute individual hash values for first,
-			// second and third and combine them using XOR
-			// and bit shifting:
-
-			return (std::hash<int>()(k.ID));
-		}
-	};
-
 	struct InputActionData
 	{
 		InputActionData(InputType& type, size_t ID, const char* actionName = "Undef") :
 			type(type), actionID(ID), actionName(actionName)
-		{}
+		{ }
 
 		//Other important variables
 		InputType type = InputType::LAG_UNKNOWN;
@@ -122,11 +100,12 @@ namespace LAG::Input
 		const char* GetDebugDisplayName() const { return actionName; }
 	};
 
+	LAG_API bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName = "InputAction");
+	const InputActionData* GetInputAction(size_t inputID);
 
+	LAG_API bool IsActionPressed(Utility::String actionName);
+	LAG_API bool IsActionPressedOnce(Utility::String actionName);
 
-	bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName = "InputAction");
-	bool IsActionPressed(Utility::String actionName);
-
-	InputDeviceType GetInputDeviceType(InputType& inputType);
+	InputDeviceType GetInputDeviceType(const InputType& inputType);
 }
 

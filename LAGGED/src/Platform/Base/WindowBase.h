@@ -3,6 +3,8 @@
 #include "Events/WindowEvents.h"
 #include <functional>
 
+#include "Core/Input/Input.h"
+
 namespace LAG::Window
 {
 	using WindowEventCallbackFunc = std::function<void(EventBase&)>;
@@ -10,12 +12,16 @@ namespace LAG::Window
 	bool Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true);
 	void Shutdown(); 
 
+	void Update(); 
+
 	// Handles the message pump
 	// &exitCodeOut: when program wants to exit, the exit code is assigned to the referenced argument. 
 	// Return value: returns FALSE when the program wants to exit
 	bool HandleWindowMessages(int& exitCodeOut);
 
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc);
+
+	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress);
 
 	LAG_API void SetWindowName(const char* windowName);
 

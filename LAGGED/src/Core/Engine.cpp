@@ -42,9 +42,10 @@ namespace LAG
 				if (Window::HandleWindowMessages(exitCode) == false)
 					break;
 
+				Window::Update();
+
 				m_App->Update();
 				Renderer::Render();
-
 
 				//Framerate counter: 
 				++frames;
