@@ -81,12 +81,21 @@ namespace LAG::Window
 
 	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
 	{
-		if (GetInputDeviceType(inputType.type) != Input::InputDeviceType::LAG_KEYBOARD)
+		int buttonState = 0;
+		Input::InputDeviceType deviceType = GetInputDeviceType(inputType.type);
+
+		if (deviceType == Input::InputDeviceType::LAG_UNKNOWN)
 			return false;
-
-		int buttonType = ConvertLAGInputToGLFWInput(inputType.type);
-		int buttonState = glfwGetKey(winData->window, buttonType);
-
+		else if (deviceType == Input::InputDeviceType::LAG_KEYBOARD)
+		{
+			int buttonType = ConvertLAGInputToGLFWInput(inputType.type);
+			buttonState = glfwGetKey(winData->window, buttonType);
+		}
+		else if (deviceType == Input::InputDeviceType::LAG_MOUSE)
+		{
+			buttonState = glfwGetMouseButton(winData->window, GLFW_MOUSE_BUTTON_LEFT);
+		}
+		
 		if (buttonState > 0)
 		{
 			if (onlyDetectSinglePress)
