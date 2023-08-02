@@ -95,6 +95,16 @@ namespace LAG::Window
 		WindowClass::GetWinClass().Shutdown();
 	}
 
+	void Update()
+	{
+
+	}
+
+	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
+	{
+		return false;
+	}
+
 	bool HandleWindowMessages(int& exitCodeOut)
 	{
 		MSG winMsg;
@@ -163,6 +173,19 @@ namespace LAG::Window
 			std::cout << "Window move: " << newWindowXPos << ", " << newWindowYPos << std::endl;
 		}
 		break;
+		case WM_KEYDOWN: case WM_KEYUP:
+		{
+			int keyID = static_cast<int>(wParam);
+			if ((msg == WM_KEYDOWN) || (msg == WM_SYSKEYDOWN))
+			{
+				printf("Press: %i\n", keyID);
+			}
+			else
+			{
+				printf("Release: %i\n", keyID);
+			}
+		}
+			break;
 		}
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
