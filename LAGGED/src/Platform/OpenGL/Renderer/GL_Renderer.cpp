@@ -49,7 +49,6 @@ namespace LAG::Renderer
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		glfwSwapBuffers(renderData->winData->window);
-		glfwPollEvents();
 	}
 
 	void Clear()

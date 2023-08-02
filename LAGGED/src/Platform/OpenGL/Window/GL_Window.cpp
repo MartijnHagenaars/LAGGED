@@ -39,8 +39,6 @@ namespace LAG::Window
 		}
 		glfwMakeContextCurrent(winData->window);
 
-		//glGetString(GL_VERSION);
-
 		return true;
 	}
 	
@@ -51,13 +49,14 @@ namespace LAG::Window
 
 	bool HandleWindowMessages(int& exitCodeOut)
 	{
+		glfwPollEvents();
+
 		if (glfwWindowShouldClose(winData->window))
 		{
 			exitCodeOut = 0;
 			return false;
 		}
-
-		return true;
+		else return true;
 	}
 
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
