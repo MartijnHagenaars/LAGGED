@@ -9,9 +9,19 @@
 
 #include "Platform/Base/RendererBase.h"
 
+
+#include <windowsx.h>
+
+//The following includes are used for storing/handling input data
+#include <bitset>
+#include "Core/Input/Input.h"
+#include "DX12_InputEnumConversion.h"
+
 namespace LAG::Window
 {
 	WIN32Data* winData = nullptr;
+
+	byte keyStates[UCHAR_MAX] = { 0 };
 
 	static LRESULT HandleWindowProcedure(HWND, UINT, WPARAM, LPARAM);
 
@@ -102,6 +112,15 @@ namespace LAG::Window
 
 	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
 	{
+		unsigned char keyCode = ConvertLAGInputToWIN32(inputType.type);
+		if (keyStates[keyCode] > 0)
+		{
+			if (onlyDetectSinglePress)
+				if (keyStates[keyCode] == 1)
+					++keyStates[keyCode];
+				else return false;
+			return true;
+		}
 		return false;
 	}
 
@@ -129,7 +148,7 @@ namespace LAG::Window
 		if (!CallbackFuncPtr)
 		{
 			return DefWindowProc(hWnd, msg, wParam, lParam);
-			LAG_ASSERT("callbackFunc is nullptr in HandleWindowProcedure.");
+			//LAG_ASSERT("callbackFunc is nullptr in HandleWindowProcedure.");
 		}
 		WindowEventCallbackFunc Callback = *CallbackFuncPtr;
 		switch (msg)
@@ -173,19 +192,61 @@ namespace LAG::Window
 			std::cout << "Window move: " << newWindowXPos << ", " << newWindowYPos << std::endl;
 		}
 		break;
+
+		//Functionality for button presses
 		case WM_KEYDOWN: case WM_KEYUP:
 		{
 			int keyID = static_cast<int>(wParam);
 			if ((msg == WM_KEYDOWN) || (msg == WM_SYSKEYDOWN))
 			{
-				printf("Press: %i\n", keyID);
+				//Checking lParam if the previous key state is false. Checking this to prevent repeating inputs.. 
+				//0x40000000 since previous key state check is on the 30th bit. 2^30 = 0x40000000. quicks maths!
+				if (!(lParam & 0x40000000))
+					keyStates[wParam] = 1;
 			}
-			else
-			{
-				printf("Release: %i\n", keyID);
-			}
-		}
+			else keyStates[wParam] = 0;
 			break;
+		}
+		case WM_LBUTTONDOWN:
+		case WM_RBUTTONDOWN:
+		case WM_MBUTTONDOWN:
+		{
+			int keyID = static_cast<int>(wParam);
+			switch (ConvertWIN32InputToLAGInput(keyID))
+			{
+			case Input::InputType::LAG_LMB:
+				printf("LMB Press!\n");
+				break;
+			case Input::InputType::LAG_RMB:
+				printf("RMB Press!\n");
+				break;
+			case Input::InputType::LAG_MMB:
+				printf("MMB Press!\n");
+				break;
+			}
+			break;
+		}
+		case WM_LBUTTONUP:
+		{
+			int keyID = static_cast<int>(wParam);
+			printf("LMB Release!\n");
+			break;
+		}
+		case WM_RBUTTONUP:
+			printf("LMB Release!\n");
+			break;
+		case WM_MBUTTONUP:
+			printf("LMB Release!\n");
+			break;
+		
+
+		case WM_MOUSEMOVE:
+		{
+			float x = static_cast<float>(GET_X_LPARAM(lParam));
+			float y = static_cast<float>(GET_Y_LPARAM(lParam));
+
+			break;
+		} 
 		}
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);

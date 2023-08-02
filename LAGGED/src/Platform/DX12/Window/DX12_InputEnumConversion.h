@@ -76,3 +76,78 @@ LAG::Input::InputType ConvertWIN32InputToLAGInput(int win32Input)
 	default:case 0: return LAG::Input::InputType::LAG_UNKNOWN;
 	}
 }
+
+unsigned char ConvertLAGInputToWIN32(LAG::Input::InputType inputType)
+{
+	switch (inputType)
+	{
+	case LAG::Input::InputType::LAG_LMB:			return 0x01;
+	case LAG::Input::InputType::LAG_RMB:			return 0x02;
+	case LAG::Input::InputType::LAG_MMB:			return 0x04;
+
+	case LAG::Input::InputType::LAG_A:				return 0x41;
+	case LAG::Input::InputType::LAG_B:				return 0x42;
+	case LAG::Input::InputType::LAG_C:				return 0x43;
+	case LAG::Input::InputType::LAG_D:				return 0x44;
+	case LAG::Input::InputType::LAG_E:				return 0x45;
+	case LAG::Input::InputType::LAG_F:				return 0x46;
+	case LAG::Input::InputType::LAG_G:				return 0x47;
+	case LAG::Input::InputType::LAG_H:				return 0x48;
+	case LAG::Input::InputType::LAG_I:				return 0x49;
+	case LAG::Input::InputType::LAG_J:				return 0x4A;
+	case LAG::Input::InputType::LAG_K:				return 0x4B;
+	case LAG::Input::InputType::LAG_L:				return 0x4C;
+	case LAG::Input::InputType::LAG_M:				return 0x4D;
+	case LAG::Input::InputType::LAG_N:				return 0x4E;
+	case LAG::Input::InputType::LAG_O:				return 0x4F;
+	case LAG::Input::InputType::LAG_P:				return 0x50;
+	case LAG::Input::InputType::LAG_Q:				return 0x51;
+	case LAG::Input::InputType::LAG_R:				return 0x52;
+	case LAG::Input::InputType::LAG_S:				return 0x53;
+	case LAG::Input::InputType::LAG_T:				return 0x54;
+	case LAG::Input::InputType::LAG_U:				return 0x55;
+	case LAG::Input::InputType::LAG_V:				return 0x56;
+	case LAG::Input::InputType::LAG_W:				return 0x57;
+	case LAG::Input::InputType::LAG_X:				return 0x58;
+	case LAG::Input::InputType::LAG_Y:				return 0x59;
+	case LAG::Input::InputType::LAG_Z:				return 0x5A;
+	case LAG::Input::InputType::LAG_SPACE:			return 0x20;
+	case LAG::Input::InputType::LAG_SHIFT_L:		return 0xA0;
+	case LAG::Input::InputType::LAG_SHIFT_R:		return 0xA1;
+	case LAG::Input::InputType::LAG_CONTROL_L:		return 0xA2;
+	case LAG::Input::InputType::LAG_CONTROL_R:		return 0xA3;
+	case LAG::Input::InputType::LAG_ALT_L:			return 0xA4;
+	case LAG::Input::InputType::LAG_ALT_R:			return 0xA5;
+
+	case LAG::Input::InputType::LAG_LEFT:			return 0x25;
+	case LAG::Input::InputType::LAG_UP:				return 0x26;
+	case LAG::Input::InputType::LAG_RIGHT:			return 0x27;
+	case LAG::Input::InputType::LAG_DOWN:			return 0x28;
+
+	case LAG::Input::InputType::LAG_ENTER:			return 0x0D;
+	case LAG::Input::InputType::LAG_BACK:			return 0x08;
+	case LAG::Input::InputType::LAG_TAB:			return 0x09;
+
+	case LAG::Input::InputType::LAG_NUM_0:			return 0x60;
+	case LAG::Input::InputType::LAG_NUM_1:			return 0x61;
+	case LAG::Input::InputType::LAG_NUM_2:			return 0x62;
+	case LAG::Input::InputType::LAG_NUM_3:			return 0x63;
+	case LAG::Input::InputType::LAG_NUM_4:			return 0x64;
+	case LAG::Input::InputType::LAG_NUM_5:			return 0x65;
+	case LAG::Input::InputType::LAG_NUM_6:			return 0x66;
+	case LAG::Input::InputType::LAG_NUM_7:			return 0x67;
+	case LAG::Input::InputType::LAG_NUM_8:			return 0x68;
+	case LAG::Input::InputType::LAG_NUM_9:			return 0x69;
+
+	case LAG::Input::InputType::LAG_ESCAPE:			return 0x1B;
+	case LAG::Input::InputType::LAG_DELETE:			return 0x2E;
+	case LAG::Input::InputType::LAG_CAPS:			return 0x14;
+	case LAG::Input::InputType::LAG_PAUSE:			return 0x13;
+	case LAG::Input::InputType::LAG_END:			return 0x23;
+	case LAG::Input::InputType::LAG_HOME:			return 0x24;
+	case LAG::Input::InputType::LAG_PRINTSCREEN:	return 0x2C;
+	case LAG::Input::InputType::LAG_INSERT:			return 0x2D;
+
+	default:case LAG::Input::InputType::LAG_UNKNOWN:return 0;
+	}
+}
