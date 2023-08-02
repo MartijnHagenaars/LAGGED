@@ -106,6 +106,9 @@ namespace LAG::Input
 	LAG_API bool IsActionPressed(Utility::String actionName);
 	LAG_API bool IsActionPressedOnce(Utility::String actionName);
 
+	//Contains two argument references that return the position of the cursor on the x- and y-axis.
+	LAG_API void GetMousePosition(float& xPos, float& yPos);
+
 	InputDeviceType GetInputDeviceType(const InputType& inputType);
 }
 

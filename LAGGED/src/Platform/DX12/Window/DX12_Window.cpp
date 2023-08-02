@@ -22,6 +22,8 @@ namespace LAG::Window
 	WIN32Data* winData = nullptr;
 
 	byte keyStates[UCHAR_MAX] = { 0 };
+	float mouseXPos = 0.f, mouseYPos = 0.f;
+	bool isCursorInWindow = false;
 
 	static LRESULT HandleWindowProcedure(HWND, UINT, WPARAM, LPARAM);
 
@@ -223,9 +225,14 @@ namespace LAG::Window
 		
 		case WM_MOUSEMOVE:
 		{
-			float x = static_cast<float>(GET_X_LPARAM(lParam));
-			float y = static_cast<float>(GET_Y_LPARAM(lParam));
+			mouseXPos = static_cast<float>(GET_X_LPARAM(lParam));
+			mouseYPos = static_cast<float>(GET_Y_LPARAM(lParam));
 
+			TRACKMOUSEEVENT tme = { 0 };
+			tme.hwndTrack = hWnd;
+			tme.cbSize = sizeof(TRACKMOUSEEVENT);
+			tme.dwFlags = TME_LEAVE;
+			TrackMouseEvent(&tme);
 			break;
 		} 
 		}
@@ -236,6 +243,11 @@ namespace LAG::Window
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
 	{
 		winData->winEventCallback = callbackFunc;
+	}
+
+	void GetMousePosition(float& xPos, float& yPos)
+	{
+		xPos = mouseXPos, yPos = mouseYPos;
 	}
 
 	LAG_API void SetWindowName(const char* windowName)

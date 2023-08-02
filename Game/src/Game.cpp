@@ -41,6 +41,8 @@ void Game::Update()
 	}
 	else if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("LMB")))
 	{
-		LAG::Utility::Logger::Info("Clickity!");
+		float x, y;
+		LAG::Input::GetMousePosition(x, y);
+		LAG::Utility::Logger::Info("Clickity at {0}, {1}!\n", x, y);
 	}
 }
