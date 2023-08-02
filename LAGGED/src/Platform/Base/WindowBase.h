@@ -22,6 +22,7 @@ namespace LAG::Window
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc);
 
 	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress);
+	void GetMousePosition(float& xPos, float& yPos);
 
 	LAG_API void SetWindowName(const char* windowName);
 

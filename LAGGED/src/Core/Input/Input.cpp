@@ -64,6 +64,11 @@ namespace LAG::Input
 		else return false;
 	}
 
+	void GetMousePosition(float& xPos, float& yPos)
+	{
+		Window::GetMousePosition(xPos, yPos);
+	}
+
 	InputDeviceType GetInputDeviceType(const InputType& inputType)
 	{
 		if (inputType >= InputType::LAG_LMB && inputType <= InputType::LAG_MMB)

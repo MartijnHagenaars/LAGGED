@@ -120,6 +120,9 @@
     <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\DX12\Window\DX12_InputEnumConversion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">
