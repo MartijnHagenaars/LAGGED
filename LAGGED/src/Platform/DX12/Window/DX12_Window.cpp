@@ -195,51 +195,32 @@ namespace LAG::Window
 
 		//Functionality for button presses
 		case WM_KEYDOWN: case WM_KEYUP:
+		case WM_LBUTTONDOWN:
+		case WM_RBUTTONDOWN:
+		case WM_MBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONUP:
 		{
 			int keyID = static_cast<int>(wParam);
-			if ((msg == WM_KEYDOWN) || (msg == WM_SYSKEYDOWN))
+			if ((msg == WM_KEYDOWN) || (msg == WM_LBUTTONDOWN) || (msg == WM_RBUTTONDOWN) || (msg == WM_SYSKEYDOWN) || (msg == WM_MBUTTONDOWN))
 			{
 				//Checking lParam if the previous key state is false. Checking this to prevent repeating inputs.. 
 				//0x40000000 since previous key state check is on the 30th bit. 2^30 = 0x40000000. quicks maths!
 				if (!(lParam & 0x40000000))
 					keyStates[wParam] = 1;
 			}
-			else keyStates[wParam] = 0;
-			break;
-		}
-		case WM_LBUTTONDOWN:
-		case WM_RBUTTONDOWN:
-		case WM_MBUTTONDOWN:
-		{
-			int keyID = static_cast<int>(wParam);
-			switch (ConvertWIN32InputToLAGInput(keyID))
+			else
 			{
-			case Input::InputType::LAG_LMB:
-				printf("LMB Press!\n");
-				break;
-			case Input::InputType::LAG_RMB:
-				printf("RMB Press!\n");
-				break;
-			case Input::InputType::LAG_MMB:
-				printf("MMB Press!\n");
-				break;
+				if ((msg == WM_LBUTTONUP) || (msg == WM_RBUTTONUP) || (msg == WM_MBUTTONUP))
+					if (msg == WM_LBUTTONUP) keyStates[VK_LBUTTON] = 0; 
+					else if (msg == WM_RBUTTONUP) keyStates[VK_RBUTTON] = 0;
+					else if (msg == WM_MBUTTONUP) keyStates[VK_MBUTTON] = 0;
+				else keyStates[wParam] = 0;
 			}
 			break;
 		}
-		case WM_LBUTTONUP:
-		{
-			int keyID = static_cast<int>(wParam);
-			printf("LMB Release!\n");
-			break;
-		}
-		case WM_RBUTTONUP:
-			printf("LMB Release!\n");
-			break;
-		case WM_MBUTTONUP:
-			printf("LMB Release!\n");
-			break;
 		
-
 		case WM_MOUSEMOVE:
 		{
 			float x = static_cast<float>(GET_X_LPARAM(lParam));
