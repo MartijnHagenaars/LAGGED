@@ -99,16 +99,26 @@ namespace LAG::Input
 		const char* actionName = "Undef";
 		const char* GetDebugDisplayName() const { return actionName; }
 	};
-
+	
+	//Add a new input action.
+	//Returns true/false based on if the input action was added successfully or not. 
 	LAG_API bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName = "InputAction");
+	
+	//Get an input action using it's ID.
 	const InputActionData* GetInputAction(size_t inputID);
 
+	//Returns true/false based on whether the action is pressed or not.
 	LAG_API bool IsActionPressed(Utility::String actionName);
+
+	//Returns true/false based on whether the action is pressed once. 
+	//Will automatically turn false again when the button is held down for more than one frame. s
 	LAG_API bool IsActionPressedOnce(Utility::String actionName);
 
 	//Contains two argument references that return the position of the cursor on the x- and y-axis.
 	LAG_API void GetMousePosition(float& xPos, float& yPos);
 
+	//Get the input device type for an input type.
+	//Determines if an input type is of input device Keyboard, Mouse or Controller.
 	InputDeviceType GetInputDeviceType(const InputType& inputType);
 }
 
