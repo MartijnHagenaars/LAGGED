@@ -28,19 +28,10 @@ namespace LAG
 
         std::shared_ptr<Window> newWindow = std::make_shared<Window>();
         newWindow->Initialize(winWidth, winHeight, fullscreen, useVSync, centerWindow);
-        if (newWindow == nullptr)
-        {
-            printf("FUCK\n");
-        }
 
         if (m_MainWindow == nullptr)
             m_MainWindow = newWindow;
         else m_AdditionalWindows.emplace_back(newWindow);
-        
-        if (m_MainWindow == nullptr)
-        {
-            printf("FUCK\n");
-        }
 
         return newWindow;
     }
