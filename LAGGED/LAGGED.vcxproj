@@ -258,8 +258,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\Precomp.h" />
-    <ClInclude Include="src\Platform\Base\RendererBase.h" />
-    <ClInclude Include="src\Platform\Base\WindowBase.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h" />
+    <ClInclude Include="src\Platform\Base\Window\WindowBase.h" />
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
     <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
@@ -276,6 +276,7 @@
     <ClInclude Include="src\Utility\String.h" />
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Utility\StackTrace.h" />
+    <ClInclude Include="src\Platform\Base\Window\WindowManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Input\Input.cpp" />
@@ -328,6 +329,7 @@
     </ClCompile>
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Utility\StackTrace.cpp" />
+    <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\PixelShader.hlsl">

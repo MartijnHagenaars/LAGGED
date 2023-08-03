@@ -5,9 +5,10 @@
 
 namespace LAG::Renderer
 {
+	//Maybe I don't need this anymore here? 
 	struct RendererData
 	{
-		const Window::WindowData* winData = nullptr;
+		//const Window::WindowData* winData = nullptr;
 
 	};
 	RendererData* renderData = nullptr;
@@ -15,14 +16,14 @@ namespace LAG::Renderer
 
 	bool Initialize()
 	{
-		if (renderData != nullptr || Window::GetWindowData() == nullptr)
+		if (renderData != nullptr)
 		{
-			Utility::Logger::Critical("RenderData / WindowData objects are invalid.");
+			Utility::Logger::Warning("Renderer already initialized.");
 			return false;
 		}
-		
 		renderData = new RendererData();
-		renderData->winData = static_cast<const Window::WindowData*>(Window::GetWindowData());
+		
+		//renderData->winData = static_cast<const Window::WindowData*>(Window::GetWindowData());
 		
 
 		return true;
@@ -47,9 +48,6 @@ namespace LAG::Renderer
 	{
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
-		glfwSwapBuffers(renderData->winData->window);
-		glfwPollEvents();
 	}
 
 	void Clear()

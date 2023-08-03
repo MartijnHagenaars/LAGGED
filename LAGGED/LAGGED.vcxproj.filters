@@ -27,10 +27,10 @@
     <ClInclude Include="src\Core\EntryPoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\Base\RendererBase.h">
+    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\Base\WindowBase.h">
+    <ClInclude Include="src\Platform\Base\Window\WindowBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h">
@@ -123,6 +123,9 @@
     <ClInclude Include="src\Platform\DX12\Window\DX12_InputEnumConversion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\Base\Window\WindowManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">
@@ -174,6 +177,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Core\Input\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

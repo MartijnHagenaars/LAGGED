@@ -1,10 +1,10 @@
 #pragma once
-#include "Platform/Base/WindowBase.h"
+#include "Platform/Base/Window/WindowBase.h"
 
 #include "GL/glew.h"
 #include "GLFW/glfw3.h"
 
-namespace LAG::Window
+namespace LAG
 {
 	struct WindowData
 	{

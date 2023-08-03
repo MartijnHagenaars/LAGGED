@@ -4,25 +4,29 @@
 #include "GL_InputEnumConversion.h"
 #include <unordered_set>
 
-namespace LAG::Window
+namespace LAG
 {
 	std::unordered_set<size_t> pressedButtonIDs(8); //Note: This is going to be moved when I add the window class, so ignore this for now. 
 	WindowData* winData = nullptr;
 
-	bool Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
+	Window::Window()
+	{
+	}
+
+	void Window::Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
 	{
 		if (winData == nullptr)
 			winData = new WindowData;
 		else
 		{
 			Utility::Logger::Error("GL Window already initialized, or WindowData is already constructed.");
-			return false;
+			return;
 		}
 
 		if (glfwInit() != GLFW_TRUE)
 		{
 			Utility::Logger::Critical("GLFW failed to initialize.");
-			return false;
+			return;
 		}
 
 		//TODO: Maybe check for most recent version of OpenGL 4? 
@@ -35,22 +39,21 @@ namespace LAG::Window
 		{
 			std::cout << "Failed to create GLFW window" << std::endl;
 			glfwTerminate();
-			return false;
+			return;
 		}
 		glfwMakeContextCurrent(winData->window);
 
 		//glGetString(GL_VERSION);
-
-		return true;
 	}
-	
-	void Shutdown()
+
+	Window::~Window()
 	{
 		glfwTerminate();
 	}
 
-	bool HandleWindowMessages(int& exitCodeOut)
+	bool Window::HandleWindowMessages(int& exitCodeOut)
 	{
+		glfwPollEvents();
 		if (glfwWindowShouldClose(winData->window))
 		{
 			exitCodeOut = 0;
@@ -60,12 +63,17 @@ namespace LAG::Window
 		return true;
 	}
 
-	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
+	void Window::PresentFrame()
+	{
+		glfwSwapBuffers(winData->window);
+	}
+
+	void Window::SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
 	{
 		winData->winEventCallback = callbackFunc;
 	}
 
-	void Update()
+	void Window::Update()
 	{
 		if (pressedButtonIDs.size() > 0)
 		{
@@ -79,7 +87,7 @@ namespace LAG::Window
 
 	}
 
-	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
+	bool Window::CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
 	{
 		int buttonState = 0;
 		Input::InputDeviceType deviceType = GetInputDeviceType(inputType.type);
@@ -111,7 +119,16 @@ namespace LAG::Window
 		return false;
 	}
 
-	const void* GetWindowData()
+	void Window::GetMousePosition(float& xPos, float& yPos)
+	{
+		double xPosD = 0.f, yPosD = 0.f;
+		
+		glfwGetCursorPos(winData->window, &xPosD, &yPosD);
+		xPos = static_cast<float>(xPosD);
+		yPos = static_cast<float>(yPosD);
+	}
+
+	const void* Window::GetWindowData()
 	{
 		return winData;
 	}
