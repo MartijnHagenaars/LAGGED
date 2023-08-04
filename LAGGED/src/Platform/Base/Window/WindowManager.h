@@ -1,6 +1,14 @@
 #pragma once
 #include "WindowBase.h"
 
+//Not super happy with this. Need to fine a better solution
+#ifdef PLATFORM_OPENGL
+#include "Platform/OpenGL/Window/GL_Window.h"
+#elif PLATFORM_DIRECTX
+#include "Platform/DX12/Window/DX12_Window.h"
+#endif
+
+
 namespace LAG
 {
 	class WindowManager

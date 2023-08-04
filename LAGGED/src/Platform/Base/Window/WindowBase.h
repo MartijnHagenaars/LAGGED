@@ -1,47 +1,51 @@
 #pragma once
 #include "Core/Defines.h"
-#include "Events/WindowEvents.h"
 #include <functional>
 
 #include "Core/Input/Input.h"
 
 namespace LAG
 {
+	class EventBase;
 	using WindowEventCallbackFunc = std::function<void(EventBase&)>;
-	
-	class Window
+
+	class WindowBase
 	{
-		friend class WindowManager;
 	public:
-		Window();
-		~Window();
+		WindowBase() {};
+		~WindowBase() {};
 
 		// Handles the message pump
 		// &exitCodeOut: when program wants to exit, the exit code is assigned to the referenced argument. 
 		// Return value: returns FALSE when the program wants to exit
-		bool HandleWindowMessages(int& exitCodeOut);
+		virtual bool HandleWindowMessages(int& exitCodeOut) = 0;
 
-		void PresentFrame();
+		virtual void PresentFrame() = 0;
 
-		bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress);
-		void GetMousePosition(float& xPos, float& yPos);
+		virtual bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress) = 0;
+		virtual void GetMousePosition(float& xPos, float& yPos) = 0;
 
-		void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc);
+		virtual void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc) = 0;
 
-		LAG_API void SetWindowName(const char* windowName);
+		LAG_API virtual void SetWindowName(const char* windowName) = 0;
 
-		LAG_API unsigned int GetWidth();
-		LAG_API unsigned int GetHeight();
+		LAG_API virtual unsigned int GetWidth() const { return m_WindowWidth; }
+		LAG_API virtual unsigned int GetHeight() const { return m_WindowHeight; }
 
-		LAG_API unsigned int GetNonClientWidth();
-		LAG_API unsigned int GetNonClientHeight();
+		LAG_API virtual unsigned int GetNonClientWidth() = 0;
+		LAG_API virtual unsigned int GetNonClientHeight() = 0;
 
-		const void* GetWindowData();
+	protected:
+		virtual void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true) = 0;
+		virtual void Update() = 0;
 
-	private:
+		//Window property values
+		unsigned int m_WindowWidth = 0;
+		unsigned int m_WindowHeight = 0;
+		const char* m_WindowName = "";
+		bool m_IsFullscreen = false;
+		bool m_UseVSync = false;
 
-		void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true);
-		void Update();
-
+		bool m_Initialized = false;
 	};
 }

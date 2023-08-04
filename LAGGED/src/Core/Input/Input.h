@@ -3,7 +3,7 @@
 
 namespace LAG
 {
-	class Window;
+	class WindowBase;
 }
 
 namespace LAG::Input
@@ -114,16 +114,16 @@ namespace LAG::Input
 
 	//Returns true/false based on whether the action is pressed or not.
 	LAG_API bool IsActionPressed(Utility::String actionName);
-	LAG_API bool IsActionPressed(Utility::String actionName, std::shared_ptr<LAG::Window> window);
+	LAG_API bool IsActionPressed(Utility::String actionName, std::shared_ptr<LAG::WindowBase> window);
 
 	//Returns true/false based on whether the action is pressed once. 
 	//Will automatically turn false again when the button is held down for more than one frame. s
 	LAG_API bool IsActionPressedOnce(Utility::String actionName);
-	LAG_API bool IsActionPressedOnce(Utility::String actionName, std::shared_ptr<LAG::Window> window);
+	LAG_API bool IsActionPressedOnce(Utility::String actionName, std::shared_ptr<LAG::WindowBase> window);
 
 	//Contains two argument references that return the position of the cursor on the x- and y-axis.
 	LAG_API void GetMousePosition(float& xPos, float& yPos);
-	LAG_API void GetMousePosition(float& xPos, float& yPos, std::shared_ptr<LAG::Window> window);
+	LAG_API void GetMousePosition(float& xPos, float& yPos, std::shared_ptr<LAG::WindowBase> window);
 
 	//Get the input device type for an input type.
 	//Determines if an input type is of input device Keyboard, Mouse or Controller.

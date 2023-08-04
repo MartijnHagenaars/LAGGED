@@ -1,25 +1,27 @@
 #include "Precomp.h"
 #include "GL_Window.h"
+#include "Events/EventBase.h"
 
 #include "GL_InputEnumConversion.h"
 #include <unordered_set>
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include "GLFW/glfw3native.h"
+
 namespace LAG
 {
 	std::unordered_set<size_t> pressedButtonIDs(8); //Note: This is going to be moved when I add the window class, so ignore this for now. 
-	WindowData* winData = nullptr;
 
 	Window::Window()
+		: WindowBase()
 	{
 	}
 
 	void Window::Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
 	{
-		if (winData == nullptr)
-			winData = new WindowData;
-		else
+		if (m_Initialized)
 		{
-			Utility::Logger::Error("GL Window already initialized, or WindowData is already constructed.");
+			Utility::Logger::Error("Window already initialized.");
 			return;
 		}
 
@@ -33,17 +35,17 @@ namespace LAG
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-		winData->window = glfwCreateWindow(winWidth, winHeight, "Hello world!", NULL, NULL);
-		if (winData->window == NULL)
+		
+		m_Window = glfwCreateWindow(winWidth, winHeight, "Hello world!", NULL, NULL);
+		if (m_Window == NULL)
 		{
 			std::cout << "Failed to create GLFW window" << std::endl;
 			glfwTerminate();
 			return;
 		}
-		glfwMakeContextCurrent(winData->window);
+		glfwMakeContextCurrent(m_Window);
 
-		//glGetString(GL_VERSION);
+		m_Initialized = true;
 	}
 
 	Window::~Window()
@@ -51,10 +53,14 @@ namespace LAG
 		glfwTerminate();
 	}
 
+	void Window::PresentFrame()
+	{
+	}
+
 	bool Window::HandleWindowMessages(int& exitCodeOut)
 	{
 		glfwPollEvents();
-		if (glfwWindowShouldClose(winData->window))
+		if (glfwWindowShouldClose(m_Window))
 		{
 			exitCodeOut = 0;
 			return false;
@@ -63,14 +69,14 @@ namespace LAG
 		return true;
 	}
 
-	void Window::PresentFrame()
+	/*void Window::PresentFrame()
 	{
-		glfwSwapBuffers(winData->window);
-	}
+		glfwSwapBuffers(window);
+	}*/
 
 	void Window::SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
 	{
-		winData->winEventCallback = callbackFunc;
+		m_WinEventCallback = callbackFunc;
 	}
 
 	void Window::Update()
@@ -97,11 +103,11 @@ namespace LAG
 		else if (deviceType == Input::InputDeviceType::LAG_KEYBOARD)
 		{
 			int buttonType = ConvertLAGInputToGLFWInput(inputType.type);
-			buttonState = glfwGetKey(winData->window, buttonType);
+			buttonState = glfwGetKey(m_Window, buttonType);
 		}
 		else if (deviceType == Input::InputDeviceType::LAG_MOUSE)
 		{
-			buttonState = glfwGetMouseButton(winData->window, GLFW_MOUSE_BUTTON_LEFT);
+			buttonState = glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_LEFT);
 		}
 		
 		if (buttonState > 0)
@@ -123,13 +129,28 @@ namespace LAG
 	{
 		double xPosD = 0.f, yPosD = 0.f;
 		
-		glfwGetCursorPos(winData->window, &xPosD, &yPosD);
+		glfwGetCursorPos(m_Window, &xPosD, &yPosD);
 		xPos = static_cast<float>(xPosD);
 		yPos = static_cast<float>(yPosD);
 	}
 
-	const void* Window::GetWindowData()
+	void Window::SetWindowName(const char* windowName)
 	{
-		return winData;
+		m_WindowName = windowName;
+		glfwSetWindowTitle(m_Window, m_WindowName);
+	}
+
+	unsigned int Window::GetNonClientWidth()
+	{
+		RECT betterRect = { 0 };
+		GetWindowRect(glfwGetWin32Window(m_Window), &betterRect);
+		return betterRect.right;
+	}
+
+	unsigned int Window::GetNonClientHeight()
+	{
+		RECT nonClientRect = { 0 };
+		GetWindowRect(glfwGetWin32Window(m_Window), &nonClientRect);
+		return nonClientRect.bottom;
 	}
 }

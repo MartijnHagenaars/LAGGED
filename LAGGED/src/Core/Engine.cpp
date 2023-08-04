@@ -98,6 +98,10 @@ namespace LAG
 
 		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
+		WindowManager::Get().AddWindow(200, 200, false);
+		WindowManager::Get().AddWindow(420, 100, false);
+		WindowManager::Get().AddWindow(800, 300, false);
+
 		//Setup renderer
 		if (!Renderer::Initialize())
 		{
