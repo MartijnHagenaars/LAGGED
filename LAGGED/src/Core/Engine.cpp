@@ -30,7 +30,7 @@ namespace LAG
 			Utility::Logger::Initialize();
 
 			//Create primary window
-			m_PrimaryWindow = WindowManager::Get().AddWindow(800, 600, false);
+			m_PrimaryWindow = WindowManager::Get().AddWindow(800, 600, "Main window!", false);
 			if (m_PrimaryWindow.get() == nullptr)
 				LAG_ASSERT("Primary window was nullptr.");
 
@@ -44,24 +44,21 @@ namespace LAG
 			float elapsedTime = 0.f;
 			int frames = 0;
 
-			int exitCode = 0;
-
 			//Main loop
 			while (true) {
 				//Update window messages
-				if (m_PrimaryWindow->HandleWindowMessages(exitCode) == false)
+				if (m_PrimaryWindow->HandleWindowMessages() == false)
 					break;
 
 				WindowManager::Get().Update();
 
 				m_App->Update();
 				Renderer::Render();
-				m_PrimaryWindow->PresentFrame();
 
 				//Framerate counter: 
 				++frames;
 				elapsedTime += timer.Mark();
-				if (elapsedTime >= 1.f)
+				if (elapsedTime >= 18.f)
 				{
 					Utility::Logger::Info("FPS: {0}", frames / elapsedTime);
 					elapsedTime = 0.f;
@@ -69,7 +66,7 @@ namespace LAG
 				}
 			}
 
-			return exitCode;
+			return 0;
 		}
 		catch (ExceptionBase& e)
 		{
@@ -98,9 +95,9 @@ namespace LAG
 
 		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
-		WindowManager::Get().AddWindow(200, 200, false);
-		WindowManager::Get().AddWindow(420, 100, false);
-		WindowManager::Get().AddWindow(800, 300, false);
+		//WindowManager::Get().AddWindow(200, 200, "First window", false);
+		WindowManager::Get().AddWindow(420, 100, "Second window", false);
+		//WindowManager::Get().AddWindow(800, 300, "Third window", false);
 
 		//Setup renderer
 		if (!Renderer::Initialize())

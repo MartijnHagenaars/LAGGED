@@ -18,7 +18,7 @@ namespace LAG
 		// Handles the message pump
 		// &exitCodeOut: when program wants to exit, the exit code is assigned to the referenced argument. 
 		// Return value: returns FALSE when the program wants to exit
-		virtual bool HandleWindowMessages(int& exitCodeOut) = 0;
+		virtual bool HandleWindowMessages() = 0;
 
 		virtual void PresentFrame() = 0;
 
@@ -29,6 +29,7 @@ namespace LAG
 
 		LAG_API virtual void SetWindowName(const char* windowName) = 0;
 
+		LAG_API virtual const char* GetWindowName() const { return m_WindowName; }
 		LAG_API virtual unsigned int GetWidth() const { return m_WindowWidth; }
 		LAG_API virtual unsigned int GetHeight() const { return m_WindowHeight; }
 

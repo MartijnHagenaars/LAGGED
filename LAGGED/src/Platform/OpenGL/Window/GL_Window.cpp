@@ -1,20 +1,23 @@
 #include "Precomp.h"
 #include "GL_Window.h"
 #include "Events/EventBase.h"
+#include "Platform/Base/Window/WindowManager.h"
 
 #include "GL_InputEnumConversion.h"
-#include <unordered_set>
 
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3native.h"
 
 namespace LAG
 {
-	std::unordered_set<size_t> pressedButtonIDs(8); //Note: This is going to be moved when I add the window class, so ignore this for now. 
-
 	Window::Window()
 		: WindowBase()
 	{
+	}
+
+	Window::~Window()
+	{
+		glfwTerminate();
 	}
 
 	void Window::Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
@@ -43,58 +46,106 @@ namespace LAG
 			glfwTerminate();
 			return;
 		}
-		glfwMakeContextCurrent(m_Window);
+	
+		//Not sure if necessary
+		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
+		glfwMakeContextCurrent(m_Window);
+		SetupCallbackFunctions();
+		
+		if (glewInit() != GLEW_OK)
+		{
+			Utility::Logger::Error("Failed to initialize GLEW.");
+			return;
+		}
+		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
+
+		pressedButtonIDs;
+		pressedButtonIDs.reserve(8);
 		m_Initialized = true;
 	}
 
-	Window::~Window()
+	void Window::SetupCallbackFunctions()
 	{
-		glfwTerminate();
+		//Look into simplifying this shitshow using this: GetFocus() == glfwGetWin32Window(m_Window);
+		// 
+		//Setup window focus callback
+		auto windowFocusCallback = [](GLFWwindow* window, int focused)
+		{
+			if (LAG::WindowManager::Get().GetFocussedWindow() == nullptr || window != LAG::WindowManager::Get().GetFocussedWindow()->m_Window)
+			{
+				if (LAG::WindowManager::Get().m_AdditionalWindows.size() > 0)
+				{
+					if (LAG::WindowManager::Get().GetPrimaryWindow()->m_Window == window)
+						LAG::WindowManager::Get().SetFocussedWindow(LAG::WindowManager::Get().GetPrimaryWindow());
+					else
+						for (const auto& it : LAG::WindowManager::Get().m_AdditionalWindows)
+						{
+							if (it->m_Window == window)
+							{
+								LAG::WindowManager::Get().SetFocussedWindow(it);
+								return;
+							}
+						}
+				}
+				else LAG::WindowManager::Get().SetFocussedWindow(LAG::WindowManager::Get().GetPrimaryWindow());
+			}
+		};
+		glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
+	}
+
+	void Window::Update()
+	{
+		auto debugTest = m_WindowName;
+
+		//Handle the releasing of button presses
+		if (pressedButtonIDs.size() > 0)
+		{
+			for (auto it = pressedButtonIDs.begin(); it != pressedButtonIDs.end();)
+			{
+				if (!CheckButtonPress(*Input::GetInputAction(*it), false))
+				{
+					it = pressedButtonIDs.erase(it);
+
+					if(m_Window == WindowManager::Get().GetFocussedWindow()->m_Window)
+						Utility::Logger::Info("Removing pressed button...");
+				}
+				else ++it;
+			}
+		}
 	}
 
 	void Window::PresentFrame()
 	{
+		glfwMakeContextCurrent(m_Window);
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		glfwSwapBuffers(m_Window);
 	}
 
-	bool Window::HandleWindowMessages(int& exitCodeOut)
+	bool Window::HandleWindowMessages()
 	{
-		glfwPollEvents();
 		if (glfwWindowShouldClose(m_Window))
 		{
-			exitCodeOut = 0;
 			return false;
 		}
 
 		return true;
 	}
 
-	/*void Window::PresentFrame()
-	{
-		glfwSwapBuffers(window);
-	}*/
-
 	void Window::SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
 	{
 		m_WinEventCallback = callbackFunc;
 	}
 
-	void Window::Update()
-	{
-		if (pressedButtonIDs.size() > 0)
-		{
-			for (auto it = pressedButtonIDs.begin(); it != pressedButtonIDs.end();)
-			{
-				if (!CheckButtonPress(*Input::GetInputAction(*it), false))
-					it = pressedButtonIDs.erase(it);
-				else ++it;
-			}
-		}
-
-	}
 
 	bool Window::CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
 	{
+		auto debugTest = m_WindowName;
+
+		glfwMakeContextCurrent(m_Window);
+
 		int buttonState = 0;
 		Input::InputDeviceType deviceType = GetInputDeviceType(inputType.type);
 
@@ -127,6 +178,8 @@ namespace LAG
 
 	void Window::GetMousePosition(float& xPos, float& yPos)
 	{
+		glfwMakeContextCurrent(m_Window);
+
 		double xPosD = 0.f, yPosD = 0.f;
 		
 		glfwGetCursorPos(m_Window, &xPosD, &yPosD);

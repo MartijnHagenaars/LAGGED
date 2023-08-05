@@ -275,8 +275,8 @@
     </ClInclude>
     <ClInclude Include="src\Utility\String.h" />
     <ClInclude Include="src\Utility\Timer.h" />
-    <ClInclude Include="src\Utility\StackTrace.h" />
     <ClInclude Include="src\Platform\Base\Window\WindowManager.h" />
+    <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Input\Input.cpp" />
@@ -328,8 +328,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Utility\Timer.cpp" />
-    <ClCompile Include="src\Utility\StackTrace.cpp" />
     <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp" />
+    <ClCompile Include="src\Utility\UniqueID.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\PixelShader.hlsl">

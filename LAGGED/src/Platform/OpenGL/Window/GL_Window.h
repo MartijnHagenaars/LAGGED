@@ -2,8 +2,9 @@
 #include "Platform/Base/Window/WindowBase.h"
 
 #include "GL/glew.h"
-
 #include "GLFW/glfw3.h"
+
+#include <unordered_set>
 
 namespace LAG
 {
@@ -17,7 +18,7 @@ namespace LAG
 		Window();
 		~Window();
 
-		bool HandleWindowMessages(int& exitCodeOut) override;
+		bool HandleWindowMessages() override;
 
 		void PresentFrame() override;
 
@@ -33,9 +34,14 @@ namespace LAG
 
 	private:
 		void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true) override;
+		void SetupCallbackFunctions();
+
 		void Update() override;
 
 		GLFWwindow* m_Window = nullptr;
 		WindowEventCallbackFunc m_WinEventCallback = NULL;
+
+		std::unordered_set<size_t> pressedButtonIDs;
+
 	};
 }
