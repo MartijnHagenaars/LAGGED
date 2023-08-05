@@ -96,20 +96,13 @@ namespace LAG
 
 	void Window::Update()
 	{
-		auto debugTest = m_WindowName;
-
 		//Handle the releasing of button presses
 		if (pressedButtonIDs.size() > 0)
 		{
 			for (auto it = pressedButtonIDs.begin(); it != pressedButtonIDs.end();)
 			{
 				if (!CheckButtonPress(*Input::GetInputAction(*it), false))
-				{
 					it = pressedButtonIDs.erase(it);
-
-					if(m_Window == WindowManager::Get().GetFocussedWindow()->m_Window)
-						Utility::Logger::Info("Removing pressed button...");
-				}
 				else ++it;
 			}
 		}
@@ -142,10 +135,9 @@ namespace LAG
 
 	bool Window::CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
 	{
-		auto debugTest = m_WindowName;
-
 		glfwMakeContextCurrent(m_Window);
 
+		//Detect if the button is being processed. Store the result in the buttonState varaible.
 		int buttonState = 0;
 		Input::InputDeviceType deviceType = GetInputDeviceType(inputType.type);
 
@@ -161,6 +153,7 @@ namespace LAG
 			buttonState = glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_LEFT);
 		}
 		
+		//Process the input if it's being pressed
 		if (buttonState > 0)
 		{
 			if (onlyDetectSinglePress)
@@ -182,6 +175,7 @@ namespace LAG
 
 		double xPosD = 0.f, yPosD = 0.f;
 		
+		//Since glfwGetCursorPos only works with doubles, we need to cast it back to floats.
 		glfwGetCursorPos(m_Window, &xPosD, &yPosD);
 		xPos = static_cast<float>(xPosD);
 		yPos = static_cast<float>(yPosD);

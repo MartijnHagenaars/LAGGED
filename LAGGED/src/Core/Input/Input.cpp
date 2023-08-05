@@ -69,7 +69,6 @@ namespace LAG::Input
 
 	bool IsActionPressedOnce(Utility::String actionName, std::shared_ptr<LAG::WindowBase> window)
 	{
-		auto debugTest = window->GetWindowName();
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
 		if (IsInputActionValid(actionName.GetValue(), it))
 			return window->CheckButtonPress(it->second, true);
