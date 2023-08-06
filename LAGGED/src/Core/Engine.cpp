@@ -45,11 +45,8 @@ namespace LAG
 			int frames = 0;
 
 			//Main loop
-			while (true) {
-				//Update window messages
-				if (m_PrimaryWindow->HandleWindowMessages() == false)
-					break;
-
+			while (WindowManager::Get().AreWindowsOpen())
+			{
 				WindowManager::Get().Update();
 
 				m_App->Update();

@@ -25,17 +25,17 @@ namespace LAG
 		void Shutdown();
 
 		std::shared_ptr<Window> AddWindow(unsigned int winWidth, unsigned int winHeight, const char* winName, bool fullscreen, bool useVSync = true, bool centerWindow = true);
-		bool RemoveWindow(const std::shared_ptr<Window>& window);
+		bool RemoveWindow(std::shared_ptr<Window>& window);
 		
 		void Update();
 
-		//bool AreWindowsOpen() const;
-
+		//Returns a shared pointer to the primary window. 
 		std::shared_ptr<Window> GetPrimaryWindow() const;
 
-		//Returns the window that the user currently has selected
+		//Returns a shared pointer to the window that the user currently has selected
 		std::shared_ptr<Window> GetFocussedWindow() const; 
 
+		bool AreWindowsOpen() const;
 	private:
 		WindowManager() {};
 		~WindowManager() {};

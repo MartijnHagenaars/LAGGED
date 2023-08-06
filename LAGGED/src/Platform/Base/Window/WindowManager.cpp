@@ -11,6 +11,7 @@ namespace LAG
                 if (m_AdditionalWindows[i] != nullptr)
                 {
                     m_AdditionalWindows[i].reset();
+                    m_AdditionalWindows.erase(m_AdditionalWindows.begin() + i);
                 }
             }
 
@@ -40,32 +41,52 @@ namespace LAG
         return newWindow;
     }
 
-    bool WindowManager::RemoveWindow(const std::shared_ptr<Window>& window)
+    bool WindowManager::RemoveWindow(std::shared_ptr<Window>& window)
     {
+        if (window.get() == m_MainWindow.get())
+        {
+            window.reset();
+            Shutdown();
+            return true;
+        }
+        else
+        {
+            for (auto it = m_AdditionalWindows.begin(); it != m_AdditionalWindows.end();)
+                if (window == *it)
+                {
+                    window.reset();
+                    m_AdditionalWindows.erase(it);
+                    return true;
+                }
+        }
         return false;
     }
 
     void WindowManager::Update()
     {
+        //If the main window is closing, we should close all the additional windows.
+        if (!m_MainWindow->HandleWindowMessages())
+        {
+            Shutdown();
+            return;
+        }
+
         m_MainWindow->Update();
         m_MainWindow->PresentFrame();
 
-        //Move this!
-        glfwPollEvents();
-
-        //Update other windows (if any exist)
-        if (m_AdditionalWindows.size() > 0)
-            for (auto i = m_AdditionalWindows.begin(); i != m_AdditionalWindows.end();)
+        for (size_t i = 0; i < m_AdditionalWindows.size(); i++)
+        {
+            std::shared_ptr<Window> winPtr = m_AdditionalWindows[i];
+            //First, handle window messages. If function returns false, the window should close.
+            if (!winPtr->HandleWindowMessages())
             {
-                if (!(*i)->HandleWindowMessages())
-                {
-                    RemoveWindow((*i++));
-                    continue;
-                }
-                (*i)->Update();
-                (*i)->PresentFrame();
-                ++i;
+                m_AdditionalWindows[i].reset();
+                m_AdditionalWindows.erase(m_AdditionalWindows.begin() + i);
+                continue;
             }
+            winPtr->Update();
+            winPtr->PresentFrame();
+        }
     }
 
     std::shared_ptr<Window> WindowManager::GetPrimaryWindow() const
@@ -76,6 +97,11 @@ namespace LAG
     std::shared_ptr<Window> WindowManager::GetFocussedWindow() const
     {
         return m_FocussedWindow;
+    }
+
+    bool WindowManager::AreWindowsOpen() const
+    {
+        return (m_MainWindow.get() != nullptr) || (m_AdditionalWindows.size() > 0);
     }
 
     void WindowManager::SetFocussedWindow(std::shared_ptr<Window> window)

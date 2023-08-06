@@ -16,7 +16,7 @@ namespace LAG
 		friend class WindowManager;
 	public:
 		Window();
-		~Window();
+		~Window() override;
 
 		bool HandleWindowMessages() override;
 

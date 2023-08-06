@@ -13,7 +13,7 @@ namespace LAG
 	{
 	public:
 		WindowBase() {};
-		~WindowBase() {};
+		virtual ~WindowBase() {};
 
 		// Handles the message pump
 		// &exitCodeOut: when program wants to exit, the exit code is assigned to the referenced argument. 

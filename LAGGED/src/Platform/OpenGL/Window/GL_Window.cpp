@@ -17,7 +17,8 @@ namespace LAG
 
 	Window::~Window()
 	{
-		glfwTerminate();
+		glfwDestroyWindow(m_Window);
+		//glfwTerminate();
 	}
 
 	void Window::Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
@@ -39,7 +40,8 @@ namespace LAG
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		
-		m_Window = glfwCreateWindow(winWidth, winHeight, "Hello world!", NULL, NULL);
+		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
+		m_Window = glfwCreateWindow(winWidth, winHeight, "LAGGED Engine", NULL, NULL);
 		if (m_Window == NULL)
 		{
 			std::cout << "Failed to create GLFW window" << std::endl;
@@ -106,6 +108,11 @@ namespace LAG
 				else ++it;
 			}
 		}
+
+		if (glfwWindowShouldClose(m_Window))
+		{
+			printf("INJECTED\n");
+		}
 	}
 
 	void Window::PresentFrame()
@@ -119,6 +126,7 @@ namespace LAG
 
 	bool Window::HandleWindowMessages()
 	{
+		glfwPollEvents();
 		if (glfwWindowShouldClose(m_Window))
 		{
 			return false;
