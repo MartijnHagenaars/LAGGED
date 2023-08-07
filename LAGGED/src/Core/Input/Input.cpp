@@ -54,7 +54,7 @@ namespace LAG::Input
 		return IsActionPressed(actionName, WindowManager::Get().GetFocussedWindow());
 	}
 
-	bool IsActionPressed(Utility::String actionName, std::shared_ptr<LAG::WindowBase> window)
+	bool IsActionPressed(Utility::String actionName, LAG::WindowBase* window)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
 		if (IsInputActionValid(actionName.GetValue(), it))
@@ -67,7 +67,7 @@ namespace LAG::Input
 		return IsActionPressedOnce(actionName, WindowManager::Get().GetFocussedWindow());
 	}
 
-	bool IsActionPressedOnce(Utility::String actionName, std::shared_ptr<LAG::WindowBase> window)
+	bool IsActionPressedOnce(Utility::String actionName, LAG::WindowBase* window)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
 		if (IsInputActionValid(actionName.GetValue(), it))
@@ -80,7 +80,7 @@ namespace LAG::Input
 		GetMousePosition(xPos, yPos, WindowManager::Get().GetFocussedWindow());
 	}
 
-	void GetMousePosition(float& xPos, float& yPos, std::shared_ptr<LAG::WindowBase> window)
+	void GetMousePosition(float& xPos, float& yPos, LAG::WindowBase* window)
 	{
 		window->GetMousePosition(xPos, yPos);
 	}

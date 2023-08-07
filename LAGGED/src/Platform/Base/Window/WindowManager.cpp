@@ -19,7 +19,7 @@ namespace LAG
             m_MainWindow.reset();
     }
 
-    std::shared_ptr<Window> WindowManager::AddWindow(unsigned int winWidth, unsigned int winHeight, const char* winName, bool fullscreen, bool useVSync, bool centerWindow)
+    Window* WindowManager::AddWindow(unsigned int winWidth, unsigned int winHeight, const char* winName, bool fullscreen, bool useVSync, bool centerWindow)
     {
         if (winWidth <= 1 && winHeight <= 1)
         {
@@ -27,21 +27,24 @@ namespace LAG
             return nullptr;
         }
 
-        std::shared_ptr<Window> newWindow = std::make_shared<Window>();
+        std::unique_ptr<Window> newWindow = std::make_unique<Window>();
         newWindow->Initialize(winWidth, winHeight, fullscreen, useVSync, centerWindow);
         newWindow->SetWindowName(winName);
 
         if (m_MainWindow == nullptr)
         {
-            m_MainWindow = newWindow;
-            SetFocussedWindow(newWindow);
+            m_MainWindow = std::move(newWindow);
+            SetFocussedWindow(m_MainWindow.get());
+            return m_MainWindow.get();
         }
-        else m_AdditionalWindows.emplace_back(newWindow);
-
-        return newWindow;
+        else
+        {
+            m_AdditionalWindows.emplace_back(std::move(newWindow));
+            return m_AdditionalWindows.at(m_AdditionalWindows.size() - 1).get();
+        }
     }
 
-    bool WindowManager::RemoveWindow(std::shared_ptr<Window>& window)
+    bool WindowManager::RemoveWindow(std::unique_ptr<Window>& window)
     {
         if (window.get() == m_MainWindow.get())
         {
@@ -76,7 +79,7 @@ namespace LAG
 
         for (size_t i = 0; i < m_AdditionalWindows.size(); i++)
         {
-            std::shared_ptr<Window> winPtr = m_AdditionalWindows[i];
+            Window* winPtr = m_AdditionalWindows[i].get();
             //First, handle window messages. If function returns false, the window should close.
             if (!winPtr->HandleWindowMessages())
             {
@@ -89,12 +92,12 @@ namespace LAG
         }
     }
 
-    std::shared_ptr<Window> WindowManager::GetPrimaryWindow() const
+    Window* WindowManager::GetPrimaryWindow() const
     {
-        return m_MainWindow;
+        return m_MainWindow.get();
     }
 
-    std::shared_ptr<Window> WindowManager::GetFocussedWindow() const
+    Window* WindowManager::GetFocussedWindow() const
     {
         return m_FocussedWindow;
     }
@@ -104,7 +107,7 @@ namespace LAG
         return (m_MainWindow.get() != nullptr) || (m_AdditionalWindows.size() > 0);
     }
 
-    void WindowManager::SetFocussedWindow(std::shared_ptr<Window> window)
+    void WindowManager::SetFocussedWindow(Window* window)
     {
         m_FocussedWindow = window;
     }

@@ -31,7 +31,7 @@ namespace LAG
 
 			//Create primary window
 			m_PrimaryWindow = WindowManager::Get().AddWindow(800, 600, "Main window!", false);
-			if (m_PrimaryWindow.get() == nullptr)
+			if (m_PrimaryWindow == nullptr)
 				LAG_ASSERT("Primary window was nullptr.");
 
 			if (Initialize(applicationPtr) != true)

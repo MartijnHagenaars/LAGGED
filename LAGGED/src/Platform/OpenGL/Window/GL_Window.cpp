@@ -85,7 +85,7 @@ namespace LAG
 						{
 							if (it->m_Window == window)
 							{
-								LAG::WindowManager::Get().SetFocussedWindow(it);
+								LAG::WindowManager::Get().SetFocussedWindow(it.get());
 								return;
 							}
 						}
