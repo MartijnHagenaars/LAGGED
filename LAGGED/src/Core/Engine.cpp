@@ -5,6 +5,10 @@
 #include "Utility/Timer.h"
 #include "Utility/Logger.h"
 
+#include "Platform/Base/Window/WindowBase.h"
+#include "Platform/Base/Window/WindowManager.h"
+#include "Platform/Base/Renderer/RendererBase.h"
+
 //using LAG::Utility
 
 namespace LAG
@@ -24,6 +28,12 @@ namespace LAG
 		try
 		{
 			Utility::Logger::Initialize();
+
+			//Create primary window
+			m_PrimaryWindow = WindowManager::Get().AddWindow(800, 600, "Main window!", false);
+			if (m_PrimaryWindow == nullptr)
+				LAG_ASSERT("Primary window was nullptr.");
+
 			if (Initialize(applicationPtr) != true)
 			{
 				Utility::Logger::Critical("Failed to initialize.");
@@ -34,15 +44,10 @@ namespace LAG
 			float elapsedTime = 0.f;
 			int frames = 0;
 
-			int exitCode = 0;
-
 			//Main loop
-			while (true) {
-				//Update window messages
-				if (Window::HandleWindowMessages(exitCode) == false)
-					break;
-
-				Window::Update();
+			while (WindowManager::Get().AreWindowsOpen())
+			{
+				WindowManager::Get().Update();
 
 				m_App->Update();
 				Renderer::Render();
@@ -50,7 +55,7 @@ namespace LAG
 				//Framerate counter: 
 				++frames;
 				elapsedTime += timer.Mark();
-				if (elapsedTime >= 1.f)
+				if (elapsedTime >= 18.f)
 				{
 					Utility::Logger::Info("FPS: {0}", frames / elapsedTime);
 					elapsedTime = 0.f;
@@ -58,7 +63,7 @@ namespace LAG
 				}
 			}
 
-			return exitCode;
+			return 0;
 		}
 		catch (ExceptionBase& e)
 		{
@@ -85,8 +90,11 @@ namespace LAG
 	{
 		//Setup window
 
-		Window::Initialize(800, 600, false);
-		Window::SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
+		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
+
+		//WindowManager::Get().AddWindow(200, 200, "First window", false);
+		WindowManager::Get().AddWindow(420, 100, "Second window", false);
+		//WindowManager::Get().AddWindow(800, 300, "Third window", false);
 
 		//Setup renderer
 		if (!Renderer::Initialize())
@@ -109,7 +117,7 @@ namespace LAG
 	{
 		m_App.reset();
 		Renderer::Shutdown();
-		Window::Shutdown();
+		WindowManager::Get().Shutdown();
 		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
 
 		return true;

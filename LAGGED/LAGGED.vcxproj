@@ -186,11 +186,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Input\Input.h" />
+    <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
+    <ClInclude Include="src\Platform\DX12\Window\DX12_InputEnumConversion.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Renderer.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h" />
+    <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Window\GL_Window.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
@@ -247,8 +259,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\Precomp.h" />
-    <ClInclude Include="src\Platform\Base\RendererBase.h" />
-    <ClInclude Include="src\Platform\Base\WindowBase.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h" />
+    <ClInclude Include="src\Platform\Base\Window\WindowBase.h" />
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
     <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
@@ -264,7 +276,8 @@
     </ClInclude>
     <ClInclude Include="src\Utility\String.h" />
     <ClInclude Include="src\Utility\Timer.h" />
-    <ClInclude Include="src\Utility\StackTrace.h" />
+    <ClInclude Include="src\Platform\Base\Window\WindowManager.h" />
+    <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Input\Input.cpp" />
@@ -316,7 +329,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="src\Utility\Timer.cpp" />
-    <ClCompile Include="src\Utility\StackTrace.cpp" />
+    <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp" />
+    <ClCompile Include="src\Utility\UniqueID.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\PixelShader.hlsl">

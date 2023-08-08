@@ -7,11 +7,23 @@
 #include "Events/WindowEvents.h"
 #include "Utility/Logger.h"
 
-#include "Platform/Base/RendererBase.h"
+#include "Platform/Base/Renderer/RendererBase.h"
+
+
+#include <windowsx.h>
+
+//The following includes are used for storing/handling input data
+#include <bitset>
+#include "Core/Input/Input.h"
+#include "DX12_InputEnumConversion.h"
 
 namespace LAG::Window
 {
 	WIN32Data* winData = nullptr;
+
+	unsigned char keyStates[UCHAR_MAX] = { 0 };
+	float mouseXPos = 0.f, mouseYPos = 0.f;
+	bool isCursorInWindow = false;
 
 	static LRESULT HandleWindowProcedure(HWND, UINT, WPARAM, LPARAM);
 
@@ -95,6 +107,25 @@ namespace LAG::Window
 		WindowClass::GetWinClass().Shutdown();
 	}
 
+	void Update()
+	{
+
+	}
+
+	bool CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
+	{
+		unsigned char keyCode = ConvertLAGInputToWIN32(inputType.type);
+		if (keyStates[keyCode] > 0)
+		{
+			if (onlyDetectSinglePress)
+				if (keyStates[keyCode] == 1)
+					++keyStates[keyCode];
+				else return false;
+			return true;
+		}
+		return false;
+	}
+
 	bool HandleWindowMessages(int& exitCodeOut)
 	{
 		MSG winMsg;
@@ -119,7 +150,7 @@ namespace LAG::Window
 		if (!CallbackFuncPtr)
 		{
 			return DefWindowProc(hWnd, msg, wParam, lParam);
-			LAG_ASSERT("callbackFunc is nullptr in HandleWindowProcedure.");
+			//LAG_ASSERT("callbackFunc is nullptr in HandleWindowProcedure.");
 		}
 		WindowEventCallbackFunc Callback = *CallbackFuncPtr;
 		switch (msg)
@@ -163,6 +194,47 @@ namespace LAG::Window
 			std::cout << "Window move: " << newWindowXPos << ", " << newWindowYPos << std::endl;
 		}
 		break;
+
+		//Functionality for button presses
+		case WM_KEYDOWN: case WM_KEYUP:
+		case WM_LBUTTONDOWN:
+		case WM_RBUTTONDOWN:
+		case WM_MBUTTONDOWN:
+		case WM_LBUTTONUP:
+		case WM_RBUTTONUP:
+		case WM_MBUTTONUP:
+		{
+			int keyID = static_cast<int>(wParam);
+			if ((msg == WM_KEYDOWN) || (msg == WM_LBUTTONDOWN) || (msg == WM_RBUTTONDOWN) || (msg == WM_SYSKEYDOWN) || (msg == WM_MBUTTONDOWN))
+			{
+				//Checking lParam if the previous key state is false. Checking this to prevent repeating inputs.. 
+				//0x40000000 since previous key state check is on the 30th bit. 2^30 = 0x40000000. quicks maths!
+				if (!(lParam & 0x40000000))
+					keyStates[wParam] = 1;
+			}
+			else
+			{
+				if ((msg == WM_LBUTTONUP) || (msg == WM_RBUTTONUP) || (msg == WM_MBUTTONUP))
+					if (msg == WM_LBUTTONUP) keyStates[VK_LBUTTON] = 0; 
+					else if (msg == WM_RBUTTONUP) keyStates[VK_RBUTTON] = 0;
+					else if (msg == WM_MBUTTONUP) keyStates[VK_MBUTTON] = 0;
+				else keyStates[wParam] = 0;
+			}
+			break;
+		}
+		
+		case WM_MOUSEMOVE:
+		{
+			mouseXPos = static_cast<float>(GET_X_LPARAM(lParam));
+			mouseYPos = static_cast<float>(GET_Y_LPARAM(lParam));
+
+			TRACKMOUSEEVENT tme = { 0 };
+			tme.hwndTrack = hWnd;
+			tme.cbSize = sizeof(TRACKMOUSEEVENT);
+			tme.dwFlags = TME_LEAVE;
+			TrackMouseEvent(&tme);
+			break;
+		} 
 		}
 
 		return DefWindowProc(hWnd, msg, wParam, lParam);
@@ -171,6 +243,11 @@ namespace LAG::Window
 	void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
 	{
 		winData->winEventCallback = callbackFunc;
+	}
+
+	void GetMousePosition(float& xPos, float& yPos)
+	{
+		xPos = mouseXPos, yPos = mouseYPos;
 	}
 
 	LAG_API void SetWindowName(const char* windowName)

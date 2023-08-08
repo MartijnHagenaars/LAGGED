@@ -3,11 +3,11 @@
 #include "Defines.h"
 
 #include "Core/ApplicationInterface.h"
-#include "Platform/Base/WindowBase.h"
-#include "Platform/Base/RendererBase.h"
+#include "Events/EventBase.h"
 
 namespace LAG
 {
+	class Window;
 	class Engine
 	{
 	public:
@@ -24,5 +24,6 @@ namespace LAG
 
 	private:
 		std::unique_ptr<LAG::IApplication> m_App;
+		Window* m_PrimaryWindow;
 	};
 }
