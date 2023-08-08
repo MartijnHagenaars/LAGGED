@@ -21,21 +21,44 @@ namespace LAG
 			//In case of exception, ensure that all memory is unloaded.
 			delete* m_Data;
 			*m_Data = nullptr;
-			m_Data = nullptr;
 			throw;
 		}
 
-		ResourcePtr(T* obj) : 
-			m_Data(&obj)
+		ResourcePtr(T* obj)
+			try
+		{
+			//This might cause a memory leak, but I don't care right now.
+			m_Data = reinterpret_cast<T**>(operator new(sizeof(T*)));
+			*m_Data = obj;
+
+			//T* tempData = obj;
+			//m_Data = &tempData;
+		}
+		catch (...)
+		{
+			//In case of exception, ensure that all memory is unloaded.
+			delete* m_Data;
+			*m_Data = nullptr;
+			throw;
+		}
+
+		ResourcePtr() :
+			m_Data(nullptr)
 		{}
 
 		ResourcePtr(const ResourcePtr& other) :
 			m_Data(other.m_Data)
 		{}
 
-		ResourcePtr(ResourcePtr& other) :
-			m_Data(other.m_Data)
-		{}
+		ResourcePtr(ResourcePtr& other)
+		{
+			m_Data = other.m_Data;
+		}
+
+		~ResourcePtr()
+		{
+
+		}
 
 
 		T* operator->()
@@ -45,17 +68,19 @@ namespace LAG
 
 		T* Get() const
 		{
-			if (m_Data == nullptr)
-				return nullptr;
-			return *m_Data;
+			{
+				if (m_Data == nullptr)
+					return nullptr;
+				return *m_Data;
+			}
 		}
 
 		//Invalidates the pointer in all areas of the project.
-		void Reset()
+		void Release()
 		{
-			delete *m_Data;
+			delete* m_Data;
 			*m_Data = nullptr;
-			m_Data = nullptr;
+			//m_Data = nullptr;
 		}
 
 	private:

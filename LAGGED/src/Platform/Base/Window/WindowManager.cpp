@@ -86,6 +86,7 @@ namespace LAG
             {
                 m_AdditionalWindows[i].reset();
                 m_AdditionalWindows.erase(m_AdditionalWindows.begin() + i);
+                SetFocussedWindow(m_MainWindow.get());
                 continue;
             }
             winPtr->Update();
