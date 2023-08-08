@@ -5,6 +5,8 @@
 
 #include "GL_InputEnumConversion.h"
 
+#include "Platform/Base/Renderer/RendererBase.h"
+
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3native.h"
 
@@ -121,6 +123,7 @@ namespace LAG
 
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+		LAG::Renderer::Render();
 		glfwSwapBuffers(m_Window);
 	}
 

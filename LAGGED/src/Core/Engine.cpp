@@ -50,7 +50,7 @@ namespace LAG
 				WindowManager::Get().Update();
 
 				m_App->Update();
-				Renderer::Render();
+				//Renderer::Render();
 
 				//Framerate counter: 
 				++frames;
@@ -93,8 +93,8 @@ namespace LAG
 		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
 		//WindowManager::Get().AddWindow(200, 200, "First window", false);
-		WindowManager::Get().AddWindow(420, 100, "Second window", false);
-		//WindowManager::Get().AddWindow(800, 300, "Third window", false);
+		//WindowManager::Get().AddWindow(420, 100, "Second window", false);
+		WindowManager::Get().AddWindow(800, 300, "Third window", false);
 
 		//Setup renderer
 		if (!Renderer::Initialize())
