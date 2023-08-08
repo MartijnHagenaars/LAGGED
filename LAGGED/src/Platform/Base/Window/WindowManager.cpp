@@ -17,6 +17,7 @@ namespace LAG
 
         if(m_MainWindow != nullptr)
             m_MainWindow.reset();
+        SetFocussedWindow(nullptr);
     }
 
     Window* WindowManager::AddWindow(unsigned int winWidth, unsigned int winHeight, const char* winName, bool fullscreen, bool useVSync, bool centerWindow)

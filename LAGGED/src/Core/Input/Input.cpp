@@ -57,7 +57,7 @@ namespace LAG::Input
 	bool IsActionPressed(Utility::String actionName, LAG::WindowBase* window)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
-		if (IsInputActionValid(actionName.GetValue(), it))
+		if (window != nullptr && IsInputActionValid(actionName.GetValue(), it))
 			return window->CheckButtonPress(it->second, false);
 		else return false;
 	}
@@ -70,7 +70,7 @@ namespace LAG::Input
 	bool IsActionPressedOnce(Utility::String actionName, LAG::WindowBase* window)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
-		if (IsInputActionValid(actionName.GetValue(), it))
+		if (window != nullptr && IsInputActionValid(actionName.GetValue(), it))
 			return window->CheckButtonPress(it->second, true);
 		else return false;
 	}
