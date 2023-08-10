@@ -92,16 +92,25 @@ namespace LAG
 
 		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
-		//WindowManager::Get().AddWindow(200, 200, "First window", false);
-		//WindowManager::Get().AddWindow(420, 100, "Second window", false);
-		WindowManager::Get().AddWindow(800, 300, "Third window", false);
-
 		//Setup renderer
 		if (!Renderer::Initialize())
 		{
 			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
 			return false;
 		}
+
+
+		//WindowManager::Get().AddWindow(200, 200, "First window", false);
+		//WindowManager::Get().AddWindow(420, 100, "Second window", false);
+		WindowManager::Get().AddWindow(800, 300, "Third window", false); //Note to self: Triangle will not be displayed on this wi
+
+
+		////Setup renderer
+		//if (!Renderer::Initialize())
+		//{
+		//	LAG::Utility::Logger::Critical("Failed to initialize renderer.");
+		//	return false;
+		//}
 
 		////Setup rendering surface
 		//m_RenderSurface = Renderer::CreateSurface(m_Window);

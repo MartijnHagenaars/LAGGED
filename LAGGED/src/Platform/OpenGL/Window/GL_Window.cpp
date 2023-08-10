@@ -43,26 +43,31 @@ namespace LAG
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		
 		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
-		m_Window = glfwCreateWindow(winWidth, winHeight, "LAGGED Engine", NULL, NULL);
-		if (m_Window == NULL)
+		GLFWwindow* sharedWindow = (WindowManager::Get().GetPrimaryWindow() == nullptr) ? NULL : WindowManager::Get().GetPrimaryWindow()->m_Window;
+
+		//Create the window. 
+		m_Window = glfwCreateWindow(winWidth, winHeight, "LAGGED Engine", NULL, sharedWindow);
+		if (m_Window == nullptr)
 		{
 			std::cout << "Failed to create GLFW window" << std::endl;
 			glfwTerminate();
 			return;
 		}
-	
-		//Not sure if necessary
-		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
 
 		glfwMakeContextCurrent(m_Window);
-		SetupCallbackFunctions();
-		
+	
 		if (glewInit() != GLEW_OK)
 		{
-			Utility::Logger::Error("Failed to initialize GLEW.");
+			Utility::Logger::Critical("Failed to initialize GLEW.");
 			return;
 		}
+
+
+		//Not sure if necessary
+		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
+
+		SetupCallbackFunctions();
 
 		pressedButtonIDs;
 		pressedButtonIDs.reserve(8);
@@ -121,8 +126,9 @@ namespace LAG
 	{
 		glfwMakeContextCurrent(m_Window);
 
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		//Lazy implementation
+		glViewport(0, 0, m_WindowWidth, m_WindowHeight);
+
 		LAG::Renderer::Render();
 		glfwSwapBuffers(m_Window);
 	}
@@ -146,7 +152,7 @@ namespace LAG
 
 	bool Window::CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
 	{
-		glfwMakeContextCurrent(m_Window);
+		//glfwMakeContextCurrent(m_Window);
 
 		//Detect if the button is being processed. Store the result in the buttonState varaible.
 		int buttonState = 0;
@@ -182,7 +188,7 @@ namespace LAG
 
 	void Window::GetMousePosition(float& xPos, float& yPos)
 	{
-		glfwMakeContextCurrent(m_Window);
+		//glfwMakeContextCurrent(m_Window);
 
 		double xPosD = 0.f, yPosD = 0.f;
 		
