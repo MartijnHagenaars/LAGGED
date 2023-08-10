@@ -49,12 +49,12 @@ namespace LAG
 		m_Window = glfwCreateWindow(winWidth, winHeight, "LAGGED Engine", NULL, sharedWindow);
 		if (m_Window == nullptr)
 		{
-			std::cout << "Failed to create GLFW window" << std::endl;
+			Utility::Logger::Critical("Failed to create GLFW window");
 			glfwTerminate();
 			return;
 		}
-
 		glfwMakeContextCurrent(m_Window);
+		glfwSwapInterval(1);
 	
 		if (glewInit() != GLEW_OK)
 		{

@@ -102,7 +102,7 @@ namespace LAG
 
 		//WindowManager::Get().AddWindow(200, 200, "First window", false);
 		//WindowManager::Get().AddWindow(420, 100, "Second window", false);
-		WindowManager::Get().AddWindow(800, 300, "Third window", false); //Note to self: Triangle will not be displayed on this wi
+		//WindowManager::Get().AddWindow(800, 300, "Third window", false); //Note to self: Triangle will not be displayed on this wi
 
 
 		////Setup renderer
