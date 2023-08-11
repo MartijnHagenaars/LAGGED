@@ -129,6 +129,9 @@
     <ClInclude Include="src\Core\Memory\ResourcePtr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">
@@ -185,9 +188,16 @@
     <ClCompile Include="src\Utility\UniqueID.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="res\Shaders\VertexShader.hlsl" />
-    <FxCompile Include="res\Shaders\PixelShader.hlsl" />
+    <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />
+    <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Shaders\OpenGL\Object.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\Object.pixel.glsl" />
   </ItemGroup>
 </Project>

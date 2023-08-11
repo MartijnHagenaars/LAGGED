@@ -185,6 +185,7 @@
     </FxCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h" />
     <ClInclude Include="src\Core\Input\Input.h" />
     <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
     <ClInclude Include="src\Platform\DX12\Window\DX12_InputEnumConversion.h">
@@ -280,6 +281,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp" />
     <ClCompile Include="src\Core\Input\Input.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Renderer.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
@@ -333,7 +335,7 @@
     <ClCompile Include="src\Utility\UniqueID.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="res\Shaders\PixelShader.hlsl">
+    <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">Pixel</ShaderType>
@@ -343,7 +345,7 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">5.1</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">5.1</ShaderModel>
     </FxCompile>
-    <FxCompile Include="res\Shaders\VertexShader.hlsl">
+    <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">Vertex</ShaderType>
@@ -353,6 +355,10 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">5.1</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">5.1</ShaderModel>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Shaders\OpenGL\Object.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\Object.vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
