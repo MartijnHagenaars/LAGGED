@@ -9,8 +9,8 @@
 
 LAG::Shader::Shader(std::string shaderPath)
 {
-	std::string vertexPath = shaderPath.append(".vertex.glsl");
-	std::string pixelPath = shaderPath.append(".pixel.glsl");
+	std::string vertexPath = shaderPath + ".vertex.glsl";
+	std::string pixelPath = shaderPath + ".pixel.glsl";
 	if (std::filesystem::exists(vertexPath) && std::filesystem::exists(pixelPath))
 	{
 		m_VertexSource = ReadFile(vertexPath);
@@ -24,6 +24,15 @@ LAG::Shader::Shader(std::string shaderPath)
 	}
 	else 
 		Utility::Logger::Error("Shader(s) with name {0} could not be found.", shaderPath);
+}
+
+LAG::Shader::Shader(ShaderData::ShaderDataBase& shader)
+{
+	m_VertexID = CompileShader(shader.GetVertex(), GL_VERTEX_SHADER);
+	m_PixelID = CompileShader(shader.GetPixel(), GL_FRAGMENT_SHADER);
+
+	m_ProgramID = MakeProgram();
+	CleanUpCompiledShaders();
 }
 
 std::string LAG::Shader::ReadFile(const std::string& filePath)
@@ -66,16 +75,18 @@ unsigned int LAG::Shader::MakeProgram()
 	glAttachShader(programID, m_VertexID);
 	glAttachShader(programID, m_PixelID);
 	glLinkProgram(programID);
+	auto thing = glGetError();
 
-	int programStatus = 0; 
+	GLint programStatus; 
 	glGetProgramiv(programID, GL_LINK_STATUS, &programStatus);
 	if (programStatus != GL_TRUE)
 	{
 		char programInfoLog[512];
 		glGetProgramInfoLog(programID, 512, NULL, programInfoLog);
-		Utility::Logger::Error("Failed to compile shader program.");
+		Utility::Logger::Error("Failed to compile shader program: {0}", programInfoLog);
 		return 0;
 	}
+
 	else return programID;
 }
 
