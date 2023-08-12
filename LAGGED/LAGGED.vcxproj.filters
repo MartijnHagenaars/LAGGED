@@ -202,8 +202,4 @@
     <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="res\Shaders\OpenGL\Object.vertex.glsl" />
-    <None Include="res\Shaders\OpenGL\Object.pixel.glsl" />
-  </ItemGroup>
 </Project>

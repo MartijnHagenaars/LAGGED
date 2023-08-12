@@ -75,7 +75,6 @@ unsigned int LAG::Shader::MakeProgram()
 	glAttachShader(programID, m_VertexID);
 	glAttachShader(programID, m_PixelID);
 	glLinkProgram(programID);
-	auto thing = glGetError();
 
 	GLint programStatus; 
 	glGetProgramiv(programID, GL_LINK_STATUS, &programStatus);
