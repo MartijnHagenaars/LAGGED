@@ -37,7 +37,7 @@ namespace LAG::Renderer
 		float vertices[] = {
 			//Vertex positions		//Tex coords
 			 0.5f,  0.5f, 0.0f,		1.0f, 1.0f,
-			 0.5f, -0.5f, 0.0f,		1.0f, 0.0f
+			 0.5f, -0.5f, 0.0f,		1.0f, 0.0f,
 			-0.5f, -0.5f, 0.0f,		0.0f, 0.0f,
 			-0.5f,  0.5f, 0.0f,		0.0f, 1.0f
 		};
@@ -49,14 +49,6 @@ namespace LAG::Renderer
 
 		renderData->shader = new Shader(ShaderData::object);
 		renderData->texture = new Texture("res/Assets/Textures/corndog.png");
-
-		//Set texture parameters
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);				//Use nearest texture filtering when texture is minified. 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);				//Use linear texture filtering when texture is magnified.
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);	//
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
 
 		//Create the VAO
 		glGenVertexArrays(1, &renderData->VAO); //What's the difference between this func and "glCreateVertexArrays"?
@@ -77,8 +69,6 @@ namespace LAG::Renderer
 
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
 		glEnableVertexAttribArray(1);
-
-
 
 		glUseProgram(0);
 		glBindVertexArray(0);
@@ -111,16 +101,10 @@ namespace LAG::Renderer
 
 		renderData->shader->Bind();
 		renderData->texture->Bind();
+		renderData->shader->SetInt("texture1", 0); //Testing, remove
 		glBindVertexArray(renderData->VAO);
 
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-		auto fu2ck = glGetError();
-		if (fu2ck != 0)
-		{
-			__debugbreak();
-		}
 
 		//Not really necessary for improved renderers, but just good for debugging for now
 		glBindVertexArray(0); 
