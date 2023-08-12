@@ -64,39 +64,39 @@ void Game::Initialize()
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::Utility::String("DownButton"));
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::Utility::String("LMB"));
 
-	//ObserverPtr test 1:
-	{
-		LAG::ResourcePtr<CoolThing> coolObject = LAG::ResourcePtr<CoolThing>("Frank", 200);
-		printf("slider value 1 (start): %f\n", coolObject.Get()->m_Slider);
-		RefFunc(coolObject);
-		printf("slider value 2 (ref): %f\n", coolObject.Get()->m_Slider);
-		CopyFunc(coolObject);
-		printf("slider value 3 (copy): %f\n", coolObject.Get()->m_Slider);
-		RefFunc(coolObject);
-		printf("slider value 4 (ref): %f\n", coolObject.Get()->m_Slider);
-		CopyFunc(coolObject);
-		printf("slider value 5 (copy): %f\n", coolObject.Get()->m_Slider);
+	////ObserverPtr test 1:
+	//{
+	//	LAG::ResourcePtr<CoolThing> coolObject = LAG::ResourcePtr<CoolThing>("Frank", 200);
+	//	printf("slider value 1 (start): %f\n", coolObject.Get()->m_Slider);
+	//	RefFunc(coolObject);
+	//	printf("slider value 2 (ref): %f\n", coolObject.Get()->m_Slider);
+	//	CopyFunc(coolObject);
+	//	printf("slider value 3 (copy): %f\n", coolObject.Get()->m_Slider);
+	//	RefFunc(coolObject);
+	//	printf("slider value 4 (ref): %f\n", coolObject.Get()->m_Slider);
+	//	CopyFunc(coolObject);
+	//	printf("slider value 5 (copy): %f\n", coolObject.Get()->m_Slider);
 
-		RemoveCopyFunc(coolObject);
-		printf("Has object been deleted? %s\n", (coolObject.Get() == nullptr) ? "true" : "false");
-	}
+	//	RemoveCopyFunc(coolObject);
+	//	printf("Has object been deleted? %s\n", (coolObject.Get() == nullptr) ? "true" : "false");
+	//}
 
-	//ObserverPtr test 2:
-	{
-		CoolThing* coolObject = new CoolThing("Francis", 400);
-		LAG::ResourcePtr<CoolThing> resource(coolObject);
-		printf("slider value 1 (start): %f\n", resource.Get()->m_Slider);
-		RefFunc(resource);
-		printf("slider value 2 (ref): %f\n", resource.Get()->m_Slider);
-		CopyFunc(coolObject);
-		printf("slider value 3 (copy): %f\n", resource.Get()->m_Slider);
-		RefFunc(resource);
-		printf("slider value 4 (ref): %f\n", resource.Get()->m_Slider);
+	////ObserverPtr test 2:
+	//{
+	//	CoolThing* coolObject = new CoolThing("Francis", 400);
+	//	LAG::ResourcePtr<CoolThing> resource(coolObject);
+	//	printf("slider value 1 (start): %f\n", resource.Get()->m_Slider);
+	//	RefFunc(resource);
+	//	printf("slider value 2 (ref): %f\n", resource.Get()->m_Slider);
+	//	CopyFunc(coolObject);
+	//	printf("slider value 3 (copy): %f\n", resource.Get()->m_Slider);
+	//	RefFunc(resource);
+	//	printf("slider value 4 (ref): %f\n", resource.Get()->m_Slider);
 
-		//RemoveCopyFunc(coolObject);
-		RemoveCopyFunc(resource);
-		printf("Has object been deleted? %s\n", (resource.Get() == nullptr) ? "true" : "false");
-	}
+	//	//RemoveCopyFunc(coolObject);
+	//	RemoveCopyFunc(resource);
+	//	printf("Has object been deleted? %s\n", (resource.Get() == nullptr) ? "true" : "false");
+	//}
 
 }
 

@@ -122,7 +122,7 @@ void LAG::Shader::SetFloat(const std::string& location, float value)
 	glUniform1f(glGetUniformLocation(m_ProgramID, location.c_str()), value);
 }
 
-void LAG::Shader::SetVec3(const std::string& location, int value)
+void LAG::Shader::SetVec3(const std::string& location, glm::vec3 value)
 {
-	glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value, value, value);
+	glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value.x, value.y, value.z);
 }

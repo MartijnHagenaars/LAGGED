@@ -1,5 +1,7 @@
 #pragma once
 #include "Shaders/OpenGL/ShaderDataBase.h"
+#include "glm/glm.hpp"
+
 namespace LAG
 {
 	class Shader
@@ -15,7 +17,7 @@ namespace LAG
 		void SetBool(const std::string& location, bool value);
 		void SetInt(const std::string& location, int value);
 		void SetFloat(const std::string& location, float value);
-		void SetVec3(const std::string& location, int value); //TODO: Apply GLM variable
+		void SetVec3(const std::string& location, glm::vec3 value); //TODO: Apply GLM variable
 
 	private:
 		std::string ReadFile(const std::string& filePath);
