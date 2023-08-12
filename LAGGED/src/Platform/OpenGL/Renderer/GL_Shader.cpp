@@ -26,7 +26,7 @@ LAG::Shader::Shader(std::string shaderPath)
 		Utility::Logger::Error("Shader(s) with name {0} could not be found.", shaderPath);
 }
 
-LAG::Shader::Shader(ShaderData::ShaderDataBase& shader)
+LAG::Shader::Shader(const ShaderData::ShaderDataBase& shader)
 {
 	m_VertexID = CompileShader(shader.GetVertex(), GL_VERTEX_SHADER);
 	m_PixelID = CompileShader(shader.GetPixel(), GL_FRAGMENT_SHADER);

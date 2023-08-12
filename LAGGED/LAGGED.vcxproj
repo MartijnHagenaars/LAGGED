@@ -108,6 +108,9 @@
       <ObjectFileOutput>$(OutDir)res\Shaders\%(Filename).cso</ObjectFileOutput>
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">
     <ClCompile>
@@ -132,6 +135,9 @@
       <ObjectFileOutput>$(OutDir)res\Shaders\%(Filename).cso</ObjectFileOutput>
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">
     <ClCompile>
@@ -156,6 +162,9 @@
       <ObjectFileOutput>$(OutDir)res\Shaders\%(Filename).cso</ObjectFileOutput>
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">
     <ClCompile>
@@ -183,8 +192,12 @@
       <ObjectFileOutput>$(OutDir)res\Shaders\%(Filename).cso</ObjectFileOutput>
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
+    <PostBuildEvent>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
     <ClInclude Include="res\Shaders\OpenGL\ObjectShader.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
@@ -293,6 +306,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp" />
     <ClCompile Include="src\Core\Input\Input.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Renderer.cpp">
