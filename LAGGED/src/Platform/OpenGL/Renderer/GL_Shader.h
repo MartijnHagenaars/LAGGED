@@ -1,5 +1,5 @@
 #pragma once
-#include "Shaders/OpenGL/ShaderDataBase.h"
+#include "Shaders/OpenGL/GL_ShaderBase.h"
 #include "glm/glm.hpp"
 
 namespace LAG
@@ -9,7 +9,7 @@ namespace LAG
 	public:
 		Shader() = delete;
 		explicit Shader(std::string shaderPath);
-		explicit Shader(const ShaderData::ShaderDataBase& shader);
+		explicit Shader(const ShaderData::GLShaderBase& shader);
 
 		void Bind();
 		void Unbind();

@@ -1,9 +1,9 @@
 #pragma once
-#include "ShaderDataBase.h"
+#include "GL_ShaderBase.h"
 
 namespace LAG::ShaderData
 {
-	struct Object : public ShaderDataBase
+	struct Object : public GLShaderBase
 	{
 		const std::string& GetVertex() const override { return vertex; }
 		const std::string& GetPixel() const override { return pixel; }

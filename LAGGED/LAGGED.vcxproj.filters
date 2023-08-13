@@ -132,10 +132,10 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res\Shaders\OpenGL\ObjectShader.h">
+    <ClInclude Include="res\Shaders\OpenGL\GL_DefaultObjectShader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res\Shaders\OpenGL\ShaderDataBase.h">
+    <ClInclude Include="res\Shaders\OpenGL\GL_ShaderBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h">

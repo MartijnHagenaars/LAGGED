@@ -5,7 +5,11 @@
 
 #include "Platform/OpenGL/Renderer/GL_Texture.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h"
-#include "Shaders/OpenGL/ObjectShader.h"
+#include "Shaders/OpenGL/GL_DefaultObjectShader.h"
+
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 
 namespace LAG::Renderer
