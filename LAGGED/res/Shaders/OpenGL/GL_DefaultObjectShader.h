@@ -13,11 +13,12 @@ namespace LAG::ShaderData
 			layout (location = 0) in vec3 aPos;
 			layout (location = 1) in vec2 aTexCoord;
 
+			uniform mat4 transformMat;
 			out vec2 texCoord;
 			
 			void main()
 			{
-			    gl_Position = vec4(aPos, 1.0);
+			    gl_Position = transformMat * vec4(aPos, 1.0);
 				texCoord = vec2(aTexCoord.x, aTexCoord.y);
 			}
 		)";

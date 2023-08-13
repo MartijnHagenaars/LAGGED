@@ -18,6 +18,7 @@ namespace LAG
 		void SetInt(const std::string& location, int value);
 		void SetFloat(const std::string& location, float value);
 		void SetVec3(const std::string& location, glm::vec3 value); //TODO: Apply GLM variable
+		void SetMat4(const std::string& location, glm::mat4 value);
 
 	private:
 		std::string ReadFile(const std::string& filePath);
