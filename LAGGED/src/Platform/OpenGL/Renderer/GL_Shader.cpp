@@ -128,7 +128,7 @@ void LAG::Shader::SetVec3(const std::string& location, glm::vec3 value)
 	glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value.x, value.y, value.z);
 }
 
-void LAG::Shader::SetMat4(const std::string& location, glm::mat4 value)
+void LAG::Shader::SetMat4(const std::string& location, const glm::mat4& value)
 {
 	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, location.c_str()), 1, GL_FALSE, glm::value_ptr(value[0]));
 }

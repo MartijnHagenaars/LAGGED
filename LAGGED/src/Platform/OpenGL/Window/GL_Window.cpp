@@ -101,6 +101,9 @@ namespace LAG
 			}
 		};
 		glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
+
+		//Setup window resize callback
+		//TODO: IMPLEMENT HERE!
 	}
 
 	void Window::Update()

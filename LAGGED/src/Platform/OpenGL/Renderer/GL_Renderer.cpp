@@ -2,6 +2,7 @@
 #include "GL_Renderer.h"
 
 #include "Platform/OpenGL/Window/GL_Window.h"
+#include "Platform/Base/Window/WindowManager.h"
 
 #include "Platform/OpenGL/Renderer/GL_Texture.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h"
@@ -21,6 +22,12 @@ namespace LAG::Renderer
 		unsigned int VBO = 0;
 		unsigned int EBO = 0; 
 		unsigned int VAO = 0; 
+
+		glm::vec3 objectPos = glm::vec3(0.f, 0.f, 1.f);
+		glm::vec3 objectRot = glm::vec3(0.f);
+
+		glm::vec3 cameraPos = glm::vec3(0.f, 0.f, -2.f);
+		glm::vec3 cameraRot = glm::vec3(0.f);
 
 		Shader* shader = nullptr;
 		Texture* texture = nullptr;
@@ -106,6 +113,32 @@ namespace LAG::Renderer
 		renderData->shader->Bind();
 		renderData->texture->Bind();
 		renderData->shader->SetInt("texture1", 0); //Testing, remove
+
+		glm::mat4 transformation = glm::mat4(1.0f);
+		transformation = glm::rotate(transformation, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		transformation = glm::translate(transformation, glm::vec3(0.5f, -0.5f, 0.0f));
+		renderData->shader->SetMat4("transformMat", transformation);
+
+
+		//Do transformation calculations
+		//First, calculate the model matrix
+		glm::mat4 modelMat = glm::mat4(1.f);
+		modelMat = glm::translate(modelMat, renderData->objectPos);
+		modelMat = glm::rotate(modelMat, glm::radians(-45.f), glm::vec3(1.f, 0.f, 0.f));
+		
+		//Next, the view matrix
+		glm::mat4 viewMat = glm::mat4(1.f);
+		viewMat = glm::translate(viewMat, renderData->cameraPos);
+		
+		//Lastly, the projection matrix
+		glm::mat4 projectionMat = glm::mat4(1.f);
+		projectionMat = glm::perspective(glm::radians(45.f), static_cast<float>(WindowManager::Get().GetFocussedWindow()->GetWidth() / WindowManager::Get().GetFocussedWindow()->GetHeight()), 0.1f, 100.f);
+
+		//Send over the matrices to the shader
+		renderData->shader->SetMat4("modelMat", modelMat);
+		renderData->shader->SetMat4("viewMat", viewMat);
+		renderData->shader->SetMat4("projMat", projectionMat);
+
 		glBindVertexArray(renderData->VAO);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
