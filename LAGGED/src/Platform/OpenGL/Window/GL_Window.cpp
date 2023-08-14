@@ -75,47 +75,18 @@ namespace LAG
 		m_Initialized = true;
 	}
 
-	void Window::WindowResizeCallback(GLFWwindow* window, int width, int height)
-	{
-
-	}
-
 	void Window::SetupCallbackFunctions()
 	{
-		//Look into simplifying this shitshow using this: GetFocus() == glfwGetWin32Window(m_Window);
-		// 
 		//Setup window focus callback
-		auto additionalWindowLoop = [](GLFWwindow* targetWindow)
+		auto windowFocusCallback = [](GLFWwindow* winPtr, int focused)
 		{
-			for (int i = 0; i < LAG::WindowManager::Get().m_AdditionalWindows.size(); i++)
-				if (LAG::WindowManager::Get().m_AdditionalWindows[i]->m_Window == targetWindow)
-					return i;
-			return -1;
-		};
-
-		auto windowFocusCallback = [](GLFWwindow* window, int focused)
-		{
-			if (LAG::WindowManager::Get().GetFocussedWindow() == nullptr || window != LAG::WindowManager::Get().GetFocussedWindow()->m_Window)
-			{
-				if (LAG::WindowManager::Get().m_AdditionalWindows.size() > 0)
-				{
-					if (LAG::WindowManager::Get().GetPrimaryWindow()->m_Window == window)
-						LAG::WindowManager::Get().SetFocussedWindow(LAG::WindowManager::Get().GetPrimaryWindow());
-					else
-						for (const auto& it : LAG::WindowManager::Get().m_AdditionalWindows)
-						{
-							if (it->m_Window == window)
-							{
-								LAG::WindowManager::Get().SetFocussedWindow(it.get());
-								return;
-							}
-						}
-				}
-				else LAG::WindowManager::Get().SetFocussedWindow(LAG::WindowManager::Get().GetPrimaryWindow());
-			}
+			Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
+			if(LAG::WindowManager::Get().GetFocussedWindow() != window)
+				LAG::WindowManager::Get().SetFocussedWindow(window);
 		};
 		glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
 
+		//Setup window resize callback
 		auto windowResizeCallback = [](GLFWwindow* winPtr, int width, int height)
 		{
 			if (width > 0 && height > 0)
@@ -130,9 +101,6 @@ namespace LAG
 			}
 		};
 		glfwSetWindowSizeCallback(m_Window, windowResizeCallback);
-
-		//Setup window resize callback
-		//TODO: IMPLEMENT HERE!
 	}
 
 	void Window::Update()
