@@ -38,6 +38,8 @@ namespace LAG
 
 		void Update() override;
 
+		void WindowResizeCallback(GLFWwindow* window, int width, int height);
+
 		GLFWwindow* m_Window = nullptr;
 		WindowEventCallbackFunc m_WinEventCallback = NULL;
 

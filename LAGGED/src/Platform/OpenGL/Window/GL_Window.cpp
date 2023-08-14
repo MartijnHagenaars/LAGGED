@@ -53,6 +53,7 @@ namespace LAG
 			glfwTerminate();
 			return;
 		}
+		glfwSetWindowUserPointer(m_Window, this);
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
 	
@@ -74,11 +75,24 @@ namespace LAG
 		m_Initialized = true;
 	}
 
+	void Window::WindowResizeCallback(GLFWwindow* window, int width, int height)
+	{
+
+	}
+
 	void Window::SetupCallbackFunctions()
 	{
 		//Look into simplifying this shitshow using this: GetFocus() == glfwGetWin32Window(m_Window);
 		// 
 		//Setup window focus callback
+		auto additionalWindowLoop = [](GLFWwindow* targetWindow)
+		{
+			for (int i = 0; i < LAG::WindowManager::Get().m_AdditionalWindows.size(); i++)
+				if (LAG::WindowManager::Get().m_AdditionalWindows[i]->m_Window == targetWindow)
+					return i;
+			return -1;
+		};
+
 		auto windowFocusCallback = [](GLFWwindow* window, int focused)
 		{
 			if (LAG::WindowManager::Get().GetFocussedWindow() == nullptr || window != LAG::WindowManager::Get().GetFocussedWindow()->m_Window)
@@ -101,6 +115,21 @@ namespace LAG
 			}
 		};
 		glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
+
+		auto windowResizeCallback = [](GLFWwindow* winPtr, int width, int height)
+		{
+			if (width > 0 && height > 0)
+			{
+				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
+				window->m_WindowWidth = width;
+				window->m_WindowHeight = height;
+
+				glfwMakeContextCurrent(window->m_Window);
+				glViewport(0, 0, width, height);
+
+			}
+		};
+		glfwSetWindowSizeCallback(m_Window, windowResizeCallback);
 
 		//Setup window resize callback
 		//TODO: IMPLEMENT HERE!
@@ -128,9 +157,6 @@ namespace LAG
 	void Window::PresentFrame()
 	{
 		glfwMakeContextCurrent(m_Window);
-
-		//Lazy implementation
-		glViewport(0, 0, m_WindowWidth, m_WindowHeight);
 
 		LAG::Renderer::Render();
 		glfwSwapBuffers(m_Window);
