@@ -96,7 +96,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External\glm;$(SolutionDir)External\stb;$(SolutionDir)External\DirectX\SimpleMath;$(SolutionDir)External\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\DirectX\SimpleMath;$(SolutionDir)External\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -122,7 +122,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External\glm;$(SolutionDir)External\stb;$(SolutionDir)External\spdlog;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\spdlog;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -149,7 +149,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External\glm;$(SolutionDir)External\stb;$(SolutionDir)External\spdlog;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\spdlog;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -178,7 +178,7 @@
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External\glm;$(SolutionDir)External\stb;$(SolutionDir)External\DirectX\SimpleMath;$(SolutionDir)External\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\DirectX\SimpleMath;$(SolutionDir)External\spdlog;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -197,6 +197,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
     <ClInclude Include="res\Shaders\OpenGL\GL_DefaultObjectShader.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
@@ -306,6 +307,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp" />
     <ClCompile Include="src\Core\Input\Input.cpp" />
