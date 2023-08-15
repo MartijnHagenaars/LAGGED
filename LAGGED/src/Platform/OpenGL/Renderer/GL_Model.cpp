@@ -31,11 +31,11 @@ namespace LAG
 		tinygltf::TinyGLTF modelLoader;
 		tinygltf::Model model;
 
-		std::string errorMsg = "No information available", warningMsg = "";
+		std::string errorMsg = "", warningMsg = "";
 
 		bool loadSuccess = modelLoader.LoadASCIIFromFile(&model, &errorMsg, &warningMsg, path);
 		if (!errorMsg.empty() || !loadSuccess)
-			Utility::Logger::Error("Error while loading Model: {0}", errorMsg);
+			Utility::Logger::Error("Error while loading Model: {0}", errorMsg.empty() ? "No information available" : errorMsg);
 		if (!warningMsg.empty())
 			Utility::Logger::Warning("Warning while loading Model: {0}", warningMsg);
 
