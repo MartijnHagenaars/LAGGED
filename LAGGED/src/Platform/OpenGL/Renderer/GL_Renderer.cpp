@@ -6,6 +6,7 @@
 
 #include "Platform/OpenGL/Renderer/GL_Texture.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h"
+#include "Platform/OpenGL/Renderer/GL_Model.h"
 #include "Shaders/OpenGL/GL_DefaultObjectShader.h"
 
 #include "glm/glm.hpp"
@@ -87,6 +88,8 @@ namespace LAG::Renderer
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+		Model testModel("res/Assets/TexturedBox/glTF/BoxTextured.gltf");
 
 		return true;
 	}

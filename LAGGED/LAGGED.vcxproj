@@ -197,7 +197,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
     <ClInclude Include="res\Shaders\OpenGL\GL_DefaultObjectShader.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
@@ -307,7 +307,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp" />
     <ClCompile Include="src\Core\Input\Input.cpp" />

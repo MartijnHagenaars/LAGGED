@@ -141,7 +141,7 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h">
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -206,7 +206,7 @@
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp">
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
