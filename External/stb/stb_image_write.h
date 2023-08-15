@@ -264,6 +264,8 @@ STBIWDEF void stbi_flip_vertically_on_write(int flag)
    stbi__flip_vertically_on_write = flag;
 }
 
+#pragma warning(disable:4996)
+
 typedef struct
 {
    stbi_write_func *func;

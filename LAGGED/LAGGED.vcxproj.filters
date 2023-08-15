@@ -144,6 +144,9 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">

@@ -24,7 +24,7 @@
 	#define NOCTLMGR
 	#define NODRAWTEXT
 	#define NOKERNEL
-	#define NONLS
+	//#define NONLS //Commented out, because it disables WideCharToMultiByte(), which is used in tinyGLTF
 	#define NOMEMMGR
 	#define NOMETAFILE
 	#define NOOPENFILE
