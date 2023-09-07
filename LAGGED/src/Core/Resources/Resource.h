@@ -8,19 +8,16 @@ namespace LAG
 		friend class ResourceManager;
 	public: 
 		Resource() = delete;
-		explicit Resource(const Utility::String& path) : m_Path(path) {};
+		explicit Resource(const Utility::String& path);
 		virtual ~Resource() {};
 
-		virtual bool Reload()
-		{
-			return (Unload() && Load());
-		}
+		virtual bool Reload();
 
 	protected:
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
 
-		const Utility::String& GetPath() const { return m_Path; }
+		const Utility::String& GetPath() const;
 
 	private:
 		const Utility::String& m_Path;
