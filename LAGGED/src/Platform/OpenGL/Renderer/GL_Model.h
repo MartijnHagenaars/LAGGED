@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Resources/Resource.h"
+#include "Core/Resources/Model.h"
 #include "glm/glm.hpp"
 
 namespace tinygltf
@@ -9,36 +9,25 @@ namespace tinygltf
 
 namespace LAG
 {
-	class Model : public Resource
+	class GL_Model : public Model
 	{
 	public:
-		Model() = delete;
-		explicit Model(const Utility::String& path);
-		~Model();
+		GL_Model() = delete;
+		explicit GL_Model(const Utility::String& path);
+		~GL_Model() override;
 
-		void Render();
-
-		void SetPosition();
-		void SetRotation();
-		void SetScale();
+		void Render() override;
 
 	private:
 		bool Load() override;
 		bool Unload() override;
 
-		void LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath);
-		void LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath);
+		void LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath) override;
+		void LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath) override;
 
 		unsigned int m_VBO = 0;
 		unsigned int m_EBO = 0;
 		unsigned int m_VAO = 0;
-
-		glm::vec3 m_Position = glm::vec3(0.f);
-		glm::vec3 m_Rotation = glm::vec3(0.f);
-		glm::vec3 m_Scale = glm::vec3(0.f);
-
-		//tinygltf::Model m_Model = {};
-		float m_PreTransformScale = 1.f; //????
 
 	};
 }

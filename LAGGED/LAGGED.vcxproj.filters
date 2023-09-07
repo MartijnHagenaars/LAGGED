@@ -224,6 +224,9 @@
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Core\Resources\Resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />

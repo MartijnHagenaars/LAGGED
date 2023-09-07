@@ -311,6 +311,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp" />

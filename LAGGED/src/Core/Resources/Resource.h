@@ -5,6 +5,7 @@ namespace LAG
 {
 	class Resource
 	{
+		friend class ResourceManager;
 	public: 
 		Resource() = delete;
 		explicit Resource(const Utility::String& path) : m_Path(path) {};
