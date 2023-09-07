@@ -9,13 +9,17 @@
 #include "Platform/Base/Window/WindowManager.h"
 #include "Platform/Base/Renderer/RendererBase.h"
 
+#include "Resources/ResourceManager.h"
+#include "Core/Resources/Resource.h"
+
 //using LAG::Utility
 
 namespace LAG
 {
 	Engine::Engine()
 	{
-
+		//ResourceManager::AddResource<float>();
+		ResourceManager::Get().AddResource<int>(Utility::String("res/Assets/Models/Cube/BoxTextured.gltf"), 1);
 	}
 
 	Engine::~Engine()

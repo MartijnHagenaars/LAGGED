@@ -16,9 +16,9 @@
 
 namespace LAG
 {
-	Model::Model(const std::string& path)
+	Model::Model(const Utility::String& path) : 
+		Resource(path)
 	{
-		LoadModel(path);
 	}
 
 	Model::~Model()
@@ -26,23 +26,43 @@ namespace LAG
 
 	}
 
-	bool Model::LoadModel(const std::string& path)
+	bool Model::Load()
 	{
 		tinygltf::TinyGLTF modelLoader;
 		tinygltf::Model model;
 
+		std::string fileExtension;
+		std::string filePath = GetPath().GetString();
+
+		if (filePath.find_last_of(".") != std::string::npos)
+			fileExtension = fileExtension.substr(fileExtension.find_last_of(".") + 1);
+		else return false;
+
+		bool loadSuccess = false;
 		std::string errorMsg = "", warningMsg = "";
 
-		bool loadSuccess = modelLoader.LoadASCIIFromFile(&model, &errorMsg, &warningMsg, path);
+		//Load data from file. GLB is used for binary files. 
+		if(fileExtension.compare("glb") == 0)
+			loadSuccess = modelLoader.LoadBinaryFromFile(&model, &errorMsg, &warningMsg, filePath);
+		else loadSuccess = modelLoader.LoadASCIIFromFile(&model, &errorMsg, &warningMsg, filePath);
+
+		//Check error messages
 		if (!errorMsg.empty() || !loadSuccess)
 			Utility::Logger::Error("Error while loading Model: {0}", errorMsg.empty() ? "No information available" : errorMsg);
 		if (!warningMsg.empty())
 			Utility::Logger::Warning("Warning while loading Model: {0}", warningMsg);
 
-		std::string modelDirPath = std::filesystem::path(path).parent_path().string();
+		std::string modelDirPath = std::filesystem::path(filePath).parent_path().string();
 		LoadTextures(model, modelDirPath);
+		LoadMeshes(model, modelDirPath);
 
 		m_PreTransformScale = 1.f;
+		return false;
+	}
+
+	bool Model::Unload()
+	{
+		//TODO: Currently doesn't do anything
 		return false;
 	}
 
@@ -58,6 +78,10 @@ namespace LAG
 
 	void Model::LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath)
 	{
+		for (const auto& mesh : modelData.meshes)
+		{
+
+		}
 	}
 
 	void LAG::Model::Render()

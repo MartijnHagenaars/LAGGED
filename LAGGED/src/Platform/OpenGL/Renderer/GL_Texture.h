@@ -1,19 +1,21 @@
 #pragma once
+#include "Core/Resources/Resource.h"
 
 namespace LAG
 {
-	class Texture
+	class Texture : public Resource
 	{
 	public:
 		Texture() = delete;
-		explicit Texture(std::string path);
-		~Texture();
+		explicit Texture(const Utility::String& path);
+		~Texture() override;
 
 		void Bind();
 		void Unbind();
 
 	private:
-		bool LoadTexture(const std::string& path);
+		bool Load() override;
+		bool Unload() override;
 
 		unsigned int m_ID = 0; 
 

@@ -24,6 +24,6 @@ namespace LAG
 
 	private:
 		std::unique_ptr<LAG::IApplication> m_App;
-		Window* m_PrimaryWindow;
+		Window* m_PrimaryWindow = nullptr;
 	};
 }

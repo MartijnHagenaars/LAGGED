@@ -61,7 +61,7 @@ namespace LAG::Renderer
 		};
 
 		renderData->shader = new Shader(ShaderData::object);
-		renderData->texture = new Texture("res/Assets/Textures/corndog.png");
+		renderData->texture = new Texture(Utility::String("res/Assets/Textures/corndog.png"));
 
 		//Create the VAO
 		glGenVertexArrays(1, &renderData->VAO); //What's the difference between this func and "glCreateVertexArrays"?
@@ -89,8 +89,8 @@ namespace LAG::Renderer
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		//Model testModel("res/Assets/Models/TexturedBox/glTF/BoxTextured.gltf");
-		Model testModel("res/Assets/Models/Chessboard/glTF/ABeautifulGame.gltf");
+		Model testModel(Utility::String("res/Assets/Models/TexturedBox/glTF/BoxTextured.gltf"));
+		//Model testModel("res/Assets/Models/Chessboard/glTF/ABeautifulGame.gltf");
 
 		return true;
 	}

@@ -8,20 +8,25 @@ namespace LAG::Utility
 	{
 	public: 
 		String() = delete;
-		explicit constexpr String(const char* s) :
-			m_HashValue(0)
+		LAG_API explicit constexpr String(const char* s) :
+			m_String(s), m_HashValue(0)
 		{
 			m_HashValue = Hash(s);
 		}
 
-		String(const String& other)
+		LAG_API String(const String& other)
 		{
 			this->m_HashValue = other.m_HashValue;
 		}
 
-		size_t GetValue() const
+		LAG_API size_t GetValue() const
 		{
 			return m_HashValue;
+		}
+
+		LAG_API std::string GetString() const
+		{
+			return std::string(m_String);
 		}
 
 	private:
@@ -37,6 +42,7 @@ namespace LAG::Utility
 			return sum;
 		}
 
+		const char* m_String;
 		size_t m_HashValue;
 		static const int PRIME_CONST = 31;
 		static const int ARR_SIZE = 3001;

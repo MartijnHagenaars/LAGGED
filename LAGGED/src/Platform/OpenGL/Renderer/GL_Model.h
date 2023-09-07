@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Resources/Resource.h"
 #include "glm/glm.hpp"
 
 namespace tinygltf
@@ -8,11 +9,11 @@ namespace tinygltf
 
 namespace LAG
 {
-	class Model
+	class Model : public Resource
 	{
 	public:
 		Model() = delete;
-		explicit Model(const std::string& path);
+		explicit Model(const Utility::String& path);
 		~Model();
 
 		void Render();
@@ -22,7 +23,8 @@ namespace LAG
 		void SetScale();
 
 	private:
-		bool LoadModel(const std::string& path);
+		bool Load() override;
+		bool Unload() override;
 
 		void LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath);
 		void LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath);
