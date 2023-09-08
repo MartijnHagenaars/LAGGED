@@ -9,12 +9,12 @@ namespace tinygltf
 
 namespace LAG
 {
-	class GL_Model : public Model
+	class Model : public ModelBase
 	{
 	public:
-		GL_Model() = delete;
-		explicit GL_Model(const Utility::String& path);
-		~GL_Model() override;
+		Model() = delete;
+		explicit Model(const Utility::String& path);
+		~Model() override;
 
 		void Render() override;
 

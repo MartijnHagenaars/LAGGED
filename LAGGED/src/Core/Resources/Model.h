@@ -9,12 +9,12 @@ namespace tinygltf
 
 namespace LAG
 {
-	class Model : public Resource
+	class ModelBase : public Resource
 	{
 	public:
-		Model() = delete;
-		explicit Model(const Utility::String& path) : Resource(path) {};
-		virtual ~Model() {};
+		ModelBase() = delete;
+		explicit ModelBase(const Utility::String& path) : Resource(path) {};
+		virtual ~ModelBase() {};
 
 		virtual void Render() = 0;
 
@@ -41,3 +41,10 @@ namespace LAG
 
 	};
 }
+
+//Include the correct model header, based on the project configuration
+#ifdef PLATFORM_OPENGL
+#include "Platform/OpenGL/Renderer/GL_Model.h"
+#elif PLATFORM_DIRECTX
+#include "Platform/DX12/Renderer/DX12_Model.h"
+#endif

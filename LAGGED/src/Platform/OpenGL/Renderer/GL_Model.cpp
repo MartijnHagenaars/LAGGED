@@ -16,17 +16,17 @@
 
 namespace LAG
 {
-	GL_Model::GL_Model(const Utility::String& path) :
-		Model(path)
+	Model::Model(const Utility::String& path) :
+		ModelBase(path)
 	{
 	}
 
-	GL_Model::~GL_Model()
+	Model::~Model()
 	{
 
 	}
 
-	bool GL_Model::Load()
+	bool Model::Load()
 	{
 		tinygltf::TinyGLTF modelLoader;
 		tinygltf::Model model;
@@ -60,13 +60,13 @@ namespace LAG
 		return false;
 	}
 
-	bool GL_Model::Unload()
+	bool Model::Unload()
 	{
 		//TODO: Currently doesn't do anything
 		return false;
 	}
 
-	void GL_Model::LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath)
+	void Model::LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath)
 	{
 		for (const auto& texture : modelData.textures)
 		{
@@ -76,7 +76,7 @@ namespace LAG
 		}
 	}
 
-	void GL_Model::LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath)
+	void Model::LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath)
 	{
 		for (const auto& mesh : modelData.meshes)
 		{
@@ -84,7 +84,7 @@ namespace LAG
 		}
 	}
 
-	void LAG::GL_Model::Render()
+	void LAG::Model::Render()
 	{
 
 	}

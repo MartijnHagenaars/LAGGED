@@ -89,7 +89,7 @@ namespace LAG::Renderer
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		GL_Model testModel(Utility::String("res/Assets/Models/TexturedBox/glTF/BoxTextured.gltf"));
+		Model testModel(Utility::String("res/Assets/Models/TexturedBox/glTF/BoxTextured.gltf"));
 		//Model testModel("res/Assets/Models/Chessboard/glTF/ABeautifulGame.gltf");
 
 		return true;
