@@ -2,6 +2,7 @@
 #include "GL_Model.h"
 
 #include <filesystem>
+#include "GL/glew.h"
 
 //#ifndef STB_IMAGE_IMPLEMENTATION
 //#define STB_IMAGE_IMPLEMENTATION
@@ -54,7 +55,7 @@ namespace LAG
 
 		std::string modelDirPath = std::filesystem::path(filePath).parent_path().string();
 		LoadTextures(model, modelDirPath);
-		LoadMeshes(model, modelDirPath);
+		LoadModel(model, modelDirPath);
 
 		m_PreTransformScale = 1.f;
 		return false;
@@ -76,12 +77,21 @@ namespace LAG
 		}
 	}
 
-	void Model::LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath)
+	void Model::LoadModel(const tinygltf::Model& modelData, const std::string& directoryPath)
 	{
-		for (const auto& mesh : modelData.meshes)
+		glGenVertexArrays(1, &m_VAO); //TODO: Research what the difference is between this func and "glCreateVertexArrays"?
+		glBindVertexArray(m_VAO);
+
+		//Note: Might want to loop over this instead. TODO: Research!
+		const tinygltf::Scene& scene = modelData.scenes[modelData.defaultScene];
+		for (size_t i = 0; i < scene.nodes.size(); i++)
 		{
 
 		}
+	}
+
+	void Model::LoadMesh()
+	{
 	}
 
 	void LAG::Model::Render()

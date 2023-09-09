@@ -9,7 +9,9 @@ namespace LAG
 {
 	Texture::Texture(const Utility::String& path) :
 		Resource(path)
-	{}
+	{
+		//Load();
+	}
 
 	Texture::~Texture()
 	{

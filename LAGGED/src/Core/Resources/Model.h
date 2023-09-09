@@ -12,7 +12,6 @@ namespace LAG
 	class ModelBase : public Resource
 	{
 	public:
-		ModelBase() = delete;
 		explicit ModelBase(const Utility::String& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
@@ -33,11 +32,12 @@ namespace LAG
 		float m_PreTransformScale = 1.f;
 
 	private:
+		ModelBase() = default;
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
 
 		virtual void LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath) = 0;
-		virtual void LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath) = 0;
+		virtual void LoadModel(const tinygltf::Model& modelData, const std::string& directoryPath) = 0;
 
 	};
 }

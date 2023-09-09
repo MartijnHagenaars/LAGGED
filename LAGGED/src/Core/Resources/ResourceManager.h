@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "Resource.h"
+//#include ""
 
 namespace LAG
 {
@@ -21,23 +22,37 @@ namespace LAG
 		template<typename T, typename... Args>
 		bool AddResource(const Utility::String& path, Args&&... args)
 		{
-			if constexpr (std::is_base_of<LAG::Resource, T>::value)
+			//Check if template type is of type "Resource" and if parameters are provided
+			//constexpr bool validArgs = sizeof...(args) > 0;
+			//int dickInAss = sizeof...(args);
+			constexpr bool validResType = std::is_base_of<LAG::Resource, T>::value; 
+			if constexpr (validResType)
 			{
-				T* resPtr = std::make_unique<T>(args...);
+				T* resPtr = new T(path, args...);
+				//T* resPtr = std::make_unique<T>(path, args...);
 				resPtr->Load();
 				m_Resources.emplace(path.GetValue(), std::move(resPtr));
+				return true;
 			}
-			else LAG_ASSERT("Cannot load resource: Template type of is not child of type \"Resource\".");
+			else
+			{
+				if (!validResType)
+				{
+					LAG_ASSERT("Cannot load resource: Template type of is not child of type \"Resource\".");
+				}
+				//else if (!validArgs)
+				//	LAG_ASSERT("Cannot load resource: No arguments provided.");
+			}
 			return false;
 		}
 
 		template<typename T>
 		T& GetResource(const Utility::String& path) const
 		{
-			T* res = dynamic_cast<T*>(m_Resources.find(path.GetValue())->second);
+			T* res = dynamic_cast<T*>(m_Resources.find(path.GetValue())->second.get());
 			if (!res)
 				Utility::Logger::Error("Could not find resource.");
-			else return res;
+			else return *res;
 		}
 
 		void Clear();

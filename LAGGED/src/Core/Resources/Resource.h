@@ -7,13 +7,13 @@ namespace LAG
 	{
 		friend class ResourceManager;
 	public: 
-		Resource() = delete;
 		explicit Resource(const Utility::String& path);
 		virtual ~Resource() {};
 
 		virtual bool Reload();
 
 	protected:
+		Resource() = default;
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
 

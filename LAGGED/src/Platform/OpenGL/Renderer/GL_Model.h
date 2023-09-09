@@ -12,18 +12,19 @@ namespace LAG
 	class Model : public ModelBase
 	{
 	public:
-		Model() = delete;
 		explicit Model(const Utility::String& path);
 		~Model() override;
 
 		void Render() override;
 
 	private:
+		Model() = default;
 		bool Load() override;
 		bool Unload() override;
 
 		void LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath) override;
-		void LoadMeshes(const tinygltf::Model& modelData, const std::string& directoryPath) override;
+		void LoadModel(const tinygltf::Model& modelData, const std::string& directoryPath) override;
+		void LoadMesh();
 
 		unsigned int m_VBO = 0;
 		unsigned int m_EBO = 0;

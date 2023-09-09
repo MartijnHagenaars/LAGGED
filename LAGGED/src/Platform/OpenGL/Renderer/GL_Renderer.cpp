@@ -4,6 +4,7 @@
 #include "Platform/OpenGL/Window/GL_Window.h"
 #include "Platform/Base/Window/WindowManager.h"
 
+#include "Core/Resources/ResourceManager.h"
 #include "Platform/OpenGL/Renderer/GL_Texture.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h"
 #include "Platform/OpenGL/Renderer/GL_Model.h"
@@ -61,7 +62,10 @@ namespace LAG::Renderer
 		};
 
 		renderData->shader = new Shader(ShaderData::object);
-		renderData->texture = new Texture(Utility::String("res/Assets/Textures/corndog.png"));
+		
+		std::unique_ptr<Texture> resPtr = std::make_unique<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
+		ResourceManager::Get().AddResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
+		//renderData->texture = new Texture(Utility::String("res/Assets/Textures/corndog.png"));
 
 		//Create the VAO
 		glGenVertexArrays(1, &renderData->VAO); //What's the difference between this func and "glCreateVertexArrays"?
@@ -89,7 +93,7 @@ namespace LAG::Renderer
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
-		Model testModel(Utility::String("res/Assets/Models/TexturedBox/glTF/BoxTextured.gltf"));
+		//Model testModel(Utility::String("res/Assets/Models/TexturedBox/glTF/BoxTextured.gltf"));
 		//Model testModel("res/Assets/Models/Chessboard/glTF/ABeautifulGame.gltf");
 
 		return true;
@@ -116,12 +120,12 @@ namespace LAG::Renderer
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		renderData->shader->Bind();
-		renderData->texture->Bind();
+		ResourceManager::Get().GetResource<Texture>(Utility::String("res/Assets/Textures/corndog.png")).Bind();
 		renderData->shader->SetInt("texture1", 0); //Testing, remove
 
 		glm::mat4 transformation = glm::mat4(1.0f);
 		transformation = glm::rotate(transformation, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-		transformation = glm::translate(transformation, glm::vec3(0.5f, -0.5f, 0.0f));
+		transformation = glm::translate(transformation, glm::vec3(3.5f, -0.5f, 0.0f));
 		renderData->shader->SetMat4("transformMat", transformation);
 
 
@@ -147,6 +151,8 @@ namespace LAG::Renderer
 		glBindVertexArray(renderData->VAO);
 
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+		auto help = glGetError();
 
 		//Not really necessary for improved renderers, but just good for debugging for now
 		glBindVertexArray(0); 

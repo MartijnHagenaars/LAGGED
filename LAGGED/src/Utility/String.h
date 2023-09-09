@@ -14,10 +14,9 @@ namespace LAG::Utility
 			m_HashValue = Hash(s);
 		}
 
-		LAG_API String(const String& other)
-		{
-			this->m_HashValue = other.m_HashValue;
-		}
+		LAG_API String(const String& other) : 
+			m_HashValue(other.m_HashValue)
+		{}
 
 		LAG_API size_t GetValue() const
 		{
@@ -36,7 +35,7 @@ namespace LAG::Utility
 
 			size_t sum = 0; 
 			for (int i = 0; i < stringLength; i++) {
-				sum += (s[i] * (int)pow(PRIME_CONST, i)) % ARR_SIZE;
+				sum += (s[i] * (int)pow(PRIME_VALUE, i)) % ARR_SIZE;
 			}
 
 			return sum;
@@ -44,7 +43,7 @@ namespace LAG::Utility
 
 		const char* m_String;
 		size_t m_HashValue;
-		static const int PRIME_CONST = 31;
-		static const int ARR_SIZE = 3001;
+		const int PRIME_VALUE = 31;
+		const int ARR_SIZE = 3001;
 	};
 }
