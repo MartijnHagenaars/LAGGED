@@ -7,6 +7,7 @@ namespace LAG
 	{
 		friend class ResourceManager;
 	public:
+		Texture() = delete;
 		explicit Texture(const Utility::String& path);
 		~Texture() override;
 
@@ -14,7 +15,6 @@ namespace LAG
 		void Unbind();
 
 	private:
-		Texture() = default;
 		bool Load() override;
 		bool Unload() override;
 

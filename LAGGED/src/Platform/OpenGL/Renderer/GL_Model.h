@@ -12,13 +12,13 @@ namespace LAG
 	class Model : public ModelBase
 	{
 	public:
+		Model() = delete;
 		explicit Model(const Utility::String& path);
 		~Model() override;
 
 		void Render() override;
 
 	private:
-		Model() = default;
 		bool Load() override;
 		bool Unload() override;
 

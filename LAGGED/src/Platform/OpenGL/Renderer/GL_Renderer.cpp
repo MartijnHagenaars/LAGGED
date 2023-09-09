@@ -120,7 +120,7 @@ namespace LAG::Renderer
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		renderData->shader->Bind();
-		ResourceManager::Get().GetResource<Texture>(Utility::String("res/Assets/Textures/corndog.png")).Bind();
+		ResourceManager::Get().GetResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"))->Bind();
 		renderData->shader->SetInt("texture1", 0); //Testing, remove
 
 		glm::mat4 transformation = glm::mat4(1.0f);

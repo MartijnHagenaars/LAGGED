@@ -47,12 +47,15 @@ namespace LAG
 		}
 
 		template<typename T>
-		T& GetResource(const Utility::String& path) const
+		T* GetResource(const Utility::String& path) const
 		{
 			T* res = dynamic_cast<T*>(m_Resources.find(path.GetValue())->second.get());
 			if (!res)
+			{
 				Utility::Logger::Error("Could not find resource.");
-			else return *res;
+				return nullptr;
+			}
+			else return res;
 		}
 
 		void Clear();

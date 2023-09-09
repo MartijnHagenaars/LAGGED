@@ -12,6 +12,7 @@ namespace LAG
 	class ModelBase : public Resource
 	{
 	public:
+		ModelBase() = delete;
 		explicit ModelBase(const Utility::String& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
@@ -32,7 +33,6 @@ namespace LAG
 		float m_PreTransformScale = 1.f;
 
 	private:
-		ModelBase() = default;
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
 
