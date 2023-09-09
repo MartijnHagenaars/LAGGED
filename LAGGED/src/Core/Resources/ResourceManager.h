@@ -22,9 +22,7 @@ namespace LAG
 		template<typename T, typename... Args>
 		bool AddResource(const Utility::String& path, Args&&... args)
 		{
-			//Check if template type is of type "Resource" and if parameters are provided
-			//constexpr bool validArgs = sizeof...(args) > 0;
-			//int dickInAss = sizeof...(args);
+			//Check if template type is of type "Resource"
 			constexpr bool validResType = std::is_base_of<LAG::Resource, T>::value; 
 			if constexpr (validResType)
 			{
@@ -34,14 +32,9 @@ namespace LAG
 				m_Resources.emplace(path.GetValue(), std::move(resPtr));
 				return true;
 			}
-			else
+			else if (!validResType)
 			{
-				if (!validResType)
-				{
-					LAG_ASSERT("Cannot load resource: Template type of is not child of type \"Resource\".");
-				}
-				//else if (!validArgs)
-				//	LAG_ASSERT("Cannot load resource: No arguments provided.");
+				LAG_ASSERT("Cannot load resource: Template type of is not child of type \"Resource\".");
 			}
 			return false;
 		}
