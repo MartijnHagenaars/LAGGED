@@ -27,6 +27,7 @@ namespace LAG
 			if constexpr (validResType)
 			{
 				T* resPtr = new T(path, args...);
+				auto whateverthefuck = typeid(resPtr).name();
 				//T* resPtr = std::make_unique<T>(path, args...);
 				resPtr->Load();
 				m_Resources.emplace(path.GetValue(), std::move(resPtr));

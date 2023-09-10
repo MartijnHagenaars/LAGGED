@@ -9,6 +9,7 @@ namespace tinygltf
 
 namespace LAG
 {
+	class Shader;
 	class ModelBase : public Resource
 	{
 	public:
@@ -16,7 +17,7 @@ namespace LAG
 		explicit ModelBase(const Utility::String& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
-		virtual void Render() = 0;
+		virtual void Render(Shader& shader) = 0;
 
 		void SetPosition(glm::vec3& position) { m_Position = position; }
 		void SetRotation(glm::vec3& rotation) { m_Rotation = rotation; }
@@ -27,17 +28,19 @@ namespace LAG
 		const glm::vec3& GetScale() const { return m_Scale; }
 
 	protected:
+		tinygltf::Model* m_Model = nullptr;
 		glm::vec3 m_Position = glm::vec3(0.f);
 		glm::vec3 m_Rotation = glm::vec3(0.f);
-		glm::vec3 m_Scale = glm::vec3(0.f);
+		glm::vec3 m_Scale = glm::vec3(1.f);
 		float m_PreTransformScale = 1.f;
 
 	private:
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
 
-		virtual void LoadTextures(const tinygltf::Model& modelData, const std::string& directoryPath) = 0;
-		virtual void LoadModel(const tinygltf::Model& modelData, const std::string& directoryPath) = 0;
+		virtual void LoadTextures(tinygltf::Model& modelData, std::string& directoryPath) = 0;
+		virtual void LoadModel(tinygltf::Model& modelData, std::string& directoryPath) = 0;
+
 
 	};
 }

@@ -63,8 +63,8 @@ namespace LAG::Renderer
 
 		renderData->shader = new Shader(ShaderData::object);
 		
-		std::unique_ptr<Texture> resPtr = std::make_unique<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
 		ResourceManager::Get().AddResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
+		ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
 		//renderData->texture = new Texture(Utility::String("res/Assets/Textures/corndog.png"));
 
 		//Create the VAO
@@ -119,38 +119,41 @@ namespace LAG::Renderer
 		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		renderData->shader->Bind();
-		ResourceManager::Get().GetResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"))->Bind();
-		renderData->shader->SetInt("texture1", 0); //Testing, remove
+		Model* modelThingy = ResourceManager::Get().GetResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
+		modelThingy->Render(*renderData->shader);
 
-		glm::mat4 transformation = glm::mat4(1.0f);
-		transformation = glm::rotate(transformation, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-		transformation = glm::translate(transformation, glm::vec3(3.5f, -0.5f, 0.0f));
-		renderData->shader->SetMat4("transformMat", transformation);
+		//renderData->shader->Bind();
+		//ResourceManager::Get().GetResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"))->Bind();
+		//renderData->shader->SetInt("texture1", 0); //Testing, remove
+
+		//glm::mat4 transformation = glm::mat4(1.0f);
+		//transformation = glm::rotate(transformation, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+		//transformation = glm::translate(transformation, glm::vec3(3.5f, -0.5f, 0.0f));
+		//renderData->shader->SetMat4("transformMat", transformation);
 
 
-		//Do transformation calculations
-		//First, calculate the model matrix
-		glm::mat4 modelMat = glm::mat4(1.f);
-		modelMat = glm::translate(modelMat, renderData->objectPos);
-		modelMat = glm::rotate(modelMat, glm::radians(-45.f), glm::vec3(1.f, 0.f, 0.f));
-		
-		//Next, the view matrix
-		glm::mat4 viewMat = glm::mat4(1.f);
-		viewMat = glm::translate(viewMat, renderData->cameraPos);
-		
-		//Lastly, the projection matrix
-		glm::mat4 projectionMat = glm::mat4(1.f);
-		projectionMat = glm::perspective(glm::radians(45.f), static_cast<float>(WindowManager::Get().GetFocussedWindow()->GetWidth() / WindowManager::Get().GetFocussedWindow()->GetHeight()), 0.1f, 100.f);
+		////Do transformation calculations
+		////First, calculate the model matrix
+		//glm::mat4 modelMat = glm::mat4(1.f);
+		//modelMat = glm::translate(modelMat, renderData->objectPos);
+		//modelMat = glm::rotate(modelMat, glm::radians(-45.f), glm::vec3(1.f, 0.f, 0.f));
+		//
+		////Next, the view matrix
+		//glm::mat4 viewMat = glm::mat4(1.f);
+		//viewMat = glm::translate(viewMat, renderData->cameraPos);
+		//
+		////Lastly, the projection matrix
+		//glm::mat4 projectionMat = glm::mat4(1.f);
+		//projectionMat = glm::perspective(glm::radians(45.f), static_cast<float>(WindowManager::Get().GetFocussedWindow()->GetWidth() / WindowManager::Get().GetFocussedWindow()->GetHeight()), 0.1f, 100.f);
 
-		//Send over the matrices to the shader
-		renderData->shader->SetMat4("modelMat", modelMat);
-		renderData->shader->SetMat4("viewMat", viewMat);
-		renderData->shader->SetMat4("projMat", projectionMat);
+		////Send over the matrices to the shader
+		//renderData->shader->SetMat4("modelMat", modelMat);
+		//renderData->shader->SetMat4("viewMat", viewMat);
+		//renderData->shader->SetMat4("projMat", projectionMat);
 
-		glBindVertexArray(renderData->VAO);
+		//glBindVertexArray(renderData->VAO);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		auto help = glGetError();
 
