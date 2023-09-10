@@ -15,7 +15,7 @@ namespace LAG::Utility
 		}
 
 		LAG_API String(const String& other) : 
-			m_HashValue(other.m_HashValue)
+			m_String(other.m_String), m_HashValue(other.m_HashValue)
 		{}
 
 		LAG_API size_t GetValue() const
@@ -31,8 +31,7 @@ namespace LAG::Utility
 	private:
 		constexpr size_t Hash(const char* s)
 		{
-			size_t stringLength = sizeof(s);
-
+			size_t stringLength = std::char_traits<char>::length(s);
 			size_t sum = 0; 
 			for (int i = 0; i < stringLength; i++) {
 				sum += (s[i] * (int)pow(PRIME_VALUE, i)) % ARR_SIZE;
