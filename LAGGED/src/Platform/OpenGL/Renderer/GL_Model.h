@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Resources/Model.h"
 #include "glm/glm.hpp" //TODO: Remove glm here
+#include <map>
+#include <utility>
 
 namespace tinygltf
 {
@@ -9,8 +11,15 @@ namespace tinygltf
 	struct Mesh;
 }
 
+typedef unsigned int GLuint;
+
 namespace LAG
 {
+	class Mesh
+	{
+
+	};
+
 	class Model : public ModelBase
 	{
 		friend class ResourceManager;
@@ -28,15 +37,17 @@ namespace LAG
 		void LoadTextures(tinygltf::Model& modelData, std::string& directoryPath) override;
 		void LoadModel(tinygltf::Model& modelData, std::string& directoryPath) override;
 
-		void LoadModelNode(tinygltf::Model& model, tinygltf::Node& node);
-		void LoadMesh(tinygltf::Model& model, tinygltf::Mesh& mesh);
+		void LoadModelNode(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Node& node);
+		void LoadMesh(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Mesh& mesh);
 
 		void RenderModelNode(tinygltf::Model& model, tinygltf::Node& node);
 		void RenderModelMesh(tinygltf::Model& model, tinygltf::Mesh& mesh);
 
-		unsigned int m_VBO = 0;
-		unsigned int m_EBO = 0;
-		unsigned int m_VAO = 0;
+		//unsigned int m_VBO = 0;
+		//unsigned int m_EBO = 0;
+		//unsigned int m_VAO = 0;
+		
+		std::pair<GLuint, std::map<int, unsigned int>> vaoAndEbos;
 
 	};
 }

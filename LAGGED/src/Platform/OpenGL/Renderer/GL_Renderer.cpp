@@ -1,5 +1,5 @@
 #include "Precomp.h"
-#include "GL_Renderer.h"
+//#include "GL_Renderer.h"
 
 #include "Platform/OpenGL/Window/GL_Window.h"
 #include "Platform/Base/Window/WindowManager.h"
@@ -67,31 +67,31 @@ namespace LAG::Renderer
 		ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
 		//renderData->texture = new Texture(Utility::String("res/Assets/Textures/corndog.png"));
 
-		//Create the VAO
-		glGenVertexArrays(1, &renderData->VAO); //What's the difference between this func and "glCreateVertexArrays"?
-		glBindVertexArray(renderData->VAO);
+		////Create the VAO
+		//glGenVertexArrays(1, &renderData->VAO); //What's the difference between this func and "glCreateVertexArrays"?
+		//glBindVertexArray(renderData->VAO);
 
-		//Create the VBO
-		glGenBuffers(1, &renderData->VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, renderData->VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+		////Create the VBO
+		//glGenBuffers(1, &renderData->VBO);
+		//glBindBuffer(GL_ARRAY_BUFFER, renderData->VBO);
+		//glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-		//Create the EBO (element buffer object / index buffer)
-		glGenBuffers(1, &renderData->EBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderData->EBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+		////Create the EBO (element buffer object / index buffer)
+		//glGenBuffers(1, &renderData->EBO);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, renderData->EBO);
+		//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
+		//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		//glEnableVertexAttribArray(0);
 
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-		glEnableVertexAttribArray(1);
+		//glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+		//glEnableVertexAttribArray(1);
 
-		glUseProgram(0);
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//glUseProgram(0);
+		//glBindVertexArray(0);
+		//glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
 		//Model testModel(Utility::String("res/Assets/Models/TexturedBox/glTF/BoxTextured.gltf"));
 		//Model testModel("res/Assets/Models/Chessboard/glTF/ABeautifulGame.gltf");

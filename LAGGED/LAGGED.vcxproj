@@ -197,10 +197,12 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Core\Resources\Model.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsExceptionMacros.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
     <ClInclude Include="res\Shaders\OpenGL\GL_DefaultObjectShader.h">
@@ -223,10 +225,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Renderer.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
@@ -311,6 +309,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp" />

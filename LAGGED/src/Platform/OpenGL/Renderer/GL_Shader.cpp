@@ -8,6 +8,8 @@
 #include "GL/glew.h"
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+
 LAG::Shader::Shader(std::string shaderPath)
 {
 	std::string vertexPath = shaderPath + ".vertex.glsl";
@@ -49,17 +51,18 @@ std::string LAG::Shader::ReadFile(const std::string& filePath)
 
 unsigned int LAG::Shader::CompileShader(const std::string& shaderSource, unsigned int shaderType)
 {
+	
 	unsigned int shaderID = glCreateShader(shaderType);
 	const char* shaderSourceChars = shaderSource.c_str();
-	glShaderSource(shaderID, 1, &shaderSourceChars, NULL);
-	glCompileShader(shaderID);
+	LAG_GRAPHICS_EXCEPTION(glShaderSource(shaderID, 1, &shaderSourceChars, NULL));
+	LAG_GRAPHICS_EXCEPTION(glCompileShader(shaderID));
 
 	int compileStatus = 0; 
-	glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus);
+	LAG_GRAPHICS_EXCEPTION(glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus));
 	if (compileStatus != GL_TRUE)
 	{
 		char shaderInfoLog[512];
-		glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog);
+		LAG_GRAPHICS_EXCEPTION(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
 		Utility::Logger::Error("Failed to compile shader: {0}", shaderInfoLog);
 #ifdef DEBUG
 		Utility::Logger::Info("Dumping shader source: \n{0}", shaderSource);
@@ -73,16 +76,16 @@ unsigned int LAG::Shader::CompileShader(const std::string& shaderSource, unsigne
 unsigned int LAG::Shader::MakeProgram()
 {
 	unsigned int programID = glCreateProgram();
-	glAttachShader(programID, m_VertexID);
-	glAttachShader(programID, m_PixelID);
-	glLinkProgram(programID);
+	LAG_GRAPHICS_EXCEPTION(glAttachShader(programID, m_VertexID));
+	LAG_GRAPHICS_EXCEPTION(glAttachShader(programID, m_PixelID));
+	LAG_GRAPHICS_EXCEPTION(glLinkProgram(programID));
 
 	GLint programStatus; 
-	glGetProgramiv(programID, GL_LINK_STATUS, &programStatus);
+	LAG_GRAPHICS_EXCEPTION(glGetProgramiv(programID, GL_LINK_STATUS, &programStatus));
 	if (programStatus != GL_TRUE)
 	{
 		char programInfoLog[512];
-		glGetProgramInfoLog(programID, 512, NULL, programInfoLog);
+		LAG_GRAPHICS_EXCEPTION(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
 		Utility::Logger::Error("Failed to compile shader program: {0}", programInfoLog);
 		return 0;
 	}
@@ -93,42 +96,42 @@ unsigned int LAG::Shader::MakeProgram()
 void LAG::Shader::CleanUpCompiledShaders()
 {
 	if (m_VertexID != 0)
-		glDeleteShader(m_VertexID);
+		LAG_GRAPHICS_EXCEPTION(glDeleteShader(m_VertexID));
 	if (m_PixelID != 0)
-		glDeleteShader(m_PixelID);
+		LAG_GRAPHICS_EXCEPTION(glDeleteShader(m_PixelID));
 }
 
 void LAG::Shader::Bind()
 {
-	glUseProgram(m_ProgramID);
+	LAG_GRAPHICS_EXCEPTION(glUseProgram(m_ProgramID));
 }
 
 void LAG::Shader::Unbind()
 {
-	glUseProgram(0);
+	LAG_GRAPHICS_EXCEPTION(glUseProgram(0));
 }
 
 void LAG::Shader::SetBool(const std::string& location, bool value)
 {
-	glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value);
+	LAG_GRAPHICS_EXCEPTION(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
 }
 
 void LAG::Shader::SetInt(const std::string& location, int value)
 {
-	glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value);
+	LAG_GRAPHICS_EXCEPTION(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
 }
 
 void LAG::Shader::SetFloat(const std::string& location, float value)
 {
-	glUniform1f(glGetUniformLocation(m_ProgramID, location.c_str()), value);
+	LAG_GRAPHICS_EXCEPTION(glUniform1f(glGetUniformLocation(m_ProgramID, location.c_str()), value));
 }
 
 void LAG::Shader::SetVec3(const std::string& location, glm::vec3 value)
 {
-	glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value.x, value.y, value.z);
+	LAG_GRAPHICS_EXCEPTION(glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value.x, value.y, value.z));
 }
 
 void LAG::Shader::SetMat4(const std::string& location, const glm::mat4& value)
 {
-	glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, location.c_str()), 1, GL_FALSE, glm::value_ptr(value[0]));
+	LAG_GRAPHICS_EXCEPTION(glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, location.c_str()), 1, GL_FALSE, glm::value_ptr(value[0])));
 }

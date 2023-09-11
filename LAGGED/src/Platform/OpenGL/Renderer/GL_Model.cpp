@@ -3,11 +3,10 @@
 
 #include "Core/Resources/ResourceManager.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
+#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
 
 #include <filesystem>
 #include "GL/glew.h"
-
-
 #include "GLFW/glfw3.h" //REMOVE: USED FOR TESTING
 #include "Platform/Base/Window/WindowManager.h" //TODO: SAME FOR THIS ONE!
 
@@ -96,34 +95,54 @@ namespace LAG
 
 	void Model::LoadModel(tinygltf::Model& modelData, std::string& directoryPath)
 	{
-		glGenVertexArrays(1, &m_VAO); //TODO: Research what the difference is between this func and "glCreateVertexArrays"?
-		glBindVertexArray(m_VAO);
+		GLuint vao; 
+		std::map<int, unsigned int> vbos;
+
+		
+		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &vao)); //TODO: Research what the difference is between this func and "glCreateVertexArrays"?
+		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(vao));
 
 		//Note: Might want to loop over this instead. TODO: Research!
 		const tinygltf::Scene& scene = modelData.scenes[modelData.defaultScene];
 		for (size_t i = 0; i < scene.nodes.size(); i++)
 		{
-			LoadModelNode(modelData, modelData.nodes[scene.nodes[i]]);
+			LoadModelNode(vbos, modelData, modelData.nodes[scene.nodes[i]]);
 		}
 
-		glBindVertexArray(0);
+		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
+
+		for (auto it = vbos.cbegin(); it != vbos.cend();) {
+			tinygltf::BufferView bufferView = modelData.bufferViews[it->first];
+			if (bufferView.target != GL_ELEMENT_ARRAY_BUFFER) 
+			{
+				LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &vbos[it->first]));
+				vbos.erase(it++);
+			}
+			else 
+			{
+				++it;
+			}
+		}
+
+		vaoAndEbos.first = vao;
+		vaoAndEbos.second = vbos;
 	}
 
-	void Model::LoadModelNode(tinygltf::Model& model, tinygltf::Node& node)
+	void Model::LoadModelNode(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Node& node)
 	{
 		if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) 
 		{
-			LoadMesh(model, model.meshes[node.mesh]);
+			LoadMesh(vboList, model, model.meshes[node.mesh]);
 		}
 
 		for (size_t i = 0; i < node.children.size(); i++) 
 		{
 			assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
-			LoadModelNode(model, model.nodes[node.children[i]]);
+			LoadModelNode(vboList, model, model.nodes[node.children[i]]);
 		}
 	}
 
-	void Model::LoadMesh(tinygltf::Model& model, tinygltf::Mesh& mesh)
+	void Model::LoadMesh(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Mesh& mesh)
 	{
 		//Create and load the VBO
 		for (size_t i = 0; i < model.bufferViews.size(); ++i)
@@ -135,17 +154,20 @@ namespace LAG
 			const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
 			std::cout << "bufferview.target " << bufferView.target << std::endl;
 
+			GLuint vbo; 
+			LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &vbo));
+			vboList[i] = vbo;
 
-			//TODO: Shitty approach. Doesn't allow for multiple meshes. Revisit this at some point...
-			glGenBuffers(1, &m_VBO);
-			glBindBuffer(bufferView.target, m_VBO);
+			LAG_GRAPHICS_EXCEPTION(glBindBuffer(bufferView.target, vbo));
 
 			//TODO: Testing, remove.
 			std::cout << "buffer.data.size = " << buffer.data.size()
 				<< ", bufferview.byteOffset = " << bufferView.byteOffset
 				<< std::endl;
 
-			glBufferData(bufferView.target, bufferView.byteLength, &buffer.data.at(0) + bufferView.byteOffset, GL_STATIC_DRAW);
+			LAG_GRAPHICS_EXCEPTION(glBufferData(bufferView.target, bufferView.byteLength, &buffer.data.at(0) + bufferView.byteOffset, GL_STATIC_DRAW));
+			auto afterInit = glGetError();
+			printf("");
 		}
 
 		//Set the primitive attributes
@@ -159,7 +181,8 @@ namespace LAG
 				int byteStride = accessor.ByteStride(model.bufferViews[accessor.bufferView]);
 				
 				//TODO: This sucks. Doesn't work with multiple meshes. REPLACE!
-				glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+
+				LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, vboList[accessor.bufferView]));
 				//glBindBuffer(GL_ARRAY_BUFFER, vbos[accessor.bufferView]);
 
 				int size = 1;
@@ -172,10 +195,10 @@ namespace LAG
 				if (attrib.first.compare("NORMAL") == 0) vaa = 1;
 				if (attrib.first.compare("TEXCOORD_0") == 0) vaa = 2;
 				if (vaa > -1) {
-					glEnableVertexAttribArray(vaa);
-					glVertexAttribPointer(vaa, size, accessor.componentType,
+					LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(vaa));
+					LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(vaa, size, accessor.componentType,
 						accessor.normalized ? GL_TRUE : GL_FALSE,
-						byteStride, ((char*)NULL + (accessor.byteOffset)));
+						byteStride, ((char*)NULL + (accessor.byteOffset))));
 				}
 				else
 					std::cout << "vaa missing: " << attrib.first << std::endl;
@@ -193,27 +216,33 @@ namespace LAG
 
 	void LAG::Model::Render(Shader& shader)
 	{
+		std::cout << sinf((float)glfwGetTime()) * 10.f << std::endl;
 		glm::mat4 modelMat = glm::mat4(1.f);
-		modelMat = glm::translate(modelMat, m_Position);
-		modelMat = glm::rotate(modelMat, (float)glfwGetTime(), glm::vec3(0.f, 0.f, 1.f));
+		modelMat = glm::translate(modelMat, glm::vec3(sinf((float)glfwGetTime()) * 2.f, 0.f, -10.f));
+		modelMat = glm::rotate(modelMat, (float)glfwGetTime(), glm::vec3(0.5f, 0.5f, 0.f));
 		modelMat = glm::scale(modelMat, m_Scale);
 
 		glm::mat4 viewMat = glm::mat4(1.f);
-		viewMat = glm::translate(viewMat, glm::vec3(0.f));
+		viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, 1.f));
 
 		glm::mat4 projMat = glm::mat4(1.f);
 		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(WindowManager::Get().GetFocussedWindow()->GetWidth() / WindowManager::Get().GetFocussedWindow()->GetHeight()), 0.1f, 100.f);
-
 		shader.Bind();
 		shader.SetMat4("modelMat", modelMat);
 		shader.SetMat4("viewMat", viewMat);
 		shader.SetMat4("projMat", projMat);
+
+		auto preRender = glGetError();
+
+		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(vaoAndEbos.first));
 
 		tinygltf::Scene& scene = m_Model->scenes[m_Model->defaultScene];
 		for (size_t i = 0; i < scene.nodes.size(); ++i) 
 		{
 			RenderModelNode(*m_Model, m_Model->nodes[scene.nodes[i]]);
 		}
+
+		auto afterRender = glGetError();
 	}
 
 	void LAG::Model::RenderModelNode(tinygltf::Model& model, tinygltf::Node& node)
@@ -236,12 +265,17 @@ namespace LAG
 			tinygltf::Accessor indexAccessor = model.accessors[primitive.indices];
 
 			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbos.at(indexAccessor.bufferView));
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_VBO);
-
-
-			glDrawElements(primitive.mode, indexAccessor.count,
+			LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vaoAndEbos.second.at(indexAccessor.bufferView)));
+			
+			auto preRender = glGetError();
+			LAG_GRAPHICS_EXCEPTION(glDrawElements(primitive.mode, indexAccessor.count,
 				indexAccessor.componentType,
-				((char*)NULL + ((indexAccessor.byteOffset))));
+				((char*)NULL + (indexAccessor.byteOffset))));
+			auto afterRender = glGetError(); //Error!
+			if (afterRender != 0)
+			{
+				LAG_ASSERT("Rendering error!!");
+			}
 		}
 	}
 }

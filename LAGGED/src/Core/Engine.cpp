@@ -102,22 +102,6 @@ namespace LAG
 			return false;
 		}
 
-
-		//WindowManager::Get().AddWindow(200, 200, "First window", false);
-		//WindowManager::Get().AddWindow(420, 100, "Second window", false);
-		//WindowManager::Get().AddWindow(800, 300, "Third window", false); //Note to self: Triangle will not be displayed on this wi
-
-
-		////Setup renderer
-		//if (!Renderer::Initialize())
-		//{
-		//	LAG::Utility::Logger::Critical("Failed to initialize renderer.");
-		//	return false;
-		//}
-
-		////Setup rendering surface
-		//m_RenderSurface = Renderer::CreateSurface(m_Window);
-
 		//Setup application
 		m_App = std::unique_ptr<LAG::IApplication>(applicationPtr);
 		m_App->Initialize();
