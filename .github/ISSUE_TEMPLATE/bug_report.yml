@@ -28,7 +28,45 @@ body:
     attributes:
       label: "How to reproduce"
       description: Steps to reproduce the behavior
-      placeholder: Provide a detailed description on how the issue can be reproduced.
+      placeholder: Provide a detailed description on how the issue can be reproduced...
     validations:
       required: true
-      
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: "Platform info"
+      description: What platform does the bug occur on?
+      multiple: true
+      options:
+        - Windows
+        - PS5
+        - Both
+    validations:
+      required: true
+
+  - type: textarea
+    id: mediaattachments
+    attributes:
+      label: "Media attachments"
+      description: Media, like screenshots and videos demonstrating the issue, can be attached here.
+      value: Attach media here...
+      render: bash
+    validations:
+      required: false
+
+  - type: textarea
+    id: loginfo
+    attributes:
+      label: "Logs"
+      description: If there is anything interesting in the logs that could help indicate what the issue is, please paste it here. 
+    validations:
+      required: false
+
+  - type: textarea
+    id: additionalinfo
+    attributes:
+      label: "Additional info"
+      description: If there is anything else that needs to be mentioned, write that here!
+    validations:
+      required: false
