@@ -10,7 +10,6 @@ body:
     attributes:
       label: "Bug description"
       description: Provide a clear and concise description of what the bug is.
-      placeholder: ""
     validations:
       required: true
   - type: textarea
@@ -18,7 +17,6 @@ body:
     attributes:
       label: "Expected behavior"
       description: Provide a clear and concise description of what you expected to happen.
-      placeholder: ""
     validations:
       required: true
   - type: textarea
@@ -50,7 +48,6 @@ body:
     attributes:
       label: "Media attachments"
       description: Media, like screenshots and videos demonstrating the issue, can be attached here.
-      placeholder: ""
       render: bash
     validations:
       required: false
@@ -59,7 +56,6 @@ body:
     attributes:
       label: "Logs"
       description: If there is anything interesting in the logs that could help indicate what the issue is, please paste it here. 
-      placeholder: ""
     validations:
       required: false
   - type: textarea
@@ -67,6 +63,5 @@ body:
     attributes:
       label: "Additional info"
       description: If there is anything else that needs to be mentioned, write it here!
-      placeholder: ""
     validations:
       required: false
