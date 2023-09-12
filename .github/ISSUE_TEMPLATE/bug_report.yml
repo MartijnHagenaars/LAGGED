@@ -9,29 +9,28 @@ body:
     id: bugdescription
     attributes:
       label: "Bug description"
-      description: Describe the bug
-      placeholder: A clear and concise description of what the bug is...
+      description: Provide a clear and concise description of what the bug is.
     validations:
       required: true
-
   - type: textarea
     id: expectedbehavior
     attributes:
       label: "Expected behavior"
-      description: Expected behavior
-      placeholder: Provide a clear and concise description of what you expected to happen...
+      description: Provide a clear and concise description of what you expected to happen.
     validations:
       required: true
-      
   - type: textarea
     id: reproduction
     attributes:
       label: "How to reproduce"
-      description: Steps to reproduce the behavior
-      placeholder: Provide a detailed description on how the issue can be reproduced...
+      description: Provide a detailed description on how the issue can be reproduced. This can be done by writing down the steps that you took to encounter the bug. 
+      placeholder: |
+        1. Load level '...'
+        2. Move player towards '....'
+        3. Press button '....'
+        4. See error
     validations:
       required: true
-
   - type: dropdown
     id: platform
     attributes:
@@ -44,17 +43,14 @@ body:
         - Both
     validations:
       required: true
-
   - type: textarea
     id: mediaattachments
     attributes:
       label: "Media attachments"
       description: Media, like screenshots and videos demonstrating the issue, can be attached here.
-      value: Attach media here...
       render: bash
     validations:
       required: false
-
   - type: textarea
     id: loginfo
     attributes:
@@ -62,11 +58,10 @@ body:
       description: If there is anything interesting in the logs that could help indicate what the issue is, please paste it here. 
     validations:
       required: false
-
   - type: textarea
     id: additionalinfo
     attributes:
       label: "Additional info"
-      description: If there is anything else that needs to be mentioned, write that here!
+      description: If there is anything else that needs to be mentioned, write it here!
     validations:
       required: false
