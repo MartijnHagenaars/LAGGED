@@ -1,6 +1,6 @@
 name: "❗ API design issue"
 description: Create a new ticket for an API design issue.
-title: "🐛 [BUG] - <title>"
+title: "❗ [API design issue] - <title>"
 labels: [
   "API design"
 ]
