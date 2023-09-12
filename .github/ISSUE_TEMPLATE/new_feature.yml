@@ -34,8 +34,7 @@ body:
     validations:
       required: false
 
-        - type: markdown
+  - type: markdown
     attributes:
-      value: |
-        Make sure to assign a label before submitting!
+      value: Make sure to assign a label before submitting!
       
