@@ -6,9 +6,9 @@ labels: [
 ]
 body:
   - type: textarea
-    id: description
+    id: api
     attributes:
-      label: "Description"
+      label: "API"
       description: What API does this apply to?
       placeholder: Describe which API this issue is for. 
     validations:
@@ -24,9 +24,9 @@ body:
       required: true
       
   - type: textarea
-    id: description
+    id: improvements
     attributes:
-      label: "Description"
+      label: "Improvements"
       description: How could it be improved?
       placeholder: Discuss what a solution could be and / or how it should work.
     validations:
