@@ -1,0 +1,34 @@
+name: "❗ API design issue"
+description: Create a new ticket for an API design issue.
+title: "🐛 [BUG] - <title>"
+labels: [
+  "API design"
+]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: What API does this apply to?
+      placeholder: Describe which API this issue is for. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: Describe the issue.
+      placeholder: Discuss what the problem is with an API design...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: How could it be improved?
+      placeholder: Discuss what a solution could be and / or how it should work.
+    validations:
+      required: true
+      
