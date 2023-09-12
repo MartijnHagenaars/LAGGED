@@ -1,0 +1,41 @@
+name: "💡 New feature"
+description: Create an issue for a new feature
+title: "<title>"
+labels: []
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: Describe clearly what the feature should do. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: defofdone
+    attributes:
+      label: "Definition of done"
+      description: Describe the definition of done. Write the acceptance criteria for when a feature can be considered done. 
+      placeholder: |
+        DoD: (example)
+        1. Feature needs to work when player presses button
+        2. Correct models are loaded
+        3. Feature works in specific level
+        etc...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: additionalinfo
+    attributes:
+      label: "Additional info"
+      description: Additional info
+      placeholder: Is there something else that needs to be mentioned? Write it here!
+    validations:
+      required: false
+
+        - type: markdown
+    attributes:
+      value: |
+        Make sure to assign a label before submitting!
+      
