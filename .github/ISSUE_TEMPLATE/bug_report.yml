@@ -1,0 +1,34 @@
+name: "🐛 Bug report"
+description: Create a new ticket for a bug report.
+title: "<title>"
+labels: [
+  "bug"
+]
+body:
+  - type: textarea
+    id: bugdescription
+    attributes:
+      label: "Bug description"
+      description: Describe the bug
+      placeholder: A clear and concise description of what the bug is...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expectedbehavior
+    attributes:
+      label: "Expected behavior"
+      description: Expected behavior
+      placeholder: Provide a clear and concise description of what you expected to happen...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "How to reproduce"
+      description: Steps to reproduce the behavior:
+      placeholder: Provide a detailed description on how the issue can be reproduced.
+    validations:
+      required: true
+      
