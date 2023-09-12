@@ -48,7 +48,6 @@ body:
     attributes:
       label: "Media attachments"
       description: Media, like screenshots and videos demonstrating the issue, can be attached here.
-      render: bash
     validations:
       required: false
   - type: textarea
