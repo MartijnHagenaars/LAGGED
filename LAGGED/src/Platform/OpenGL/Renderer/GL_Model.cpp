@@ -4,6 +4,7 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
 #include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "Platform/OpenGL/Renderer/GL_Texture.h" //TODO: BAD
 
 #include <filesystem>
 #include "GL/glew.h"
@@ -209,8 +210,11 @@ namespace LAG
 		for (const auto& texture : model.textures)
 		{
 			std::string textureName = model.images[texture.source].uri; //Get texture resource identifier
-			std::string texturePath = GetPath().GetString() + "/" + textureName;	//Get texture path for loading through resource manager
+
+			std::string modelPath = GetPath().GetString();
+			std::string texturePath = modelPath.erase(modelPath.find_last_of('/'), modelPath.length() - 1 - 1) + "/" + textureName; //Get texture path for loading through resource manager
 			Utility::Logger::Info("Loading texture at location {0}", texturePath);
+			ResourceManager::Get().AddResource<Texture>(Utility::String(texturePath.c_str()));
 		}
 	}
 
