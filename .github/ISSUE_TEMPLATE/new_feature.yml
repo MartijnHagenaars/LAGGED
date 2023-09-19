@@ -1,7 +1,9 @@
 name: "💡 New feature"
 description: Create a new ticket for a new feature.
 title: "<title>"
-labels: []
+labels: [
+  "new feature"
+]
 body:
   - type: textarea
     id: description
