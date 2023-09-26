@@ -1,0 +1,50 @@
+name: "💡 New task"
+description: Create a new ticket for a new task.
+title: "<title>"
+labels: ["task"]
+projects: ["MartijnHagenaars/1"]
+body:
+  - type: textarea
+    id: epic
+    attributes:
+      label: "What epic is this task part of?"
+      description: Mention (or link) the epic that this task is part of. 
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: Describe clearly what the task is about.
+    validations:
+      required: true
+
+  - type: textarea
+    id: defofdone
+    attributes:
+      label: "Definition of done"
+      description: Describe the definition of done. Write the acceptance criteria for when the task can be considered done. 
+      placeholder: |
+        DoD: (example)
+        1. I want to have researched a feature, and understand how it could be implemented
+        2. Feature needs to work when player presses button
+        3. Correct models are loaded
+        4. Feature works in specific level
+        etc...
+    validations:
+      required: true
+      
+  - type: textarea
+    id: additionalinfo
+    attributes:
+      label: "Additional info"
+      description: Additional info
+      placeholder: Is there something else that needs to be mentioned? Write it here!
+    validations:
+      required: false
+
+  - type: markdown
+    attributes:
+      value: Make sure to assign a label before submitting!
+      
