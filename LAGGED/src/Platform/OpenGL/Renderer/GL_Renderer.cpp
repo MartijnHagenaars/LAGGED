@@ -36,7 +36,9 @@ namespace LAG::Renderer
 
 		renderData->shader = new Shader(ShaderData::object);
 
-		ResourceManager::Get().AddResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
+		glEnable(GL_DEPTH_TEST);
+
+		//ResourceManager::Get().AddResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
 		ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
 
 		return true;
@@ -60,7 +62,7 @@ namespace LAG::Renderer
 	void Render()
 	{
 		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		Model* modelThingy = ResourceManager::Get().GetResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
 		modelThingy->Render(*renderData->shader);
