@@ -213,14 +213,21 @@ namespace LAG
 
 			std::string modelPath = GetPath().GetString();
 			std::string texturePath = modelPath.erase(modelPath.find_last_of('/'), modelPath.length() - 1 - 1) + "/" + textureName; //Get texture path for loading through resource manager
+			
+			Utility::String pathString = Utility::String(texturePath.c_str());
+
+			if (didThing)
+				continue;
+			else didThing = true;
+			ResourceManager::Get().AddResource<Texture>(pathString);
 			Utility::Logger::Info("Loading texture at location {0}", texturePath);
-			ResourceManager::Get().AddResource<Texture>(Utility::String(texturePath.c_str()));
+
+			m_Textures.emplace_back(pathString.GetValue());
 		}
 	}
 
 	void LAG::Model::Render(Shader& shader)
 	{
-		std::cout << sinf((float)glfwGetTime()) * 10.f << std::endl;
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, glm::vec3(sinf((float)glfwGetTime()) * 2.f, 0.f, -10.f));
 		modelMat = glm::rotate(modelMat, (float)glfwGetTime(), glm::vec3(0.5f, 0.5f, 0.f));
@@ -243,26 +250,41 @@ namespace LAG
 		tinygltf::Scene& scene = m_Model->scenes[m_Model->defaultScene];
 		for (size_t i = 0; i < scene.nodes.size(); ++i) 
 		{
-			RenderModelNode(*m_Model, m_Model->nodes[scene.nodes[i]]);
+			RenderModelNode(*m_Model, m_Model->nodes[scene.nodes[i]], shader);
 		}
 
 		auto afterRender = glGetError();
 	}
 
-	void LAG::Model::RenderModelNode(tinygltf::Model& model, tinygltf::Node& node)
+	void LAG::Model::RenderModelNode(tinygltf::Model& model, tinygltf::Node& node, Shader& shader)
 	{
 		if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) 
 		{
-			RenderModelMesh(model, model.meshes[node.mesh]);
+			RenderModelMesh(model, model.meshes[node.mesh], shader);
 		}
 		for (size_t i = 0; i < node.children.size(); i++) 
 		{
-			RenderModelNode(model, model.nodes[node.children[i]]);
+			RenderModelNode(model, model.nodes[node.children[i]], shader);
 		}
 	}
 
-	void LAG::Model::RenderModelMesh(tinygltf::Model& model, tinygltf::Mesh& mesh)
+	void LAG::Model::RenderModelMesh(tinygltf::Model& model, tinygltf::Mesh& mesh, Shader& shader)
 	{
+		//for (size_t i = 0; i < m_Textures.size(); i++)
+		//{
+		//	if (i == 1) break;
+		//	//There's an issue here that's causing weird stuff
+		//	ResourceManager::Get().GetResource<Texture>(m_Textures[i])->Bind(i);
+		//	//shader.SetInt("texture" + std::to_string(i + 1), i);
+		//	shader.SetInt("texture1", 0);
+		//}
+
+		for (size_t i = 0; i < m_Textures.size(); i++)
+		{
+			if (i == 0) break;
+			ResourceManager::Get().GetResource<Texture>(m_Textures[i])->Bind(i);
+		}
+
 		for (size_t i = 0; i < mesh.primitives.size(); ++i) 
 		{
 			tinygltf::Primitive primitive = mesh.primitives[i];

@@ -29,7 +29,7 @@ namespace LAG
 		}
 
 		glGenTextures(1, &m_ID);
-		Bind();
+		Bind(0);
 
 		//Load image data
 		stbi_set_flip_vertically_on_load(true);
@@ -63,15 +63,31 @@ namespace LAG
 		return true;
 	}
 
-	void Texture::Bind()
+	int GetTextureUnit(size_t textureUnit)
 	{
-		glActiveTexture(GL_TEXTURE0);
+		switch (textureUnit)
+		{
+		case 0: return GL_TEXTURE0;
+		case 1: return GL_TEXTURE1;
+		case 2: return GL_TEXTURE2;
+		case 3: return GL_TEXTURE3;
+		case 4: return GL_TEXTURE4;
+		case 5: return GL_TEXTURE5;
+		case 6: return GL_TEXTURE6;
+		case 7: return GL_TEXTURE7;
+		default: return GL_TEXTURE0;
+		}
+	}
+
+	void Texture::Bind(size_t textureUnit)
+	{
+		glActiveTexture(GetTextureUnit(textureUnit));
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}
 
-	void Texture::Unbind()
+	void Texture::Unbind(size_t textureUnit)
 	{
-		glDisable(GL_TEXTURE0);
+		glDisable(GetTextureUnit(textureUnit));
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 

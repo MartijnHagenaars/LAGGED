@@ -40,14 +40,16 @@ namespace LAG
 		void LoadModelNode(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Node& node);
 		void LoadMesh(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Mesh& mesh);
 
-		void RenderModelNode(tinygltf::Model& model, tinygltf::Node& node);
-		void RenderModelMesh(tinygltf::Model& model, tinygltf::Mesh& mesh);
+		void RenderModelNode(tinygltf::Model& model, tinygltf::Node& node, Shader& shader);
+		void RenderModelMesh(tinygltf::Model& model, tinygltf::Mesh& mesh, Shader& shader);
 
 		//unsigned int m_VBO = 0;
 		//unsigned int m_EBO = 0;
 		//unsigned int m_VAO = 0;
 		
 		std::pair<GLuint, std::map<int, unsigned int>> vaoAndEbos;
+		std::vector<size_t> m_Textures;
 
+		bool didThing = false;
 	};
 }

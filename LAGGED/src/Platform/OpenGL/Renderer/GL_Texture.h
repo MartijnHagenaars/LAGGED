@@ -6,13 +6,14 @@ namespace LAG
 	class Texture : public Resource
 	{
 		friend class ResourceManager;
+		friend class Model;
 	public:
 		Texture() = delete;
 		explicit Texture(const Utility::String& path);
 		~Texture() override;
 
-		void Bind();
-		void Unbind();
+		void Bind(size_t textureUnit);
+		void Unbind(size_t textureUnit);
 
 	private:
 		bool Load() override;

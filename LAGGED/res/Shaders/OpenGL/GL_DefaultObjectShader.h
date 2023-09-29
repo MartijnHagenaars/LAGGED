@@ -32,11 +32,11 @@ namespace LAG::ShaderData
 			out vec4 ColorOutput;
 			 
 			in vec2 texCoord;
-			uniform sampler2D testTexture;
+			uniform sampler2D texture1;
 			
 			void main()
 			{
-			    ColorOutput = texture(testTexture, texCoord);
+			    ColorOutput = texture(texture1, texCoord);
 			} 
 		)";
 	} object;
