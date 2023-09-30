@@ -96,29 +96,77 @@ namespace LAG
 		//}
 	}
 
-	void Model::LoadModel(tinygltf::Model& modelData, std::string& directoryPath)
+	std::vector<glm::vec3> LoadVertices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
 	{
-		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-
-		//For now, I'm only looking at the first mesh. In the future, this should loop and create mesh objects. 
-		auto& primitive = modelData.meshes[0].primitives[0];
+		std::vector<glm::vec3> vertices;
 
 		//Load vertex data
 		const auto& primitiveAttributes = primitive.attributes["POSITION"];
 		const auto& accessors = modelData.accessors[primitiveAttributes];
 		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
+		const auto& buffers = modelData.buffers[bufferViews.buffer];
 
-		std::vector<glm::vec3> vertices;
 		vertices.reserve(accessors.count);
-		const float* positions = reinterpret_cast<const float*>(&modelData.buffers[bufferViews.buffer].data[bufferViews.byteOffset + accessors.byteOffset]);
+		const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
 		for (size_t i = 0; i < vertices.capacity(); i++)
 		{
 			vertices.emplace_back(glm::vec3(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]));
 			std::cout << "(" << positions[i * 3 + 0] << ", " << positions[i * 3 + 1] << ", " << positions[i * 3 + 2] << ")" << "\n";
 		}
 
+		return vertices;
+	}
+
+	std::vector<unsigned short> LoadIndices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
+	{
+		std::vector<unsigned short> indices;
+
+		const auto& accessors = modelData.accessors[primitive.indices];
+		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
+		const auto& buffers = modelData.buffers[bufferViews.buffer];
+
+		auto whatever = accessors.componentType;
+		size_t accessorSize = tinygltf::GetNumComponentsInType(accessors.type) * tinygltf::GetComponentSizeInBytes(accessors.componentType);
+		indices.reserve((bufferViews.byteLength / accessorSize));
+		{
+			auto* indexArray = &buffers.data.data()[bufferViews.byteOffset];
+			const unsigned short* indexArrayShort = reinterpret_cast<const unsigned short*>(indexArray);
+
+			for (size_t i = 0; i < indices.capacity(); i++)
+			{
+				indices.emplace_back(indexArrayShort[i]);
+			}
+		}
+
+		return indices;
+	}
+
+	void Model::LoadModel(tinygltf::Model& modelData, std::string& directoryPath)
+	{
+		//Create buffer objects and such
+		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
+		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
+		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
+
+		//For now, I'm only looking at the first mesh. In the future, this should loop and create mesh objects. TODO!
+		auto& primitive = modelData.meshes[0].primitives[0];
+		std::vector<glm::vec3> vertices = LoadVertices(modelData, primitive);
+		std::vector<unsigned short> indices = LoadIndices(modelData, primitive);
+
+
+		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+
+		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
+		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), &vertices.data()[0], GL_STATIC_DRAW));
+
+		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indices.size(), &indices.data()[0], GL_STATIC_DRAW));
+
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
+
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
+		//TINYGLTF_COMPONENT_TYPE_INT;
 	}
 
 	void LAG::Model::Render(Shader& shader)
@@ -137,5 +185,8 @@ namespace LAG
 		shader.SetMat4("modelMat", modelMat);
 		shader.SetMat4("viewMat", viewMat);
 		shader.SetMat4("projMat", projMat);
+
+		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0));
 	}
 }
