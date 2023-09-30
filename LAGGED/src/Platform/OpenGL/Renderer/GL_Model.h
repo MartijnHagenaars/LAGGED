@@ -38,5 +38,9 @@ namespace LAG
 		void LoadModel(tinygltf::Model& modelData, std::string& directoryPath) override;
 		
 		std::vector<size_t> m_Textures;
+
+		unsigned int m_VBO = 0;
+		unsigned int m_EBO = 0;
+		unsigned int m_VAO = 0;
 	};
 }

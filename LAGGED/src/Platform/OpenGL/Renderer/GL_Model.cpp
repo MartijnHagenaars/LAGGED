@@ -54,16 +54,18 @@ namespace LAG
 		std::string filePath = GetPath().GetString();
 
 		if (filePath.find_last_of(".") != std::string::npos)
-			fileExtension = fileExtension.substr(fileExtension.find_last_of(".") + 1);
+			fileExtension = filePath.substr(filePath.find_last_of(".") + 1);
 		else return false;
 
 		bool loadSuccess = false;
 		std::string errorMsg = "", warningMsg = "";
 
 		//Load data from file. GLB is used for binary files. 
-		if(fileExtension.compare("glb") == 0)
+		if (fileExtension.compare("glb") == 0)
 			loadSuccess = modelLoader.LoadBinaryFromFile(m_Model, &errorMsg, &warningMsg, filePath);
-		else loadSuccess = modelLoader.LoadASCIIFromFile(m_Model, &errorMsg, &warningMsg, filePath);
+		else if (fileExtension.compare("gltf") == 0)
+			loadSuccess = modelLoader.LoadASCIIFromFile(m_Model, &errorMsg, &warningMsg, filePath);
+		else return false;
 
 		//Check error messages
 		if (!errorMsg.empty() || !loadSuccess)
@@ -96,34 +98,27 @@ namespace LAG
 
 	void Model::LoadModel(tinygltf::Model& modelData, std::string& directoryPath)
 	{
-		GLuint vao; 
-		std::map<int, unsigned int> vbos;
+		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
+		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 
-		
-		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &vao)); //TODO: Research what the difference is between this func and "glCreateVertexArrays"?
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(vao));
+		//For now, I'm only looking at the first mesh. In the future, this should loop and create mesh objects. 
+		auto& primitive = modelData.meshes[0].primitives[0];
 
-		//Note: Might want to loop over this instead. TODO: Research!
-		const tinygltf::Scene& scene = modelData.scenes[modelData.defaultScene];
-		for (size_t i = 0; i < scene.nodes.size(); i++)
+		//Load vertex data
+		const auto& primitiveAttributes = primitive.attributes["POSITION"];
+		const auto& accessors = modelData.accessors[primitiveAttributes];
+		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
+
+		std::vector<glm::vec3> vertices;
+		vertices.reserve(accessors.count);
+		const float* positions = reinterpret_cast<const float*>(&modelData.buffers[bufferViews.buffer].data[bufferViews.byteOffset + accessors.byteOffset]);
+		for (size_t i = 0; i < vertices.capacity(); i++)
 		{
-			
+			vertices.emplace_back(glm::vec3(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]));
+			std::cout << "(" << positions[i * 3 + 0] << ", " << positions[i * 3 + 1] << ", " << positions[i * 3 + 2] << ")" << "\n";
 		}
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
-
-		for (auto it = vbos.cbegin(); it != vbos.cend();) {
-			tinygltf::BufferView bufferView = modelData.bufferViews[it->first];
-			if (bufferView.target != GL_ELEMENT_ARRAY_BUFFER) 
-			{
-				LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &vbos[it->first]));
-				vbos.erase(it++);
-			}
-			else 
-			{
-				++it;
-			}
-		}
 	}
 
 	void LAG::Model::Render(Shader& shader)
@@ -142,17 +137,5 @@ namespace LAG
 		shader.SetMat4("modelMat", modelMat);
 		shader.SetMat4("viewMat", viewMat);
 		shader.SetMat4("projMat", projMat);
-
-		auto preRender = glGetError();
-
-		//LAG_GRAPHICS_EXCEPTION(glBindVertexArray(...));
-
-		tinygltf::Scene& scene = m_Model->scenes[m_Model->defaultScene];
-		for (size_t i = 0; i < scene.nodes.size(); ++i) 
-		{
-			
-		}
-
-		auto afterRender = glGetError();
 	}
 }
