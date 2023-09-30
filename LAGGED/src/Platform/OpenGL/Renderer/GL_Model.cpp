@@ -107,7 +107,7 @@ namespace LAG
 		const tinygltf::Scene& scene = modelData.scenes[modelData.defaultScene];
 		for (size_t i = 0; i < scene.nodes.size(); i++)
 		{
-			LoadModelNode(vbos, modelData, modelData.nodes[scene.nodes[i]]);
+			
 		}
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
@@ -123,106 +123,6 @@ namespace LAG
 			{
 				++it;
 			}
-		}
-
-		vaoAndEbos.first = vao;
-		vaoAndEbos.second = vbos;
-	}
-
-	void Model::LoadModelNode(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Node& node)
-	{
-		if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) 
-		{
-			LoadMesh(vboList, model, model.meshes[node.mesh]);
-		}
-
-		for (size_t i = 0; i < node.children.size(); i++) 
-		{
-			assert((node.children[i] >= 0) && (node.children[i] < model.nodes.size()));
-			LoadModelNode(vboList, model, model.nodes[node.children[i]]);
-		}
-	}
-
-	void Model::LoadMesh(std::map<int, unsigned int>& vboList, tinygltf::Model& model, tinygltf::Mesh& mesh)
-	{
-		//Create and load the VBO
-		for (size_t i = 0; i < model.bufferViews.size(); ++i)
-		{
-			const tinygltf::BufferView& bufferView = model.bufferViews[i];
-			if (bufferView.target == 0)
-				continue;
-
-			const tinygltf::Buffer& buffer = model.buffers[bufferView.buffer];
-			std::cout << "bufferview.target " << bufferView.target << std::endl;
-
-			GLuint vbo; 
-			LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &vbo));
-			vboList[i] = vbo;
-
-			LAG_GRAPHICS_EXCEPTION(glBindBuffer(bufferView.target, vbo));
-
-			//TODO: Testing, remove.
-			std::cout << "buffer.data.size = " << buffer.data.size()
-				<< ", bufferview.byteOffset = " << bufferView.byteOffset
-				<< std::endl;
-
-			LAG_GRAPHICS_EXCEPTION(glBufferData(bufferView.target, bufferView.byteLength, &buffer.data.at(0) + bufferView.byteOffset, GL_STATIC_DRAW));
-			auto afterInit = glGetError();
-			printf("");
-		}
-
-		//Set the primitive attributes
-		for (size_t i = 0; i < mesh.primitives.size(); ++i) 
-		{
-			tinygltf::Primitive primitive = mesh.primitives[i];
-			tinygltf::Accessor indexAccessor = model.accessors[primitive.indices];
-
-			for (auto& attrib : primitive.attributes) {
-				tinygltf::Accessor accessor = model.accessors[attrib.second];
-				int byteStride = accessor.ByteStride(model.bufferViews[accessor.bufferView]);
-				
-				//TODO: This sucks. Doesn't work with multiple meshes. REPLACE!
-
-				LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, vboList[accessor.bufferView]));
-				//glBindBuffer(GL_ARRAY_BUFFER, vbos[accessor.bufferView]);
-
-				int size = 1;
-				if (accessor.type != TINYGLTF_TYPE_SCALAR) {
-					size = accessor.type;
-				}
-
-				int vaa = -1;
-				if (attrib.first.compare("POSITION") == 0) vaa = 0;
-				if (attrib.first.compare("NORMAL") == 0) vaa = 1;
-				if (attrib.first.compare("TEXCOORD_0") == 0) vaa = 2;
-				if (vaa > -1) {
-					LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(vaa));
-					LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(vaa, size, accessor.componentType,
-						accessor.normalized ? GL_TRUE : GL_FALSE,
-						byteStride, ((char*)NULL + (accessor.byteOffset))));
-				}
-				else
-					std::cout << "vaa missing: " << attrib.first << std::endl;
-			}
-		}
-
-		//Load textures
-		for (const auto& texture : model.textures)
-		{
-			std::string textureName = model.images[texture.source].uri; //Get texture resource identifier
-
-			std::string modelPath = GetPath().GetString();
-			std::string texturePath = modelPath.erase(modelPath.find_last_of('/'), modelPath.length() - 1 - 1) + "/" + textureName; //Get texture path for loading through resource manager
-			
-			Utility::String pathString = Utility::String(texturePath.c_str());
-
-			if (didThing)
-				continue;
-			else didThing = true;
-			ResourceManager::Get().AddResource<Texture>(pathString);
-			Utility::Logger::Info("Loading texture at location {0}", texturePath);
-
-			m_Textures.emplace_back(pathString.GetValue());
 		}
 	}
 
@@ -245,63 +145,14 @@ namespace LAG
 
 		auto preRender = glGetError();
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(vaoAndEbos.first));
+		//LAG_GRAPHICS_EXCEPTION(glBindVertexArray(...));
 
 		tinygltf::Scene& scene = m_Model->scenes[m_Model->defaultScene];
 		for (size_t i = 0; i < scene.nodes.size(); ++i) 
 		{
-			RenderModelNode(*m_Model, m_Model->nodes[scene.nodes[i]], shader);
+			
 		}
 
 		auto afterRender = glGetError();
-	}
-
-	void LAG::Model::RenderModelNode(tinygltf::Model& model, tinygltf::Node& node, Shader& shader)
-	{
-		if ((node.mesh >= 0) && (node.mesh < model.meshes.size())) 
-		{
-			RenderModelMesh(model, model.meshes[node.mesh], shader);
-		}
-		for (size_t i = 0; i < node.children.size(); i++) 
-		{
-			RenderModelNode(model, model.nodes[node.children[i]], shader);
-		}
-	}
-
-	void LAG::Model::RenderModelMesh(tinygltf::Model& model, tinygltf::Mesh& mesh, Shader& shader)
-	{
-		//for (size_t i = 0; i < m_Textures.size(); i++)
-		//{
-		//	if (i == 1) break;
-		//	//There's an issue here that's causing weird stuff
-		//	ResourceManager::Get().GetResource<Texture>(m_Textures[i])->Bind(i);
-		//	//shader.SetInt("texture" + std::to_string(i + 1), i);
-		//	shader.SetInt("texture1", 0);
-		//}
-
-		for (size_t i = 0; i < m_Textures.size(); i++)
-		{
-			if (i == 0) break;
-			ResourceManager::Get().GetResource<Texture>(m_Textures[i])->Bind(i);
-		}
-
-		for (size_t i = 0; i < mesh.primitives.size(); ++i) 
-		{
-			tinygltf::Primitive primitive = mesh.primitives[i];
-			tinygltf::Accessor indexAccessor = model.accessors[primitive.indices];
-
-			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbos.at(indexAccessor.bufferView));
-			LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vaoAndEbos.second.at(indexAccessor.bufferView)));
-			
-			auto preRender = glGetError();
-			LAG_GRAPHICS_EXCEPTION(glDrawElements(primitive.mode, indexAccessor.count,
-				indexAccessor.componentType,
-				((char*)NULL + (indexAccessor.byteOffset))));
-			auto afterRender = glGetError(); //Error!
-			if (afterRender != 0)
-			{
-				LAG_ASSERT("Rendering error!!");
-			}
-		}
 	}
 }
