@@ -38,7 +38,7 @@ namespace LAG::Renderer
 		glEnable(GL_DEPTH_TEST);
 
 		//ResourceManager::Get().AddResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
-		//ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
+		ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
 		ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 
 		return true;

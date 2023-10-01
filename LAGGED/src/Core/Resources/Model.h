@@ -14,7 +14,7 @@ namespace LAG
 	{
 	public:
 		ModelBase() = delete;
-		explicit ModelBase(const Utility::String& path) : Resource(path) {};
+		LAG_API explicit ModelBase(const Utility::String& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
 		virtual void Render(Shader& shader) = 0;

@@ -6,6 +6,8 @@
 #include "Platform/Base/Renderer/RendererBase.h"
 
 #include "Core/Memory/ResourcePtr.h"
+#include "Core/Resources/ResourceManager.h"
+#include "Core/Resources/Model.h"
 
 ENTRY_APP(Game)
 
@@ -63,6 +65,9 @@ void Game::Initialize()
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::Utility::String("UpButton"));
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::Utility::String("DownButton"));
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::Utility::String("LMB"));
+
+	LAG::ResourceManager::Get().AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Cube/Cube.gltf"));
+	LAG::ResourceManager::Get().AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 
 	////ObserverPtr test 1:
 	//{
