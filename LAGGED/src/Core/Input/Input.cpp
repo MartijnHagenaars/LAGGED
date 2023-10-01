@@ -2,7 +2,8 @@
 #include "Input.h"
 
 #include <unordered_map>
-#include "Platform/Base/WindowBase.h"
+#include "Platform/Base/Window/WindowBase.h"
+#include "Platform/Base/Window/WindowManager.h"
 
 namespace LAG::Input
 {
@@ -50,23 +51,38 @@ namespace LAG::Input
 
 	bool IsActionPressed(Utility::String actionName)
 	{
+		return IsActionPressed(actionName, WindowManager::Get().GetFocussedWindow());
+	}
+
+	bool IsActionPressed(Utility::String actionName, LAG::WindowBase* window)
+	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
-		if (IsInputActionValid(actionName.GetValue(), it))
-			return Window::CheckButtonPress(it->second, false);
+		if (window != nullptr && IsInputActionValid(actionName.GetValue(), it))
+			return window->CheckButtonPress(it->second, false);
 		else return false;
 	}
 
 	bool IsActionPressedOnce(Utility::String actionName)
 	{
+		return IsActionPressedOnce(actionName, WindowManager::Get().GetFocussedWindow());
+	}
+
+	bool IsActionPressedOnce(Utility::String actionName, LAG::WindowBase* window)
+	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
-		if (IsInputActionValid(actionName.GetValue(), it))
-			return Window::CheckButtonPress(it->second, true);
+		if (window != nullptr && IsInputActionValid(actionName.GetValue(), it))
+			return window->CheckButtonPress(it->second, true);
 		else return false;
 	}
 
 	void GetMousePosition(float& xPos, float& yPos)
 	{
-		Window::GetMousePosition(xPos, yPos);
+		GetMousePosition(xPos, yPos, WindowManager::Get().GetFocussedWindow());
+	}
+
+	void GetMousePosition(float& xPos, float& yPos, LAG::WindowBase* window)
+	{
+		window->GetMousePosition(xPos, yPos);
 	}
 
 	InputDeviceType GetInputDeviceType(const InputType& inputType)

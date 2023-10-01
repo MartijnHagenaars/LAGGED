@@ -7,7 +7,7 @@
 #include "Events/WindowEvents.h"
 #include "Utility/Logger.h"
 
-#include "Platform/Base/RendererBase.h"
+#include "Platform/Base/Renderer/RendererBase.h"
 
 
 #include <windowsx.h>
@@ -21,7 +21,7 @@ namespace LAG::Window
 {
 	WIN32Data* winData = nullptr;
 
-	byte keyStates[UCHAR_MAX] = { 0 };
+	unsigned char keyStates[UCHAR_MAX] = { 0 };
 	float mouseXPos = 0.f, mouseYPos = 0.f;
 	bool isCursorInWindow = false;
 

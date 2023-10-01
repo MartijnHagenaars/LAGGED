@@ -9,7 +9,7 @@
 
 //Assertion defines
 #ifdef DEBUG
-#define LAG_ASSERT(AssertMessage) std::cerr << "Assertion called on line " << __LINE__ << " in file " << __FILE__ << ": \n   > " << AssertMessage << std::endl; __debugbreak();
+#define LAG_ASSERT(AssertMessage) { LAG::Utility::Logger::Critical("Assertion called on line {0} in file {1}: {2}", __LINE__, __FILE__, AssertMessage); __debugbreak(); }
 #else
 #define LAG_ASSERT(AssertMessage)
 #endif
