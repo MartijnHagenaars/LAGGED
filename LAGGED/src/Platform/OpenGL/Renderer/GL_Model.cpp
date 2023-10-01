@@ -89,8 +89,9 @@ namespace LAG
 	std::vector<MeshData> LoadVertices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
 	{
 		std::vector<MeshData> meshData;
+
+		//Load vertex data
 		{
-			//Load vertex data
 			const auto& primitiveAttributes = primitive.attributes["POSITION"];
 			const auto& accessors = modelData.accessors[primitiveAttributes];
 			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
@@ -102,10 +103,10 @@ namespace LAG
 			{
 				meshData.emplace_back(MeshData({}));
 				meshData[i].vertices = glm::vec3(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]);
-				//std::cout << "(" << positions[i * 3] << ", " << positions[i * 3 + 1] << ", " << positions[i * 3 + 2] << ")" << "\n";
 			}
 		}
 
+		//Load texture coordinates
 		{
 			const auto& primitiveAttributes = primitive.attributes["TEXCOORD_0"];
 			const auto& accessors = modelData.accessors[primitiveAttributes];
@@ -121,7 +122,6 @@ namespace LAG
 			for (size_t i = 0; i < meshData.capacity(); i++)
 			{
 				meshData[i].textureCoords = glm::vec2(positions[i * 2 + 0], positions[i * 2 + 1]);
-				//std::cout << "(" << positions[i * 2] << ", " << positions[i * 2 + 1] << ")" << "\n";
 			}
 		}
 
@@ -198,7 +198,6 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
 		
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
-		//TINYGLTF_COMPONENT_TYPE_INT;
 	}
 
 	void LAG::Model::Render(Shader& shader)
