@@ -13,7 +13,7 @@ namespace LAG
 	{
 	public:
 		ResourceManager(const ResourceManager&) = delete;
-		static ResourceManager& Get()
+		LAG_API static ResourceManager& Get()
 		{
 			static ResourceManager instance;
 			return instance;
