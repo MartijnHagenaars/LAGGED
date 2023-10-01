@@ -5,6 +5,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "Exceptions/GL_GraphicsExceptionMacros.h"
+
 namespace LAG
 {
 	Texture::Texture(const Utility::String& path) :
@@ -28,8 +30,8 @@ namespace LAG
 			return false;
 		}
 
-		glGenTextures(1, &m_ID);
-		Bind(0);
+		LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ID));
+		LAG_GRAPHICS_EXCEPTION(Bind(0));
 
 		//Load image data
 		stbi_set_flip_vertically_on_load(true);
@@ -42,17 +44,17 @@ namespace LAG
 		}
 
 		//Apply image data
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TexWidth, m_TexHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData);
-		glGenerateMipmap(GL_TEXTURE_2D);
+		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TexWidth, m_TexHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData));
+		LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
 		stbi_image_free(texData);
 
 		//Apply some texture paramters before finishing loading
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);				//Use nearest texture filtering when texture is minified. 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);				//Use linear texture filtering when texture is magnified.
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));				//Use nearest texture filtering when texture is minified. 
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));				//Use linear texture filtering when texture is magnified.
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT));
 
 		return true;
 	}
@@ -81,14 +83,13 @@ namespace LAG
 
 	void Texture::Bind(size_t textureUnit)
 	{
-		glActiveTexture(GetTextureUnit(textureUnit));
-		glBindTexture(GL_TEXTURE_2D, m_ID);
+		LAG_GRAPHICS_EXCEPTION(glActiveTexture(GetTextureUnit(textureUnit));)
+		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ID));
 	}
 
 	void Texture::Unbind(size_t textureUnit)
 	{
-		glDisable(GetTextureUnit(textureUnit));
-		glBindTexture(GL_TEXTURE_2D, 0);
+		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, 0));
 	}
 
 }

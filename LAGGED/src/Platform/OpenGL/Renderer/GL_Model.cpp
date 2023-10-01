@@ -151,9 +151,9 @@ namespace LAG
 		return indices;
 	}
 
-	std::vector<Utility::String> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive, std::string modelPath)
+	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive, std::string modelPath)
 	{
-		std::vector<Utility::String> textures;
+		std::vector<size_t> textures;
 
 		tinygltf::Texture& texture = modelData.textures.at(0);
 		std::string textureName = modelData.images[texture.source].uri; //Get texture resource identifier
@@ -165,7 +165,9 @@ namespace LAG
 		ResourceManager::Get().AddResource<Texture>(pathString);
 		Utility::Logger::Info("Loading texture at location {0}", texturePath);
 
-		textures.emplace_back(pathString);
+		textures.emplace_back(pathString.GetValue());
+		ResourceManager::Get().GetResource<Texture>(pathString)->Unbind(0);
+
 		return textures;
 	}
 
@@ -180,9 +182,8 @@ namespace LAG
 		auto& primitive = modelData.meshes[0].primitives[0];
 		std::vector<MeshData> meshData = LoadVertices(modelData, primitive);
 		std::vector<unsigned short> indices = LoadIndices(modelData, primitive);
+		m_Textures = LoadTexture(modelData, primitive, GetPath().GetString());
 		m_TotalIndices = indices.size();
-		LoadTexture(modelData, primitive, GetPath().GetString());
-
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 		
@@ -216,6 +217,10 @@ namespace LAG
 		shader.SetMat4("modelMat", modelMat);
 		shader.SetMat4("viewMat", viewMat);
 		shader.SetMat4("projMat", projMat);
+		
+		//Bind textures
+		for (size_t i = 0; i < m_Textures.size(); i++)
+			ResourceManager::Get().GetResource<Texture>(m_Textures.at(i))->Bind(i);
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, m_TotalIndices, GL_UNSIGNED_SHORT, 0));
