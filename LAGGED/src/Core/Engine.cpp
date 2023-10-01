@@ -18,7 +18,6 @@ namespace LAG
 {
 	Engine::Engine()
 	{
-		Model* testModel = new Model(Utility::String("res/Assets/Models/Cube/BoxTextured.gltf"));
 	}
 
 	Engine::~Engine()

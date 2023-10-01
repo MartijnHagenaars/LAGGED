@@ -15,9 +15,11 @@ typedef unsigned int GLuint;
 
 namespace LAG
 {
-	class Mesh
+	struct MeshData
 	{
-
+		glm::vec3 vertices;
+		//glm::vec3 normals;
+		//glm::vec2 textureCoords;
 	};
 
 	class Model : public ModelBase
@@ -34,7 +36,7 @@ namespace LAG
 		bool Load() override;
 		bool Unload() override;
 
-		void LoadTextures(tinygltf::Model& modelData, std::string& directoryPath) override;
+		void LoadTextures(tinygltf::Model& modelData, std::string& directoryPath) override {}; //CURRENTLY NOT BEING USED
 		void LoadModel(tinygltf::Model& modelData, std::string& directoryPath) override;
 		
 		std::vector<size_t> m_Textures;
@@ -42,5 +44,7 @@ namespace LAG
 		unsigned int m_VBO = 0;
 		unsigned int m_EBO = 0;
 		unsigned int m_VAO = 0;
+
+		unsigned int m_TotalIndices = 0;
 	};
 }

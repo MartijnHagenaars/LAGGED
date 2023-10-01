@@ -86,35 +86,46 @@ namespace LAG
 		return false;
 	}
 
-	void Model::LoadTextures(tinygltf::Model& modelData, std::string& directoryPath)
+	std::vector<MeshData> LoadVertices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
 	{
-		//for (const auto& texture : modelData.textures)
-		//{
-		//	std::string textureName = modelData.images[texture.source].uri; //Get texture resource identifier
-		//	std::string texturePath = directoryPath + "/" + textureName;	//Get texture path for loading through resource manager
-		//	Utility::Logger::Info("Loading texture at location {0}", texturePath);
-		//}
-	}
-
-	std::vector<glm::vec3> LoadVertices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
-	{
-		std::vector<glm::vec3> vertices;
-
-		//Load vertex data
-		const auto& primitiveAttributes = primitive.attributes["POSITION"];
-		const auto& accessors = modelData.accessors[primitiveAttributes];
-		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
-		const auto& buffers = modelData.buffers[bufferViews.buffer];
-
-		vertices.reserve(accessors.count);
-		const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
-		for (size_t i = 0; i < vertices.capacity(); i++)
+		std::vector<MeshData> meshData;
 		{
-			vertices.emplace_back(glm::vec3(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]));
-			std::cout << "(" << positions[i * 3 + 0] << ", " << positions[i * 3 + 1] << ", " << positions[i * 3 + 2] << ")" << "\n";
+			//Load vertex data
+			const auto& primitiveAttributes = primitive.attributes["POSITION"];
+			const auto& accessors = modelData.accessors[primitiveAttributes];
+			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
+			const auto& buffers = modelData.buffers[bufferViews.buffer];
+
+			meshData.reserve(accessors.count);
+			const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
+			for (size_t i = 0; i < meshData.capacity(); i++)
+			{
+				meshData.emplace_back(MeshData({}));
+				meshData[i].vertices = glm::vec3(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]);
+				//std::cout << "(" << positions[i * 3] << ", " << positions[i * 3 + 1] << ", " << positions[i * 3 + 2] << ")" << "\n";
+			}
 		}
 
-		return vertices;
+		//{
+		//	const auto& primitiveAttributes = primitive.attributes["TEXCOORD_0"];
+		//	const auto& accessors = modelData.accessors[primitiveAttributes];
+		//	const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
+		//	const auto& buffers = modelData.buffers[bufferViews.buffer];
+
+		//	if (accessors.componentType != TINYGLTF_COMPONENT_TYPE_FLOAT)
+		//	{
+		//		Utility::Logger::Error("Incorrect component type detected while loading mesh.");
+		//	}
+
+		//	const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
+		//	for (size_t i = 0; i < meshData.capacity(); i++)
+		//	{
+		//		meshData[i].textureCoords = glm::vec2(positions[i * 3 + 0], positions[i * 3 + 1]);
+		//		std::cout << "(" << positions[i * 2] << ", " << positions[i * 2 + 1] << ")" << "\n";
+		//	}
+		//}
+
+		return meshData;
 	}
 
 	std::vector<unsigned short> LoadIndices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
@@ -124,7 +135,6 @@ namespace LAG
 		const auto& accessors = modelData.accessors[primitive.indices];
 		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
 		const auto& buffers = modelData.buffers[bufferViews.buffer];
-
 		auto whatever = accessors.componentType;
 		size_t accessorSize = tinygltf::GetNumComponentsInType(accessors.type) * tinygltf::GetComponentSizeInBytes(accessors.componentType);
 		indices.reserve((bufferViews.byteLength / accessorSize));
@@ -141,6 +151,24 @@ namespace LAG
 		return indices;
 	}
 
+	std::vector<Utility::String> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive, std::string modelPath)
+	{
+		std::vector<Utility::String> textures;
+
+		tinygltf::Texture& texture = modelData.textures.at(0);
+		std::string textureName = modelData.images[texture.source].uri; //Get texture resource identifier
+
+		std::string texturePath = modelPath.erase(modelPath.find_last_of('/'), modelPath.length() - 1 - 1) + "/" + textureName; //Get texture path for loading through resource manager
+
+		Utility::String pathString = Utility::String(texturePath.c_str());
+
+		ResourceManager::Get().AddResource<Texture>(pathString);
+		Utility::Logger::Info("Loading texture at location {0}", texturePath);
+
+		textures.emplace_back(pathString);
+		return textures;
+	}
+
 	void Model::LoadModel(tinygltf::Model& modelData, std::string& directoryPath)
 	{
 		//Create buffer objects and such
@@ -150,21 +178,25 @@ namespace LAG
 
 		//For now, I'm only looking at the first mesh. In the future, this should loop and create mesh objects. TODO!
 		auto& primitive = modelData.meshes[0].primitives[0];
-		std::vector<glm::vec3> vertices = LoadVertices(modelData, primitive);
+		std::vector<MeshData> meshData = LoadVertices(modelData, primitive);
 		std::vector<unsigned short> indices = LoadIndices(modelData, primitive);
+		m_TotalIndices = indices.size();
+		LoadTexture(modelData, primitive, GetPath().GetString());
 
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-
+		
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), &vertices.data()[0], GL_STATIC_DRAW));
-
+		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, sizeof(MeshData) * meshData.size(), &meshData.data()[0], GL_STATIC_DRAW));
+		
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
 		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indices.size(), &indices.data()[0], GL_STATIC_DRAW));
-
+		
 		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
-
+		//LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float))));
+		//LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
+		
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 		//TINYGLTF_COMPONENT_TYPE_INT;
 	}
@@ -187,6 +219,6 @@ namespace LAG
 		shader.SetMat4("projMat", projMat);
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_SHORT, 0));
+		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, m_TotalIndices, GL_UNSIGNED_SHORT, 0));
 	}
 }

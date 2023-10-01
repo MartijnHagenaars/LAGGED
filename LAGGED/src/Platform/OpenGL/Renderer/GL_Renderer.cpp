@@ -39,7 +39,8 @@ namespace LAG::Renderer
 		glEnable(GL_DEPTH_TEST);
 
 		//ResourceManager::Get().AddResource<Texture>(Utility::String("res/Assets/Textures/corndog.png"));
-		ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
+		//ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
+		ResourceManager::Get().AddResource<Model>(Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 
 		return true;
 	}
@@ -64,7 +65,8 @@ namespace LAG::Renderer
 		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Model* modelThingy = ResourceManager::Get().GetResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
+		//Model* modelThingy = ResourceManager::Get().GetResource<Model>(Utility::String("res/Assets/Models/Cube/Cube.gltf"));
+		Model* modelThingy = ResourceManager::Get().GetResource<Model>(Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 		modelThingy->Render(*renderData->shader);
 
 		auto help = glGetError();
