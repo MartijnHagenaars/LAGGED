@@ -106,24 +106,24 @@ namespace LAG
 			}
 		}
 
-		//{
-		//	const auto& primitiveAttributes = primitive.attributes["TEXCOORD_0"];
-		//	const auto& accessors = modelData.accessors[primitiveAttributes];
-		//	const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
-		//	const auto& buffers = modelData.buffers[bufferViews.buffer];
+		{
+			const auto& primitiveAttributes = primitive.attributes["TEXCOORD_0"];
+			const auto& accessors = modelData.accessors[primitiveAttributes];
+			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
+			const auto& buffers = modelData.buffers[bufferViews.buffer];
 
-		//	if (accessors.componentType != TINYGLTF_COMPONENT_TYPE_FLOAT)
-		//	{
-		//		Utility::Logger::Error("Incorrect component type detected while loading mesh.");
-		//	}
+			if (accessors.componentType != TINYGLTF_COMPONENT_TYPE_FLOAT)
+			{
+				Utility::Logger::Error("Incorrect component type detected while loading mesh.");
+			}
 
-		//	const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
-		//	for (size_t i = 0; i < meshData.capacity(); i++)
-		//	{
-		//		meshData[i].textureCoords = glm::vec2(positions[i * 3 + 0], positions[i * 3 + 1]);
-		//		std::cout << "(" << positions[i * 2] << ", " << positions[i * 2 + 1] << ")" << "\n";
-		//	}
-		//}
+			const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
+			for (size_t i = 0; i < meshData.capacity(); i++)
+			{
+				meshData[i].textureCoords = glm::vec2(positions[i * 2 + 0], positions[i * 2 + 1]);
+				//std::cout << "(" << positions[i * 2] << ", " << positions[i * 2 + 1] << ")" << "\n";
+			}
+		}
 
 		return meshData;
 	}
@@ -192,10 +192,10 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
 		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indices.size(), &indices.data()[0], GL_STATIC_DRAW));
 		
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
-		//LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float))));
-		//LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))));
+		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
 		
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 		//TINYGLTF_COMPONENT_TYPE_INT;

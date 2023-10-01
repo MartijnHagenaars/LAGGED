@@ -19,7 +19,7 @@ namespace LAG
 	{
 		glm::vec3 vertices;
 		//glm::vec3 normals;
-		//glm::vec2 textureCoords;
+		glm::vec2 textureCoords;
 	};
 
 	class Model : public ModelBase
