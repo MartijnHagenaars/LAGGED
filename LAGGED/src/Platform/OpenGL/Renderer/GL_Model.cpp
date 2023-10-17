@@ -212,7 +212,7 @@ namespace LAG
 		viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, 1.f));
 
 		glm::mat4 projMat = glm::mat4(1.f);
-		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(WindowManager::Get().GetFocussedWindow()->GetWidth() / WindowManager::Get().GetFocussedWindow()->GetHeight()), 0.1f, 100.f);
+		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(WindowManager::Get().GetFocussedWindow()->GetWidth()) / WindowManager::Get().GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
 		shader.Bind();
 		shader.SetMat4("modelMat", modelMat);
 		shader.SetMat4("viewMat", viewMat);
