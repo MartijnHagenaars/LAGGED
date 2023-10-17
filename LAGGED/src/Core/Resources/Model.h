@@ -40,8 +40,6 @@ namespace LAG
 
 		virtual void LoadTextures(tinygltf::Model& modelData, std::string& directoryPath) = 0;
 		virtual void LoadModel(tinygltf::Model& modelData, std::string& directoryPath) = 0;
-
-
 	};
 }
 

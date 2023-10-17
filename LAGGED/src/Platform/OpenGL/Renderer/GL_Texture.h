@@ -1,30 +1,25 @@
 #pragma once
-#include "Core/Resources/Resource.h"
+#include "Core/Resources/Texture.h"
 
 namespace LAG
 {
-	class Texture : public Resource
+	class Texture : public TextureBase
 	{
-		friend class ResourceManager;
 		friend class Model;
+		friend class ResourceManager;
 	public:
 		Texture() = delete;
 		explicit Texture(const Utility::String& path);
 		~Texture() override;
 
-		void Bind(size_t textureUnit);
-		void Unbind(size_t textureUnit);
+		void Bind(size_t textureUnit) override;
+		void Unbind(size_t textureUnit)  override;
 
 	private:
 		bool Load() override;
 		bool Unload() override;
 
-		unsigned int m_ID = 0; 
-
-		int m_TexWidth = 0;
-		int m_TexHeight = 0;
-		int m_TexChannels = 0;
-
+		unsigned int m_ID = 0;
 	};
 
 }

@@ -197,6 +197,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\Resources\Texture.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />

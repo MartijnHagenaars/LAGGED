@@ -10,9 +10,8 @@
 namespace LAG
 {
 	Texture::Texture(const Utility::String& path) :
-		Resource(path)
+		TextureBase(path)
 	{
-		//Load();
 	}
 
 	Texture::~Texture()

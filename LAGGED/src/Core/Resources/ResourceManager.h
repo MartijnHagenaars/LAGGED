@@ -5,7 +5,6 @@
 #include <memory>
 
 #include "Resource.h"
-//#include ""
 
 namespace LAG
 {

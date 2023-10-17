@@ -159,6 +159,9 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Core\Resources\Texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">
