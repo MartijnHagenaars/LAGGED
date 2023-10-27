@@ -27,14 +27,14 @@ namespace LAG
 
 		virtual void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc) = 0;
 
-		LAG_API virtual void SetWindowName(const char* windowName) = 0;
+		virtual void SetWindowName(const char* windowName) = 0;
 
-		LAG_API virtual const char* GetWindowName() const { return m_WindowName; }
-		LAG_API virtual unsigned int GetWidth() const { return m_WindowWidth; }
-		LAG_API virtual unsigned int GetHeight() const { return m_WindowHeight; }
+		virtual const char* GetWindowName() const { return m_WindowName; }
+		virtual unsigned int GetWidth() const { return m_WindowWidth; }
+		virtual unsigned int GetHeight() const { return m_WindowHeight; }
 
-		LAG_API virtual unsigned int GetNonClientWidth() = 0;
-		LAG_API virtual unsigned int GetNonClientHeight() = 0;
+		virtual unsigned int GetNonClientWidth() = 0;
+		virtual unsigned int GetNonClientHeight() = 0;
 
 	protected:
 		virtual void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true) = 0;

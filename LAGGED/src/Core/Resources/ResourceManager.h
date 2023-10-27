@@ -50,12 +50,12 @@ namespace LAG
 			return GetResource<T>(path.GetValue());
 		}
 
-		LAG_API void Clear();
+		void Clear();
 
 	private:
 		friend class Engine;
-		LAG_API ResourceManager();
-		LAG_API ~ResourceManager();
+		ResourceManager();
+		~ResourceManager();
 
 		std::unordered_map<size_t, std::unique_ptr<LAG::Resource>> m_Resources;
 	};

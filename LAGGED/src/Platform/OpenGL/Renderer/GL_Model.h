@@ -27,7 +27,7 @@ namespace LAG
 		friend class ResourceManager;
 	public:
 		Model() = delete;
-		LAG_API explicit Model(const Utility::String& path);
+		explicit Model(const Utility::String& path);
 		~Model() override;
 
 		void Render(Shader& shader) override;

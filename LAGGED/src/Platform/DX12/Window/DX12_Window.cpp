@@ -250,30 +250,30 @@ namespace LAG::Window
 		xPos = mouseXPos, yPos = mouseYPos;
 	}
 
-	LAG_API void SetWindowName(const char* windowName)
+	void SetWindowName(const char* windowName)
 	{
 		winData->windowName = windowName;
 		LAG::Utility::Logger::Error("SetWindowName NOT IMPLEMENTED YET!!!");
 	}
 
-	LAG_API unsigned int GetWidth()
+	unsigned int GetWidth()
 	{
 		return winData->windowWidth;
 	}
 
-	LAG_API unsigned int GetHeight()
+	unsigned int GetHeight()
 	{
 		return winData->windowHeight;
 	}
 
-	LAG_API unsigned int GetNonClientWidth()
+	unsigned int GetNonClientWidth()
 	{
 		RECT betterRect = { 0 };
 		GetWindowRect(winData->hWnd, &betterRect);
 		return betterRect.right;
 	}
 
-	LAG_API unsigned int GetNonClientHeight()
+	unsigned int GetNonClientHeight()
 	{
 		RECT betterRect = { 0 };
 		GetWindowRect(winData->hWnd, &betterRect);

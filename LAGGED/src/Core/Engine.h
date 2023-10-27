@@ -12,16 +12,16 @@ namespace LAG
 	class Engine
 	{
 	public:
-		LAG_API Engine(const Engine&) = delete;
-		LAG_API ~Engine();
+		Engine(const Engine&) = delete;
+		~Engine();
 
-		LAG_API int Run(IApplication* applicationPtr);
+		int Run(IApplication* applicationPtr);
 
 		ResourceManager* GetResources() const { return m_ResourceManager; }
 
 	private:
 		friend Engine& GetEngine();
-		LAG_API Engine()
+		Engine()
 		{
 			std::cout << "ENgine constructor" << std::endl;
 		}
