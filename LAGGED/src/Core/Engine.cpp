@@ -47,7 +47,7 @@ namespace LAG
 			{
 				WindowManager::Get().Update();
 
-				m_App->Update();
+				m_Application->Update();
 				//Renderer::Render();
 
 				//Framerate counter: 
@@ -97,18 +97,33 @@ namespace LAG
 			return false;
 		}
 
-		//Setup application
-		m_App = std::unique_ptr<LAG::IApplication>(applicationPtr);
-		m_App->Initialize();
+		m_ResourceManager = new ResourceManager();
+
+		//Application setup. Should be the last object to be initialized!
+		m_Application = applicationPtr;
+		m_Application->Initialize();
 
 		return true;
 	}
 
 	bool Engine::Shutdown()
 	{
-		m_App.reset();
+		if (m_Application != nullptr)
+		{
+			m_Application->Shutdown();
+			delete m_Application;
+		}
+		m_Application = nullptr;
+
+		if (m_ResourceManager != nullptr)
+			delete m_ResourceManager;
+		m_ResourceManager = nullptr;
+
+
+
 		Renderer::Shutdown();
 		WindowManager::Get().Shutdown();
+
 		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
 
 		return true;

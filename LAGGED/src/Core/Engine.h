@@ -8,12 +8,15 @@
 namespace LAG
 {
 	class Window;
+	class ResourceManager;
 	class Engine
 	{
 	public:
 		LAG_API ~Engine();
 
 		LAG_API int Run(IApplication* applicationPtr);
+
+		ResourceManager* GetResources() const { return m_ResourceManager; }
 
 	private:
 
@@ -27,8 +30,9 @@ namespace LAG
 		void EventCallback(EventBase& event);
 
 	private:
-		std::unique_ptr<LAG::IApplication> m_App;
+		LAG::IApplication* m_Application = nullptr;
 		Window* m_PrimaryWindow = nullptr;
+		ResourceManager* m_ResourceManager = nullptr;
 	};
 
 	static Engine& GetEngine()
@@ -36,4 +40,5 @@ namespace LAG
 		static Engine engine;
 		return engine;
 	}
+	static ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
 }
