@@ -34,6 +34,30 @@ namespace LAG
 			return &m_RegistryPtr->get<T>(m_EntityID);
 		}
 
+		template<typename T>
+		void RemoveComponent()
+		{
+			if (HasComponent<T>())
+				m_RegistryPtr->remove<T>(m_EntityID);
+			else 
+				Utility::Logger::Warning("Failed to remove component: entity doesn't have component.");
+		}
+
+		template<typename T>
+		T* GetComponent()
+		{
+			if (m_RegistryPtr.valid(m_EntityID))
+			{
+				if (HasComponent<T>())
+					return &m_RegistryPtr->get<T>(m_EntityID);
+				else 
+					Utility::Logger::Error("Tried to get missing component.");
+			}
+			else Utility::Logger::Error("Tried to get an invalid entity.");
+
+			return nullptr;
+		}
+
 		uint32_t GetEntityID() const { return static_cast<uint32_t>(m_EntityID); }
 
 	private:
