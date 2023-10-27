@@ -32,10 +32,21 @@ void Game::Initialize()
 
 	LAG::ResourceManager::Get().AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 
-	LAG::Entity newEntity = LAG::GetEngine().GetScene()->AddEntity();
+	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity();
+	ent1.AddComponent<LAG::NameComponent>("First component");
+	ent1.AddComponent<LAG::TransformComponent>();
 
-	//newEntity.AddComponent<LAG::NameComponent>("First component");
-	//newEntity.AddComponent<LAG::TransformComponent>();
+	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity();
+	ent2.AddComponent<LAG::NameComponent>("Second component");
+
+	LAG::Entity ent3 = LAG::GetEngine().GetScene()->AddEntity();
+	ent3.AddComponent<LAG::TransformComponent>();
+
+	LAG::GetEngine().GetScene()->Loop<LAG::NameComponent>(
+		[](uint32_t entityID, LAG::NameComponent& comp)
+		{
+			std::cout << "Name: " << comp.name << std::endl;
+		});
 
 }
 

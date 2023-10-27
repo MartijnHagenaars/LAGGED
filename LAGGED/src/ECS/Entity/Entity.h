@@ -34,6 +34,8 @@ namespace LAG
 			return &m_RegistryPtr->get<T>(m_EntityID);
 		}
 
+		uint32_t GetEntityID() const { return static_cast<uint32_t>(m_EntityID); }
+
 	private:
 		friend class Scene;
 		Entity(entt::entity entityID, entt::registry& registryPtr);
