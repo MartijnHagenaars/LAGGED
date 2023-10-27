@@ -12,7 +12,8 @@
 #include "Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
 
-//using LAG::Utility
+#include "ECS/Scene.h"
+#include "ECS/Entity/Entity.h"
 
 namespace LAG
 {
@@ -23,6 +24,38 @@ namespace LAG
 	Engine::~Engine()
 	{
 		Shutdown(); 
+	}
+
+	bool Engine::Initialize(IApplication* applicationPtr)
+	{
+		//Setup window
+
+		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
+
+		//Setup renderer
+		if (!Renderer::Initialize())
+		{
+			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
+			return false;
+		}
+
+		m_Scene = new Scene();
+
+		//Setup application
+		m_App = std::unique_ptr<LAG::IApplication>(applicationPtr);
+		m_App->Initialize();
+
+		return true;
+	}
+
+	bool Engine::Shutdown()
+	{
+		m_App.reset();
+		Renderer::Shutdown();
+		WindowManager::Get().Shutdown();
+		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
+
+		return true;
 	}
 
 	int Engine::Run(IApplication* applicationPtr)
@@ -86,36 +119,6 @@ namespace LAG
 			return -1;
 		}
 
-	}
-
-	bool Engine::Initialize(IApplication* applicationPtr)
-	{
-		//Setup window
-
-		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
-
-		//Setup renderer
-		if (!Renderer::Initialize())
-		{
-			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
-			return false;
-		}
-
-		//Setup application
-		m_App = std::unique_ptr<LAG::IApplication>(applicationPtr);
-		m_App->Initialize();
-
-		return true;
-	}
-
-	bool Engine::Shutdown()
-	{
-		m_App.reset();
-		Renderer::Shutdown();
-		WindowManager::Get().Shutdown();
-		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
-
-		return true;
 	}
 
 	void Engine::EventCallback(EventBase& event)

@@ -8,6 +8,7 @@
 namespace LAG
 {
 	class Window;
+	class Scene;
 	class Engine
 	{
 	public:
@@ -22,8 +23,12 @@ namespace LAG
 
 		void EventCallback(EventBase& event);
 
+		LAG_API Scene* GetScene() const { return m_Scene; }
+
 	private:
 		std::unique_ptr<LAG::IApplication> m_App;
 		Window* m_PrimaryWindow = nullptr;
+
+		Scene* m_Scene = nullptr;
 	};
 }

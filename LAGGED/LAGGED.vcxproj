@@ -197,7 +197,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\ECS\Entity\EntityBase.h" />
+    <ClInclude Include="src\ECS\Entity\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Texture.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h" />
@@ -312,7 +312,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ECS\Entity\EntityBase.cpp" />
+    <ClCompile Include="src\ECS\Entity\Entity.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />

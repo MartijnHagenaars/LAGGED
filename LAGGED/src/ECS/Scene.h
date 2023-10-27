@@ -1,6 +1,7 @@
 #pragma once
 #include "entt/entt.hpp"
-#include "Entity/EntityBase.h"
+#include "Entity/Entity.h"
+#include <memory>
 
 namespace LAG
 {
@@ -10,10 +11,10 @@ namespace LAG
 		Scene();
 		~Scene();
 
-		EntityBase AddEntity()
+		LAG_API Entity AddEntity()
 		{
 			entt::entity newEntity = m_Registry.create();
-			return EntityBase(newEntity);
+			return Entity(newEntity, m_Registry);
 		}
 
 	private:
