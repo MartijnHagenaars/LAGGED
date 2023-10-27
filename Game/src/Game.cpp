@@ -55,6 +55,13 @@ void Game::Initialize()
 			transform.position = glm::vec3(34.f);
 		});
 
+	LAG::GetEngine().GetScene()->RemoveAll();
+	LAG::GetEngine().GetScene()->Loop<LAG::NameComponent>(
+		[](uint32_t entityID, LAG::NameComponent& comp)
+		{
+			std::cout << "Name: " << comp.name << std::endl;
+		});
+
 }
 
 void Game::Shutdown()
