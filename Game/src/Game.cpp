@@ -48,6 +48,13 @@ void Game::Initialize()
 			std::cout << "Name: " << comp.name << std::endl;
 		});
 
+	LAG::GetEngine().GetScene()->Loop<LAG::NameComponent, LAG::TransformComponent>(
+		[](uint32_t entityID, LAG::NameComponent& name, LAG::TransformComponent transform)
+		{
+			std::cout << "Name: " << name.name << std::endl;
+			transform.position = glm::vec3(34.f);
+		});
+
 }
 
 void Game::Shutdown()
