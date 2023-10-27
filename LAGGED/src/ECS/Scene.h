@@ -12,7 +12,11 @@ namespace LAG
 		~Scene();
 
 		LAG_API Entity AddEntity();
+		LAG_API void RemoveEntity(uint32_t entityID);
+
 		LAG_API bool DoesEntityExist(uint32_t entityID); 
+
+		LAG_API void RemoveAll();
 		
 		template<typename... Components>
 		void Loop(std::function<void(uint32_t entityID, Components&...)> func)
