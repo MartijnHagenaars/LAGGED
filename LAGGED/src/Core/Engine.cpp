@@ -17,10 +17,6 @@
 
 namespace LAG
 {
-	Engine::Engine()
-	{
-	}
-
 	Engine::~Engine()
 	{
 		Shutdown(); 

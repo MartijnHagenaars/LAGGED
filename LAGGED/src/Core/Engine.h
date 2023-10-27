@@ -12,12 +12,16 @@ namespace LAG
 	class Engine
 	{
 	public:
-		LAG_API Engine();
 		LAG_API ~Engine();
 
 		LAG_API int Run(IApplication* applicationPtr);
 
 	private:
+
+		Engine(const Engine&) = delete;
+		friend Engine& GetEngine();
+		Engine() {}
+
 		bool Initialize(IApplication* applicationPtr);
 		bool Shutdown();
 
@@ -31,4 +35,10 @@ namespace LAG
 
 		Scene* m_Scene = nullptr;
 	};
+
+	static Engine& GetEngine()
+	{
+		static Engine engine;
+		return engine;
+	}
 }
