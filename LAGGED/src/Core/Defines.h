@@ -2,9 +2,9 @@
 
 //Declspec defines
 #ifdef BUILD_DLL
-#define LAG_API __declspec(dllexport)
+#define LAG_API  
 #else
-#define LAG_API __declspec(dllimport)
+#define LAG_API  
 #endif
 
 //Assertion defines

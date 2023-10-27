@@ -133,4 +133,10 @@ namespace LAG
 	{
 		std::cout << "Event callback detected.\n";
 	}
+
+	Engine& GetEngine()
+	{
+		static Engine engine;
+		return engine;
+	}
 }

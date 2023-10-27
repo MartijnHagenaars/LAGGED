@@ -12,6 +12,7 @@ namespace LAG
 	class Engine
 	{
 	public:
+		LAG_API Engine(const Engine&) = delete;
 		LAG_API ~Engine();
 
 		LAG_API int Run(IApplication* applicationPtr);
@@ -19,10 +20,11 @@ namespace LAG
 		ResourceManager* GetResources() const { return m_ResourceManager; }
 
 	private:
-
-		Engine(const Engine&) = delete;
 		friend Engine& GetEngine();
-		Engine() {}
+		LAG_API Engine()
+		{
+			std::cout << "ENgine constructor" << std::endl;
+		}
 
 		bool Initialize(IApplication* applicationPtr);
 		bool Shutdown();
@@ -35,10 +37,7 @@ namespace LAG
 		ResourceManager* m_ResourceManager = nullptr;
 	};
 
-	static Engine& GetEngine()
-	{
-		static Engine engine;
-		return engine;
-	}
-	static ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
+	Engine& GetEngine();
+
+	inline ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
 }
