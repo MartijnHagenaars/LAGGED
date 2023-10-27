@@ -197,6 +197,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\Components\BasicComponents.h" />
     <ClInclude Include="src\ECS\Entity\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Texture.h" />

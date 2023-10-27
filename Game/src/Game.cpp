@@ -9,6 +9,9 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
 
+#include "ECS/Scene.h"
+#include "ECS/Components/BasicComponents.h"
+
 ENTRY_APP(Game)
 
 Game::Game()
@@ -28,6 +31,12 @@ void Game::Initialize()
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::Utility::String("LMB"));
 
 	LAG::ResourceManager::Get().AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
+
+	LAG::Entity newEntity = LAG::GetEngine().GetScene()->AddEntity();
+
+	//newEntity.AddComponent<LAG::NameComponent>("First component");
+	//newEntity.AddComponent<LAG::TransformComponent>();
+
 }
 
 void Game::Shutdown()

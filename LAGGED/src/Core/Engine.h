@@ -16,6 +16,8 @@ namespace LAG
 
 		LAG_API int Run(IApplication* applicationPtr);
 
+		LAG_API Scene* GetScene() const { return m_Scene; }
+
 	private:
 
 		Engine(const Engine&) = delete;
@@ -26,8 +28,6 @@ namespace LAG
 		bool Shutdown();
 
 		void EventCallback(EventBase& event);
-
-		LAG_API Scene* GetScene() const { return m_Scene; }
 
 	private:
 		std::unique_ptr<LAG::IApplication> m_App;

@@ -1,5 +1,6 @@
 #pragma once
 #include "entt/entt.hpp"
+#include "Core/Defines.h"
 
 namespace LAG
 {
@@ -8,7 +9,7 @@ namespace LAG
 	public:
 		Entity() = delete;
 		Entity(const Entity&) = delete;
-		~Entity();
+		LAG_API ~Entity();
 
 		template<typename T>
 		bool HasComponent()
@@ -26,12 +27,11 @@ namespace LAG
 			{
 				//std::forward stuff: https://stackoverflow.com/questions/65144882/how-to-pass-any-number-of-arguments-to-c-template-function
 				m_RegistryPtr->emplace<T>(m_EntityID, std::forward<Args>(arguments)...);
-				return m_RegistryPtr->get<T>(m_EntityID);
-
+				return &m_RegistryPtr->get<T>(m_EntityID);
 			}
 			
 			Utility::Logger::Warning("Tried to add a component to an entity that already has the same component.");
-			return m_RegistryPtr->get<T>(m_EntityID);
+			return &m_RegistryPtr->get<T>(m_EntityID);
 		}
 
 	private:
