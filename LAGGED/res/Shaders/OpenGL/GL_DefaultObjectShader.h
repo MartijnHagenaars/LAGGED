@@ -45,27 +45,36 @@ namespace LAG::ShaderData
 			uniform sampler2D a_Texture1;
 
 			//Lighting data
-			uniform vec3 a_LightPosition;
-			uniform vec3 a_LightColor;
-			uniform float a_LightIntensity;
-			uniform float a_LightAttenuation;
+			uniform bool a_UseLight;
+
+			struct PointLightData
+			{			
+				vec3 a_LightPosition;
+				vec3 a_LightColor;
+				float a_LightIntensity;
+				float a_LightAttenuation;
+			};
+			uniform PointLightData a_PointLightData[3];
 			
-			vec3 CalculateDiffuse()
+			vec3 CalculateDiffuse(vec3 lightPosition, vec3 lightColor)
 			{
-				vec3 lightDirection = normalize(a_LightPosition - fragPosition);
+				vec3 lightDirection = normalize(lightPosition - fragPosition);
 				float diffuseIntensity = max(0.0, dot(normal, lightDirection));
-				return diffuseIntensity * a_LightColor;
+				return diffuseIntensity * lightColor;
 			}
 
-			float CalculateAttenuation()
+			float CalculateAttenuation(vec3 lightPosition, float lightIntensity, float lightAttenuation)
 			{
-				float lightDistance = distance(fragPosition, a_LightPosition);
-				return a_LightIntensity * (1.0 / (1.0 + lightDistance + a_LightAttenuation * lightDistance * lightDistance));
+				float lightDistance = distance(fragPosition, lightPosition);
+				return lightIntensity * (1.0 / (1.0 + lightAttenuation * lightDistance * lightDistance));
 			}
 
 			void main()
 			{
-				vec3 lightCalculation = (CalculateDiffuse()) * CalculateAttenuation();
+				vec3 lightCalculation = vec3(1.0);
+				if(a_UseLight)
+					lightCalculation = (CalculateDiffuse(a_PointLightData[0].a_LightPosition, a_PointLightData[0].a_LightColor)) * CalculateAttenuation(a_PointLightData[0].a_LightPosition, a_PointLightData[0].a_LightIntensity, a_PointLightData[0].a_LightAttenuation);
+
 			    colorOut = texture(a_Texture1, texCoord) * vec4(lightCalculation, 1.f);
 			    //colorOut = vec4(normal, 1.f); //Draw normal
 			} 

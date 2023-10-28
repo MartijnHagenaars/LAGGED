@@ -14,6 +14,9 @@
 #include "ECS/Components/MeshComponent.h"
 #include "ECS/Components/LightComponent.h"
 
+#include <utility>
+#include "glm/glm.hpp"
+
 namespace LAG::Renderer
 {
 	struct RendererData
@@ -62,10 +65,13 @@ namespace LAG::Renderer
 
 		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& meshTransformComp)
 			{
-				std::array<LightData, 3> lights;
+				std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
+				lights.reserve(3);
+
 				GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](uint32_t entityID, LightComponent& lightComp, TransformComponent& lightTransformComp)
 					{
-						//glm::length();
+						if (lights.size() < 2)
+							lights.push_back({ &lightTransformComp, &lightComp });
 					});
 
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, *renderData->shader, lights);

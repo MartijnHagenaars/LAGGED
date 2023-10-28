@@ -216,7 +216,7 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 	}
 
-	void LAG::Model::Render(TransformComponent& transform, Shader& shader, std::array<LightData, 3> lights)
+	void LAG::Model::Render(TransformComponent& transform, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
@@ -235,10 +235,17 @@ namespace LAG
 		shader.SetMat4("a_ViewMat", viewMat);
 		shader.SetMat4("a_ProjMat", projMat);
 
-		shader.SetVec3("a_LightPosition", glm::vec3(0.f, 0.f, -5.f));
-		shader.SetVec3("a_LightColor", glm::vec3(1.f));
-		shader.SetFloat("a_LightIntensity", 2.f);
-		shader.SetFloat("a_LightAttenuation", 5.f);
+		if (lights.size() > 0)
+		{
+			shader.SetBool("a_UseLight", true);
+
+			shader.SetVec3("a_PointLightData[0].a_LightPosition", lights[0].first->position);
+			shader.SetVec3("a_PointLightData[0].a_LightColor", lights[0].second->lightColor);
+			shader.SetFloat("a_PointLightData[0].a_LightIntensity", lights[0].second->lightIntensity);
+			shader.SetFloat("a_PointLightData[0].a_LightAttenuation", lights[0].second->lightAttenuation);
+		}
+		else shader.SetBool("a_UseLight", false);
+
 		
 		//Bind textures
 		for (size_t i = 0; i < m_Textures.size(); i++)

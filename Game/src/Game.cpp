@@ -38,6 +38,13 @@ void Game::Initialize()
 	ent1.AddComponent<LAG::NameComponent>("Helmet");
 	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -5.f);
 	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
+
+	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity();
+	ent1.AddComponent<LAG::NameComponent>("Light1");
+	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -5.f);
+	auto ent1Light = ent1.AddComponent<LAG::LightComponent>();
+	ent1Light->lightAttenuation = 5.f;
+	ent1Light->lightIntensity = 2.f;
 }
 
 void Game::Shutdown()

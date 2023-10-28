@@ -30,7 +30,7 @@ namespace LAG
 		explicit Model(const Utility::String& path);
 		~Model() override;
 
-		void Render(TransformComponent& transform, Shader& shader, std::array<LightData, 3> lights) override;
+		void Render(TransformComponent& transform, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
 
 	private:
 		bool Load() override;

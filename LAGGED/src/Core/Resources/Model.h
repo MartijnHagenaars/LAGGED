@@ -1,6 +1,7 @@
 #pragma once
 #include "Core/Resources/Resource.h"
 #include "ECS/Components/BasicComponents.h"
+#include "ECS/Components/LightComponent.h"
 
 namespace tinygltf
 {
@@ -24,7 +25,7 @@ namespace LAG
 		explicit ModelBase(const Utility::String& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
-		virtual void Render(TransformComponent& transform, Shader& shader, std::array<LightData, 3> lights) = 0;
+		virtual void Render(TransformComponent& transform, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
 	protected:
 		tinygltf::Model* m_Model = nullptr;
