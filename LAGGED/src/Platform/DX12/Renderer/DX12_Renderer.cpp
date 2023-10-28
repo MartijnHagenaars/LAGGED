@@ -378,16 +378,6 @@ namespace LAG::Renderer
 		return true;
 	}
 
-	void StartFrame()
-	{
-
-	}
-
-	void EndFrame()
-	{
-
-	}
-
 	void Render()
 	{
 		Mesh* meshRef = renderData->tempMesh;

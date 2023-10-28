@@ -11,6 +11,10 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3native.h"
 
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_impl_glfw.h"
+#include "ImGui/imgui_impl_opengl3.h"
+
 namespace LAG
 {
 	Window::Window()
@@ -68,15 +72,24 @@ namespace LAG
 			return;
 		}
 
-
 		//Not sure if necessary
 		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
 
 		SetupCallbackFunctions();
-
-		pressedButtonIDs;
 		pressedButtonIDs.reserve(8);
+
+		//Now that the window is initialized, initialize ImGui
+		IMGUI_CHECKVERSION();
+		ImGui::CreateContext();
+		ImGuiIO& io = ImGui::GetIO(); (void)io;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+
+		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
+		ImGui_ImplOpenGL3_Init("#version 140");
+
+		//Window is ready to be used! Set initialized to true!
 		m_Initialized = true;
 	}
 

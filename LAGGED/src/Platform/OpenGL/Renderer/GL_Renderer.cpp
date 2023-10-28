@@ -17,6 +17,10 @@
 #include <utility>
 #include "glm/glm.hpp"
 
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_impl_glfw.h"
+#include "ImGui/imgui_impl_opengl3.h"
+
 namespace LAG::Renderer
 {
 	struct RendererData
@@ -49,19 +53,25 @@ namespace LAG::Renderer
 
 	void StartFrame()
 	{
+		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		ImGui::ShowDemoWindow();
 	}
 
 	void EndFrame()
 	{
-
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	void Render()
 	{
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		StartFrame();
 
 		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& meshTransformComp)
 			{
@@ -79,9 +89,7 @@ namespace LAG::Renderer
 				meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
 			});
 
-
-		//Not really necessary for improved renderers, but just good for debugging for now
-		glBindVertexArray(0); 
+		EndFrame();
 	}
 
 	void Clear()

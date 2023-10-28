@@ -9,9 +9,6 @@ namespace LAG::Renderer
 	bool Initialize();
 	bool Shutdown();
 
-	void StartFrame();
-	void EndFrame();
-
 	void Render();
 	void Clear();
 
