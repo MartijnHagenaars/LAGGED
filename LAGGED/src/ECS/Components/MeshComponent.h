@@ -5,9 +5,10 @@ namespace LAG
 {
 	struct MeshComponent
 	{
-		MeshComponent(std::string path)
+		MeshComponent(std::string path) : 
+			meshPath(Utility::String(path.c_str()))
 		{
-			meshPath = Utility::String(path.c_str());
+			
 		}
 
 		Utility::String meshPath;

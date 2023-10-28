@@ -1,6 +1,6 @@
 #pragma once
 #include "entt/entt.hpp"
-#include "Entity/Entity.h"
+#include "Entity.h"
 #include <memory>
 
 namespace LAG

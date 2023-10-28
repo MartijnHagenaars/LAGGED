@@ -209,9 +209,10 @@
   <ItemGroup>
     <ClInclude Include="src\ECS\Components\BasicComponents.h" />
     <ClInclude Include="src\ECS\Components\MeshComponent.h" />
-    <ClInclude Include="src\ECS\Entity\Entity.h" />
+    <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Texture.h" />
+    <ClInclude Include="src\ECS\Systems\RenderSystem.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
@@ -324,8 +325,9 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\ECS\Entity\Entity.cpp" />
+    <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
+    <ClCompile Include="src\ECS\Systems\RenderSystem.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />

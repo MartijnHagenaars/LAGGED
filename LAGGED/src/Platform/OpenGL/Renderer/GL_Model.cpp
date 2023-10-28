@@ -1,19 +1,17 @@
 #include "Precomp.h"
 #include "GL_Model.h"
 
+#include "Core/Engine.h"
+#include "Platform/Base/Window/WindowManager.h"
 #include "Core/Resources/ResourceManager.h"
+#include "Core/Resources/Texture.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
+
 #include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
-#include "Platform/OpenGL/Renderer/GL_Texture.h" //TODO: BAD
 
-#include <filesystem>
 #include "GL/glew.h"
-#include "GLFW/glfw3.h" //REMOVE: USED FOR TESTING
-#include "Platform/Base/Window/WindowManager.h" //TODO: SAME FOR THIS ONE!
 
-//#include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp"
 
 //#ifndef STB_IMAGE_IMPLEMENTATION
 //#define STB_IMAGE_IMPLEMENTATION
@@ -22,10 +20,8 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define TINYGLTF_NOEXCEPTION
 #define JSON_NOEXCEPTION
-
 #include "TinyGLTF/tiny_gltf.h"
 
-#include "Core/Engine.h"
 
 
 namespace LAG
@@ -206,13 +202,15 @@ namespace LAG
 	void LAG::Model::Render(Shader& shader)
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
-		modelMat = glm::translate(modelMat, glm::vec3(sinf((float)glfwGetTime()) * 2.f, 0.f, -10.f));
-		modelMat = glm::rotate(modelMat, (float)glfwGetTime(), glm::vec3(0.5f, 0.5f, 0.f));
+		modelMat = glm::translate(modelMat, glm::vec3(0.f, 0.f, -10.f));
+		modelMat = glm::rotate(modelMat, 0.f, glm::vec3(0.5f, 0.5f, 0.f));
 		modelMat = glm::scale(modelMat, m_Scale);
 
 		glm::mat4 viewMat = glm::mat4(1.f);
 		viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, 1.f));
 		glm::mat4 projMat = glm::mat4(1.f);
+
+		//Will be moved
 		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
 
 		shader.Bind();

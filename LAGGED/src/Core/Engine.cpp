@@ -13,7 +13,7 @@
 #include "Core/Resources/Model.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Entity/Entity.h"
+#include "ECS/Entity.h"
 
 namespace LAG
 {
