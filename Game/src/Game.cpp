@@ -33,16 +33,11 @@ void Game::Initialize()
 
 	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 
+	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity();
 	ent1.AddComponent<LAG::NameComponent>("Helmet");
 	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -10.f);
 	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
-
-	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity();
-	ent2.AddComponent<LAG::NameComponent>("Second component");
-
-	LAG::Entity ent3 = LAG::GetEngine().GetScene()->AddEntity();
-	ent3.AddComponent<LAG::TransformComponent>();
 }
 
 void Game::Shutdown()

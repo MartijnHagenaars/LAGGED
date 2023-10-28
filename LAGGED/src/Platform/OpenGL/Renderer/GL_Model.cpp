@@ -210,7 +210,7 @@ namespace LAG
 		viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, 1.f));
 		glm::mat4 projMat = glm::mat4(1.f);
 
-		//Will be moved
+		//Will be moved when camera gets added.
 		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
 
 		shader.Bind();
