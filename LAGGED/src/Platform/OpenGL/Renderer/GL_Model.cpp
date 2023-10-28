@@ -199,12 +199,12 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 	}
 
-	void LAG::Model::Render(Shader& shader)
+	void LAG::Model::Render(TransformComponent& transform, Shader& shader)
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
-		modelMat = glm::translate(modelMat, glm::vec3(0.f, 0.f, -10.f));
-		modelMat = glm::rotate(modelMat, 0.f, glm::vec3(0.5f, 0.5f, 0.f));
-		modelMat = glm::scale(modelMat, m_Scale);
+		modelMat = glm::translate(modelMat, transform.position);
+		modelMat = glm::rotate(modelMat, 0.f, transform.scale);
+		modelMat = glm::scale(modelMat, transform.scale);
 
 		glm::mat4 viewMat = glm::mat4(1.f);
 		viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, 1.f));

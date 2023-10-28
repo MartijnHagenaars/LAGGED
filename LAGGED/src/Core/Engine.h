@@ -46,4 +46,5 @@ namespace LAG
 
 	inline ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
 	inline WindowManager* GetWindowManager() { return GetEngine().GetWindowManager(); }
+	inline Scene* GetScene() { return GetEngine().GetScene(); }
 }

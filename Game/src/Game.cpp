@@ -11,6 +11,7 @@
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
+#include "ECS/Components/MeshComponent.h"
 
 ENTRY_APP(Game)
 
@@ -33,35 +34,15 @@ void Game::Initialize()
 	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity();
-	ent1.AddComponent<LAG::NameComponent>("First component");
-	ent1.AddComponent<LAG::TransformComponent>();
+	ent1.AddComponent<LAG::NameComponent>("Helmet");
+	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -10.f);
+	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity();
 	ent2.AddComponent<LAG::NameComponent>("Second component");
 
 	LAG::Entity ent3 = LAG::GetEngine().GetScene()->AddEntity();
 	ent3.AddComponent<LAG::TransformComponent>();
-
-	LAG::GetEngine().GetScene()->Loop<LAG::NameComponent>(
-		[](uint32_t entityID, LAG::NameComponent& comp)
-		{
-			std::cout << "Name: " << comp.name << std::endl;
-		});
-
-	LAG::GetEngine().GetScene()->Loop<LAG::NameComponent, LAG::TransformComponent>(
-		[](uint32_t entityID, LAG::NameComponent& name, LAG::TransformComponent transform)
-		{
-			std::cout << "Name: " << name.name << std::endl;
-			transform.position = glm::vec3(34.f);
-		});
-
-	LAG::GetEngine().GetScene()->RemoveAll();
-	LAG::GetEngine().GetScene()->Loop<LAG::NameComponent>(
-		[](uint32_t entityID, LAG::NameComponent& comp)
-		{
-			std::cout << "Name: " << comp.name << std::endl;
-		});
-
 }
 
 void Game::Shutdown()
