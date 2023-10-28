@@ -30,7 +30,7 @@ namespace LAG::Renderer
 		//FIRST, recalculate the MVP. Doing this here, since the Mesh class shouldn't have an update function
 		{
 			//Update the model matrix
-			float modelAngle = static_cast<float>(0.1f * m_ObjectLifetime.GetSeconds());
+			float modelAngle = static_cast<float>(0.1f * m_ObjectLifetime.GetMs());
 			const DirectX::XMVECTOR modelRotationAxis = DirectX::XMVectorSet(0, 1, 1, 0);
 			m_ModelMatrix = DirectX::XMMatrixRotationAxis(modelRotationAxis, DirectX::XMConvertToRadians(modelAngle));
 

@@ -22,6 +22,7 @@ namespace LAG
 		ResourceManager* GetResources() const { return m_ResourceManager; }
 		WindowManager* GetWindowManager() const { return m_WindowManager; }
 		Scene* GetScene() const { return m_Scene; }
+		float GetFPS() const { return m_FPS; }
 
 	private:
 		friend Engine& GetEngine();
@@ -38,8 +39,11 @@ namespace LAG
 	private:
 		LAG::IApplication* m_Application = nullptr;
 		WindowManager* m_WindowManager = nullptr;
+
+
 		ResourceManager* m_ResourceManager = nullptr;
 		Scene* m_Scene = nullptr;
+		float m_FPS = 0.f;
 	};
 
 	Engine& GetEngine();

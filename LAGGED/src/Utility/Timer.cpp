@@ -13,13 +13,13 @@ LAG::Utility::Timer::~Timer()
 
 }
 
-float LAG::Utility::Timer::GetMs()
+float LAG::Utility::Timer::GetSeconds()
 {
 	m_DeltaTime = TimerClock::now() - m_StartTime;
 	return m_DeltaTime.count();
 }
 
-float LAG::Utility::Timer::GetSeconds()
+float LAG::Utility::Timer::GetMs()
 {
 	m_DeltaTime = TimerClock::now() - m_StartTime;
 	return m_DeltaTime.count() * 1000.f;

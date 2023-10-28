@@ -21,11 +21,18 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
+#include "Utility/Timer.h"
+
 namespace LAG::Renderer
 {
 	struct RendererData
 	{
 		Shader* shader = nullptr;
+		bool showWireframe = false;
+		bool useLighting = true;
+
+		float renderTime = 0.f;
+		LAG::Utility::Timer renderTimer;
 	};
 	RendererData* renderData = nullptr;
 
@@ -59,8 +66,6 @@ namespace LAG::Renderer
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
-
-		ImGui::ShowDemoWindow();
 	}
 
 	void EndFrame()
@@ -69,20 +74,49 @@ namespace LAG::Renderer
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 
+	void DrawOptionsWindow()
+	{
+		bool isOpen = true;
+		ImGui::Begin("Render options");
+
+		ImGui::Text("LAGGED Renderer");
+		ImGui::Text(std::string("FPS: " + std::to_string(GetEngine().GetFPS())).c_str());
+		ImGui::Text(std::string("Render time: " + std::to_string(renderData->renderTime) + "ms").c_str());
+		ImGui::Separator();
+
+		if (ImGui::Checkbox("Enable wireframe", &renderData->showWireframe))
+		{
+			if (renderData->showWireframe)
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		}
+
+		if (ImGui::Checkbox("Enable lighting", &renderData->useLighting));
+
+		ImGui::End();
+	}
+
 	void Render()
 	{
-		StartFrame();
+		renderData->renderTimer.ResetTimer();
 
+		StartFrame();
+		DrawOptionsWindow();
+
+		//Render all meshes
 		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& meshTransformComp)
 			{
 				std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
-				lights.reserve(3);
 
-				GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](uint32_t entityID, LightComponent& lightComp, TransformComponent& lightTransformComp)
-					{
-						if (lights.size() < TOTAL_POINT_LIGHTS)
-							lights.push_back({ &lightTransformComp, &lightComp });
-					});
+				if (renderData->useLighting)
+				{
+					lights.reserve(3);
+					GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](uint32_t entityID, LightComponent& lightComp, TransformComponent& lightTransformComp)
+						{
+							if (lights.size() < TOTAL_POINT_LIGHTS)
+								lights.push_back({ &lightTransformComp, &lightComp });
+						});
+				}
 
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, *renderData->shader, lights);
 				meshTransformComp.rotation.x = (float)glfwGetTime();
@@ -90,6 +124,8 @@ namespace LAG::Renderer
 			});
 
 		EndFrame();
+
+		renderData->renderTime = renderData->renderTimer.GetMs();
 	}
 
 	void Clear()

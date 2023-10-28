@@ -46,11 +46,10 @@ namespace LAG
 				//Framerate counter: 
 				++frames;
 				elapsedTime += timer.Mark();
-				if (elapsedTime >= 18.f)
+				if (elapsedTime >= 1.f)
 				{
-					Utility::Logger::Info("FPS: {0}", frames / elapsedTime);
-					elapsedTime = 0.f;
-					frames = 0;
+					m_FPS = frames / elapsedTime;
+					elapsedTime = 0.f, frames = 0;
 				}
 			}
 

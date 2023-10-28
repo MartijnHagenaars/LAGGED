@@ -238,7 +238,6 @@ namespace LAG
 		if (lights.size() > 0)
 		{
 			shader.SetBool("a_UseLight", true);
-
 			for (int i = 0; i < TOTAL_POINT_LIGHTS; i++)
 			{
 				if (i < lights.size())
