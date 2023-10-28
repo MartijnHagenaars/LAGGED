@@ -22,49 +22,10 @@ namespace LAG
 		Shutdown(); 
 	}
 
-	bool Engine::Initialize(IApplication* applicationPtr)
-	{
-		//Setup window
-
-		m_PrimaryWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
-
-		//Setup renderer
-		if (!Renderer::Initialize())
-		{
-			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
-			return false;
-		}
-
-		m_Scene = new Scene();
-
-		//Setup application
-		m_App = std::unique_ptr<LAG::IApplication>(applicationPtr);
-		m_App->Initialize();
-
-		return true;
-	}
-
-	bool Engine::Shutdown()
-	{
-		m_App.reset();
-		Renderer::Shutdown();
-		WindowManager::Get().Shutdown();
-		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
-
-		return true;
-	}
-
 	int Engine::Run(IApplication* applicationPtr)
 	{
 		try
 		{
-			Utility::Logger::Initialize();
-
-			//Create primary window
-			m_PrimaryWindow = WindowManager::Get().AddWindow(800, 600, "Main window!", false);
-			if (m_PrimaryWindow == nullptr)
-				LAG_ASSERT("Primary window was nullptr.");
-
 			if (Initialize(applicationPtr) != true)
 			{
 				Utility::Logger::Critical("Failed to initialize.");
@@ -75,14 +36,13 @@ namespace LAG
 			float elapsedTime = 0.f;
 			int frames = 0;
 
+			
 			//Main loop
-			while (WindowManager::Get().AreWindowsOpen())
+			while (m_WindowManager->AreWindowsOpen())
 			{
-				WindowManager::Get().Update();
+				m_WindowManager->Update();
 
-				m_App->Update();
-				//Renderer::Render();
-
+				m_Application->Update();
 				//Framerate counter: 
 				++frames;
 				elapsedTime += timer.Mark();
@@ -117,8 +77,68 @@ namespace LAG
 
 	}
 
+	bool Engine::Initialize(IApplication* applicationPtr)
+	{
+		Utility::Logger::Initialize();
+
+		//Create the window manager and a primary window
+		m_WindowManager = new WindowManager();
+		Window* newWindow = m_WindowManager->AddWindow(800, 600, "Main window!", false);
+		newWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
+
+		//Setup renderer
+		if (!Renderer::Initialize())
+		{
+			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
+			return false;
+		}
+
+		m_ResourceManager = new ResourceManager();
+		m_Scene = new Scene();
+
+		//Application setup. Should be the last object to be initialized!
+		m_Application = applicationPtr;
+		m_Application->Initialize();
+
+		return true;
+	}
+
+	bool Engine::Shutdown()
+	{
+		if (m_Application != nullptr)
+		{
+			m_Application->Shutdown();
+			delete m_Application;
+		}
+		m_Application = nullptr;
+
+		if (m_ResourceManager != nullptr)
+			delete m_ResourceManager;
+		m_ResourceManager = nullptr;
+
+		Renderer::Shutdown();
+
+		if (m_WindowManager != nullptr)
+		{
+			m_WindowManager->Shutdown();
+			delete m_WindowManager;
+		}
+		m_WindowManager = nullptr;
+
+
+		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
+
+		return true;
+	}
+
 	void Engine::EventCallback(EventBase& event)
 	{
 		std::cout << "Event callback detected.\n";
+	}
+
+	Engine& GetEngine()
+	{
+		static Engine engine;
+		return engine;
 	}
 }

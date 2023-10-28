@@ -34,8 +34,8 @@ namespace LAG::Renderer
 
 		void Render();
 
-		LAG_API bool LoadContent(); 
-		LAG_API void UnloadContent();
+		bool LoadContent(); 
+		void UnloadContent();
 
 		void TransitionResource(ComPtr<ID3D12GraphicsCommandList2> commandList, ComPtr<ID3D12Resource> resource, D3D12_RESOURCE_STATES beforeState, D3D12_RESOURCE_STATES afterState);
 

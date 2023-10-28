@@ -3,6 +3,7 @@
 #include "Platform/OpenGL/Window/GL_Window.h"
 #include "Platform/Base/Window/WindowManager.h"
 
+#include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Platform/OpenGL/Renderer/GL_Texture.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h"
@@ -60,7 +61,7 @@ namespace LAG::Renderer
 		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Model* modelThingy = ResourceManager::Get().GetResource<LAG::Model>(Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
+		Model* modelThingy = GetResourceManager()->GetResource<LAG::Model>(Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
 		modelThingy->Render(*renderData->shader);
 
 		//Not really necessary for improved renderers, but just good for debugging for now

@@ -1,12 +1,5 @@
 #pragma once
 
-//Declspec defines
-#ifdef BUILD_DLL
-#define LAG_API __declspec(dllexport)
-#else
-#define LAG_API __declspec(dllimport)
-#endif
-
 //Assertion defines
 #ifdef DEBUG
 #define LAG_ASSERT(AssertMessage) { LAG::Utility::Logger::Critical("Assertion called on line {0} in file {1}: {2}", __LINE__, __FILE__, AssertMessage); __debugbreak(); }

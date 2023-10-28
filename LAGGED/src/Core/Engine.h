@@ -9,20 +9,26 @@ namespace LAG
 {
 	class Window;
 	class Scene;
+	class ResourceManager;
+	class WindowManager;
 	class Engine
 	{
 	public:
-		LAG_API ~Engine();
+		Engine(const Engine&) = delete;
+		~Engine();
 
-		LAG_API int Run(IApplication* applicationPtr);
+		int Run(IApplication* applicationPtr);
 
-		LAG_API Scene* GetScene() const { return m_Scene; }
+		ResourceManager* GetResources() const { return m_ResourceManager; }
+		WindowManager* GetWindowManager() const { return m_WindowManager; }
+		Scene* GetScene() const { return m_Scene; }
 
 	private:
-
-		Engine(const Engine&) = delete;
 		friend Engine& GetEngine();
-		Engine() {}
+		Engine()
+		{
+			std::cout << "Engine constructor" << std::endl;
+		}
 
 		bool Initialize(IApplication* applicationPtr);
 		bool Shutdown();
@@ -30,15 +36,14 @@ namespace LAG
 		void EventCallback(EventBase& event);
 
 	private:
-		std::unique_ptr<LAG::IApplication> m_App;
-		Window* m_PrimaryWindow = nullptr;
-
+		LAG::IApplication* m_Application = nullptr;
+		WindowManager* m_WindowManager = nullptr;
+		ResourceManager* m_ResourceManager = nullptr;
 		Scene* m_Scene = nullptr;
 	};
 
-	static Engine& GetEngine()
-	{
-		static Engine engine;
-		return engine;
-	}
+	Engine& GetEngine();
+
+	inline ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
+	inline WindowManager* GetWindowManager() { return GetEngine().GetWindowManager(); }
 }

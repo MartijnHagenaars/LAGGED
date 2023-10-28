@@ -6,17 +6,17 @@ namespace LAG::Renderer
 {
 	// ===== Essential render functions =====
 
-	LAG_API bool Initialize();
-	LAG_API bool Shutdown();
+	bool Initialize();
+	bool Shutdown();
 
-	LAG_API void StartFrame();
-	LAG_API void EndFrame();
+	void StartFrame();
+	void EndFrame();
 
-	LAG_API void Render();
-	LAG_API void Clear();
+	void Render();
+	void Clear();
 
 	void OnResize();
 
-	LAG_API void SetPipelineState(int pipelineID);
+	void SetPipelineState(int pipelineID);
 
 }

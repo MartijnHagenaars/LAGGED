@@ -33,5 +33,6 @@ void LAG::Utility::Logger::Initialize()
 
 void LAG::Utility::Logger::Shutdown()
 {
-    spdlog::shutdown();
+    //TODO: Causes a crash. Look into this at some point
+    //spdlog::shutdown();
 }

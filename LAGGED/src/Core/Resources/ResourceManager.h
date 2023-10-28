@@ -12,11 +12,6 @@ namespace LAG
 	{
 	public:
 		ResourceManager(const ResourceManager&) = delete;
-		LAG_API static ResourceManager& Get()
-		{
-			static ResourceManager instance;
-			return instance;
-		}
 
 		template<typename T, typename... Args>
 		bool AddResource(const Utility::String& path, Args&&... args)
@@ -55,11 +50,12 @@ namespace LAG
 			return GetResource<T>(path.GetValue());
 		}
 
-		LAG_API void Clear();
+		void Clear();
 
 	private:
-		LAG_API ResourceManager();
-		LAG_API ~ResourceManager();
+		friend class Engine;
+		ResourceManager();
+		~ResourceManager();
 
 		std::unordered_map<size_t, std::unique_ptr<LAG::Resource>> m_Resources;
 	};

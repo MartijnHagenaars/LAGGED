@@ -3,6 +3,10 @@
 
 namespace LAG
 {
+    void WindowManager::Initialize()
+    {
+    }
+
     void WindowManager::Shutdown()
     {
         if (m_AdditionalWindows.size() > 0)

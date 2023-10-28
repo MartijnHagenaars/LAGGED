@@ -28,25 +28,25 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -124,6 +124,7 @@
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\spdlog;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -138,6 +139,10 @@
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>glfw3_mt.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)External\OpenGL\GLEW\lib</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">
     <ClCompile>
@@ -151,6 +156,7 @@
       <PrecompiledHeaderFile>Precomp.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src;$(SolutionDir)LAGGED\res;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\spdlog;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -165,6 +171,10 @@
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
     </PostBuildEvent>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)External\OpenGL\GLEW\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3_mt.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">
     <ClCompile>

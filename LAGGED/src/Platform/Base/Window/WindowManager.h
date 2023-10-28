@@ -14,14 +14,11 @@ namespace LAG
 	class WindowManager
 	{
 		friend class Window;
+		friend class Engine;
 	public:
-
 		WindowManager(const WindowManager&) = delete;
-		static WindowManager& Get()
-		{
-			static WindowManager instance;
-			return instance;
-		}
+
+		void Initialize();
 		void Shutdown();
 
 		Window* AddWindow(unsigned int winWidth, unsigned int winHeight, const char* winName, bool fullscreen, bool useVSync = true, bool centerWindow = true);

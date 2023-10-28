@@ -2,6 +2,7 @@
 #include "GL_Window.h"
 #include "Events/EventBase.h"
 #include "Platform/Base/Window/WindowManager.h"
+#include "Core/Engine.h"
 
 #include "GL_InputEnumConversion.h"
 
@@ -47,7 +48,7 @@ namespace LAG
 		glGetIntegerv(GL_MINOR_VERSION, &vMinor);
 		
 		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
-		GLFWwindow* sharedWindow = (WindowManager::Get().GetPrimaryWindow() == nullptr) ? NULL : WindowManager::Get().GetPrimaryWindow()->m_Window;
+		GLFWwindow* sharedWindow = (GetWindowManager()->GetPrimaryWindow() == nullptr) ? NULL : GetWindowManager()->GetPrimaryWindow()->m_Window;
 
 		//Create the window. 
 		m_Window = glfwCreateWindow(winWidth, winHeight, "LAGGED Engine", NULL, sharedWindow);
@@ -85,8 +86,8 @@ namespace LAG
 		auto windowFocusCallback = [](GLFWwindow* winPtr, int focused)
 		{
 			Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
-			if(LAG::WindowManager::Get().GetFocussedWindow() != window)
-				LAG::WindowManager::Get().SetFocussedWindow(window);
+			if(GetWindowManager()->GetFocussedWindow() != window)
+				GetWindowManager()->SetFocussedWindow(window);
 		};
 		glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
 

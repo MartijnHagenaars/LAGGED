@@ -25,6 +25,8 @@
 
 #include "TinyGLTF/tiny_gltf.h"
 
+#include "Core/Engine.h"
+
 
 namespace LAG
 {
@@ -162,11 +164,11 @@ namespace LAG
 
 		Utility::String pathString = Utility::String(texturePath.c_str());
 
-		ResourceManager::Get().AddResource<Texture>(pathString);
+		GetResourceManager()->AddResource<Texture>(pathString);
 		Utility::Logger::Info("Loading texture at location {0}", texturePath);
 
 		textures.emplace_back(pathString.GetValue());
-		ResourceManager::Get().GetResource<Texture>(pathString)->Unbind(0);
+		GetResourceManager()->GetResource<Texture>(pathString)->Unbind(0);
 
 		return textures;
 	}
@@ -211,8 +213,8 @@ namespace LAG
 		glm::mat4 viewMat = glm::mat4(1.f);
 		viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, 1.f));
 		glm::mat4 projMat = glm::mat4(1.f);
-		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(WindowManager::Get().GetFocussedWindow()->GetWidth()) / WindowManager::Get().GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
-		
+		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
+
 		shader.Bind();
 		shader.SetMat4("modelMat", modelMat);
 		shader.SetMat4("viewMat", viewMat);
@@ -220,7 +222,7 @@ namespace LAG
 		
 		//Bind textures
 		for (size_t i = 0; i < m_Textures.size(); i++)
-			ResourceManager::Get().GetResource<Texture>(m_Textures.at(i))->Bind(i);
+			GetResourceManager()->GetResource<Texture>(m_Textures.at(i))->Bind(i);
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, m_TotalIndices, GL_UNSIGNED_SHORT, 0));

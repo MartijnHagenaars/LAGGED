@@ -9,7 +9,7 @@ namespace LAG
 	public:
 		Entity() = delete;
 		Entity(const Entity&) = delete;
-		LAG_API ~Entity();
+		~Entity();
 
 		template<typename T>
 		bool HasComponent()

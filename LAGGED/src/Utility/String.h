@@ -8,22 +8,22 @@ namespace LAG::Utility
 	{
 	public: 
 		String() = delete;
-		LAG_API explicit constexpr String(const char* s) :
+		explicit constexpr String(const char* s) :
 			m_String(s), m_HashValue(0)
 		{
 			m_HashValue = Hash(s);
 		}
 
-		LAG_API String(const String& other) : 
+		String(const String& other) : 
 			m_String(other.m_String), m_HashValue(other.m_HashValue)
 		{}
 
-		LAG_API size_t GetValue() const
+		size_t GetValue() const
 		{
 			return m_HashValue;
 		}
 
-		LAG_API std::string GetString() const
+		std::string GetString() const
 		{
 			return std::string(m_String);
 		}
