@@ -45,6 +45,22 @@ void Game::Initialize()
 	auto ent2Light = ent2.AddComponent<LAG::LightComponent>();
 	ent2Light->lightAttenuation = 5.f;
 	ent2Light->lightIntensity = 2.f;
+
+	LAG::Entity ent3 = LAG::GetEngine().GetScene()->AddEntity();
+	ent3.AddComponent<LAG::NameComponent>("Light1");
+	ent3.AddComponent<LAG::TransformComponent>()->position = glm::vec3(-5.f, -2.f, -7.f);
+	auto ent3Light = ent3.AddComponent<LAG::LightComponent>();
+	ent3Light->lightAttenuation = 0.1f;
+	ent3Light->lightIntensity = 2.f;
+	ent3Light->lightColor = glm::vec3(0.f, 1.f, 0.f);
+
+	LAG::Entity ent4 = LAG::GetEngine().GetScene()->AddEntity();
+	ent4.AddComponent<LAG::NameComponent>("Light1");
+	ent4.AddComponent<LAG::TransformComponent>()->position = glm::vec3(5.f, 2.f, -7.f);
+	auto ent4Light = ent4.AddComponent<LAG::LightComponent>();
+	ent4Light->lightAttenuation = 0.1f;
+	ent4Light->lightIntensity = 2.f;
+	ent4Light->lightColor = glm::vec3(1.f, 0.f, 0.f);
 }
 
 void Game::Shutdown()

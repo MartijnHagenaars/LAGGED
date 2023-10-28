@@ -1,5 +1,8 @@
 #pragma once
 
+//Renderer defines
+#define TOTAL_POINT_LIGHTS 3
+
 //Assertion defines
 #ifdef DEBUG
 #define LAG_ASSERT(AssertMessage) { LAG::Utility::Logger::Critical("Assertion called on line {0} in file {1}: {2}", __LINE__, __FILE__, AssertMessage); __debugbreak(); }

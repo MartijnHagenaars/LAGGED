@@ -54,7 +54,8 @@ namespace LAG::ShaderData
 				float a_LightIntensity;
 				float a_LightAttenuation;
 			};
-			uniform PointLightData a_PointLightData[3];
+			#define TOTAL_POINT_LIGHTS 3
+			uniform PointLightData a_PointLightData[TOTAL_POINT_LIGHTS];
 			
 			vec3 CalculateDiffuse(vec3 lightPosition, vec3 lightColor)
 			{
@@ -71,9 +72,12 @@ namespace LAG::ShaderData
 
 			void main()
 			{
-				vec3 lightCalculation = vec3(1.0);
+				vec3 lightCalculation = vec3(0.0);
 				if(a_UseLight)
-					lightCalculation = (CalculateDiffuse(a_PointLightData[0].a_LightPosition, a_PointLightData[0].a_LightColor)) * CalculateAttenuation(a_PointLightData[0].a_LightPosition, a_PointLightData[0].a_LightIntensity, a_PointLightData[0].a_LightAttenuation);
+				{
+					for(int i = 0; i < TOTAL_POINT_LIGHTS; i++)
+						lightCalculation += (CalculateDiffuse(a_PointLightData[i].a_LightPosition, a_PointLightData[i].a_LightColor)) * CalculateAttenuation(a_PointLightData[i].a_LightPosition, a_PointLightData[i].a_LightIntensity, a_PointLightData[i].a_LightAttenuation);
+				}
 
 			    colorOut = texture(a_Texture1, texCoord) * vec4(lightCalculation, 1.f);
 			    //colorOut = vec4(normal, 1.f); //Draw normal

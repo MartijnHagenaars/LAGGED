@@ -70,7 +70,7 @@ namespace LAG::Renderer
 
 				GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](uint32_t entityID, LightComponent& lightComp, TransformComponent& lightTransformComp)
 					{
-						if (lights.size() < 2)
+						if (lights.size() < TOTAL_POINT_LIGHTS)
 							lights.push_back({ &lightTransformComp, &lightComp });
 					});
 

@@ -239,10 +239,24 @@ namespace LAG
 		{
 			shader.SetBool("a_UseLight", true);
 
-			shader.SetVec3("a_PointLightData[0].a_LightPosition", lights[0].first->position);
-			shader.SetVec3("a_PointLightData[0].a_LightColor", lights[0].second->lightColor);
-			shader.SetFloat("a_PointLightData[0].a_LightIntensity", lights[0].second->lightIntensity);
-			shader.SetFloat("a_PointLightData[0].a_LightAttenuation", lights[0].second->lightAttenuation);
+			for (int i = 0; i < TOTAL_POINT_LIGHTS; i++)
+			{
+				if (i < lights.size())
+				{
+					shader.SetVec3(std::string("a_PointLightData[" + std::to_string(i) + "].a_LightPosition"), lights[i].first->position);
+					shader.SetVec3("a_PointLightData[" + std::to_string(i) + "].a_LightColor", lights[i].second->lightColor);
+					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightIntensity", lights[i].second->lightIntensity);
+					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", lights[i].second->lightAttenuation);
+				}
+				//else
+				//{
+				//	shader.SetVec3(std::string("a_PointLightData[" + std::to_string(i) + "].a_LightPosition"), glm::vec3(0.f));
+				//	shader.SetVec3("a_PointLightData[" + std::to_string(i) + "].a_LightColor", glm::vec3(1.f));
+				//	shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightIntensity", 0.f);
+				//	shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", 0.f);
+				//}
+			}
+
 		}
 		else shader.SetBool("a_UseLight", false);
 
