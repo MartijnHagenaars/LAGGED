@@ -61,6 +61,8 @@ namespace LAG::Renderer
 		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& transformComp)
 			{
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(transformComp, *renderData->shader);
+				transformComp.rotation.x = (float)glfwGetTime();
+				transformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
 			});
 
 

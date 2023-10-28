@@ -174,7 +174,7 @@
     <ClInclude Include="src\ECS\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\Systems\RenderSystem.h">
+    <ClInclude Include="src\ECS\Components\LightComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -255,9 +255,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Systems\RenderSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

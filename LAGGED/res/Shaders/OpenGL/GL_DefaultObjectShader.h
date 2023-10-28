@@ -11,18 +11,22 @@ namespace LAG::ShaderData
 		std::string vertex = R"(
 			#version 330 core
 			layout (location = 0) in vec3 aPos;
-			layout (location = 1) in vec2 aTexCoord;
+			layout (location = 1) in vec3 aNormal;
+			layout (location = 2) in vec2 aTexCoord;
 
 			uniform mat4 modelMat;
 			uniform mat4 viewMat;
 			uniform mat4 projMat;			
 
+			out vec3 normal;
 			out vec2 texCoord;
 			
 			void main()
 			{
 			    //gl_Position = transformMat * vec4(aPos, 1.0);
 				gl_Position = projMat * viewMat * modelMat * vec4(aPos, 1.0);
+
+				normal = vec3(aNormal.x, aNormal.y, aNormal.z);
 				texCoord = vec2(aTexCoord.x, aTexCoord.y);
 			}
 		)";
@@ -30,13 +34,15 @@ namespace LAG::ShaderData
 		std::string pixel = R"(
 			#version 330 core
 			out vec4 ColorOutput;
-			 
+			
+			in vec3 normal;
 			in vec2 texCoord;
 			uniform sampler2D texture1;
 			
 			void main()
 			{
 			    ColorOutput = texture(texture1, texCoord);
+			    //ColorOutput = vec4(normal, 1.f); //Draw normal
 			} 
 		)";
 	} object;

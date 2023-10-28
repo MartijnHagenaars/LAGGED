@@ -104,6 +104,19 @@ namespace LAG
 			}
 		}
 
+		//Load normals
+		{
+			const auto& primitiveAttributes = primitive.attributes["NORMAL"];
+			const auto& accessors = modelData.accessors[primitiveAttributes];
+			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
+			const auto& buffers = modelData.buffers[bufferViews.buffer];
+			const float* normals = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
+			for (size_t i = 0; i < meshData.capacity(); i++)
+			{
+				meshData[i].normals = glm::vec3(normals[i * 3 + 0], normals[i * 3 + 1], normals[i * 3 + 2]);
+			}
+		}
+
 		//Load texture coordinates
 		{
 			const auto& primitiveAttributes = primitive.attributes["TEXCOORD_0"];
@@ -191,10 +204,14 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
 		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indices.size(), &indices.data()[0], GL_STATIC_DRAW));
 		
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0));
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float))));
+
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
+
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
+		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(2));
 		
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 	}
@@ -203,7 +220,7 @@ namespace LAG
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
-		modelMat = glm::rotate(modelMat, 0.f, transform.scale);
+		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(0.5f, 0.5f, 0.f)); //Shit rotation calculation. FIX!!!
 		modelMat = glm::scale(modelMat, transform.scale);
 
 		glm::mat4 viewMat = glm::mat4(1.f);

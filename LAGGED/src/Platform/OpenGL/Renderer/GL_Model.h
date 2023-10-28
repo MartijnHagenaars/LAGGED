@@ -18,7 +18,7 @@ namespace LAG
 	struct MeshData
 	{
 		glm::vec3 vertices;
-		//glm::vec3 normals;
+		glm::vec3 normals;
 		glm::vec2 textureCoords;
 	};
 
