@@ -2,6 +2,7 @@
 #include "Input.h"
 
 #include <unordered_map>
+#include "Core/Engine.h"
 #include "Platform/Base/Window/WindowBase.h"
 #include "Platform/Base/Window/WindowManager.h"
 
@@ -51,7 +52,7 @@ namespace LAG::Input
 
 	bool IsActionPressed(Utility::String actionName)
 	{
-		return IsActionPressed(actionName, WindowManager::Get().GetFocussedWindow());
+		return IsActionPressed(actionName, GetWindowManager()->GetFocussedWindow());
 	}
 
 	bool IsActionPressed(Utility::String actionName, LAG::WindowBase* window)
@@ -64,7 +65,7 @@ namespace LAG::Input
 
 	bool IsActionPressedOnce(Utility::String actionName)
 	{
-		return IsActionPressedOnce(actionName, WindowManager::Get().GetFocussedWindow());
+		return IsActionPressedOnce(actionName, GetWindowManager()->GetFocussedWindow());
 	}
 
 	bool IsActionPressedOnce(Utility::String actionName, LAG::WindowBase* window)
@@ -77,7 +78,7 @@ namespace LAG::Input
 
 	void GetMousePosition(float& xPos, float& yPos)
 	{
-		GetMousePosition(xPos, yPos, WindowManager::Get().GetFocussedWindow());
+		GetMousePosition(xPos, yPos, GetWindowManager()->GetFocussedWindow());
 	}
 
 	void GetMousePosition(float& xPos, float& yPos, LAG::WindowBase* window)
