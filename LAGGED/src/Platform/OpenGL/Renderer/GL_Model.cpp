@@ -216,7 +216,7 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 	}
 
-	void LAG::Model::Render(TransformComponent& transform, Shader& shader)
+	void LAG::Model::Render(TransformComponent& transform, Shader& shader, std::array<LightData, 3> lights)
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
@@ -235,9 +235,10 @@ namespace LAG
 		shader.SetMat4("a_ViewMat", viewMat);
 		shader.SetMat4("a_ProjMat", projMat);
 
-		shader.SetVec3("a_LightPosition", glm::vec3(5.f, -15.f, 0.f));
-		shader.SetVec3("a_LightColor", glm::vec3(1.f, 0.f, 0.f));
-		shader.SetFloat("a_LightIntensity", 1.f);
+		shader.SetVec3("a_LightPosition", glm::vec3(2.f, 0.f, 0.f));
+		shader.SetVec3("a_LightColor", glm::vec3(1.f));
+		shader.SetFloat("a_LightIntensity", 10.f);
+		shader.SetFloat("a_LightAttenuation", 1.f);
 		
 		//Bind textures
 		for (size_t i = 0; i < m_Textures.size(); i++)

@@ -9,6 +9,13 @@ namespace tinygltf
 
 namespace LAG
 {
+	struct LightData
+	{
+		glm::vec3 m_LightPos = glm::vec3(0.f);
+		glm::vec3 m_LightColor = glm::vec3(1.f);
+		float m_LightIntensity = 1.f;
+	};
+
 	class Shader;
 	class ModelBase : public Resource
 	{
@@ -17,7 +24,7 @@ namespace LAG
 		explicit ModelBase(const Utility::String& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
-		virtual void Render(TransformComponent& transform, Shader& shader) = 0;
+		virtual void Render(TransformComponent& transform, Shader& shader, std::array<LightData, 3> lights) = 0;
 
 	protected:
 		tinygltf::Model* m_Model = nullptr;

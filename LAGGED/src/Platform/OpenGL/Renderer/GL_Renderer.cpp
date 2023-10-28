@@ -12,6 +12,7 @@
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/MeshComponent.h"
+#include "ECS/Components/LightComponent.h"
 
 namespace LAG::Renderer
 {
@@ -55,14 +56,21 @@ namespace LAG::Renderer
 
 	void Render()
 	{
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& transformComp)
+		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& meshTransformComp)
 			{
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(transformComp, *renderData->shader);
-				transformComp.rotation.x = (float)glfwGetTime();
-				transformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
+				std::array<LightData, 3> lights;
+				GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](uint32_t entityID, LightComponent& lightComp, TransformComponent& lightTransformComp)
+					{
+						//glm::length();
+					});
+
+				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, *renderData->shader, lights);
+				meshTransformComp.rotation.x = (float)glfwGetTime();
+				meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
 			});
 
 

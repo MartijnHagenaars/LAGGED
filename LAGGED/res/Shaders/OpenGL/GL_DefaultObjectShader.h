@@ -48,6 +48,7 @@ namespace LAG::ShaderData
 			uniform vec3 a_LightPosition;
 			uniform vec3 a_LightColor;
 			uniform float a_LightIntensity;
+			uniform float a_LightAttenuation;
 			
 			vec3 CalculateDiffuse()
 			{
@@ -56,9 +57,16 @@ namespace LAG::ShaderData
 				return diffuseIntensity * a_LightColor;
 			}
 
+			float CalculateAttenuation()
+			{
+				float lightDistance = distance(fragPosition, a_LightPosition);
+				return a_LightIntensity * (1.0 / (1.0 + a_LightAttenuation * lightDistance * lightDistance));
+			}
+
 			void main()
 			{
-			    colorOut = texture(a_Texture1, texCoord) * vec4(CalculateDiffuse(), 1.f);
+				vec3 lightCalculation = (CalculateDiffuse()) * CalculateAttenuation();
+			    colorOut = texture(a_Texture1, texCoord) * vec4(lightCalculation, 1.f);
 			    //colorOut = vec4(normal, 1.f); //Draw normal
 			} 
 		)";
