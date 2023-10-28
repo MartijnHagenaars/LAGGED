@@ -10,39 +10,56 @@ namespace LAG::ShaderData
 	private:
 		std::string vertex = R"(
 			#version 330 core
-			layout (location = 0) in vec3 aPos;
-			layout (location = 1) in vec3 aNormal;
-			layout (location = 2) in vec2 aTexCoord;
+			layout (location = 0) in vec3 a_Position;
+			layout (location = 1) in vec3 a_Normal;
+			layout (location = 2) in vec2 a_TexCoord;
 
-			uniform mat4 modelMat;
-			uniform mat4 viewMat;
-			uniform mat4 projMat;			
-
+			out vec3 fragPosition;
 			out vec3 normal;
 			out vec2 texCoord;
+
+			uniform mat4 a_ModelMat;
+			uniform mat4 a_ViewMat;
+			uniform mat4 a_ProjMat;			
 			
 			void main()
 			{
-			    //gl_Position = transformMat * vec4(aPos, 1.0);
-				gl_Position = projMat * viewMat * modelMat * vec4(aPos, 1.0);
+				fragPosition = vec3(a_ModelMat * vec4(a_Position, 1.f));
+				normal = vec3(a_Normal.x, a_Normal.y, a_Normal.z);
+				texCoord = vec2(a_TexCoord.x, a_TexCoord.y);
 
-				normal = vec3(aNormal.x, aNormal.y, aNormal.z);
-				texCoord = vec2(aTexCoord.x, aTexCoord.y);
+				normal = mat3(transpose(inverse(a_ModelMat))) * a_Normal;
+				gl_Position = a_ProjMat * a_ViewMat * a_ModelMat * vec4(a_Position, 1.0);
 			}
 		)";
 
 		std::string pixel = R"(
 			#version 330 core
-			out vec4 ColorOutput;
-			
+
+			in vec3 fragPosition;
 			in vec3 normal;
 			in vec2 texCoord;
-			uniform sampler2D texture1;
+
+			out vec4 colorOut;
+
+			uniform sampler2D a_Texture1;
+
+			//Lighting data
+			uniform vec3 a_LightPosition;
+			uniform vec3 a_LightColor;
+			uniform float a_LightIntensity;
 			
+			vec3 CalculateDiffuse()
+			{
+				vec3 lightDirection = normalize(a_LightPosition - fragPosition);
+				float diffuseIntensity = max(0.0, dot(normal, lightDirection));
+				return diffuseIntensity * a_LightColor;
+			}
+
 			void main()
 			{
-			    ColorOutput = texture(texture1, texCoord);
-			    //ColorOutput = vec4(normal, 1.f); //Draw normal
+			    colorOut = texture(a_Texture1, texCoord) * vec4(CalculateDiffuse(), 1.f);
+			    //colorOut = vec4(normal, 1.f); //Draw normal
 			} 
 		)";
 	} object;

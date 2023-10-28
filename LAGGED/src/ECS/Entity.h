@@ -25,7 +25,6 @@ namespace LAG
 		{
 			if (!HasComponent<T>())
 			{
-				//std::forward stuff: https://stackoverflow.com/questions/65144882/how-to-pass-any-number-of-arguments-to-c-template-function
 				m_RegistryPtr->emplace<T>(m_EntityID, std::forward<Args>(arguments)...);
 				return &m_RegistryPtr->get<T>(m_EntityID);
 			}

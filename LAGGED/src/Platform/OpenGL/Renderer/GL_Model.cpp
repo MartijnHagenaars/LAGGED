@@ -231,9 +231,13 @@ namespace LAG
 		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
 
 		shader.Bind();
-		shader.SetMat4("modelMat", modelMat);
-		shader.SetMat4("viewMat", viewMat);
-		shader.SetMat4("projMat", projMat);
+		shader.SetMat4("a_ModelMat", modelMat);
+		shader.SetMat4("a_ViewMat", viewMat);
+		shader.SetMat4("a_ProjMat", projMat);
+
+		shader.SetVec3("a_LightPosition", glm::vec3(5.f, -15.f, 0.f));
+		shader.SetVec3("a_LightColor", glm::vec3(1.f, 0.f, 0.f));
+		shader.SetFloat("a_LightIntensity", 1.f);
 		
 		//Bind textures
 		for (size_t i = 0; i < m_Textures.size(); i++)
