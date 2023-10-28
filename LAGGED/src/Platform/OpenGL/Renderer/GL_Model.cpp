@@ -235,10 +235,10 @@ namespace LAG
 		shader.SetMat4("a_ViewMat", viewMat);
 		shader.SetMat4("a_ProjMat", projMat);
 
-		shader.SetVec3("a_LightPosition", glm::vec3(2.f, 0.f, 0.f));
+		shader.SetVec3("a_LightPosition", glm::vec3(0.f, 0.f, -5.f));
 		shader.SetVec3("a_LightColor", glm::vec3(1.f));
-		shader.SetFloat("a_LightIntensity", 10.f);
-		shader.SetFloat("a_LightAttenuation", 1.f);
+		shader.SetFloat("a_LightIntensity", 2.f);
+		shader.SetFloat("a_LightAttenuation", 5.f);
 		
 		//Bind textures
 		for (size_t i = 0; i < m_Textures.size(); i++)

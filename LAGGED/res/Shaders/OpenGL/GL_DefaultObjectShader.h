@@ -60,7 +60,7 @@ namespace LAG::ShaderData
 			float CalculateAttenuation()
 			{
 				float lightDistance = distance(fragPosition, a_LightPosition);
-				return a_LightIntensity * (1.0 / (1.0 + a_LightAttenuation * lightDistance * lightDistance));
+				return a_LightIntensity * (1.0 / (1.0 + lightDistance + a_LightAttenuation * lightDistance * lightDistance));
 			}
 
 			void main()

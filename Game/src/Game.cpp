@@ -36,7 +36,7 @@ void Game::Initialize()
 	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity();
 	ent1.AddComponent<LAG::NameComponent>("Helmet");
-	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -10.f);
+	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -5.f);
 	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 }
 
