@@ -1,4 +1,5 @@
 #pragma once
+#include "glm/mat4x4.hpp"
 
 namespace LAG
 {
@@ -15,6 +16,11 @@ namespace LAG
 		float fov = 90.f;
 		float movementSpeed = 1.f;
 
+		bool hasCameraMoved = true;
+		bool hasCameraDimensionChanged = true;
+
+		glm::mat4 viewMat = glm::mat4(1.f);
+		glm::mat4 projMat = glm::mat4(1.f);
 		CameraPerspectiveType perspectiveType = CameraPerspectiveType::PERSPECTIVE;
 	};
 }

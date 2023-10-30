@@ -2,6 +2,7 @@
 #include "Core/Resources/Resource.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
+#include "ECS/Components/CameraComponent.h"
 
 namespace tinygltf
 {
@@ -25,7 +26,7 @@ namespace LAG
 		explicit ModelBase(const Utility::String& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
-		virtual void Render(TransformComponent& transform, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
+		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
 	protected:
 		tinygltf::Model* m_Model = nullptr;

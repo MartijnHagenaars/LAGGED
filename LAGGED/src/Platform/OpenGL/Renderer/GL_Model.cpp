@@ -1,17 +1,18 @@
 #include "Precomp.h"
 #include "GL_Model.h"
+#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
 
 #include "Core/Engine.h"
 #include "Platform/Base/Window/WindowManager.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Texture.h"
-#include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
 
-#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "ECS/Systems/CameraSystem.h"
 
 #include "GL/glew.h"
-
 #include "glm/gtc/matrix_transform.hpp"
+
 
 //#ifndef STB_IMAGE_IMPLEMENTATION
 //#define STB_IMAGE_IMPLEMENTATION
@@ -216,24 +217,17 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 	}
 
-	void LAG::Model::Render(TransformComponent& transform, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
+	void LAG::Model::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
 		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(0.5f, 0.5f, 0.f)); //Shit rotation calculation. FIX!!!
 		modelMat = glm::scale(modelMat, transform.scale);
 
-		glm::mat4 viewMat = glm::mat4(1.f);
-		viewMat = glm::translate(viewMat, glm::vec3(0.f, 0.f, 1.f));
-		glm::mat4 projMat = glm::mat4(1.f);
-
-		//Will be moved when camera gets added.
-		projMat = glm::perspective(glm::radians(45.f), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
-
 		shader.Bind();
 		shader.SetMat4("a_ModelMat", modelMat);
-		shader.SetMat4("a_ViewMat", viewMat);
-		shader.SetMat4("a_ProjMat", projMat);
+		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
+		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMatrix(cameraEntityID));
 
 		if (lights.size() > 0)
 		{
@@ -247,13 +241,6 @@ namespace LAG
 					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightIntensity", lights[i].second->lightIntensity);
 					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", lights[i].second->lightAttenuation);
 				}
-				//else
-				//{
-				//	shader.SetVec3(std::string("a_PointLightData[" + std::to_string(i) + "].a_LightPosition"), glm::vec3(0.f));
-				//	shader.SetVec3("a_PointLightData[" + std::to_string(i) + "].a_LightColor", glm::vec3(1.f));
-				//	shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightIntensity", 0.f);
-				//	shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", 0.f);
-				//}
 			}
 
 		}

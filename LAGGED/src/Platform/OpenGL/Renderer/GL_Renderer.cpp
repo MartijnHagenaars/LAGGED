@@ -118,7 +118,14 @@ namespace LAG::Renderer
 						});
 				}
 
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, *renderData->shader, lights);
+				uint32_t selectedCameraID = 0;
+				GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCameraID](uint32_t entityID, CameraComponent& camera, TransformComponent& transform)
+					{
+						if (camera.isActive)
+							selectedCameraID = entityID;
+					});
+
+				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *renderData->shader, lights);
 				meshTransformComp.rotation.x = (float)glfwGetTime();
 				meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
 			});

@@ -45,7 +45,7 @@ namespace LAG
 		template<typename T>
 		T* GetComponent()
 		{
-			if (m_RegistryPtr.valid(m_EntityID))
+			if (m_RegistryPtr->valid(m_EntityID))
 			{
 				if (HasComponent<T>())
 					return &m_RegistryPtr->get<T>(m_EntityID);
