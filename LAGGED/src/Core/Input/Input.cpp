@@ -8,7 +8,6 @@
 
 namespace LAG::Input
 {
-	//These structs are causing errors. Fix!!
 	std::unordered_map<size_t, InputActionData> inputActions;
 
 

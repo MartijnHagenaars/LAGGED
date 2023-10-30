@@ -95,6 +95,18 @@ namespace LAG
 		m_ResourceManager = new ResourceManager();
 		m_Scene = new Scene();
 
+		//Add some input actions that'll be used by the engine and the editor. 
+		Input::AddInputAction(Input::InputType::LAG_W, Utility::String("cameraMoveForward"));
+		Input::AddInputAction(Input::InputType::LAG_S, Utility::String("cameraMoveBackward"));
+		Input::AddInputAction(Input::InputType::LAG_A, Utility::String("cameraMoveLeft"));
+		Input::AddInputAction(Input::InputType::LAG_D, Utility::String("cameraMoveRight"));
+		Input::AddInputAction(Input::InputType::LAG_SHIFT_L, Utility::String("cameraMoveUp"));
+		Input::AddInputAction(Input::InputType::LAG_CONTROL_L, Utility::String("cameraMoveDown"));
+		Input::AddInputAction(Input::InputType::LAG_UP, Utility::String("cameraLookUp"));
+		Input::AddInputAction(Input::InputType::LAG_DOWN, Utility::String("cameraLookDown"));
+		Input::AddInputAction(Input::InputType::LAG_LEFT, Utility::String("cameraLookLeft"));
+		Input::AddInputAction(Input::InputType::LAG_RIGHT, Utility::String("cameraLookRight"));
+
 		//Application setup. Should be the last object to be initialized!
 		m_Application = applicationPtr;
 		m_Application->Initialize();

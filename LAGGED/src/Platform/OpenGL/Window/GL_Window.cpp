@@ -52,6 +52,7 @@ namespace LAG
 		glGetIntegerv(GL_MINOR_VERSION, &vMinor);
 		
 		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
+		m_WindowHalfWidth = static_cast<unsigned int>(winWidth * 0.5f), m_WindowHalfHeight = static_cast<unsigned int>(winHeight * 0.5f);
 		GLFWwindow* sharedWindow = (GetWindowManager()->GetPrimaryWindow() == nullptr) ? NULL : GetWindowManager()->GetPrimaryWindow()->m_Window;
 
 		//Create the window. 
@@ -112,6 +113,8 @@ namespace LAG
 				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
 				window->m_WindowWidth = width;
 				window->m_WindowHeight = height;
+				window->m_WindowHalfWidth = static_cast<unsigned int>(width * 0.5f);
+				window->m_WindowHalfHeight = static_cast<unsigned int>(height * 0.5f);
 
 				glfwMakeContextCurrent(window->m_Window);
 				glViewport(0, 0, width, height);

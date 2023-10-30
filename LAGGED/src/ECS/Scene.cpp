@@ -31,6 +31,11 @@ namespace LAG
 		return m_Registry.valid(static_cast<entt::entity>(entityID));
 	}
 
+	Entity Scene::GetEntity(uint32_t entityID)
+	{
+		return Entity(static_cast<entt::entity>(entityID), m_Registry);
+	}
+
 	void Scene::RemoveAll()
 	{
 		if (m_Registry.storage<entt::entity>().size() > 0)
