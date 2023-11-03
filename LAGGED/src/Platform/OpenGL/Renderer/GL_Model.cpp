@@ -227,7 +227,7 @@ namespace LAG
 		shader.Bind();
 		shader.SetMat4("a_ModelMat", modelMat);
 		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
-		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMatrix(cameraEntityID));
+		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
 
 		if (lights.size() > 0)
 		{

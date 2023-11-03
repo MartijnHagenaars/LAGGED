@@ -56,7 +56,7 @@ namespace LAG::CameraSystem
 			camera->hasCameraMoved = true;
 		
 	}
-
+	
 	glm::mat4 CalculateViewMat(uint32_t entityID)
 	{
 		CameraComponent* camera = GetScene()->GetEntity(entityID).GetComponent<CameraComponent>();
@@ -75,7 +75,7 @@ namespace LAG::CameraSystem
 		camera->hasCameraMoved = false;
 		return camera->viewMat;
 	}
-	
+
 	glm::mat4 CalculateProjMat(uint32_t entityID)
 	{
 		CameraComponent* camera = GetScene()->GetEntity(entityID).GetComponent<CameraComponent>();

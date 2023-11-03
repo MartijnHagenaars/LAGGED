@@ -1,10 +1,10 @@
 #pragma once
-#include "glm/mat4x4.hpp"
+#include "glm/glm.hpp"
 
 namespace LAG::CameraSystem
 {
-	static void Update(uint32_t entityID);
+	void Update(uint32_t entityID);
 
-	static glm::mat4 CalculateViewMatrix(uint32_t entityID);
-	static glm::mat4 CalculateProjMat(uint32_t entityID);
+	glm::mat4 CalculateViewMat(uint32_t entityID);
+	glm::mat4 CalculateProjMat(uint32_t entityID);
 }
