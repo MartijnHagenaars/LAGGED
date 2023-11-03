@@ -5,7 +5,6 @@ namespace LAG
 {
 	Scene::Scene()
 	{
-
 	}
 
 	Scene::~Scene()

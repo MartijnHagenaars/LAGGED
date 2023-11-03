@@ -118,12 +118,17 @@ namespace LAG::Renderer
 						});
 				}
 
-				uint32_t selectedCameraID = 0;
-				GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCameraID](uint32_t entityID, CameraComponent& camera, TransformComponent& transform)
+				bool doesCameraExist;
+				uint32_t selectedCameraID;
+				doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCameraID](uint32_t entityID, CameraComponent& camera, TransformComponent& transform)
 					{
 						if (camera.isActive)
 							selectedCameraID = entityID;
 					});
+
+				//Don't render anything if there isn't a valid camera.
+				if (!doesCameraExist)
+					return;
 
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *renderData->shader, lights);
 				meshTransformComp.rotation.x = (float)glfwGetTime();

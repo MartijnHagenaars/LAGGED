@@ -21,10 +21,16 @@ namespace LAG
 		void RemoveAll();
 		
 		template<typename... Components>
-		void Loop(std::function<void(uint32_t entityID, Components&...)> func)
+		bool Loop(std::function<void(uint32_t entityID, Components&...)> func)
 		{
+			auto view = m_Registry.view<Components...>();
+			if (view.back() == entt::null)
+				return false;
+
 			for (auto& current : m_Registry.view<Components...>())
 				func(uint32_t(current), m_Registry.get<Components>(current)...);
+
+			return true;
 		}
 
 	private:
