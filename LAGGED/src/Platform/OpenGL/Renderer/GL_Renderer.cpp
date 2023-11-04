@@ -14,6 +14,8 @@
 #include "ECS/Components/MeshComponent.h"
 #include "ECS/Components/LightComponent.h"
 
+#include "ECS/Systems/CameraSystem.h"
+
 #include <utility>
 #include "glm/glm.hpp"
 
@@ -123,13 +125,16 @@ namespace LAG::Renderer
 				doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCameraID](uint32_t entityID, CameraComponent& camera, TransformComponent& transform)
 					{
 						if (camera.isActive)
+						{
 							selectedCameraID = entityID;
+						}
 					});
 
 				//Don't render anything if there isn't a valid camera.
 				if (!doesCameraExist)
 					return;
 
+				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *renderData->shader, lights);
 				meshTransformComp.rotation.x = (float)glfwGetTime();
 				meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
