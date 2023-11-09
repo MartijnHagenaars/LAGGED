@@ -29,7 +29,6 @@ float LAG::Utility::Timer::Mark()
 {
 	float ms = GetMs();
 	ResetTimer();
-
 	return ms;
 }
 

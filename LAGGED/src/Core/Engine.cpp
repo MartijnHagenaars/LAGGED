@@ -43,13 +43,14 @@ namespace LAG
 				m_WindowManager->Update();
 
 				m_Application->Update();
-				//Framerate counter: 
-				++frames;
-				elapsedTime += timer.Mark();
-				if (elapsedTime >= 1.f)
+
+				//Calculate the framerate
+				if (frames++ >= 64)
 				{
-					m_FPS = frames / elapsedTime;
+					elapsedTime = timer.GetSeconds();
+					m_FPS = static_cast<float>(frames) / elapsedTime;
 					elapsedTime = 0.f, frames = 0;
+					timer.ResetTimer();
 				}
 			}
 
