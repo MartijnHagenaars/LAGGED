@@ -3,18 +3,19 @@
 
 namespace LAG::Utility
 {
-	using TimerClock = std::chrono::system_clock;
+	using TimerClock = std::chrono::high_resolution_clock;
 	class Timer
 	{
 	public:
 		Timer();
 		~Timer();
 
-		float GetMs();
+		float GetMilliseconds();
 		float GetSeconds();
 
-		//Marks the time in Ms
-		float Mark();
+		//Marks the time in seconds
+		float MarkSeconds();
+		float MarkMilliseconds();
 
 		void SetTimeScale(float timeScale);
 

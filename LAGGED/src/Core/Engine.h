@@ -23,6 +23,7 @@ namespace LAG
 		WindowManager* GetWindowManager() const { return m_WindowManager; }
 		Scene* GetScene() const { return m_Scene; }
 		float GetFPS() const { return m_FPS; }
+		float GetDeltaTime() const { return m_DeltaTime; }
 
 	private:
 		friend Engine& GetEngine();
@@ -43,7 +44,9 @@ namespace LAG
 
 		ResourceManager* m_ResourceManager = nullptr;
 		Scene* m_Scene = nullptr;
+
 		float m_FPS = 0.f;
+		float m_DeltaTime = 0.f;
 	};
 
 	Engine& GetEngine();

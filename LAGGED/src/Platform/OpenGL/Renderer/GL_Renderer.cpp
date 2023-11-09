@@ -142,7 +142,7 @@ namespace LAG::Renderer
 
 		EndFrame();
 
-		renderData->renderTime = renderData->renderTimer.GetMs();
+		renderData->renderTime = renderData->renderTimer.GetMilliseconds();
 	}
 
 	void Clear()

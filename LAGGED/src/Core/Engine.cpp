@@ -45,12 +45,12 @@ namespace LAG
 				m_Application->Update();
 
 				//Calculate the framerate
+				m_DeltaTime = timer.MarkSeconds();
+				elapsedTime += m_DeltaTime;
 				if (frames++ >= 64)
 				{
-					elapsedTime = timer.GetSeconds();
-					m_FPS = static_cast<float>(frames) / elapsedTime;
+					m_FPS = static_cast<float>(frames) / (elapsedTime);
 					elapsedTime = 0.f, frames = 0;
-					timer.ResetTimer();
 				}
 			}
 

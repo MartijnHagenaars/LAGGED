@@ -24,6 +24,8 @@ namespace LAG::CameraSystem
 		if (!camera->isActive)
 			return;
 
+		//float cameraRotationSpeed = 1.f * camera->movementSpeed * GetEngine().
+
 		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
 		glm::vec3 preCameraPosition = transform->position;
 		if (Input::IsActionPressed(Utility::String("cameraMoveForward")))

@@ -19,17 +19,24 @@ float LAG::Utility::Timer::GetSeconds()
 	return m_DeltaTime.count();
 }
 
-float LAG::Utility::Timer::GetMs()
+float LAG::Utility::Timer::GetMilliseconds()
 {
 	m_DeltaTime = TimerClock::now() - m_StartTime;
 	return m_DeltaTime.count() * 1000.f;
 }
 
-float LAG::Utility::Timer::Mark()
+float LAG::Utility::Timer::MarkSeconds()
 {
-	float ms = GetMs();
+	float mark = GetSeconds();
 	ResetTimer();
-	return ms;
+	return mark;
+}
+
+float LAG::Utility::Timer::MarkMilliseconds()
+{
+	float mark = GetMilliseconds();
+	ResetTimer();
+	return mark;
 }
 
 void LAG::Utility::Timer::SetTimeScale(float timeScale)
