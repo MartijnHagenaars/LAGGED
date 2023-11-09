@@ -31,12 +31,14 @@ namespace LAG::Utility
 	private:
 		size_t Hash(const std::string& str, int i = 0)
 		{
-			size_t charValue = static_cast<size_t>(str[i]);
+			std::hash<std::string> hasher;
+			return hasher(str);
 
-			if (str[i] != '\0')
-				return (Hash(str.data(), i + 1) * 32) + charValue;
-			else
-				return 26;
+			//size_t charValue = static_cast<size_t>(str[i]);
+			//if (str[i] != '\0')
+			//	return (Hash(str.data(), i + 1) * 32) + charValue;
+			//else
+			//	return 26;
 		}
 
 		std::string m_String;
