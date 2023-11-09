@@ -30,13 +30,13 @@ namespace LAG::CameraSystem
 		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
 		glm::vec3 preCameraPosition = transform->position;
 		if (Input::IsActionPressed(Utility::String("cameraMoveForward")))
-			transform->position.z += cameraMovementSpeed;
+			transform->position += camera->forwardVector * cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveBackward")))
-			transform->position.z -= cameraMovementSpeed;
+			transform->position -= camera->forwardVector * cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveLeft")))
-			transform->position.x += cameraMovementSpeed;
+			transform->position += camera->rightVector * cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveRight")))
-			transform->position.x -= cameraMovementSpeed;
+			transform->position -= camera->rightVector * cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveUp")))
 			transform->position.y -= cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveDown")))
@@ -75,6 +75,11 @@ namespace LAG::CameraSystem
 		camera->viewMat = glm::rotate(camera->viewMat, transform->rotation.z, glm::vec3(0.f, 0.f, 1.f));
 		camera->viewMat = glm::translate(camera->viewMat, transform->position);
 
+		//Thanks to this post for helping fix forward- and right vector calculations
+		//  https://stackoverflow.com/questions/50081475/opengl-local-up-and-right-from-matrix-4x4
+		camera->forwardVector = glm::vec3(camera->viewMat[0][2], camera->viewMat[1][2], camera->viewMat[2][2]);
+		camera->rightVector = glm::vec3(camera->viewMat[0][0], camera->viewMat[1][0], camera->viewMat[2][0]);
+
 		camera->hasCameraMoved = false;
 		return camera->viewMat;
 	}
@@ -89,5 +94,10 @@ namespace LAG::CameraSystem
 		camera->projMat = glm::perspective(glm::radians(camera->fov), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;
+	}
+
+	glm::vec3 GetForwardDirection(uint32_t entityID)
+	{
+		return glm::vec3();
 	}
 }

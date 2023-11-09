@@ -20,6 +20,9 @@ namespace LAG
 		bool hasCameraMoved = true;
 		bool hasCameraDimensionChanged = true;
 
+		glm::vec3 forwardVector = glm::vec3(0.f);
+		glm::vec3 rightVector = glm::vec3(0.f);
+
 		glm::mat4 viewMat = glm::mat4(1.f);
 		glm::mat4 projMat = glm::mat4(1.f);
 		CameraPerspectiveType perspectiveType = CameraPerspectiveType::PERSPECTIVE;
