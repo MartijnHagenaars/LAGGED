@@ -32,28 +32,28 @@ namespace LAG::CameraSystem
 		if (Input::IsActionPressed(Utility::String("cameraMoveForward")))
 			transform->position.z += cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveBackward")))
-			transform->position.z += -cameraMovementSpeed;
+			transform->position.z -= cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveLeft")))
 			transform->position.x += cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveRight")))
-			transform->position.x += -cameraMovementSpeed;
+			transform->position.x -= cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveUp")))
-			transform->position.y += cameraMovementSpeed;
+			transform->position.y -= cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveDown")))
-			transform->position.y += -cameraMovementSpeed;
+			transform->position.y += cameraMovementSpeed;
 
 		if (preCameraPosition != transform->position)
 			camera->hasCameraMoved = true;
 
 		glm::vec3 preCameraRotation = transform->rotation;
 		if (Input::IsActionPressed(Utility::String("cameraLookUp")))
-			transform->rotation.x += cameraRotationSpeed;
+			transform->rotation.x -= cameraRotationSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraLookDown")))
-			transform->rotation.x += -cameraRotationSpeed;
+			transform->rotation.x += cameraRotationSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraLookLeft")))
-			transform->rotation.y += cameraRotationSpeed;
+			transform->rotation.y -= cameraRotationSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraLookRight")))
-			transform->rotation.y += -cameraRotationSpeed;
+			transform->rotation.y += cameraRotationSpeed;
 
 		if (preCameraRotation != transform->rotation)
 			camera->hasCameraMoved = true;
