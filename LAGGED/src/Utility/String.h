@@ -8,10 +8,10 @@ namespace LAG::Utility
 	{
 	public: 
 		String() = delete;
-		explicit constexpr String(const char* s) :
-			m_String(s), m_HashValue(0)
+		explicit String(const std::string& str) :
+			m_HashValue(0),m_String(str)
 		{
-			m_HashValue = Hash(s);
+			m_HashValue = Hash(str);
 		}
 
 		String(const String& other) : 
@@ -29,20 +29,17 @@ namespace LAG::Utility
 		}
 
 	private:
-		constexpr size_t Hash(const char* s)
+		size_t Hash(const std::string& str, int i = 0)
 		{
-			size_t stringLength = std::char_traits<char>::length(s);
-			size_t sum = 0; 
-			for (int i = 0; i < stringLength; i++) {
-				sum += (s[i] * (int)pow(PRIME_VALUE, i)) % ARR_SIZE;
-			}
+			size_t charValue = static_cast<size_t>(str[i]);
 
-			return sum;
+			if (str[i] != '\0')
+				return (Hash(str.data(), i + 1) * 32) + charValue;
+			else
+				return 26;
 		}
 
-		const char* m_String;
+		std::string m_String;
 		size_t m_HashValue;
-		const int PRIME_VALUE = 31;
-		const int ARR_SIZE = 3001;
 	};
 }
