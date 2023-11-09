@@ -7,5 +7,4 @@ namespace LAG::CameraSystem
 
 	glm::mat4 CalculateViewMat(uint32_t entityID);
 	glm::mat4 CalculateProjMat(uint32_t entityID);
-	glm::vec3 GetForwardDirection(uint32_t entityID);
 }

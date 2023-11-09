@@ -95,9 +95,4 @@ namespace LAG::CameraSystem
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;
 	}
-
-	glm::vec3 GetForwardDirection(uint32_t entityID)
-	{
-		return glm::vec3();
-	}
 }
