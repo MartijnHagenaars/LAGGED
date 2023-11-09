@@ -137,7 +137,7 @@ namespace LAG::Renderer
 				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *renderData->shader, lights);
 				meshTransformComp.rotation.x = (float)glfwGetTime();
-				meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
+				//meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
 			});
 
 		EndFrame();

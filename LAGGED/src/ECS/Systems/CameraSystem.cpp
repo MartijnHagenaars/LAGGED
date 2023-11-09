@@ -70,10 +70,10 @@ namespace LAG::CameraSystem
 		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
 
 		camera->viewMat = glm::mat4(1.f);
-		camera->viewMat = glm::translate(camera->viewMat, transform->position);
 		camera->viewMat = glm::rotate(camera->viewMat, transform->rotation.x, glm::vec3(1.f, 0.f, 0.f));
 		camera->viewMat = glm::rotate(camera->viewMat, transform->rotation.y, glm::vec3(0.f, 1.f, 0.f));
 		camera->viewMat = glm::rotate(camera->viewMat, transform->rotation.z, glm::vec3(0.f, 0.f, 1.f));
+		camera->viewMat = glm::translate(camera->viewMat, transform->position);
 
 		camera->hasCameraMoved = false;
 		return camera->viewMat;

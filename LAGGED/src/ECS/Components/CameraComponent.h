@@ -14,8 +14,8 @@ namespace LAG
 		bool isActive = true;
 
 		float fov = 90.f;
-		float movementSpeed = 1.f;
-		float rotationSpeed = 1.f;
+		float movementSpeed = 5.f;
+		float rotationSpeed = 5.f;
 
 		bool hasCameraMoved = true;
 		bool hasCameraDimensionChanged = true;
