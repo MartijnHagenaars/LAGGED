@@ -24,35 +24,36 @@ namespace LAG::CameraSystem
 		if (!camera->isActive)
 			return;
 
-		//float cameraRotationSpeed = 1.f * camera->movementSpeed * GetEngine().
+		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
+		float cameraRotationSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
 
 		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
 		glm::vec3 preCameraPosition = transform->position;
 		if (Input::IsActionPressed(Utility::String("cameraMoveForward")))
-			transform->position.z += 1.f * camera->movementSpeed;
+			transform->position.z += cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveBackward")))
-			transform->position.z += -1.f * camera->movementSpeed;
+			transform->position.z += -cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveLeft")))
-			transform->position.x += 1.f * camera->movementSpeed;
+			transform->position.x += cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveRight")))
-			transform->position.x += -1.f * camera->movementSpeed;
+			transform->position.x += -cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveUp")))
-			transform->position.y += 1.f * camera->movementSpeed;
+			transform->position.y += cameraMovementSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraMoveDown")))
-			transform->position.y += -1.f * camera->movementSpeed;
+			transform->position.y += -cameraMovementSpeed;
 
 		if (preCameraPosition != transform->position)
 			camera->hasCameraMoved = true;
 
 		glm::vec3 preCameraRotation = transform->rotation;
 		if (Input::IsActionPressed(Utility::String("cameraLookUp")))
-			transform->rotation.x += 1.f * camera->movementSpeed;
+			transform->rotation.x += cameraRotationSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraLookDown")))
-			transform->rotation.x += -1.f * camera->movementSpeed;
+			transform->rotation.x += -cameraRotationSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraLookLeft")))
-			transform->rotation.y += 1.f * camera->movementSpeed;
+			transform->rotation.y += cameraRotationSpeed;
 		if (Input::IsActionPressed(Utility::String("cameraLookRight")))
-			transform->rotation.y += -1.f * camera->movementSpeed;
+			transform->rotation.y += -cameraRotationSpeed;
 
 		if (preCameraRotation != transform->rotation)
 			camera->hasCameraMoved = true;
