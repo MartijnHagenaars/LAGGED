@@ -12,6 +12,8 @@
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/MeshComponent.h"
+#include "ECS/Components/CameraComponent.h"
+#include "ECS/Components/LightComponent.h"
 
 ENTRY_APP(Game)
 

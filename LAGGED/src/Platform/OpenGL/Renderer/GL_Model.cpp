@@ -85,8 +85,11 @@ namespace LAG
 
 	bool Model::Unload()
 	{
-		//TODO: Currently doesn't do anything
-		return false;
+		glDeleteBuffers(1, &m_VBO);
+		glDeleteBuffers(1, &m_EBO);
+		glDeleteBuffers(1, &m_VAO);
+
+		return true;
 	}
 
 	std::vector<MeshData> LoadVertices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
