@@ -13,6 +13,7 @@
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/MeshComponent.h"
 #include "ECS/Components/LightComponent.h"
+#include "ECS/Components/CameraComponent.h"
 
 #include "ECS/Systems/CameraSystem.h"
 

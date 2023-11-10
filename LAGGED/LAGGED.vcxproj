@@ -207,6 +207,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h" />
+    <ClInclude Include="src\Core\Resources\Plane.h" />
+    <ClInclude Include="src\Editor\Grid.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
     <ClInclude Include="imgui\ImGui\imgui.h" />
@@ -336,6 +339,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp" />
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />
     <ClCompile Include="imgui\ImGui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">NotUsing</PrecompiledHeader>

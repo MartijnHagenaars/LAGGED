@@ -8,6 +8,10 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Texture.h"
 
+#include "ECS/Components/BasicComponents.h"
+#include "ECS/Components/LightComponent.h"
+#include "ECS/Components/CameraComponent.h"
+
 #include "ECS/Systems/CameraSystem.h"
 
 #include "GL/glew.h"

@@ -1,8 +1,6 @@
 #pragma once
 #include "Core/Resources/Resource.h"
-#include "ECS/Components/BasicComponents.h"
-#include "ECS/Components/LightComponent.h"
-#include "ECS/Components/CameraComponent.h"
+#include "glm/vec3.hpp"
 
 namespace tinygltf
 {
@@ -19,6 +17,8 @@ namespace LAG
 	};
 
 	class Shader;
+	struct LightComponent;
+	struct TransformComponent;
 	class ModelBase : public Resource
 	{
 	public:
