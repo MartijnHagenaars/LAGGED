@@ -48,6 +48,7 @@ namespace LAG::Renderer
 		renderData = new RendererData();
 
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader"));
+		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader"));
 
 		glEnable(GL_DEPTH_TEST);
 

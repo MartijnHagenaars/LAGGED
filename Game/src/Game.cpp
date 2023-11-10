@@ -29,8 +29,6 @@ Game::~Game()
 
 void Game::Initialize()
 {
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::Utility::String("UpButton"));
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::Utility::String("DownButton"));
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::Utility::String("LMB"));
 
 	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
@@ -81,15 +79,7 @@ void Game::Shutdown()
 
 void Game::Update()
 {
-	if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("UpButton")))
-	{
-		LAG::Utility::Logger::Info("W is being pressed, but only detected once!");
-	}
-	else if (LAG::Input::IsActionPressed(LAG::Utility::String("DownButton")))
-	{
-		LAG::Utility::Logger::Info("S is being pressed!");
-	}
-	else if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("LMB")))
+	if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("LMB")))
 	{
 		float x, y;
 		LAG::Input::GetMousePosition(x, y);
