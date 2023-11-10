@@ -129,12 +129,6 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res\Shaders\OpenGL\GL_DefaultObjectShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="res\Shaders\OpenGL\GL_ShaderBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -217,6 +211,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Resources\Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -330,5 +327,11 @@
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\PlaneShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\PlaneShader.pixel.glsl" />
   </ItemGroup>
 </Project>

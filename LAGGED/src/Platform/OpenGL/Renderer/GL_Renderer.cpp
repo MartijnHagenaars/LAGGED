@@ -7,7 +7,6 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h"
-#include "Shaders/OpenGL/GL_DefaultObjectShader.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
@@ -30,7 +29,6 @@ namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		Shader* shader = nullptr;
 		bool showWireframe = false;
 		bool useLighting = true;
 
@@ -49,7 +47,7 @@ namespace LAG::Renderer
 		}
 		renderData = new RendererData();
 
-		renderData->shader = new Shader(ShaderData::object);
+		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader"));
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -136,7 +134,7 @@ namespace LAG::Renderer
 					return;
 
 				CameraSystem::Update(selectedCameraID);
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *renderData->shader, lights);
+				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader")), lights); //TODO!
 				meshTransformComp.rotation.x = (float)glfwGetTime();
 				//meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
 			});

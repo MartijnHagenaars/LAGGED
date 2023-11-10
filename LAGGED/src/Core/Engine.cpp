@@ -86,15 +86,15 @@ namespace LAG
 		Window* newWindow = m_WindowManager->AddWindow(800, 600, "Main window!", false);
 		newWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
+		m_ResourceManager = new ResourceManager();
+		m_Scene = new Scene();
+
 		//Setup renderer
 		if (!Renderer::Initialize())
 		{
 			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
 			return false;
 		}
-
-		m_ResourceManager = new ResourceManager();
-		m_Scene = new Scene();
 
 		//Add some input actions that'll be used by the engine and the editor. 
 		Input::AddInputAction(Input::InputType::LAG_W, Utility::String("cameraMoveForward"));

@@ -41,9 +41,9 @@ void Game::Initialize()
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity();
 	ent1.AddComponent<LAG::NameComponent>("Helmet");
 	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -5.f);
-	ent1.GetComponent<LAG::TransformComponent>()->scale = glm::vec3(75.f);
-	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/BoomBox/BoomBox.gltf");
-	//ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
+	//ent1.GetComponent<LAG::TransformComponent>()->scale = glm::vec3(75.f);
+	//ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/BoomBox/BoomBox.gltf");
+	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity();
 	ent2.AddComponent<LAG::NameComponent>("Light1");
