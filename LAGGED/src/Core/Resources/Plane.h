@@ -14,7 +14,7 @@ namespace LAG
 		explicit PlaneBase(const Utility::String& path) : Resource(path) {};
 		virtual ~PlaneBase() {};
 
-		virtual void Render(TransformComponent& transform, CameraComponent& camera, Shader& shader) = 0;
+		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader) = 0;
 
 	private:
 		virtual bool Load() = 0;

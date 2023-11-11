@@ -228,7 +228,9 @@ namespace LAG
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
-		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(0.5f, 0.5f, 0.f)); //Shit rotation calculation. FIX!!!
+		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(1.f, 0.f, 0.f));
+		modelMat = glm::rotate(modelMat, transform.rotation.y, glm::vec3(0.f, 1.f, 0.f));
+		modelMat = glm::rotate(modelMat, transform.rotation.z, glm::vec3(0.f, 0.f, 1.f));
 		modelMat = glm::scale(modelMat, transform.scale);
 
 		shader.Bind();

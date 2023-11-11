@@ -1,11 +1,17 @@
 #include "Precomp.h"
 #include "GL_Plane.h"
 
+#include "Core/Resources/Shader.h"
+
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
 
+#include "ECS/Systems/CameraSystem.h"
+
 #include "GL/glew.h"
 #include "Exceptions/GL_GraphicsExceptionMacros.h"
+#include <glm/ext/matrix_transform.hpp>
+
 
 namespace LAG
 {
@@ -18,10 +24,24 @@ namespace LAG
 	{
 	}
 
-	void Plane::Render(TransformComponent& transform, CameraComponent& camera, Shader& shader)
+	void Plane::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader)
 	{
 		glBindVertexArray(m_VAO);
 
+		glm::mat4 modelMat = glm::mat4(1.f);
+		modelMat = glm::translate(modelMat, transform.position);
+		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(1.f, 0.f, 0.f));
+		modelMat = glm::rotate(modelMat, transform.rotation.y, glm::vec3(0.f, 1.f, 0.f));
+		modelMat = glm::rotate(modelMat, transform.rotation.z, glm::vec3(0.f, 0.f, 1.f));
+		modelMat = glm::scale(modelMat, transform.scale);
+
+		shader.Bind();
+		shader.SetMat4("a_ModelMat", modelMat);
+		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
+		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
+
+		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
 	}
 
 	bool Plane::Load()

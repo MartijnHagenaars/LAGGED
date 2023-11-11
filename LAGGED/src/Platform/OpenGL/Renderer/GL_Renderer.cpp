@@ -135,9 +135,7 @@ namespace LAG::Renderer
 					return;
 
 				CameraSystem::Update(selectedCameraID);
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader")), lights); //TODO!
-				meshTransformComp.rotation.x = (float)glfwGetTime();
-				//meshTransformComp.position.x = sinf((float)glfwGetTime()) * 2.f;
+				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader")), lights);
 			});
 
 		EndFrame();

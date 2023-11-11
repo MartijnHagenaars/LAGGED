@@ -10,7 +10,7 @@ namespace LAG
 		explicit Plane(const Utility::String& path);
 		~Plane() override;
 
-		void Render(TransformComponent& transform, CameraComponent& camera, Shader& shader) override;
+		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader) override;
 
 	private:
 		virtual bool Load() override;

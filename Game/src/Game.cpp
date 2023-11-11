@@ -17,6 +17,8 @@
 
 ENTRY_APP(Game)
 
+static float sinCounter = 0.f;
+
 Game::Game()
 {
 	std::cout << "Construct..." << std::endl;
@@ -79,6 +81,12 @@ void Game::Shutdown()
 
 void Game::Update()
 {
+	LAG::GetScene()->Loop<LAG::MeshComponent, LAG::TransformComponent>([](uint32_t entityID, LAG::MeshComponent& mesh, LAG::TransformComponent& transform)
+		{
+			transform.rotation.x = sinCounter;
+		});
+	sinCounter += 0.01f;
+
 	if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("LMB")))
 	{
 		float x, y;
