@@ -25,10 +25,14 @@
 
 #include "Utility/Timer.h"
 
+#include "Core/Resources/Plane.h"
+
 namespace LAG::Renderer
 {
 	struct RendererData
 	{
+		Plane* plane = nullptr;
+
 		bool showWireframe = false;
 		bool useLighting = true;
 
@@ -51,6 +55,9 @@ namespace LAG::Renderer
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader"));
 
 		glEnable(GL_DEPTH_TEST);
+
+		renderData->plane = new Plane();
+		renderData->plane->Reload();
 
 		return true;
 	}
@@ -136,6 +143,9 @@ namespace LAG::Renderer
 
 				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader")), lights);
+
+				TransformComponent planeTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
+				renderData->plane->Render(planeTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader")));
 			});
 
 		EndFrame();

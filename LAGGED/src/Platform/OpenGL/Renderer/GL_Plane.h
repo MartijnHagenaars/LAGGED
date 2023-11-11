@@ -6,7 +6,7 @@ namespace LAG
 	class Plane : public PlaneBase
 	{
 	public:
-		Plane() = delete;
+		Plane() : PlaneBase(Utility::String("")) {}
 		explicit Plane(const Utility::String& path);
 		~Plane() override;
 

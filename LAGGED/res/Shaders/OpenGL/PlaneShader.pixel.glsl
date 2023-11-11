@@ -1,10 +1,9 @@
 #version 330 core
 
-in vec3 fragPosition;
-
 out vec4 colorOut;
 
 void main()
 {
-	colorOut = vec4(1.f, 0.f, 0.f, 1.f);
+	vec3 baseColor = vec3(1.0, 0.0, 0.0);
+	colorOut = vec4(baseColor, 1.0);
 } 

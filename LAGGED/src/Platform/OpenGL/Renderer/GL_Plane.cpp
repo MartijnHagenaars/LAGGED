@@ -26,7 +26,6 @@ namespace LAG
 
 	void Plane::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader)
 	{
-		glBindVertexArray(m_VAO);
 
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
@@ -58,29 +57,27 @@ namespace LAG
 			0.5f, -0.5f,  0.0f,		0.0f,  0.0f,  1.0f,		1.0f, 0.0f   //Bottom-right
 		};
 
-		unsigned char indices[] = 
+		unsigned short indices[] =
 		{ 
 			0, 1, 2,
 			0, 2, 3 
 		};
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices[0], GL_STATIC_DRAW));
-
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_READ));
+		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices[0], GL_STATIC_DRAW));
 
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, false, 8 * sizeof(float), (void*)0));
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, false, 8 * sizeof(float), (void*)(3 * sizeof(float))));
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(2, 2, GL_FLOAT, false, 8 * sizeof(float), (void*)(6 * sizeof(float))));
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(2));
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
-		//LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, 0));
-		//LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
 		return true;
 	}
