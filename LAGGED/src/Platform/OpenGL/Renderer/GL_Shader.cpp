@@ -26,7 +26,7 @@ LAG::Shader::Shader(std::string shaderPath)
 		CleanUpCompiledShaders();
 	}
 	else 
-		Utility::Logger::Error("Shader(s) with name {0} could not be found.", shaderPath);
+		Logger::Error("Shader(s) with name {0} could not be found.", shaderPath);
 }
 
 LAG::Shader::Shader(const ShaderData::GLShaderBase& shader)
@@ -45,7 +45,7 @@ std::string LAG::Shader::ReadFile(const std::string& filePath)
 
 	if (vertexStream.is_open())
 		ss << vertexStream.rdbuf();
-	else Utility::Logger::Error("Failed to open ifstream for file {0}.", filePath);
+	else Logger::Error("Failed to open ifstream for file {0}.", filePath);
 	return ss.str();
 }
 
@@ -63,9 +63,9 @@ unsigned int LAG::Shader::CompileShader(const std::string& shaderSource, unsigne
 	{
 		char shaderInfoLog[512];
 		LAG_GRAPHICS_EXCEPTION(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
-		Utility::Logger::Error("Failed to compile shader: {0}", shaderInfoLog);
+		Logger::Error("Failed to compile shader: {0}", shaderInfoLog);
 #ifdef DEBUG
-		Utility::Logger::Info("Dumping shader source: \n{0}", shaderSource);
+		Logger::Info("Dumping shader source: \n{0}", shaderSource);
 #endif
 		return 0; 
 	}
@@ -86,7 +86,7 @@ unsigned int LAG::Shader::MakeProgram()
 	{
 		char programInfoLog[512];
 		LAG_GRAPHICS_EXCEPTION(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
-		Utility::Logger::Error("Failed to compile shader program: {0}", programInfoLog);
+		Logger::Error("Failed to compile shader program: {0}", programInfoLog);
 		return 0;
 	}
 

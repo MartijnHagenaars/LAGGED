@@ -32,13 +32,13 @@ namespace LAG
 	{
 		if (m_Initialized)
 		{
-			Utility::Logger::Error("Window already initialized.");
+			Logger::Error("Window already initialized.");
 			return;
 		}
 
 		if (glfwInit() != GLFW_TRUE)
 		{
-			Utility::Logger::Critical("GLFW failed to initialize.");
+			Logger::Critical("GLFW failed to initialize.");
 			return;
 		}
 
@@ -59,7 +59,7 @@ namespace LAG
 		m_Window = glfwCreateWindow(winWidth, winHeight, "LAGGED Engine", NULL, sharedWindow);
 		if (m_Window == nullptr)
 		{
-			Utility::Logger::Critical("Failed to create GLFW window");
+			Logger::Critical("Failed to create GLFW window");
 			glfwTerminate();
 			return;
 		}
@@ -69,7 +69,7 @@ namespace LAG
 	
 		if (glewInit() != GLEW_OK)
 		{
-			Utility::Logger::Critical("Failed to initialize GLEW.");
+			Logger::Critical("Failed to initialize GLEW.");
 			return;
 		}
 

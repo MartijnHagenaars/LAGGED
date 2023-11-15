@@ -25,7 +25,7 @@ namespace LAG
 		//Check if the texture hasn't been loaded yet. 
 		if (m_ID != 0)
 		{
-			Utility::Logger::Warning("Texture \"{0}\" has already been loaded.", filePath);
+			Logger::Warning("Texture \"{0}\" has already been loaded.", filePath);
 			return false;
 		}
 
@@ -37,7 +37,7 @@ namespace LAG
 		stbi_uc* texData = stbi_load(filePath.c_str(), &m_TexWidth, &m_TexHeight, &m_TexChannels, 0);
 		if (texData == nullptr)
 		{
-			Utility::Logger::Error("Failed to load texture data for texture with the following path: {0}", filePath);
+			Logger::Error("Failed to load texture data for texture with the following path: {0}", filePath);
 			glDeleteTextures(1, &m_ID);
 			return false;
 		}

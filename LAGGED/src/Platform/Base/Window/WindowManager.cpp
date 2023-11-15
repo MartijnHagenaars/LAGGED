@@ -28,7 +28,7 @@ namespace LAG
     {
         if (winWidth <= 1 && winHeight <= 1)
         {
-            Utility::Logger::Error("Failed to add window: Invalid window size.");
+            Logger::Error("Failed to add window: Invalid window size.");
             return nullptr;
         }
 

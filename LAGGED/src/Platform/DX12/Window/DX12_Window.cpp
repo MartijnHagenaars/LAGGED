@@ -5,7 +5,6 @@
 #include "Exceptions/DX12_WindowExceptionMacros.h"
 
 #include "Events/WindowEvents.h"
-#include "Utility/Logger.h"
 
 #include "Platform/Base/Renderer/RendererBase.h"
 
@@ -33,7 +32,7 @@ namespace LAG::Window
 		{
 			winData = new WIN32Data();
 		}
-		else LAG::Utility::Logger::Error("WinData already exists.");
+		else LAG::Logger::Error("WinData already exists.");
 
 		try {
 			//First, ensure that the window class has been set up.
@@ -253,7 +252,7 @@ namespace LAG::Window
 	void SetWindowName(const char* windowName)
 	{
 		winData->windowName = windowName;
-		LAG::Utility::Logger::Error("SetWindowName NOT IMPLEMENTED YET!!!");
+		LAG::Logger::Error("SetWindowName NOT IMPLEMENTED YET!!!");
 	}
 
 	unsigned int GetWidth()

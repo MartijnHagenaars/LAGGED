@@ -2,9 +2,6 @@
 #include "Engine.h"
 #include "Platform/Base/ExceptionBase.h"
 
-#include "Utility/Timer.h"
-#include "Utility/Logger.h"
-
 #include "Platform/Base/Window/WindowBase.h"
 #include "Platform/Base/Window/WindowManager.h"
 #include "Platform/Base/Renderer/RendererBase.h"
@@ -28,7 +25,7 @@ namespace LAG
 		{
 			if (Initialize(applicationPtr) != true)
 			{
-				Utility::Logger::Critical("Failed to initialize.");
+				Logger::Critical("Failed to initialize.");
 				return -1;
 			}
 
@@ -58,19 +55,19 @@ namespace LAG
 		}
 		catch (ExceptionBase& e)
 		{
-			Utility::Logger::Critical(e.GetExceptionMessage().c_str());
+			Logger::Critical(e.GetExceptionMessage().c_str());
 			system("pause");
 			return -3; 
 		}
 		catch (std::exception& e)
 		{
-			Utility::Logger::Critical("Standard exception thrown: {0}", e.what());
+			Logger::Critical("Standard exception thrown: {0}", e.what());
 			system("pause");
 			return -2; 
 		}
 		catch (...)
 		{
-			Utility::Logger::Critical("Unknown exception thrown: no information available.");
+			Logger::Critical("Unknown exception thrown: no information available.");
 			system("pause");
 			return -1;
 		}
@@ -79,7 +76,7 @@ namespace LAG
 
 	bool Engine::Initialize(IApplication* applicationPtr)
 	{
-		Utility::Logger::Initialize();
+		Logger::Initialize();
 
 		//Create the window manager and a primary window
 		m_WindowManager = new WindowManager();
@@ -89,7 +86,7 @@ namespace LAG
 		//Setup renderer
 		if (!Renderer::Initialize())
 		{
-			LAG::Utility::Logger::Critical("Failed to initialize renderer.");
+			LAG::Logger::Critical("Failed to initialize renderer.");
 			return false;
 		}
 
@@ -138,7 +135,7 @@ namespace LAG
 		m_WindowManager = nullptr;
 
 
-		Utility::Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
+		Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
 
 		return true;
 	}

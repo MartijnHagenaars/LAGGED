@@ -43,7 +43,7 @@ namespace LAG
 			m_Model = new tinygltf::Model();
 		else
 		{
-			Utility::Logger::Error("Model \"{0}\" already exists.", GetPath().GetString());
+			Logger::Error("Model \"{0}\" already exists.", GetPath().GetString());
 			return false;
 		}
 
@@ -68,9 +68,9 @@ namespace LAG
 
 		//Check error messages
 		if (!errorMsg.empty() || !loadSuccess)
-			Utility::Logger::Error("Error while loading Model: {0}", errorMsg.empty() ? "No information available" : errorMsg);
+			Logger::Error("Error while loading Model: {0}", errorMsg.empty() ? "No information available" : errorMsg);
 		if (!warningMsg.empty())
-			Utility::Logger::Warning("Warning while loading Model: {0}", warningMsg);
+			Logger::Warning("Warning while loading Model: {0}", warningMsg);
 
 		std::string modelDirPath = std::filesystem::path(filePath).parent_path().string();
 		LoadModel(*m_Model, modelDirPath);
@@ -127,7 +127,7 @@ namespace LAG
 
 			if (accessors.componentType != TINYGLTF_COMPONENT_TYPE_FLOAT)
 			{
-				Utility::Logger::Error("Incorrect component type detected while loading mesh.");
+				Logger::Error("Incorrect component type detected while loading mesh.");
 			}
 
 			const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
@@ -175,7 +175,7 @@ namespace LAG
 		Utility::String pathString = Utility::String(texturePath.c_str());
 
 		GetResourceManager()->AddResource<Texture>(pathString);
-		Utility::Logger::Info("Loading texture at location {0}", texturePath);
+		Logger::Info("Loading texture at location {0}", texturePath);
 
 		textures.emplace_back(pathString.GetValue());
 		GetResourceManager()->GetResource<Texture>(pathString)->Unbind(0);

@@ -81,16 +81,16 @@ void Game::Update()
 {
 	if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("UpButton")))
 	{
-		LAG::Utility::Logger::Info("W is being pressed, but only detected once!");
+		LAG::Logger::Info("W is being pressed, but only detected once!");
 	}
 	else if (LAG::Input::IsActionPressed(LAG::Utility::String("DownButton")))
 	{
-		LAG::Utility::Logger::Info("S is being pressed!");
+		LAG::Logger::Info("S is being pressed!");
 	}
 	else if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("LMB")))
 	{
 		float x, y;
 		LAG::Input::GetMousePosition(x, y);
-		LAG::Utility::Logger::Info("Clickity at {0}, {1}!\n", x, y);
+		LAG::Logger::Info("Clickity at {0}, {1}!\n", x, y);
 	}
 }

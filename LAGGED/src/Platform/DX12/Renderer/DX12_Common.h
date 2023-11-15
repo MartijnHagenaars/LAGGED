@@ -15,15 +15,13 @@ using Microsoft::WRL::ComPtr;
 
 //Additional includes
 #include "DX12_Utility.h"
-#include "Utility/Logger.h"
-
 
 //TODO: Set the input libs in the project properties (instead of doing it here) 
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d12.lib")
 
 #ifdef DEBUG
-#define LAG_SET_D3D12_NAME(object, name) object->SetName(ConvertStringToLPCWSTR(name)); LAG::Utility::Logger::Info("Assigned name to D3D12 object: {0}", name);
+#define LAG_SET_D3D12_NAME(object, name) object->SetName(ConvertStringToLPCWSTR(name)); LAG::Logger::Info("Assigned name to D3D12 object: {0}", name);
 #else
 #define LAG_SET_D3D12_NAME(object, name) 
 #endif

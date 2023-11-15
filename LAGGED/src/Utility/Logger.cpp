@@ -1,10 +1,9 @@
 #include "Precomp.h"
-#include "Logger.h"
 
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 
-namespace LAG::Utility::Logger
+namespace LAG::Logger
 {
     struct LoggerData
     {
@@ -14,7 +13,7 @@ namespace LAG::Utility::Logger
     } *loggerData = nullptr;
 }
 
-void LAG::Utility::Logger::Initialize()
+void LAG::Logger::Initialize()
 {
     //Set up the basics
     spdlog::set_pattern("[%H:%M:%S %z][%^%l%$] %v");
@@ -31,7 +30,7 @@ void LAG::Utility::Logger::Initialize()
     spdlog::flush_every(std::chrono::seconds(5));
 }
 
-void LAG::Utility::Logger::Shutdown()
+void LAG::Logger::Shutdown()
 {
     //TODO: Causes a crash. Look into this at some point
     //spdlog::shutdown();

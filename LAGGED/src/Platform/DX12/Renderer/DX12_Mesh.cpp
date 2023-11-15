@@ -6,7 +6,6 @@
 #include <iostream>
 #include <filesystem>
 
-#include "Utility/Logger.h"
 #include "Utility/Clamp.h"
        
 #pragma comment(lib, "D3DCompiler.lib")
@@ -420,7 +419,7 @@ namespace LAG::Renderer
 			device->CreateDepthStencilView(m_DepthBuffer.Get(), &dsvDesc, m_DSVHeap->GetCPUDescriptorHandleForHeapStart());
 
 		}
-		else Utility::Logger::Warning("Cannot resize depth buffer because content has not yet been loaded.");
+		else Logger::Warning("Cannot resize depth buffer because content has not yet been loaded.");
 
 	}
 }

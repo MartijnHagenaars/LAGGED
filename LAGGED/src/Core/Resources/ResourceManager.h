@@ -38,7 +38,7 @@ namespace LAG
 			T* res = dynamic_cast<T*>(m_Resources.find(assetID)->second.get());
 			if (!res)
 			{
-				Utility::Logger::Error("Could not find resource.");
+				Logger::Error("Could not find resource.");
 				return nullptr;
 			}
 			else return res;

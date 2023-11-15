@@ -1,7 +1,7 @@
 #pragma once
 #include "spdlog/spdlog.h"
 
-namespace LAG::Utility::Logger
+namespace LAG::Logger
 {
 	void Initialize();
 	void Shutdown();

@@ -23,8 +23,6 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 
-#include "Utility/Timer.h"
-
 namespace LAG::Renderer
 {
 	struct RendererData
@@ -43,7 +41,7 @@ namespace LAG::Renderer
 	{
 		if (renderData != nullptr)
 		{
-			Utility::Logger::Error("Renderer already initialized.");
+			Logger::Error("Renderer already initialized.");
 			return false;
 		}
 		renderData = new RendererData();
@@ -93,7 +91,7 @@ namespace LAG::Renderer
 			else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 
-		if (ImGui::Checkbox("Enable lighting", &renderData->useLighting));
+		ImGui::Checkbox("Enable lighting", &renderData->useLighting);
 
 		ImGui::End();
 	}
