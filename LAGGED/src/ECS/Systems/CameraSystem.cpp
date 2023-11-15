@@ -29,30 +29,30 @@ namespace LAG::CameraSystem
 
 		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
 		glm::vec3 preCameraPosition = transform->position;
-		if (Input::IsActionPressed(Utility::String("cameraMoveForward")))
+		if (Input::IsActionPressed(HashedString("cameraMoveForward")))
 			transform->position += camera->forwardVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraMoveBackward")))
+		if (Input::IsActionPressed(HashedString("cameraMoveBackward")))
 			transform->position -= camera->forwardVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraMoveLeft")))
+		if (Input::IsActionPressed(HashedString("cameraMoveLeft")))
 			transform->position += camera->rightVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraMoveRight")))
+		if (Input::IsActionPressed(HashedString("cameraMoveRight")))
 			transform->position -= camera->rightVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraMoveUp")))
+		if (Input::IsActionPressed(HashedString("cameraMoveUp")))
 			transform->position.y -= cameraMovementSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraMoveDown")))
+		if (Input::IsActionPressed(HashedString("cameraMoveDown")))
 			transform->position.y += cameraMovementSpeed;
 
 		if (preCameraPosition != transform->position)
 			camera->hasCameraMoved = true;
 
 		glm::vec3 preCameraRotation = transform->rotation;
-		if (Input::IsActionPressed(Utility::String("cameraLookUp")))
+		if (Input::IsActionPressed(HashedString("cameraLookUp")))
 			transform->rotation.x -= cameraRotationSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraLookDown")))
+		if (Input::IsActionPressed(HashedString("cameraLookDown")))
 			transform->rotation.x += cameraRotationSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraLookLeft")))
+		if (Input::IsActionPressed(HashedString("cameraLookLeft")))
 			transform->rotation.y -= cameraRotationSpeed;
-		if (Input::IsActionPressed(Utility::String("cameraLookRight")))
+		if (Input::IsActionPressed(HashedString("cameraLookRight")))
 			transform->rotation.y += cameraRotationSpeed;
 
 		if (preCameraRotation != transform->rotation)

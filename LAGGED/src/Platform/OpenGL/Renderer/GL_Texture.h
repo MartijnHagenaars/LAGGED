@@ -9,7 +9,7 @@ namespace LAG
 		friend class ResourceManager;
 	public:
 		Texture() = delete;
-		explicit Texture(const Utility::String& path);
+		explicit Texture(const HashedString& path);
 		~Texture() override;
 
 		void Bind(size_t textureUnit) override;

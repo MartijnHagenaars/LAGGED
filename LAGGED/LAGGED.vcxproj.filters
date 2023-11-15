@@ -108,7 +108,7 @@
     <ClInclude Include="src\Core\Input\Input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\String.h">
+    <ClInclude Include="src\Utility\HashedString.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h">

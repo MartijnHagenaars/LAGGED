@@ -1,5 +1,5 @@
 #pragma once
-#include "Utility/String.h"
+#include "Utility/HashedString.h"
 
 namespace LAG
 {
@@ -8,7 +8,7 @@ namespace LAG
 		friend class ResourceManager;
 	public: 
 		Resource() = delete;
-		explicit Resource(const Utility::String& path);
+		explicit Resource(const HashedString& path);
 		virtual ~Resource() {};
 
 		virtual bool Reload();
@@ -17,9 +17,9 @@ namespace LAG
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
 
-		const Utility::String& GetPath() const;
+		const HashedString& GetPath() const;
 
 	private:
-		const Utility::String& m_Path;
+		const HashedString& m_Path;
 	};
 }

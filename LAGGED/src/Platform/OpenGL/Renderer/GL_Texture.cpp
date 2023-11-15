@@ -9,7 +9,7 @@
 
 namespace LAG
 {
-	Texture::Texture(const Utility::String& path) :
+	Texture::Texture(const HashedString& path) :
 		TextureBase(path)
 	{
 	}

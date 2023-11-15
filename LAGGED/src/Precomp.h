@@ -13,5 +13,6 @@
 
 //Utilities
 #include "Utility/Logger.h"
+#include "Utility/HashedString.h"
 #include "Utility/Timer.h"
 #include "Utility/UniqueID.h"

@@ -1,12 +1,11 @@
 #include "Precomp.h"
 #include "Resource.h"
 
-#include "Utility/String.h"
 #include "ResourceManager.h"
 
 namespace LAG
 {
-	Resource::Resource(const Utility::String& path)
+	Resource::Resource(const HashedString& path)
 		: m_Path(path)
 	{};
 
@@ -15,7 +14,7 @@ namespace LAG
 		return (Unload() && Load());
 	}
 
-	const Utility::String& Resource::GetPath() const
+	const HashedString& Resource::GetPath() const
 	{
 		return m_Path;
 	}

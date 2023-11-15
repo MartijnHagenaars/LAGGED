@@ -8,7 +8,7 @@ namespace LAG
 	{
 	public:
 		TextureBase() = delete;
-		explicit TextureBase(const Utility::String& path) : Resource(path) {};
+		explicit TextureBase(const HashedString& path) : Resource(path) {};
 		virtual ~TextureBase() {};
 
 		virtual void Bind(size_t textureUnit) = 0;

@@ -11,7 +11,7 @@ namespace LAG::Input
 	std::unordered_map<size_t, InputActionData> inputActions;
 
 
-	bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName)
+	bool AddInputAction(InputType inputType, HashedString actionName, const char* debugDisplayName)
 	{
 		//Check if input action already exists
 		if (inputActions.find(actionName.GetValue()) != inputActions.end())
@@ -49,12 +49,12 @@ namespace LAG::Input
 		else return nullptr;
 	}
 
-	bool IsActionPressed(Utility::String actionName)
+	bool IsActionPressed(HashedString actionName)
 	{
 		return IsActionPressed(actionName, GetWindowManager()->GetFocussedWindow());
 	}
 
-	bool IsActionPressed(Utility::String actionName, LAG::WindowBase* window)
+	bool IsActionPressed(HashedString actionName, LAG::WindowBase* window)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
 		if (window != nullptr && IsInputActionValid(actionName.GetValue(), it))
@@ -62,12 +62,12 @@ namespace LAG::Input
 		else return false;
 	}
 
-	bool IsActionPressedOnce(Utility::String actionName)
+	bool IsActionPressedOnce(HashedString actionName)
 	{
 		return IsActionPressedOnce(actionName, GetWindowManager()->GetFocussedWindow());
 	}
 
-	bool IsActionPressedOnce(Utility::String actionName, LAG::WindowBase* window)
+	bool IsActionPressedOnce(HashedString actionName, LAG::WindowBase* window)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
 		if (window != nullptr && IsInputActionValid(actionName.GetValue(), it))

@@ -1,15 +1,15 @@
 #pragma once
-#include "Utility/String.h"
+#include "Utility/HashedString.h"
 
 namespace LAG
 {
 	struct MeshComponent
 	{
 		MeshComponent(std::string path) : 
-			meshPath(Utility::String(path.c_str()))
+			meshPath(HashedString(path.c_str()))
 		{
 		}
 
-		Utility::String meshPath;
+		HashedString meshPath;
 	};
 }

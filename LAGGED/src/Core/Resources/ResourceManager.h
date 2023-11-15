@@ -1,5 +1,5 @@
 #pragma once
-#include "Utility/String.h"
+#include "Utility/HashedString.h"
 
 #include <unordered_map>
 #include <memory>
@@ -14,7 +14,7 @@ namespace LAG
 		ResourceManager(const ResourceManager&) = delete;
 
 		template<typename T, typename... Args>
-		bool AddResource(const Utility::String& path, Args&&... args)
+		bool AddResource(const HashedString& path, Args&&... args)
 		{
 			//Check if template type is of type "Resource"
 			constexpr bool validResType = std::is_base_of<LAG::Resource, T>::value; 
@@ -45,7 +45,7 @@ namespace LAG
 		}
 
 		template<typename T>
-		T* GetResource(const Utility::String& path) const
+		T* GetResource(const HashedString& path) const
 		{
 			return GetResource<T>(path.GetValue());
 		}

@@ -27,13 +27,13 @@ Game::~Game()
 
 void Game::Initialize()
 {
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::Utility::String("UpButton"));
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::Utility::String("DownButton"));
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::Utility::String("LMB"));
+	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::HashedString("UpButton"));
+	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::HashedString("DownButton"));
+	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::HashedString("LMB"));
 
-	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
-	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/Avocado/Avocado.gltf"));
-	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::Utility::String("res/Assets/Models/BoomBox/BoomBox.gltf"));
+	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
+	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Avocado/Avocado.gltf"));
+	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/BoomBox/BoomBox.gltf"));
 
 	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity();
@@ -79,15 +79,15 @@ void Game::Shutdown()
 
 void Game::Update()
 {
-	if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("UpButton")))
+	if (LAG::Input::IsActionPressedOnce(LAG::HashedString("UpButton")))
 	{
 		LAG::Logger::Info("W is being pressed, but only detected once!");
 	}
-	else if (LAG::Input::IsActionPressed(LAG::Utility::String("DownButton")))
+	else if (LAG::Input::IsActionPressed(LAG::HashedString("DownButton")))
 	{
 		LAG::Logger::Info("S is being pressed!");
 	}
-	else if (LAG::Input::IsActionPressedOnce(LAG::Utility::String("LMB")))
+	else if (LAG::Input::IsActionPressedOnce(LAG::HashedString("LMB")))
 	{
 		float x, y;
 		LAG::Input::GetMousePosition(x, y);

@@ -27,7 +27,7 @@ namespace LAG
 		friend class ResourceManager;
 	public:
 		Model() = delete;
-		explicit Model(const Utility::String& path);
+		explicit Model(const HashedString& path);
 		~Model() override;
 
 		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;

@@ -27,7 +27,7 @@
 
 namespace LAG
 {
-	Model::Model(const Utility::String& path) :
+	Model::Model(const HashedString& path) :
 		ModelBase(path)
 	{
 	}
@@ -172,7 +172,7 @@ namespace LAG
 
 		std::string texturePath = modelPath.erase(modelPath.find_last_of('/'), modelPath.length() - 1 - 1) + "/" + textureName; //Get texture path for loading through resource manager
 
-		Utility::String pathString = Utility::String(texturePath.c_str());
+		HashedString pathString = HashedString(texturePath.c_str());
 
 		GetResourceManager()->AddResource<Texture>(pathString);
 		Logger::Info("Loading texture at location {0}", texturePath);

@@ -1,5 +1,5 @@
 #pragma once
-#include "Utility/String.h"
+#include "Utility/HashedString.h"
 
 namespace LAG
 {
@@ -107,19 +107,19 @@ namespace LAG::Input
 	
 	//Add a new input action.
 	//Returns true/false based on if the input action was added successfully or not. 
-	bool AddInputAction(InputType inputType, Utility::String actionName, const char* debugDisplayName = "InputAction");
+	bool AddInputAction(InputType inputType, HashedString actionName, const char* debugDisplayName = "InputAction");
 	
 	//Get an input action using it's ID.
 	const InputActionData* GetInputAction(size_t inputID);
 
 	//Returns true/false based on whether the action is pressed or not.
-	bool IsActionPressed(Utility::String actionName);
-	bool IsActionPressed(Utility::String actionName, LAG::WindowBase* window);
+	bool IsActionPressed(HashedString actionName);
+	bool IsActionPressed(HashedString actionName, LAG::WindowBase* window);
 
 	//Returns true/false based on whether the action is pressed once. 
 	//Will automatically turn false again when the button is held down for more than one frame.
-	bool IsActionPressedOnce(Utility::String actionName);
-	bool IsActionPressedOnce(Utility::String actionName, LAG::WindowBase* window);
+	bool IsActionPressedOnce(HashedString actionName);
+	bool IsActionPressedOnce(HashedString actionName, LAG::WindowBase* window);
 
 	//Contains two argument references that return the position of the cursor on the x- and y-axis.
 	void GetMousePosition(float& xPos, float& yPos);

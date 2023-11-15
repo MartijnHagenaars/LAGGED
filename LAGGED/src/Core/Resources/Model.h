@@ -23,7 +23,7 @@ namespace LAG
 	{
 	public:
 		ModelBase() = delete;
-		explicit ModelBase(const Utility::String& path) : Resource(path) {};
+		explicit ModelBase(const HashedString& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
 		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
