@@ -2,7 +2,7 @@
 #include <vector>
 #include "Core/Defines.h"
 
-namespace LAG::Utility
+namespace LAG
 {
 	template<typename T>
 	class FreeList

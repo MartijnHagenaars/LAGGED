@@ -29,7 +29,7 @@ namespace LAG
 				return -1;
 			}
 
-			LAG::Utility::Timer timer;
+			LAG::Timer timer;
 			float elapsedTime = 0.f;
 			int frames = 0;
 

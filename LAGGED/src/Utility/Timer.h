@@ -1,7 +1,7 @@
 #pragma once
 #include <chrono>
 
-namespace LAG::Utility
+namespace LAG
 {
 	using TimerClock = std::chrono::high_resolution_clock;
 	class Timer

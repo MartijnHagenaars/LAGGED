@@ -32,7 +32,7 @@ namespace LAG::Renderer
 		bool useLighting = true;
 
 		float renderTime = 0.f;
-		LAG::Utility::Timer renderTimer;
+		LAG::Timer renderTimer;
 	};
 	RendererData* renderData = nullptr;
 
