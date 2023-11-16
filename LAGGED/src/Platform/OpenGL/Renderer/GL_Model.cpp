@@ -202,7 +202,7 @@ namespace LAG
 		std::vector<MeshData> meshData = LoadVertices(modelData, primitive);
 		std::vector<unsigned short> indices = LoadIndices(modelData, primitive);
 		m_Textures = LoadTexture(modelData, primitive, GetPath().GetString());
-		m_TotalIndices = indices.size();
+		m_TotalIndices = static_cast<unsigned int>(indices.size());
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 		

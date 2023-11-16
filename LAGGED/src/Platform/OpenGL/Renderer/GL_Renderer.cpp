@@ -100,7 +100,7 @@ namespace LAG::Renderer
 			else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		}
 
-		if (ImGui::Checkbox("Enable lighting", &renderData->useLighting));
+		ImGui::Checkbox("Enable lighting", &renderData->useLighting);
 
 		ImGui::End();
 	}
