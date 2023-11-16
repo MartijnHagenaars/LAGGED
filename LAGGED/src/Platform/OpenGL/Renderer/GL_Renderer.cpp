@@ -33,6 +33,9 @@ namespace LAG::Renderer
 	{
 		Plane* plane = nullptr;
 
+		unsigned int m_FrameBuffer = 0;
+		unsigned int m_FrameTextureBuffer = 0;
+
 		bool showWireframe = false;
 		bool useLighting = true;
 
@@ -50,6 +53,33 @@ namespace LAG::Renderer
 			return false;
 		}
 		renderData = new RendererData();
+
+		//Create the frame buffer
+		glGenFramebuffers(1, &renderData->m_FrameBuffer);
+		glBindFramebuffer(GL_FRAMEBUFFER, renderData->m_FrameBuffer);
+
+		//Create the framebuffer texture
+		glGenTextures(1, &renderData->m_FrameTextureBuffer);
+		glBindTexture(GL_TEXTURE_2D, renderData->m_FrameTextureBuffer);
+		glTexImage2D(
+			GL_TEXTURE_2D, 0, GL_RGB, 
+			GetWindowManager()->GetPrimaryWindow()->GetWidth(), 
+			GetWindowManager()->GetPrimaryWindow()->GetHeight(), 
+			0, GL_RGB, GL_UNSIGNED_BYTE, NULL
+		);
+
+		glRenderbufferStorage(
+			GL_FRAMEBUFFER, GL_DEPTH24_STENCIL8, 
+			GetWindowManager()->GetPrimaryWindow()->GetWidth(), 
+			GetWindowManager()->GetPrimaryWindow()->GetHeight()
+		);
+
+		auto result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+		if (result == GL_FRAMEBUFFER_COMPLETE)
+		{
+			printf("YES!");
+		}
+		else printf("NO!");
 
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader"));
