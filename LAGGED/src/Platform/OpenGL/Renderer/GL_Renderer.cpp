@@ -103,6 +103,7 @@ namespace LAG::Renderer
 		bool succeeded = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
 		if (!succeeded)
 			Utility::Logger::Critical("Failed to create frame buffer.");
+		else glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return succeeded;
 	}
 
