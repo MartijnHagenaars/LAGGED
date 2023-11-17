@@ -34,7 +34,7 @@ namespace LAG::Renderer
 		Plane* plane = nullptr;
 
 		unsigned int m_FrameBuffer = 0;
-		unsigned int m_FrameTextureBuffer = 0;
+		unsigned int m_RenderBuffer = 0;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -58,21 +58,12 @@ namespace LAG::Renderer
 		glGenFramebuffers(1, &renderData->m_FrameBuffer);
 		glBindFramebuffer(GL_FRAMEBUFFER, renderData->m_FrameBuffer);
 
-		//Create the framebuffer texture
-		glGenTextures(1, &renderData->m_FrameTextureBuffer);
-		glBindTexture(GL_TEXTURE_2D, renderData->m_FrameTextureBuffer);
-		glTexImage2D(
-			GL_TEXTURE_2D, 0, GL_RGB, 
-			GetWindowManager()->GetPrimaryWindow()->GetWidth(), 
-			GetWindowManager()->GetPrimaryWindow()->GetHeight(), 
-			0, GL_RGB, GL_UNSIGNED_BYTE, NULL
-		);
+		//Create the render buffer
+		glGenRenderbuffers(1, &renderData->m_RenderBuffer);
+		glBindRenderbuffer(GL_RENDERBUFFER, renderData->m_RenderBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight());
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderData->m_RenderBuffer);
 
-		glRenderbufferStorage(
-			GL_FRAMEBUFFER, GL_DEPTH24_STENCIL8, 
-			GetWindowManager()->GetPrimaryWindow()->GetWidth(), 
-			GetWindowManager()->GetPrimaryWindow()->GetHeight()
-		);
 
 		auto result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 		if (result == GL_FRAMEBUFFER_COMPLETE)
