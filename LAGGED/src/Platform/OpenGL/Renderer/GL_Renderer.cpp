@@ -6,7 +6,9 @@
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
-#include "Platform/OpenGL/Renderer/GL_Shader.h"
+#include "Core/Resources/Shader.h"
+
+#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
@@ -34,7 +36,8 @@ namespace LAG::Renderer
 		Plane* plane = nullptr;
 
 		unsigned int m_FrameBuffer = 0;
-		unsigned int m_RenderBuffer = 0;
+		unsigned int m_ColorBuffer = 0;
+		unsigned int m_DepthStencilBuffer = 0;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -45,6 +48,9 @@ namespace LAG::Renderer
 	RendererData* renderData = nullptr;
 
 
+	//Initialization functions
+	bool CreateFrameBuffer(unsigned int& frameBufferID, unsigned int& renderBufferID, unsigned int& colorBufferID);
+
 	bool Initialize()
 	{
 		if (renderData != nullptr)
@@ -54,23 +60,9 @@ namespace LAG::Renderer
 		}
 		renderData = new RendererData();
 
-		//Create the frame buffer
-		glGenFramebuffers(1, &renderData->m_FrameBuffer);
-		glBindFramebuffer(GL_FRAMEBUFFER, renderData->m_FrameBuffer);
-
-		//Create the render buffer
-		glGenRenderbuffers(1, &renderData->m_RenderBuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, renderData->m_RenderBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight());
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderData->m_RenderBuffer);
-
-
-		auto result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-		if (result == GL_FRAMEBUFFER_COMPLETE)
-		{
-			printf("YES!");
-		}
-		else printf("NO!");
+		//Create the frame buffer, as well as the depth-stencil buffer and the color buffer.
+		if (!CreateFrameBuffer(renderData->m_FrameBuffer, renderData->m_DepthStencilBuffer, renderData->m_ColorBuffer))
+			return false;
 
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader"));
@@ -87,6 +79,33 @@ namespace LAG::Renderer
 	{
 		return false;
 	}
+
+
+	bool CreateFrameBuffer(unsigned int& frameBufferID, unsigned int& depthStencilBufferID, unsigned int& colorBufferID)
+	{
+		//Create the frame buffer
+		LAG_GRAPHICS_EXCEPTION(glGenFramebuffers(1, &frameBufferID));
+		LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID));
+
+		//Create a render buffer object for the depth stencil
+		LAG_GRAPHICS_EXCEPTION(glGenRenderbuffers(1, &depthStencilBufferID));
+		LAG_GRAPHICS_EXCEPTION(glBindRenderbuffer(GL_RENDERBUFFER, depthStencilBufferID));
+		LAG_GRAPHICS_EXCEPTION(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight()));
+		LAG_GRAPHICS_EXCEPTION(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthStencilBufferID));
+
+		LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &colorBufferID));
+		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, colorBufferID));
+		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferID, 0);
+
+		bool succeeded = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+		if (!succeeded)
+			Utility::Logger::Critical("Failed to create frame buffer.");
+		return succeeded;
+	}
+
 
 	void StartFrame()
 	{
