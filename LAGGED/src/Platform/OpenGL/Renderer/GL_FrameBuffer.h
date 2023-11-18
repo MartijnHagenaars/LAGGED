@@ -7,7 +7,7 @@ namespace LAG
 		FrameBuffer();
 		~FrameBuffer();
 
-		void FrameStart();
+		void FrameStart(bool showWireframe);
 		void FrameEnd();
 
 	private:

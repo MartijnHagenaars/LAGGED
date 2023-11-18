@@ -93,9 +93,13 @@ namespace LAG
 		return false;
 	}
 
-	void FrameBuffer::FrameStart()
+	void FrameBuffer::FrameStart(bool showWireframe)
 	{
 		LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
+
+		if (showWireframe)
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glEnable(GL_DEPTH_TEST);
 		LAG_GRAPHICS_EXCEPTION(glClearColor(0.2f, 0.2f, 0.6f, 1.0f));
@@ -105,6 +109,15 @@ namespace LAG
 
 	void FrameBuffer::FrameEnd()
 	{
+		//Second render pass using default frame buffer
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_DEPTH_TEST);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+
+
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 		GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/FrameBuffer"))->Bind();
 		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));

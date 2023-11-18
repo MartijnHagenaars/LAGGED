@@ -94,12 +94,7 @@ namespace LAG::Renderer
 		ImGui::Text(std::string("Render time: " + std::to_string(renderData->renderTime) + "ms").c_str());
 		ImGui::Separator();
 
-		if (ImGui::Checkbox("Enable wireframe", &renderData->showWireframe))
-		{
-			if (renderData->showWireframe)
-				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		}
+		ImGui::Checkbox("Enable wireframe", &renderData->showWireframe);
 
 		ImGui::Checkbox("Enable lighting", &renderData->useLighting);
 
@@ -114,7 +109,7 @@ namespace LAG::Renderer
 		DrawOptionsWindow();
 
 		//First render pass using custom frame buffer
-		renderData->frameBuffer->FrameStart();
+		renderData->frameBuffer->FrameStart(renderData->showWireframe);
 
 		//Render all meshes
 		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& meshTransformComp)
@@ -151,13 +146,6 @@ namespace LAG::Renderer
 				//TransformComponent planeTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
 				//renderData->plane->Render(planeTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader")));
 			});
-
-
-		//Second render pass using default frame buffer
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glDisable(GL_DEPTH_TEST);
-		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
 
 		renderData->frameBuffer->FrameEnd();
 		ImGuiFrameEnd();
