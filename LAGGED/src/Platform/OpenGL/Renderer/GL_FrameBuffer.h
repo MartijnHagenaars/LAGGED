@@ -15,6 +15,7 @@ namespace LAG
 		bool Shutdown();
 
 		unsigned int m_VBO = 0;
+		unsigned int m_EBO = 0;
 		unsigned int m_VAO = 0; 
 
 		unsigned int m_FrameBuffer = 0;

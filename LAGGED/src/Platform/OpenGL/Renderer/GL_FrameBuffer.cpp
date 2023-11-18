@@ -35,10 +35,15 @@ namespace LAG
 			 1.f,  1.f,	1.f, 1.f
 		};
 
+		unsigned short indices[] = { 0, 1, 2, 1, 3, 2 };
+
 		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
+		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+
+		//Setup the VBO
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
@@ -46,6 +51,10 @@ namespace LAG
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 		glEnableVertexAttribArray(1);
+
+		//Setup the EBO
+		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
 
 		//Create the frame buffer
 		LAG_GRAPHICS_EXCEPTION(glGenFramebuffers(1, &m_FrameBuffer));
@@ -96,14 +105,9 @@ namespace LAG
 
 	void FrameBuffer::FrameEnd()
 	{
-		////Might not be necessary
-		//LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-
-		//glDisable(GL_DEPTH_TEST);
-
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 		GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/FrameBuffer"))->Bind();
 		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
-		LAG_GRAPHICS_EXCEPTION(glDrawArrays(GL_TRIANGLES, 0, 6));
+		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
 	}
 }
