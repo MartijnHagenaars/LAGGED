@@ -10,6 +10,9 @@ namespace LAG
 		void FrameStart(bool showWireframe);
 		void FrameEnd();
 
+		void PostProcessInversion(float inversionAmount) { m_InversionAmount = inversionAmount; };
+		void PostProcessGrayScale(float grayScaleAmount) { m_GrayScaleAmount = grayScaleAmount };
+
 	private:
 		bool Initialize();
 		bool Shutdown();
@@ -21,6 +24,9 @@ namespace LAG
 		unsigned int m_FrameBuffer = 0;
 		unsigned int m_ColorBuffer = 0;
 		unsigned int m_DepthStencilBuffer = 0;
+
+		float m_InversionAmount = 0.f;
+		float m_GrayScaleAmount = 0.f;
 	};
 }
 
