@@ -9,6 +9,8 @@
 #include "Platform/Base/Window/WindowManager.h"
 #include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
 
+#include "ImGui/imgui.h"
+
 
 namespace LAG
 {
@@ -116,11 +118,26 @@ namespace LAG
 		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-
-
+		//Bind VAO and Shader
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-		GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/FrameBuffer"))->Bind();
+		Shader* shader = GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/FrameBuffer"));
+		shader->Bind();
+
+		//Assign post-processing values
+		shader->SetFloat("a_InversionAmount", m_InversionAmount);
+		shader->SetFloat("a_GrayScaleAmount", m_GrayScaleAmount);
+
 		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
 		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
+	}
+
+	void FrameBuffer::DrawPostProcessWindow()
+	{
+		ImGui::Begin("Post processing options");
+
+		ImGui::SliderFloat("Inversion", &m_InversionAmount, 0.f, 1.f, "%.3f");
+		ImGui::SliderFloat("Gray scale", &m_GrayScaleAmount, 0.f, 1.f, "%.3f");
+
+		ImGui::End();
 	}
 }

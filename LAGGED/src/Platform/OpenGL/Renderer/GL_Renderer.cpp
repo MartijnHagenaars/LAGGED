@@ -86,7 +86,6 @@ namespace LAG::Renderer
 
 	void DrawOptionsWindow()
 	{
-		bool isOpen = true;
 		ImGui::Begin("Render options");
 
 		ImGui::Text("LAGGED Renderer");
@@ -107,6 +106,7 @@ namespace LAG::Renderer
 
 		ImGuiFrameStart();
 		DrawOptionsWindow();
+		renderData->frameBuffer->DrawPostProcessWindow();
 
 		//First render pass using custom frame buffer
 		renderData->frameBuffer->FrameStart(renderData->showWireframe);

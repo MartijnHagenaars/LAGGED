@@ -10,8 +10,11 @@ namespace LAG
 		void FrameStart(bool showWireframe);
 		void FrameEnd();
 
+		void DrawPostProcessWindow();
+
 		void PostProcessInversion(float inversionAmount) { m_InversionAmount = inversionAmount; };
-		void PostProcessGrayScale(float grayScaleAmount) { m_GrayScaleAmount = grayScaleAmount };
+		void PostProcessGrayScale(float grayScaleAmount) { m_GrayScaleAmount = grayScaleAmount; }
+
 
 	private:
 		bool Initialize();
