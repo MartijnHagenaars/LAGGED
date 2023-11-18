@@ -8,6 +8,7 @@
 #include "Core/Resources/Model.h"
 #include "Core/Resources/Shader.h"
 
+#include "Platform/OpenGL/Renderer/GL_FrameBuffer.h"
 #include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
 
 #include "ECS/Scene.h"
@@ -34,10 +35,7 @@ namespace LAG::Renderer
 	struct RendererData
 	{
 		Plane* plane = nullptr;
-
-		unsigned int m_FrameBuffer = 0;
-		unsigned int m_ColorBuffer = 0;
-		unsigned int m_DepthStencilBuffer = 0;
+		FrameBuffer* frameBuffer = nullptr;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -47,10 +45,6 @@ namespace LAG::Renderer
 	};
 	RendererData* renderData = nullptr;
 
-
-	//Initialization functions
-	bool CreateFrameBuffer(unsigned int& frameBufferID, unsigned int& renderBufferID, unsigned int& colorBufferID);
-
 	bool Initialize()
 	{
 		if (renderData != nullptr)
@@ -59,10 +53,7 @@ namespace LAG::Renderer
 			return false;
 		}
 		renderData = new RendererData();
-
-		//Create the frame buffer, as well as the depth-stencil buffer and the color buffer.
-		if (!CreateFrameBuffer(renderData->m_FrameBuffer, renderData->m_DepthStencilBuffer, renderData->m_ColorBuffer))
-			return false;
+		renderData->frameBuffer = new FrameBuffer();
 
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader"));
@@ -80,45 +71,14 @@ namespace LAG::Renderer
 		return false;
 	}
 
-
-	bool CreateFrameBuffer(unsigned int& frameBufferID, unsigned int& depthStencilBufferID, unsigned int& colorBufferID)
+	void ImGuiFrameStart()
 	{
-		//Create the frame buffer
-		LAG_GRAPHICS_EXCEPTION(glGenFramebuffers(1, &frameBufferID));
-		LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID));
-
-		//Create a render buffer object for the depth stencil
-		LAG_GRAPHICS_EXCEPTION(glGenRenderbuffers(1, &depthStencilBufferID));
-		LAG_GRAPHICS_EXCEPTION(glBindRenderbuffer(GL_RENDERBUFFER, depthStencilBufferID));
-		LAG_GRAPHICS_EXCEPTION(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight()));
-		LAG_GRAPHICS_EXCEPTION(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthStencilBufferID));
-
-		LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &colorBufferID));
-		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, colorBufferID));
-		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBufferID, 0);
-
-		bool succeeded = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
-		if (!succeeded)
-			Utility::Logger::Critical("Failed to create frame buffer.");
-		else glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		return succeeded;
-	}
-
-
-	void StartFrame()
-	{
-		glClearColor(0.2f, 0.2f, 0.6f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 	}
 
-	void EndFrame()
+	void ImGuiFrameEnd()
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -150,8 +110,11 @@ namespace LAG::Renderer
 	{
 		renderData->renderTimer.ResetTimer();
 
-		StartFrame();
+		ImGuiFrameStart();
 		DrawOptionsWindow();
+
+		//First render pass using custom frame buffer
+		renderData->frameBuffer->FrameStart();
 
 		//Render all meshes
 		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& meshTransformComp)
@@ -185,11 +148,19 @@ namespace LAG::Renderer
 				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/ObjectShader")), lights);
 
-				TransformComponent planeTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
-				renderData->plane->Render(planeTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader")));
+				//TransformComponent planeTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
+				//renderData->plane->Render(planeTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader")));
 			});
 
-		EndFrame();
+
+		//Second render pass using default frame buffer
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDisable(GL_DEPTH_TEST);
+		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		renderData->frameBuffer->FrameEnd();
+		ImGuiFrameEnd();
 
 		renderData->renderTime = renderData->renderTimer.GetMilliseconds();
 	}

@@ -211,6 +211,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h" />
     <ClInclude Include="src\Core\Resources\Plane.h" />
@@ -332,6 +333,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp" />
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />
     <ClCompile Include="imgui\ImGui\imgui.cpp">
@@ -467,6 +469,8 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\PlaneShader.pixel.glsl" />
