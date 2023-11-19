@@ -83,15 +83,7 @@ void Game::Shutdown()
 
 void Game::Update()
 {
-	if (LAG::Input::IsActionPressedOnce(LAG::HashedString("UpButton")))
-	{
-		LAG::Logger::Info("W is being pressed, but only detected once!");
-	}
-	else if (LAG::Input::IsActionPressed(LAG::HashedString("DownButton")))
-	{
-		LAG::Logger::Info("S is being pressed!");
-	}
-	else if (LAG::Input::IsActionPressedOnce(LAG::HashedString("LMB")))
+	if (LAG::Input::IsActionPressedOnce(LAG::HashedString("LMB")))
 	{
 		float x, y;
 		LAG::Input::GetMousePosition(x, y);
