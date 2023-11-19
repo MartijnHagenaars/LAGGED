@@ -15,12 +15,10 @@ void main()
     vec4 textureColor = texture(a_Texture, texCoord);
 
     //Calculate inverted color
-    vec3 invertedColor = 1.0 - textureColor.rgb;
+    textureColor.rgb = mix(textureColor.rgb, 1.0 - textureColor.rgb, clamp(a_InversionAmount, 0.0, 1.0));
 
-    //Calculate grayscale
-    vec3 grayScaleColor = textureColor.rgb / 3.0;
+    float averageColor = (textureColor.x + textureColor.y + textureColor.z) / 3.0;
+    textureColor.rgb = mix(textureColor.rgb, vec3(averageColor, averageColor, averageColor) / 3.0, clamp(a_GrayScaleAmount, 0.0, 1.0));
 
-    vec3 inversionMix = mix(textureColor.rgb, invertedColor, clamp(a_InversionAmount, 0.0, 1.0));
-    //vec3 grayScaleMix = mix(invertedColor, grayScaleColor, clamp(a_GrayScaleAmount, 0.0, 1.0));
-    FragColor = vec4(inversionMix, 1.0);
+    FragColor = vec4(textureColor.rgb, 1.0);
 } 
