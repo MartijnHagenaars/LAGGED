@@ -129,12 +129,6 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="res\Shaders\OpenGL\GL_DefaultObjectShader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="res\Shaders\OpenGL\GL_ShaderBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -208,6 +202,21 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\Systems\CameraSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Editor\Grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Resources\Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Core\Resources\Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -314,9 +323,23 @@
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\PlaneShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\PlaneShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
   </ItemGroup>
 </Project>

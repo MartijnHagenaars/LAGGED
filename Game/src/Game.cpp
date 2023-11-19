@@ -12,8 +12,12 @@
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/MeshComponent.h"
+#include "ECS/Components/CameraComponent.h"
+#include "ECS/Components/LightComponent.h"
 
 ENTRY_APP(Game)
+
+static float sinCounter = 0.f;
 
 Game::Game()
 {
@@ -39,9 +43,9 @@ void Game::Initialize()
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity();
 	ent1.AddComponent<LAG::NameComponent>("Helmet");
 	ent1.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, 0.f, -5.f);
-	ent1.GetComponent<LAG::TransformComponent>()->scale = glm::vec3(75.f);
-	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/BoomBox/BoomBox.gltf");
-	//ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
+	//ent1.GetComponent<LAG::TransformComponent>()->scale = glm::vec3(75.f);
+	//ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/BoomBox/BoomBox.gltf");
+	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity();
 	ent2.AddComponent<LAG::NameComponent>("Light1");

@@ -109,7 +109,8 @@
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r
+xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">
@@ -137,7 +138,8 @@
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r
+xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e /y /i /r</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>glfw3_mt.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
@@ -169,7 +171,8 @@
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r
+xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e /y /i /r</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)External\OpenGL\GLEW\lib</AdditionalLibraryDirectories>
@@ -203,10 +206,16 @@
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r</Command>
+      <Command>xcopy "$(SolutionDir)LAGGED\res\Assets" "$(OutDir)res\Assets" /e /y /i /r
+xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e /y /i /r</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
+    <ClInclude Include="src\Core\Resources\Shader.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h" />
+    <ClInclude Include="src\Core\Resources\Plane.h" />
+    <ClInclude Include="src\Editor\Grid.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
     <ClInclude Include="imgui\ImGui\imgui.h" />
@@ -232,18 +241,6 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsExceptionMacros.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
-    <ClInclude Include="res\Shaders\OpenGL\GL_DefaultObjectShader.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="res\Shaders\OpenGL\GL_ShaderBase.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h" />
     <ClInclude Include="src\Core\Input\Input.h" />
     <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
@@ -336,6 +333,8 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp" />
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />
     <ClCompile Include="imgui\ImGui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">NotUsing</PrecompiledHeader>
@@ -468,6 +467,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">false</ExcludedFromBuild>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\PlaneShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\PlaneShader.vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -56,19 +56,19 @@ namespace LAG
 		catch (ExceptionBase& e)
 		{
 			Logger::Critical(e.GetExceptionMessage().c_str());
-			system("pause");
+			__debugbreak();
 			return -3; 
 		}
 		catch (std::exception& e)
 		{
 			Logger::Critical("Standard exception thrown: {0}", e.what());
-			system("pause");
+			__debugbreak();
 			return -2; 
 		}
 		catch (...)
 		{
 			Logger::Critical("Unknown exception thrown: no information available.");
-			system("pause");
+			__debugbreak();
 			return -1;
 		}
 
@@ -83,15 +83,15 @@ namespace LAG
 		Window* newWindow = m_WindowManager->AddWindow(800, 600, "Main window!", false);
 		newWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
+		m_ResourceManager = new ResourceManager();
+		m_Scene = new Scene();
+
 		//Setup renderer
 		if (!Renderer::Initialize())
 		{
 			LAG::Logger::Critical("Failed to initialize renderer.");
 			return false;
 		}
-
-		m_ResourceManager = new ResourceManager();
-		m_Scene = new Scene();
 
 		//Add some input actions that'll be used by the engine and the editor. 
 		Input::AddInputAction(Input::InputType::LAG_W, HashedString("cameraMoveForward"));

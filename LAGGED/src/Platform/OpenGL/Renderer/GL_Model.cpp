@@ -8,6 +8,10 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Texture.h"
 
+#include "ECS/Components/BasicComponents.h"
+#include "ECS/Components/LightComponent.h"
+#include "ECS/Components/CameraComponent.h"
+
 #include "ECS/Systems/CameraSystem.h"
 
 #include "GL/glew.h"
@@ -81,8 +85,11 @@ namespace LAG
 
 	bool Model::Unload()
 	{
-		//TODO: Currently doesn't do anything
-		return false;
+		glDeleteBuffers(1, &m_VBO);
+		glDeleteBuffers(1, &m_EBO);
+		glDeleteBuffers(1, &m_VAO);
+
+		return true;
 	}
 
 	std::vector<MeshData> LoadVertices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
@@ -195,7 +202,7 @@ namespace LAG
 		std::vector<MeshData> meshData = LoadVertices(modelData, primitive);
 		std::vector<unsigned short> indices = LoadIndices(modelData, primitive);
 		m_Textures = LoadTexture(modelData, primitive, GetPath().GetString());
-		m_TotalIndices = indices.size();
+		m_TotalIndices = static_cast<unsigned int>(indices.size());
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 		
@@ -221,7 +228,9 @@ namespace LAG
 	{
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
-		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(0.5f, 0.5f, 0.f)); //Shit rotation calculation. FIX!!!
+		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(1.f, 0.f, 0.f));
+		modelMat = glm::rotate(modelMat, transform.rotation.y, glm::vec3(0.f, 1.f, 0.f));
+		modelMat = glm::rotate(modelMat, transform.rotation.z, glm::vec3(0.f, 0.f, 1.f));
 		modelMat = glm::scale(modelMat, transform.scale);
 
 		shader.Bind();
