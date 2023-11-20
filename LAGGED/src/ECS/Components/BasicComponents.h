@@ -29,4 +29,13 @@ namespace LAG
 		glm::vec3 rotation = glm::vec3(0.f);
 		glm::vec3 scale = glm::vec3(1.f);
 	};
+
+	struct SinWaveComponent
+	{
+		float sinValue = 0.f;
+		float time = 0.f;
+
+		float amplitude = 1.f;
+		float frequency = 1.f;
+	};
 }
