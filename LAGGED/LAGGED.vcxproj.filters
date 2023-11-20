@@ -219,6 +219,9 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ECS\Systems\BasicSystems.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">
@@ -327,6 +330,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\Systems\BasicSystems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

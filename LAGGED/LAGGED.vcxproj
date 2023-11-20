@@ -211,6 +211,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h" />
@@ -333,6 +334,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp" />
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />

@@ -1,6 +1,7 @@
 #pragma once
 #include "entt/entt.hpp"
 #include "Core/Defines.h"
+#include "Utility/Logger.h"
 
 namespace LAG
 {

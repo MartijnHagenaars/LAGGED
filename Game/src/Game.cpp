@@ -17,7 +17,7 @@
 
 ENTRY_APP(Game)
 
-static float sinCounter = 0.f;
+static uint32_t meshEntityID = 0;
 
 Game::Game()
 {
@@ -46,6 +46,8 @@ void Game::Initialize()
 	//ent1.GetComponent<LAG::TransformComponent>()->scale = glm::vec3(75.f);
 	//ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/BoomBox/BoomBox.gltf");
 	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
+	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
+	meshEntityID = ent1.GetEntityID();
 
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity();
 	ent2.AddComponent<LAG::NameComponent>("Light1");
@@ -89,4 +91,9 @@ void Game::Update()
 		LAG::Input::GetMousePosition(x, y);
 		LAG::Logger::Info("Clickity at {0}, {1}!\n", x, y);
 	}
+
+	LAG::Entity meshEntity = LAG::GetScene()->GetEntity(meshEntityID);
+	meshEntity.GetComponent<LAG::TransformComponent>()->position.x = meshEntity.GetComponent<LAG::SinWaveComponent>()->sinValue;
+
+
 }

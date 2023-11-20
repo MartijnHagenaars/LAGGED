@@ -6,7 +6,7 @@ namespace LAG
 {
 	struct NameComponent
 	{
-		NameComponent(std::string name) : 
+		explicit NameComponent(std::string name) : 
 			name(name)
 		{};
 
@@ -17,7 +17,7 @@ namespace LAG
 	struct TransformComponent
 	{
 		TransformComponent() = default;
-		TransformComponent(const glm::vec3& position) : 
+		explicit TransformComponent(const glm::vec3& position) : 
 			position(position)
 		{}
 
@@ -32,6 +32,11 @@ namespace LAG
 
 	struct SinWaveComponent
 	{
+		SinWaveComponent() = default;
+		SinWaveComponent(float amplitude, float frequency) :
+			amplitude(amplitude), frequency(frequency)
+		{}
+
 		float sinValue = 0.f;
 		float time = 0.f;
 

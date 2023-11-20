@@ -28,9 +28,7 @@ namespace LAG
 	private:
 		friend Engine& GetEngine();
 		Engine()
-		{
-			std::cout << "Engine constructor" << std::endl;
-		}
+		{}
 
 		bool Initialize(IApplication* applicationPtr);
 		bool Shutdown();

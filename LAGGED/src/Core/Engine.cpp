@@ -12,6 +12,8 @@
 #include "ECS/Scene.h"
 #include "ECS/Entity.h"
 
+#include "ECS/Systems/BasicSystems.h"
+
 namespace LAG
 {
 	Engine::~Engine()
@@ -38,6 +40,9 @@ namespace LAG
 			while (m_WindowManager->AreWindowsOpen())
 			{
 				m_WindowManager->Update();
+
+				//Update all basic systems
+				BasicSystems::UpdateBasicSystems();
 
 				m_Application->Update();
 
