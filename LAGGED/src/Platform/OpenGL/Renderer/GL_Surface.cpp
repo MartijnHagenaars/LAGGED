@@ -37,10 +37,10 @@ namespace LAG
 	{
 		m_Vertices =
 		{
-		   -0.5f, 0.0f,	-0.5f,		0.0f,  0.0f,  1.0f,		0.0f, 0.0f,  //Bottom-left
-		   -0.5f, 0.0f,	 0.5f,		0.0f,  0.0f,  1.0f,		0.0f, 1.0f,  //Top-left
-			0.5f, 0.0f,	 0.5f,		0.0f,  0.0f,  1.0f,		1.0f, 1.0f,  //Top-right
-			0.5f, 0.0f,	-0.5f,		0.0f,  0.0f,  1.0f,		1.0f, 0.0f   //Bottom-right
+		   -0.5f, 0.0f,	-0.5f,
+		   -0.5f, 0.0f,	 0.5f,
+			0.5f, 0.0f,	 0.5f,
+			0.5f, 0.0f,	-0.5f
 		};
 
 		m_Indices =
@@ -69,7 +69,7 @@ namespace LAG
 		float yScale = 64.0f / 256.0f, yShift = 16.0f;
 
 		m_Vertices.clear();
-		m_Vertices.reserve(m_ZVertexResolution * m_XVertexResolution * 8);
+		m_Vertices.reserve(m_ZVertexResolution * m_XVertexResolution * 3);
 		for (unsigned int z = 0; z < m_ZVertexResolution; z++)
 		{
 			for (unsigned int x = 0; x < m_XVertexResolution; x++)
@@ -79,10 +79,6 @@ namespace LAG
 
 				//Insert vertices
 				m_Vertices.insert(m_Vertices.end(), { -m_ZVertexResolution / 2.0f + z, (int)y * yScale - yShift, -m_XVertexResolution / 2.0f + x });
-				//Insert normals, TODO
-				m_Vertices.insert(m_Vertices.end(), { 0.0f,  0.0f,  1.0f });
-				//Insert tex coords, TODO
-				m_Vertices.insert(m_Vertices.end(), { 0.0f, 0.0f });
 			}
 		}
 
@@ -133,12 +129,8 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
 		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned short), &m_Indices[0], GL_STATIC_DRAW));
 
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
+		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(2));
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 
