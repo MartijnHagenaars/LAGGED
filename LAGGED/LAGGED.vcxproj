@@ -214,8 +214,8 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h" />
-    <ClInclude Include="src\Core\Resources\Plane.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
+    <ClInclude Include="src\Core\Resources\Surface.h" />
     <ClInclude Include="src\Editor\Grid.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
@@ -336,7 +336,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
   <ItemGroup>
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp" />
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />
     <ClCompile Include="imgui\ImGui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">NotUsing</PrecompiledHeader>

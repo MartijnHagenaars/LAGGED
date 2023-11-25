@@ -28,13 +28,13 @@
 
 #include "Utility/Timer.h"
 
-#include "Core/Resources/Plane.h"
+#include "Core/Resources/Surface.h"
 
 namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		Plane* plane = nullptr;
+		Surface* surface = nullptr;
 		FrameBuffer* frameBuffer = nullptr;
 
 		bool showWireframe = false;
@@ -60,8 +60,8 @@ namespace LAG::Renderer
 
 		glEnable(GL_DEPTH_TEST);
 
-		renderData->plane = new Plane();
-		renderData->plane->Reload();
+		renderData->surface = new Surface();
+		renderData->surface->Reload();
 
 		return true;
 	}

@@ -207,10 +207,10 @@
     <ClInclude Include="src\Editor\Grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Core\Resources\Plane.h">
+    <ClInclude Include="src\Core\Resources\Surface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Plane.h">
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Core\Resources\Shader.h">
@@ -326,7 +326,7 @@
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp">
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp">

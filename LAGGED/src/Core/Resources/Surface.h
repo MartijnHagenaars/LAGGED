@@ -7,14 +7,17 @@ namespace LAG
 	class Shader;
 	struct CameraComponent;
 	struct TransformComponent;
-	class PlaneBase : public Resource
+	class SurfaceBase : public Resource
 	{
 	public:
-		PlaneBase() = delete;
-		explicit PlaneBase(const HashedString& path) : Resource(path) {};
-		virtual ~PlaneBase() {};
+		SurfaceBase() : Resource(HashedString("")) {};
+		virtual ~SurfaceBase() {};
 
 		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader) = 0;
+
+	protected:
+		int m_XVertexResolution = 1;
+		int m_ZVertexResolution = 1;
 
 	private:
 		virtual bool Load() = 0;
@@ -22,9 +25,9 @@ namespace LAG
 	};
 }
 
-//Include the correct model header, based on the project configuration
+//Include the correct surface header, based on the project configuration
 #ifdef PLATFORM_OPENGL
-#include "Platform/OpenGL/Renderer/GL_Plane.h"
+#include "Platform/OpenGL/Renderer/GL_Surface.h"
 #elif PLATFORM_DIRECTX
-#include "Platform/DX12/Renderer/DX12_Plane.h"
+#include "Platform/DX12/Renderer/DX12_Surface.h"
 #endif

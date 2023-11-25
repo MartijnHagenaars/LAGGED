@@ -1,7 +1,8 @@
 #include "Precomp.h"
-#include "GL_Plane.h"
+#include "GL_Surface.h"
 
 #include "Core/Resources/Shader.h"
+#include "Core/Resources/Texture.h"
 
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
@@ -13,18 +14,39 @@
 #include <glm/ext/matrix_transform.hpp>
 
 
+
 namespace LAG
 {
-	Plane::Plane(const HashedString& path) :
-		PlaneBase(path)
+	Surface::Surface() : 
+		SurfaceBase()
 	{
 	}
 
-	Plane::~Plane()
+	Surface::~Surface()
 	{
 	}
 
-	void Plane::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader)
+	void Surface::SetTessellation(int xResolution, int zResolution, Texture& heightTexture)
+	{
+		//Check if parameters are valid
+		if (xResolution <= 0 || zResolution <= 0)
+			return;
+
+		m_XVertexResolution = xResolution, m_ZVertexResolution = zResolution;
+
+		std::vector<glm::vec3> vertices;
+		for (int z = 0; z < zResolution; z++)
+		{
+			//CONTINUE HERE: https://learnopengl.com/Guest-Articles/2021/Tessellation/Height-map
+			//heightTexture.
+			for (int x = 0; x < xResolution; x++)
+			{
+
+			}
+		}
+	}
+
+	void Surface::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader)
 	{
 
 		glm::mat4 modelMat = glm::mat4(1.f);
@@ -43,7 +65,7 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
 	}
 
-	bool Plane::Load()
+	bool Surface::Load()
 	{
 		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
@@ -82,7 +104,7 @@ namespace LAG
 		return true;
 	}
 
-	bool Plane::Unload()
+	bool Surface::Unload()
 	{
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, 0));
