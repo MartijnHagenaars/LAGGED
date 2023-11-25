@@ -60,7 +60,7 @@ namespace LAG::Renderer
 
 		glEnable(GL_DEPTH_TEST);
 
-		renderData->surface = new Surface();
+		renderData->surface = new Surface(256.f, 256.f, "res/Assets/Textures/heightmap.png");
 		renderData->surface->Reload();
 
 		return true;

@@ -23,7 +23,7 @@ namespace LAG
 		SetTessellationQuality();
 	}
 
-	Surface::Surface(int xResolution, int zResolution, const std::string& heightTexturePath) :
+	Surface::Surface(float xResolution, float zResolution, const std::string& heightTexturePath) :
 		SurfaceBase()
 	{
 		SetTessellationQuality(xResolution, zResolution, heightTexturePath);
@@ -37,10 +37,10 @@ namespace LAG
 	{
 		m_Vertices =
 		{
-		   -0.5f, -0.5f,  0.0f,		0.0f,  0.0f,  1.0f,		0.0f, 0.0f,  //Bottom-left
-		   -0.5f,  0.5f,  0.0f,		0.0f,  0.0f,  1.0f,		0.0f, 1.0f,  //Top-left
-			0.5f,  0.5f,  0.0f,		0.0f,  0.0f,  1.0f,		1.0f, 1.0f,  //Top-right
-			0.5f, -0.5f,  0.0f,		0.0f,  0.0f,  1.0f,		1.0f, 0.0f   //Bottom-right
+		   -0.5f, 0.0f,	-0.5f,		0.0f,  0.0f,  1.0f,		0.0f, 0.0f,  //Bottom-left
+		   -0.5f, 0.0f,	 0.5f,		0.0f,  0.0f,  1.0f,		0.0f, 1.0f,  //Top-left
+			0.5f, 0.0f,	 0.5f,		0.0f,  0.0f,  1.0f,		1.0f, 1.0f,  //Top-right
+			0.5f, 0.0f,	-0.5f,		0.0f,  0.0f,  1.0f,		1.0f, 0.0f   //Bottom-right
 		};
 
 		m_Indices =
@@ -50,7 +50,7 @@ namespace LAG
 		};
 	}
 
-	void Surface::SetTessellationQuality(int xResolution, int zResolution, const std::string& heightTexturePath)
+	void Surface::SetTessellationQuality(float xResolution, float zResolution, const std::string& heightTexturePath)
 	{
 		//Check if parameters are valid
 		if (xResolution <= 0 || zResolution <= 0)
@@ -59,38 +59,46 @@ namespace LAG
 		//m_XVertexResolution = xResolution, m_ZVertexResolution = zResolution;
 
 		int colorChannels = 0;
-		unsigned char* data = stbi_load(heightTexturePath.c_str(), &m_XVertexResolution, &m_ZVertexResolution, &colorChannels, 0);
+		unsigned char* heightMapData = stbi_load(heightTexturePath.c_str(), &m_XVertexResolution, &m_ZVertexResolution, &colorChannels, 0);
+		if (heightMapData == nullptr)
+		{
+			Logger::Error("Failed to load height map texture data for height map texture with the following path: {0}", heightTexturePath);
+			return;
+		}
 
-		std::vector<glm::vec3> vertices;
-		//for (int z = 0; z < zResolution; z++)
-		//{
-		//	//CONTINUE HERE: https://learnopengl.com/Guest-Articles/2021/Tessellation/Height-map
-		//	//heightTexture.
-		//	for (int x = 0; x < xResolution; x++)
-		//	{
+		float yScale = 64.0f / 256.0f, yShift = 16.0f;
 
-		//	}
-		//}
-
-		float yScale = 64.0f / 256.0f, yShift = 16.0f;  // apply a scale+shift to the height data
+		m_Vertices.clear();
+		m_Vertices.reserve(m_ZVertexResolution * m_XVertexResolution * 8);
 		for (unsigned int z = 0; z < m_ZVertexResolution; z++)
 		{
 			for (unsigned int x = 0; x < m_XVertexResolution; x++)
 			{
-				// retrieve texel for (i,j) tex coord
-				unsigned char* texel = data + (x + m_XVertexResolution * z) * colorChannels;
-				// raw height at coordinate
+				unsigned char* texel = heightMapData + (x + m_XVertexResolution * z) * colorChannels;
 				unsigned char y = texel[0];
 
-				// vertex
-				vertices.push_back(glm::vec3(-m_ZVertexResolution / 2.0f + z, (int)y * yScale - yShift, -m_XVertexResolution / 2.0f + x));
-				//vertices.push_back();        // v.x
-				//vertices.push_back(); // v.y
-				//vertices.push_back(-width / 2.0f + j / );        // v.z
+				//Insert vertices
+				m_Vertices.insert(m_Vertices.end(), { -m_ZVertexResolution / 2.0f + z, (int)y * yScale - yShift, -m_XVertexResolution / 2.0f + x });
+				//Insert normals, TODO
+				m_Vertices.insert(m_Vertices.end(), { 0.0f,  0.0f,  1.0f });
+				//Insert tex coords, TODO
+				m_Vertices.insert(m_Vertices.end(), { 0.0f, 0.0f });
 			}
 		}
 
-		stbi_image_free(data);
+		m_Indices.clear();
+		for (unsigned int z = 0; z < m_ZVertexResolution - 1; z++)
+		{
+			for (unsigned int x = 0; x < m_XVertexResolution; x++)
+			{
+				for (unsigned int k = 0; k < 2; k++)
+				{
+					m_Indices.push_back(x + m_XVertexResolution * (z + k));
+				}
+			}
+		}
+
+		stbi_image_free(heightMapData);
 	}
 
 	void Surface::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader)

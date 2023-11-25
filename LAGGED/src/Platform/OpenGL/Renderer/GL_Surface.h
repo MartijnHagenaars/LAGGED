@@ -8,13 +8,13 @@ namespace LAG
 	{
 	public:
 		Surface();
-		Surface(int xResolution, int zResolution, const std::string& heightTexturePath);
+		Surface(float xResolution, float zResolution, const std::string& heightTexturePath);
 		~Surface() override;
 		
 
 		//TODO: Make this a virtual in the SurfaceBase
 		void SetTessellationQuality();
-		void SetTessellationQuality(int xResolution, int zResolution, const std::string& heightTexturePath);
+		void SetTessellationQuality(float xResolution, float zResolution, const std::string& heightTexturePath);
 
 		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader) override;
 
