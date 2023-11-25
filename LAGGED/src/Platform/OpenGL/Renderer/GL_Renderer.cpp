@@ -143,8 +143,8 @@ namespace LAG::Renderer
 				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
 
-				//TransformComponent planeTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
-				//renderData->plane->Render(planeTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(Utility::String("res/Shaders/OpenGL/PlaneShader")));
+				TransformComponent planeTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
+				renderData->surface->Render(planeTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));
 			});
 
 		renderData->frameBuffer->FrameEnd();
