@@ -30,6 +30,8 @@
 
 #include "Core/Resources/Plane.h"
 
+#include "ImGuizmo/ImGuizmo.h"
+
 namespace LAG::Renderer
 {
 	struct RendererData
