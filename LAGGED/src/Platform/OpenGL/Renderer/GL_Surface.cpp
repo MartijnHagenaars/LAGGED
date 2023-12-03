@@ -56,17 +56,19 @@ namespace LAG
 		if (xResolution <= 0 || zResolution <= 0)
 			return;
 
-		//m_XVertexResolution = xResolution, m_ZVertexResolution = zResolution;
+		m_XVertexResolution = xResolution, m_ZVertexResolution = zResolution;
 
 		int colorChannels = 0;
-		unsigned char* heightMapData = stbi_load(heightTexturePath.c_str(), &m_XVertexResolution, &m_ZVertexResolution, &colorChannels, 0);
+		//Texture width and height are currently just kind of ignored. This is bad. Some downscaling thing should be added.
+		int textureWidth, textureHeight;
+		unsigned char* heightMapData = stbi_load(heightTexturePath.c_str(), &textureWidth, &textureHeight, &colorChannels, 0);
 		if (heightMapData == nullptr)
 		{
 			Logger::Error("Failed to load height map texture data for height map texture with the following path: {0}", heightTexturePath);
 			return;
 		}
 
-		float yScale = 64.0f / 256.0f, yShift = 16.0f;
+		float yScale = 64.0f / 256.0f, yShift = 0.f;
 
 		m_Vertices.clear();
 		m_Vertices.reserve(m_ZVertexResolution * m_XVertexResolution * 3);
@@ -74,22 +76,38 @@ namespace LAG
 		{
 			for (unsigned int x = 0; x < m_XVertexResolution; x++)
 			{
-				unsigned char* texel = heightMapData + (x + m_XVertexResolution * z) * colorChannels;
-				unsigned char y = texel[0];
+				//Calculate vertices
+				float xVert = -m_ZVertexResolution * 0.5f + m_ZVertexResolution * z / static_cast<float>(m_ZVertexResolution);
+				float zVert = -m_XVertexResolution * 0.5f + m_XVertexResolution * x / static_cast<float>(m_XVertexResolution);
 
-				//Insert vertices
-				m_Vertices.insert(m_Vertices.end(), { -m_ZVertexResolution / 2.0f + z, (int)y * yScale - yShift, -m_XVertexResolution / 2.0f + x });
+				unsigned char* heightPosData = heightMapData + ((x + m_XVertexResolution * z) * colorChannels);
+				float yVert = static_cast<int>(heightPosData[0]) * yScale - yShift;
+
+				m_Vertices.insert(m_Vertices.end(), { xVert, yVert, zVert });
+				
+				//Next thing to do here is calculate the normals
+				//... TODO!
 			}
 		}
 
 		m_Indices.clear();
-		for (unsigned int z = 0; z < m_ZVertexResolution - 1; z++)
+		m_Indices.reserve((m_ZVertexResolution - 1) * m_XVertexResolution * 2);
+		for (unsigned int z = 0; z < m_ZVertexResolution - 1; z += 1)
 		{
-			for (unsigned int x = 0; x < m_XVertexResolution; x++)
+			for (unsigned int x = 0; x < m_XVertexResolution; x += 1)
 			{
-				for (unsigned int k = 0; k < 2; k++)
+				for (unsigned int stripSide = 0; stripSide < 2; stripSide++)
 				{
-					m_Indices.push_back(x + m_XVertexResolution * (z + k));
+					unsigned int indexValue = x + m_XVertexResolution * (z + stripSide);
+					if (indexValue > USHRT_MAX)
+					{
+						//TODO: Better error checking here!
+						//This check should also be done before building the terrain and all the vertices
+						printf("This terrain type is too big!");
+
+						return;
+					}
+					else m_Indices.push_back(static_cast<unsigned short>(indexValue));
 				}
 			}
 		}
@@ -99,7 +117,6 @@ namespace LAG
 
 	void Surface::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader)
 	{
-
 		glm::mat4 modelMat = glm::mat4(1.f);
 		modelMat = glm::translate(modelMat, transform.position);
 		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(1.f, 0.f, 0.f));
@@ -109,11 +126,18 @@ namespace LAG
 
 		shader.Bind();
 		shader.SetMat4("a_ModelMat", modelMat);
-		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
 		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
+		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
+
+		int resolution = 1;
+		const int totalStrips = (m_ZVertexResolution - 1) / resolution;
+		const int trisPerStrip = (m_XVertexResolution / resolution) * 2 - 2;
+		for (unsigned int strip = 0; strip < totalStrips; strip++)
+		{
+			glDrawElements(GL_TRIANGLE_STRIP, trisPerStrip + 2, GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * (trisPerStrip + 2) * strip));
+		}
 	}
 
 	bool Surface::Load()

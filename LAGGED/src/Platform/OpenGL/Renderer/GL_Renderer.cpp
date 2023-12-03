@@ -34,7 +34,8 @@ namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		Surface* surface = nullptr;
+		Surface* testSurface = nullptr;
+		Surface* floorSurface = nullptr;
 		FrameBuffer* frameBuffer = nullptr;
 
 		bool showWireframe = false;
@@ -60,8 +61,12 @@ namespace LAG::Renderer
 
 		glEnable(GL_DEPTH_TEST);
 
-		renderData->surface = new Surface(256.f, 256.f, "res/Assets/Textures/heightmap.png");
-		renderData->surface->Reload();
+		//renderData->surface = new Surface();
+		renderData->testSurface = new Surface(256.f, 256.f, "res/Assets/Textures/face.png");
+		renderData->testSurface->Reload();
+
+		renderData->floorSurface = new Surface();
+		renderData->floorSurface->Reload();
 
 		return true;
 	}
@@ -105,7 +110,11 @@ namespace LAG::Renderer
 		renderData->renderTimer.ResetTimer();
 
 		ImGuiFrameStart();
+
+		//Render ImGui editor windows
 		DrawOptionsWindow();
+		CameraSystem::DrawEditorWindow();
+
 		renderData->frameBuffer->DrawPostProcessWindow();
 
 		//First render pass using custom frame buffer
@@ -141,10 +150,13 @@ namespace LAG::Renderer
 					return;
 
 				CameraSystem::Update(selectedCameraID);
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
+				//GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
 
-				TransformComponent planeTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
-				renderData->surface->Render(planeTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));
+				TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
+				renderData->testSurface->Render(testPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));
+
+				//TransformComponent floorPlaneTransform(glm::vec3(0.f, -2.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
+				//renderData->floorSurface->Render(floorPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));
 			});
 
 		renderData->frameBuffer->FrameEnd();

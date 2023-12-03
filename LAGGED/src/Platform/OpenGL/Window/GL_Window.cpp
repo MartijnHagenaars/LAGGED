@@ -42,15 +42,10 @@ namespace LAG
 			return;
 		}
 
-		////TODO: Maybe check for most recent version of OpenGL 4? 
-		//glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		//glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		//glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		GLint vMajor, vMinor;
-		glGetIntegerv(GL_MAJOR_VERSION, &vMajor);
-		glGetIntegerv(GL_MINOR_VERSION, &vMinor);
-		
 		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
 		m_WindowHalfWidth = static_cast<unsigned int>(winWidth * 0.5f), m_WindowHalfHeight = static_cast<unsigned int>(winHeight * 0.5f);
 		GLFWwindow* sharedWindow = (GetWindowManager()->GetPrimaryWindow() == nullptr) ? NULL : GetWindowManager()->GetPrimaryWindow()->m_Window;
