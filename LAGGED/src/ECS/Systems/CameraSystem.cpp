@@ -14,6 +14,8 @@
 #include "glm/ext/matrix_transform.hpp"
 #include <glm/ext/matrix_clip_space.hpp>
 
+#include "ImGui/imgui.h"
+
 namespace LAG::CameraSystem
 {
 	void Update(uint32_t entityID)
@@ -25,7 +27,7 @@ namespace LAG::CameraSystem
 			return;
 
 		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
-		float cameraRotationSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
+		float cameraRotationSpeed = 1.f * camera->rotationSpeed * GetEngine().GetDeltaTime();
 
 		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
 		glm::vec3 preCameraPosition = transform->position;
@@ -91,8 +93,36 @@ namespace LAG::CameraSystem
 			return camera->projMat;
 
 		camera->projMat = glm::mat4(1.f);
-		camera->projMat = glm::perspective(glm::radians(camera->fov), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100.f);
+		camera->projMat = glm::perspective(glm::radians(camera->fov), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100000.f);
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;
+	}
+
+	static uint32_t selectedCameraID = 0;
+	void DrawEditorWindow()
+	{
+		ImGui::Begin("Cameras");
+
+		if (ImGui::BeginListBox("Cameras in level"))
+		{	
+			std::vector<std::string> cameraDisplayNames;
+			GetScene()->Loop<CameraComponent, NameComponent>([&cameraDisplayNames](uint32_t entityID, CameraComponent& camComp, NameComponent& nameComp)
+				{
+					if (ImGui::Selectable(nameComp.name.c_str(), entityID == selectedCameraID))
+						selectedCameraID = entityID;
+				});
+		}
+		ImGui::EndListBox();
+		ImGui::Separator();
+
+		if (selectedCameraID > 0)
+		{
+			CameraComponent& camera = *GetScene()->GetEntity(selectedCameraID).GetComponent<CameraComponent>();
+			ImGui::Checkbox("Active", &camera.isActive);
+			ImGui::SliderFloat("Movement speed", &camera.movementSpeed, 0.f, 1000.f, "%.1f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic);
+			ImGui::SliderFloat("Rotation speed", &camera.rotationSpeed, 0.f, 200.f, "%.1f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic);
+		}
+
+		ImGui::End();
 	}
 }
