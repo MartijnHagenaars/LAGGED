@@ -16,8 +16,7 @@ namespace LAG
 		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader) = 0;
 
 	protected:
-		int m_XVertexResolution = 1;
-		int m_ZVertexResolution = 1;
+		//TODO: Move surface size variables here
 
 	private:
 		virtual bool Load() = 0;

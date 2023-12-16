@@ -343,8 +343,8 @@
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
-    <None Include="res\Shaders\OpenGL\PlaneShader.vertex.glsl" />
-    <None Include="res\Shaders\OpenGL\PlaneShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
   </ItemGroup>

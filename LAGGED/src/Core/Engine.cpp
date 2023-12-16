@@ -85,7 +85,7 @@ namespace LAG
 
 		//Create the window manager and a primary window
 		m_WindowManager = new WindowManager();
-		Window* newWindow = m_WindowManager->AddWindow(800, 600, "Main window!", false);
+		Window* newWindow = m_WindowManager->AddWindow(1920, 1280, "Main window!", false);
 		newWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
 
 		m_ResourceManager = new ResourceManager();

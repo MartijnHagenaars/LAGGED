@@ -57,12 +57,12 @@ namespace LAG::Renderer
 		renderData->frameBuffer = new FrameBuffer();
 
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader"));
+		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 
 		glEnable(GL_DEPTH_TEST);
 
 		//renderData->surface = new Surface();
-		renderData->testSurface = new Surface(256.f, 256.f, "res/Assets/Textures/face.png");
+		renderData->testSurface = new Surface("res/Assets/Textures/face.png");
 		renderData->testSurface->Reload();
 
 		renderData->floorSurface = new Surface();
@@ -114,6 +114,7 @@ namespace LAG::Renderer
 		//Render ImGui editor windows
 		DrawOptionsWindow();
 		CameraSystem::DrawEditorWindow();
+		renderData->testSurface->DrawDebugWindow();
 
 		renderData->frameBuffer->DrawPostProcessWindow();
 
@@ -153,7 +154,7 @@ namespace LAG::Renderer
 				//GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
 
 				TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				renderData->testSurface->Render(testPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));
+				renderData->testSurface->Render(testPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")));
 
 				//TransformComponent floorPlaneTransform(glm::vec3(0.f, -2.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
 				//renderData->floorSurface->Render(floorPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));

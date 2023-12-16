@@ -475,8 +475,8 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
-    <None Include="res\Shaders\OpenGL\PlaneShader.pixel.glsl" />
-    <None Include="res\Shaders\OpenGL\PlaneShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
