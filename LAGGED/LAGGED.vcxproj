@@ -478,6 +478,10 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="src\Utility\Natvis\glm.natvis" />
+    <Natvis Include="src\Utility\Natvis\imgui.natvis" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

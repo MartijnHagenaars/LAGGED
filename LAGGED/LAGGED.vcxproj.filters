@@ -348,4 +348,8 @@
     <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
   </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="src\Utility\Natvis\glm.natvis" />
+    <Natvis Include="src\Utility\Natvis\imgui.natvis" />
+  </ItemGroup>
 </Project>
