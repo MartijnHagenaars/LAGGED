@@ -94,6 +94,19 @@ namespace LAG
 		if (m_Width <= 0 || m_Height <= 0)
 			return;
 
+		//If any data already exists, clear it.
+		if (m_VertexData.capacity() > 0)
+		{
+			//First, clear the vertex data vector
+			m_VertexData.clear();
+			m_VertexData.shrink_to_fit();
+
+			//After that, clear indices
+			m_Indices.clear();
+			m_Indices.shrink_to_fit();
+		}
+
+
 		CalculateVertices();
 		CalculateIndices();
 		//CalculateNormals();
@@ -183,7 +196,6 @@ namespace LAG
 		float widthAdjustment = static_cast<float>(m_TextureWidth) / m_Width;
 		float heightAdjustment = static_cast<float>(m_TextureHeight) / m_Height;
 
-		m_VertexData.clear();
 		//TODO: m_Height and m_Width should be renamed to m_Column and m_Row
 		m_VertexData.reserve(m_Height * m_Width);
 		for (unsigned int h = 0; h < m_Height; h++)
@@ -208,25 +220,26 @@ namespace LAG
 
 	void Surface::CalculateIndices()
 	{
-		m_Indices.clear();
-		m_Indices.reserve((m_Height - 1) * m_Width * 2);
-		for (unsigned int z = 0; z < m_Height - 1; z += 1)
-		{
-			for (unsigned int x = 0; x < m_Width; x += 1)
-			{
-				for (unsigned int stripSide = 0; stripSide < 2; stripSide++)
-				{
-					unsigned int indexValue = x + m_Width * (z + stripSide);
-					if (indexValue > USHRT_MAX)
-					{
-						//TODO: Better error checking here!
-						//This check should also be done before building the terrain and all the vertices
-						printf("This terrain type is too big!");
+		m_Indices.reserve((m_Height - 1) * (m_Width - 1) * 6);
 
-						return;
-					}
-					else m_Indices.push_back(static_cast<unsigned int>(indexValue));
-				}
+		for (int h = 0; h < m_Height - 1; ++h) {
+			for (int w = 0; w < m_Width - 1; ++w) 
+			{
+				// Calculate indices for two triangles, forming a quad
+				unsigned int topLeft = h * m_Width + w;
+				unsigned int topRight = topLeft + 1;
+				unsigned int bottomLeft = (h + 1) * m_Width + w;
+				unsigned int bottomRight = bottomLeft + 1;
+
+				//First triangle
+				m_Indices.push_back(topLeft);
+				m_Indices.push_back(bottomLeft);
+				m_Indices.push_back(topRight);
+
+				//Second triangle
+				m_Indices.push_back(topRight);
+				m_Indices.push_back(bottomLeft);
+				m_Indices.push_back(bottomRight);
 			}
 		}
 	}
