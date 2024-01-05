@@ -31,6 +31,7 @@
 #include "Core/Resources/Plane.h"
 
 #include "ImGuizmo/ImGuizmo.h"
+#include "Editor/Gizmos.h"
 
 namespace LAG::Renderer
 {
@@ -78,6 +79,7 @@ namespace LAG::Renderer
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
 	}
 
 	void ImGuiFrameEnd()
@@ -108,6 +110,7 @@ namespace LAG::Renderer
 
 		ImGuiFrameStart();
 		DrawOptionsWindow();
+
 		renderData->frameBuffer->DrawPostProcessWindow();
 
 		//First render pass using custom frame buffer
@@ -142,6 +145,7 @@ namespace LAG::Renderer
 				if (!doesCameraExist)
 					return;
 
+				Gizmos::DrawViewManipulator(selectedCameraID);
 				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
 
