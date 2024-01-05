@@ -31,8 +31,8 @@ namespace LAG
 
 		struct VertexData
 		{
-			glm::vec3 vertex;
-			glm::vec3 normal = glm::vec3(1.f);
+			glm::vec3 vertex = glm::vec3(0.f);
+			glm::vec3 normal = glm::vec3(0.f);
 		};
 
 		std::vector<VertexData> m_VertexData;

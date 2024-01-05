@@ -246,6 +246,30 @@ namespace LAG
 
 	void Surface::CalculateNormals()
 	{
+		for (unsigned int i = 0; i < m_Indices.size(); i += 3)
+		{
+			//Get all the indices
+			unsigned int index1 = m_Indices[i + 0];
+			unsigned int index2 = m_Indices[i + 1];
+			unsigned int index3 = m_Indices[i + 2];
+
+			//Get all the vertices
+			glm::vec3& v0 = m_VertexData[index1].vertex;
+			glm::vec3& v1 = m_VertexData[index2].vertex;
+			glm::vec3& v2 = m_VertexData[index3].vertex;
+
+			//Calculate normal
+			const glm::vec3 normal = glm::normalize(glm::cross(v1 - v0, v2 - v0));
+
+			//Apply the normal calculations to the vertices
+			m_VertexData[index1].normal += normal;
+			m_VertexData[index2].normal += normal;
+			m_VertexData[index3].normal += normal;
+		}
+
+		//Normalize each vertex normal
+		for (unsigned int i = 0; i < m_VertexData.size(); i++)
+			m_VertexData[i].normal = glm::normalize(m_VertexData[i].normal);
 
 	}
 }
