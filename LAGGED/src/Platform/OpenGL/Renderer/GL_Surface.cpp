@@ -96,7 +96,7 @@ namespace LAG
 
 		CalculateVertices();
 		CalculateIndices();
-		CalculateNormals();
+		//CalculateNormals();
 
 		stbi_image_free(m_HeightMap);
 	}
@@ -117,13 +117,8 @@ namespace LAG
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 
-		int resolution = 1;
-		const int totalStrips = (m_Height - 1) / resolution;
-		const int trisPerStrip = (m_Width / resolution) * 2 - 2;
-		for (unsigned int strip = 0; strip < totalStrips; strip++)
-		{
-			glDrawElements(GL_TRIANGLE_STRIP, trisPerStrip + 2, GL_UNSIGNED_SHORT, (void*)(sizeof(unsigned short) * (trisPerStrip + 2) * strip));
-		}
+		//TOOD: Should use unsigned short
+		glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
 	}
 
 	void Surface::DrawDebugWindow()
@@ -157,7 +152,7 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, m_VertexData.size() * sizeof(VertexData), &m_VertexData[0], GL_STATIC_DRAW));
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned short), &m_Indices[0], GL_STATIC_DRAW));
+		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned int), &m_Indices[0], GL_STATIC_DRAW));
 
 		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
@@ -191,16 +186,16 @@ namespace LAG
 		m_VertexData.clear();
 		//TODO: m_Height and m_Width should be renamed to m_Column and m_Row
 		m_VertexData.reserve(m_Height * m_Width);
-		for (unsigned int z = 0; z < m_Height; z++)
+		for (unsigned int h = 0; h < m_Height; h++)
 		{
-			for (unsigned int x = 0; x < m_Width; x++)
+			for (unsigned int w = 0; w < m_Width; w++)
 			{
 				//Calculate vertices
-				float xVert = -m_Height * 0.5f + m_Height * z / static_cast<float>(m_Height);
-				float zVert = -m_Width * 0.5f + (m_Width * x / static_cast<float>(m_Width));
+				float xVert = -m_Height * 0.5f + m_Height * h / static_cast<float>(m_Height);
+				float zVert = -m_Width * 0.5f + (m_Width * w / static_cast<float>(m_Width));
 
-				unsigned int xResize = static_cast<unsigned int>(widthAdjustment * static_cast<float>(x));
-				unsigned int zResize = static_cast<unsigned int>(heightAdjustment * static_cast<float>(z));
+				unsigned int xResize = static_cast<unsigned int>(widthAdjustment * static_cast<float>(w));
+				unsigned int zResize = static_cast<unsigned int>(heightAdjustment * static_cast<float>(h));
 				unsigned char* heightPosData = m_HeightMap + ((xResize + m_TextureWidth * zResize) * m_HeightMapColorChannels);
 				float yVert = static_cast<int>(heightPosData[0]) * m_YScale - m_YScaleShift;
 
@@ -213,7 +208,6 @@ namespace LAG
 
 	void Surface::CalculateIndices()
 	{
-		//Seperate vertex and index calculations into functions
 		m_Indices.clear();
 		m_Indices.reserve((m_Height - 1) * m_Width * 2);
 		for (unsigned int z = 0; z < m_Height - 1; z += 1)
@@ -231,7 +225,7 @@ namespace LAG
 
 						return;
 					}
-					else m_Indices.push_back(static_cast<unsigned short>(indexValue));
+					else m_Indices.push_back(static_cast<unsigned int>(indexValue));
 				}
 			}
 		}

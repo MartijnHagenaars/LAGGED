@@ -37,7 +37,7 @@ namespace LAG
 
 		std::vector<VertexData> m_VertexData;
 		//std::vector<float> m_Normals;
-		std::vector<unsigned short> m_Indices;
+		std::vector<unsigned int> m_Indices;
 
 		unsigned int m_VBO = 0;
 		unsigned int m_EBO = 0;
