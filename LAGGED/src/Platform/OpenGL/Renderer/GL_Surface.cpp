@@ -109,7 +109,7 @@ namespace LAG
 
 		CalculateVertices();
 		CalculateIndices();
-		//CalculateNormals();
+		CalculateNormals();
 
 		stbi_image_free(m_HeightMap);
 	}
@@ -246,30 +246,6 @@ namespace LAG
 
 	void Surface::CalculateNormals()
 	{
-		for (size_t i = 0; i < m_Indices.size(); i += 3)
-		{
-			const auto kIdx1 = m_Indices[i + 0];
-			const auto kIdx2 = m_Indices[i + 1];
-			const auto kIdx3 = m_Indices[i + 2];
 
-			const auto& v0 = m_VertexData[kIdx1].vertex;
-			const auto& v1 = m_VertexData[kIdx2].vertex;
-			const auto& v2 = m_VertexData[kIdx3].vertex;
-
-			const glm::vec3 kNormal = glm::normalize(
-				glm::cross(v1 - v0, v2 - v0)
-			);
-
-			// Save for each vertex
-			m_VertexData[kIdx1].normal += kNormal;
-			m_VertexData[kIdx2].normal += kNormal;
-			m_VertexData[kIdx3].normal += kNormal;
-		}
-
-		for (size_t i = 0; i < m_VertexData.size(); ++i)
-		{
-			//Normalizing 0 0 0 results in nan values? wtf
-			m_VertexData[i].normal = glm::normalize(m_VertexData[i].normal);
-		}
 	}
 }
