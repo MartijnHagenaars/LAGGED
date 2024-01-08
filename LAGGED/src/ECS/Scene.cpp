@@ -35,6 +35,11 @@ namespace LAG
 		return Entity(static_cast<entt::entity>(entityID), m_Registry);
 	}
 
+	size_t Scene::Count() const
+	{
+		return m_Registry.storage<void>()->size();
+	}
+
 	void Scene::RemoveAll()
 	{
 		if (m_Registry.storage<entt::entity>().size() > 0)

@@ -17,6 +17,7 @@ namespace LAG
 		bool DoesEntityExist(uint32_t entityID); 
 
 		Entity GetEntity(uint32_t entityID);
+		size_t Count() const;
 
 		void RemoveAll();
 		
