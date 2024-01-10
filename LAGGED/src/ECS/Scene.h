@@ -12,6 +12,8 @@ namespace LAG
 		~Scene();
 
 		Entity AddEntity();
+		Entity AddEntity(const std::string& entityName);
+
 		void RemoveEntity(uint32_t entityID);
 
 		bool DoesEntityExist(uint32_t entityID); 

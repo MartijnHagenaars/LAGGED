@@ -33,12 +33,18 @@
 #include "ImGuizmo/ImGuizmo.h"
 #include "Editor/Gizmos.h"
 
+#include "Editor/EntityViewer.h"
+
+#include "Editor/EditorLayout.h"
+
 namespace LAG::Renderer
 {
 	struct RendererData
 	{
 		Plane* plane = nullptr;
 		FrameBuffer* frameBuffer = nullptr;
+
+		EditorLayout* editorLayout = nullptr;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -58,6 +64,9 @@ namespace LAG::Renderer
 		renderData = new RendererData();
 		renderData->frameBuffer = new FrameBuffer();
 
+		renderData->editorLayout = new EditorLayout();
+		renderData->editorLayout->Initialize();
+
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader"));
 
@@ -66,11 +75,16 @@ namespace LAG::Renderer
 		renderData->plane = new Plane();
 		renderData->plane->Reload();
 
+		renderData->editorLayout = new EditorLayout();
+		renderData->editorLayout->Initialize();
+
 		return true;
 	}
 
 	bool Shutdown()
 	{
+		//TODO: Proper cleanup
+
 		return false;
 	}
 
@@ -80,6 +94,8 @@ namespace LAG::Renderer
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
+
+		ImGui::ShowDemoWindow();
 	}
 
 	void ImGuiFrameEnd()
@@ -106,12 +122,16 @@ namespace LAG::Renderer
 
 	void Render()
 	{
+		//Start timer for measuring render time
 		renderData->renderTimer.ResetTimer();
 
-		ImGuiFrameStart();
-		DrawOptionsWindow();
 
+		// Begin of ImGui rendering
+		ImGuiFrameStart();
+
+		DrawOptionsWindow();
 		renderData->frameBuffer->DrawPostProcessWindow();
+		renderData->editorLayout->Render();
 
 		//First render pass using custom frame buffer
 		renderData->frameBuffer->FrameStart(renderData->showWireframe);

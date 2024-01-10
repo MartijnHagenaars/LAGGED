@@ -1,6 +1,8 @@
 #include "Precomp.h"
 #include "Scene.h"
 
+#include "Components/BasicComponents.h"
+
 namespace LAG
 {
 	Scene::Scene()
@@ -14,6 +16,14 @@ namespace LAG
 	Entity Scene::AddEntity()
 	{
 		entt::entity newEntity = m_Registry.create();
+		m_Registry.emplace<NameComponent>(newEntity, "New entity");
+		return Entity(newEntity, m_Registry);
+	}
+
+	Entity Scene::AddEntity(const std::string& entityName)
+	{
+		entt::entity newEntity = m_Registry.create();
+		m_Registry.emplace<NameComponent>(newEntity, entityName);
 		return Entity(newEntity, m_Registry);
 	}
 
@@ -37,7 +47,7 @@ namespace LAG
 
 	size_t Scene::Count() const
 	{
-		return m_Registry.storage<void>()->size();
+		return m_Registry.storage<entt::entity>()->size();
 	}
 
 	void Scene::RemoveAll()
