@@ -39,12 +39,14 @@ namespace LAG
 		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
 		scene->Loop<DefaultComponent>([&scene, &selectedEntityID = m_SelectedEntityID](uint32_t entityID, DefaultComponent& comp)
 			{
+				ImGui::PushID(entityID);
 				if (ImGui::Button(comp.visible ? "Hide" : "Show"))
 					comp.visible = !comp.visible;
 
 				ImGui::SameLine();
 				if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
 					selectedEntityID = entityID;
+				ImGui::PopID();
 			});
 
 		ImGui::EndChild();
