@@ -36,8 +36,9 @@ namespace LAG
 			return true;
 		}
 
-	private:
+		//TODO: Temporarily public to figure out Meta reflection
 		entt::registry m_Registry;
+	private:
 
 	};
 }

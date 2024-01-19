@@ -26,5 +26,9 @@ namespace LAG
 		glm::mat4 viewMat = glm::mat4(1.f);
 		glm::mat4 projMat = glm::mat4(1.f);
 		CameraPerspectiveType perspectiveType = CameraPerspectiveType::PERSPECTIVE;
+
+	private:
+		static int InitReflection();
+		static inline int m_ReflectionID = InitReflection();
 	};
 }

@@ -338,6 +338,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Utility\UniqueID.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\Editor\EditorLayout.cpp" />
     <ClCompile Include="src\Editor\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
