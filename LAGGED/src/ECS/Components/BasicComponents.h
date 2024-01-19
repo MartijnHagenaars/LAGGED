@@ -4,13 +4,15 @@
 
 namespace LAG
 {
-	struct NameComponent
+	struct DefaultComponent
 	{
-		explicit NameComponent(std::string name) : 
-			name(name)
-		{};
+		explicit DefaultComponent(std::string name) :
+			name(name), visible(true)
+		{
+		};
 
 		std::string name;
+		bool visible;
 	};
 
 

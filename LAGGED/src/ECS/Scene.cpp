@@ -16,14 +16,14 @@ namespace LAG
 	Entity Scene::AddEntity()
 	{
 		entt::entity newEntity = m_Registry.create();
-		m_Registry.emplace<NameComponent>(newEntity, "New entity");
+		m_Registry.emplace<DefaultComponent>(newEntity, "New entity");
 		return Entity(newEntity, m_Registry);
 	}
 
 	Entity Scene::AddEntity(const std::string& entityName)
 	{
 		entt::entity newEntity = m_Registry.create();
-		m_Registry.emplace<NameComponent>(newEntity, entityName);
+		m_Registry.emplace<DefaultComponent>(newEntity, entityName);
 		return Entity(newEntity, m_Registry);
 	}
 
