@@ -2,6 +2,7 @@
 
 namespace LAG
 {
+	class Gizmo;
 	class EntityViewer;
 
 	class EditorLayout
@@ -16,7 +17,7 @@ namespace LAG
 		void Update(float deltaTime);
 		void Render();
 
-	private:
+		Gizmo* m_Gizmo = nullptr;
 		EntityViewer* m_EntityViewer = nullptr;
 	};
 }

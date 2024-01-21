@@ -13,12 +13,19 @@ namespace LAG
 	{
 	public: 
 		Gizmo();
-		void DrawGizmo(uint32_t targetEntityID, uint32_t cameraEntityID);
+		void RenderGizmo(uint32_t targetEntityID, uint32_t cameraEntityID);
+		void RenderViewManipulator(uint32_t cameraEntityID);
 
-		void DrawViewManipulator(uint32_t cameraEntityID);
+		void RenderGizmoProperties();
 
 	private:
-		ImGuizmo::OPERATION m_GizmoOperation;
-		ImGuizmo::MODE m_GizmoMode;
+		int m_GizmoOperation;
+		int m_GizmoMode;
+
+		bool m_UseSnap = false;
+		bool m_SplitSnapAxis = false;
+		glm::vec3 m_SnapScale = glm::vec3(1.f);
+
+		bool m_UseGizmo = true;
 	};
 }
