@@ -9,6 +9,9 @@ namespace LAG
 {
 	namespace Reflection
 	{
+		inline const int REFLECTION_CHAR_ARRAY_SIZE = 256;
+		static char reflectionWidgetTextBuffer[REFLECTION_CHAR_ARRAY_SIZE];
+
 		template <typename Type>
 		static void SetWidgetType(const entt::meta_data& meta, const std::string& name, Type& value)
 		{
@@ -38,7 +41,14 @@ namespace LAG
 		template <>
 		static void SetWidgetType<std::string>(const entt::meta_data& meta, const std::string& name, std::string& value)
 		{
-			ImGui::Text("STRING REFLECTION WIDGET NOT IMPLEMENTED");
+			//Clear the text buffer and copy the current value into it
+			memset(reflectionWidgetTextBuffer, 0, REFLECTION_CHAR_ARRAY_SIZE);
+			value.copy(reflectionWidgetTextBuffer, REFLECTION_CHAR_ARRAY_SIZE);
+
+			if(ImGui::InputText(name.c_str(), reflectionWidgetTextBuffer, REFLECTION_CHAR_ARRAY_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
+			{
+				value = reflectionWidgetTextBuffer;
+			}
 		}
 
 		template <>
