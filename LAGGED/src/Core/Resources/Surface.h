@@ -7,13 +7,14 @@ namespace LAG
 	class Shader;
 	struct CameraComponent;
 	struct TransformComponent;
+	struct LightComponent;
 	class SurfaceBase : public Resource
 	{
 	public:
 		SurfaceBase() : Resource(HashedString("")) {};
 		virtual ~SurfaceBase() {};
 
-		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader) = 0;
+		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
 	protected:
 		//TODO: Move surface size variables here

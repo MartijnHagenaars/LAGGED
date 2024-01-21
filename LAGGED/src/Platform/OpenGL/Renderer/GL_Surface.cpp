@@ -6,6 +6,7 @@
 
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
+#include "ECS/Components/LightComponent.h"
 
 #include "ECS/Systems/CameraSystem.h"
 
@@ -60,20 +61,6 @@ namespace LAG
 		};
 	}
 
-	glm::vec3 CalculateSurfaceNormal(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3) 
-	{
-		glm::vec3 U = p2 - p1;
-		glm::vec3 V = p3 - p1;
-
-		//Should be a cross
-		glm::vec3 normal;
-		normal.x = (U.y * V.z) - (U.z * V.y);
-		normal.y = (U.z * V.x) - (U.x * V.z);
-		normal.z = (U.x * V.y) - (U.y * V.x);
-
-		return glm::normalize(normal);
-	}
-
 	void Surface::SetTessellationQuality(const std::string& heightTexturePath)
 	{
 		//TODO: Add some sort of check here to see if the terrain is too big
@@ -114,12 +101,30 @@ namespace LAG
 		stbi_image_free(m_HeightMap);
 	}
 
-	void Surface::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader)
+	void Surface::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
 		shader.Bind();
 		shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
 		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
 		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
+
+		//TODO: The way lights are currently handled isn't that good and should be revisited in the future.
+		if (lights.size() > 0)
+		{
+			shader.SetBool("a_UseLight", true);
+			for (int i = 0; i < TOTAL_POINT_LIGHTS; i++)
+			{
+				if (i < lights.size())
+				{
+					shader.SetVec3(std::string("a_PointLightData[" + std::to_string(i) + "].a_LightPosition"), lights[i].first->GetPosition());
+					shader.SetVec3("a_PointLightData[" + std::to_string(i) + "].a_LightColor", lights[i].second->lightColor);
+					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightIntensity", lights[i].second->lightIntensity);
+					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", lights[i].second->lightAttenuation);
+				}
+			}
+
+		}
+		else shader.SetBool("a_UseLight", false);
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 
@@ -262,7 +267,7 @@ namespace LAG
 
 		//Normalize each vertex normal
 		for (unsigned int i = 0; i < m_VertexData.size(); i++)
-			m_VertexData[i].normal = glm::normalize(m_VertexData[i].normal);
+			m_VertexData[i].normal = glm::normalize(-m_VertexData[i].normal);
 
 	}
 }

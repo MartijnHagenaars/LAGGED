@@ -17,7 +17,7 @@ namespace LAG
 		void SetTessellationQuality();
 		void SetTessellationQuality(const std::string& heightTexturePath);
 
-		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader) override;
+		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
 
 		void DrawDebugWindow();
 
