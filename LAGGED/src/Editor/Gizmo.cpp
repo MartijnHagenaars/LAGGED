@@ -1,17 +1,28 @@
 #include "Precomp.h"
-#include "Gizmos.h"
+#include "Gizmo.h"
 
-//#define IMGUI_DEFINE_MATH_OPERATORS
 #include "ImGui/imgui.h"
-//#include "ImGui/imgui_internal.h"
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "ECS/Scene.h"
+#include "ECS/Components/BasicComponents.h"
 #include "Core/Engine.h"
 
 namespace LAG
 {
-	void Gizmos::DrawViewManipulator(uint32_t cameraEntityID)
+	Gizmo::Gizmo() :
+		m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)
+	{
+	}
+
+	void Gizmo::DrawGizmo(uint32_t targetEntityID, uint32_t cameraEntityID)
+	{
+		TransformComponent* transform = GetScene()->GetEntity(targetEntityID).GetComponent<TransformComponent>();
+		if (transform == nullptr)
+			return;
+	}
+
+	void Gizmo::DrawViewManipulator(uint32_t cameraEntityID)
 	{
 		CameraComponent* cameraComp = GetScene()->GetEntity(cameraEntityID).GetComponent<CameraComponent>();
 

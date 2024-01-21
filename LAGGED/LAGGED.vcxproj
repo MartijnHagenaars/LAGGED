@@ -217,7 +217,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Editor\EditorLayout.h" />
     <ClInclude Include="src\Editor\EntityViewer.h" />
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="src\Editor\Gizmos.h" />
+    <ClInclude Include="src\Editor\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
@@ -353,7 +353,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Editor\Gizmos.cpp" />
+    <ClCompile Include="src\Editor\Gizmo.cpp" />
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Plane.cpp" />

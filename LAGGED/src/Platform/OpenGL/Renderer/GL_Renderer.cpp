@@ -25,15 +25,11 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 #include "Utility/Timer.h"
 
 #include "Core/Resources/Plane.h"
-
-#include "ImGuizmo/ImGuizmo.h"
-#include "Editor/Gizmos.h"
-
-#include "Editor/EntityViewer.h"
 
 #include "Editor/EditorLayout.h"
 
@@ -165,7 +161,6 @@ namespace LAG::Renderer
 				if (!doesCameraExist)
 					return;
 
-				Gizmos::DrawViewManipulator(selectedCameraID);
 				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
 

@@ -222,7 +222,7 @@
     <ClInclude Include="src\ECS\Systems\BasicSystems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Gizmos.h">
+    <ClInclude Include="src\Editor\Gizmo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h">
@@ -356,7 +356,7 @@
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\Gizmos.cpp">
+    <ClCompile Include="src\Editor\Gizmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
