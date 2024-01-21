@@ -28,7 +28,7 @@ namespace LAG
 		CameraPerspectiveType perspectiveType = CameraPerspectiveType::PERSPECTIVE;
 
 	private:
-		static int InitReflection();
-		static inline int m_ReflectionID = InitReflection();
+		static bool InitializeReflection();
+		static inline bool m_ReflectionState = InitializeReflection();
 	};
 }

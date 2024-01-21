@@ -9,7 +9,7 @@ namespace LAG
 		float lightIntensity = 0.f;
 		float lightAttenuation = 0.f;
 
-		static int InitReflection();
-		static inline int m_ReflectionID = InitReflection();
+		static bool InitializeReflection();
+		static inline bool m_ReflectionState = InitializeReflection();
 	};
 }

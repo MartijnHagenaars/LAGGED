@@ -14,8 +14,8 @@ namespace LAG
 		std::string name;
 		bool visible;
 
-		static int InitReflection();
-		static inline int m_ReflectionID = InitReflection();
+		static bool InitializeReflection();
+		static inline bool m_ReflectionState = InitializeReflection();
 	};
 
 
@@ -34,8 +34,8 @@ namespace LAG
 		glm::vec3 rotation = glm::vec3(0.f);
 		glm::vec3 scale = glm::vec3(1.f);
 
-		static int InitReflection();
-		static inline int m_ReflectionID = InitReflection();
+		static bool InitializeReflection();
+		static inline bool m_ReflectionState = InitializeReflection();
 	};
 
 	struct SinWaveComponent

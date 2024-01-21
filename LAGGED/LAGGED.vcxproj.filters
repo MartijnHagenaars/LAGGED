@@ -234,7 +234,13 @@
     <ClInclude Include="src\Editor\EditorLayout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ECS\Meta\MetaDefines.h">
+    <ClInclude Include="src\ECS\Meta\ReflectionDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -369,6 +375,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\Components\LightComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
