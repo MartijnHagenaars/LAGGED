@@ -105,32 +105,4 @@ namespace LAG::CameraSystem
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;
 	}
-
-	static uint32_t selectedCameraID = 0;
-	void DrawEditorWindow()
-	{
-		ImGui::Begin("Cameras");
-
-		if (ImGui::BeginListBox("Cameras in level"))
-		{	
-			std::vector<std::string> cameraDisplayNames;
-			GetScene()->Loop<CameraComponent, DefaultComponent>([&cameraDisplayNames](uint32_t entityID, CameraComponent& camComp, DefaultComponent& defaultComp)
-				{
-					if (ImGui::Selectable(defaultComp.name.c_str(), entityID == selectedCameraID))
-						selectedCameraID = entityID;
-				});
-		}
-		ImGui::EndListBox();
-		ImGui::Separator();
-
-		if (selectedCameraID > 0)
-		{
-			CameraComponent& camera = *GetScene()->GetEntity(selectedCameraID).GetComponent<CameraComponent>();
-			ImGui::Checkbox("Active", &camera.isActive);
-			ImGui::SliderFloat("Movement speed", &camera.movementSpeed, 0.f, 1000.f, "%.1f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic);
-			ImGui::SliderFloat("Rotation speed", &camera.rotationSpeed, 0.f, 200.f, "%.1f", ImGuiSliderFlags_AlwaysClamp | ImGuiSliderFlags_Logarithmic);
-		}
-
-		ImGui::End();
-	}
 }

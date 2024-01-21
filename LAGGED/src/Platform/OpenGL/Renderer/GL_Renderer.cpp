@@ -132,7 +132,6 @@ namespace LAG::Renderer
 
 		//Render ImGui editor windows
 		DrawOptionsWindow();
-		CameraSystem::DrawEditorWindow();
 		renderData->testSurface->DrawDebugWindow();
 
 		renderData->frameBuffer->DrawPostProcessWindow();
