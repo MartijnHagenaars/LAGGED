@@ -25,13 +25,13 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 #include "Utility/Timer.h"
 
 #include "Core/Resources/Plane.h"
 
-#include "ImGuizmo/ImGuizmo.h"
-#include "Editor/Gizmos.h"
+#include "Editor/EditorLayout.h"
 
 namespace LAG::Renderer
 {
@@ -39,6 +39,8 @@ namespace LAG::Renderer
 	{
 		Plane* plane = nullptr;
 		FrameBuffer* frameBuffer = nullptr;
+
+		EditorLayout* editorLayout = nullptr;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -58,6 +60,9 @@ namespace LAG::Renderer
 		renderData = new RendererData();
 		renderData->frameBuffer = new FrameBuffer();
 
+		renderData->editorLayout = new EditorLayout();
+		renderData->editorLayout->Initialize();
+
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader"));
 
@@ -66,11 +71,16 @@ namespace LAG::Renderer
 		renderData->plane = new Plane();
 		renderData->plane->Reload();
 
+		renderData->editorLayout = new EditorLayout();
+		renderData->editorLayout->Initialize();
+
 		return true;
 	}
 
 	bool Shutdown()
 	{
+		//TODO: Proper cleanup
+
 		return false;
 	}
 
@@ -80,6 +90,8 @@ namespace LAG::Renderer
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
+
+		ImGui::ShowDemoWindow();
 	}
 
 	void ImGuiFrameEnd()
@@ -106,12 +118,16 @@ namespace LAG::Renderer
 
 	void Render()
 	{
+		//Start timer for measuring render time
 		renderData->renderTimer.ResetTimer();
 
-		ImGuiFrameStart();
-		DrawOptionsWindow();
 
+		// Begin of ImGui rendering
+		ImGuiFrameStart();
+
+		DrawOptionsWindow();
 		renderData->frameBuffer->DrawPostProcessWindow();
+		renderData->editorLayout->Render();
 
 		//First render pass using custom frame buffer
 		renderData->frameBuffer->FrameStart(renderData->showWireframe);
@@ -145,7 +161,6 @@ namespace LAG::Renderer
 				if (!doesCameraExist)
 					return;
 
-				Gizmos::DrawViewManipulator(selectedCameraID);
 				CameraSystem::Update(selectedCameraID);
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
 

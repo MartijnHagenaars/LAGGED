@@ -12,11 +12,14 @@ namespace LAG
 		~Scene();
 
 		Entity AddEntity();
+		Entity AddEntity(const std::string& entityName);
+
 		void RemoveEntity(uint32_t entityID);
 
 		bool DoesEntityExist(uint32_t entityID); 
 
 		Entity GetEntity(uint32_t entityID);
+		size_t Count() const;
 
 		void RemoveAll();
 		
@@ -33,8 +36,14 @@ namespace LAG
 			return true;
 		}
 
-	private:
-		entt::registry m_Registry;
+		void DrawComponentWidgets(uint32_t entityID);
 
+
+	private:
+		bool ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, uint32_t entityID);
+		void ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, uint32_t entityID);
+		void ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, uint32_t entityID, const std::string& propName);
+
+		entt::registry m_Registry;
 	};
 }
