@@ -11,5 +11,6 @@ namespace LAG
 		}
 
 		HashedString meshPath;
+
 	};
 }

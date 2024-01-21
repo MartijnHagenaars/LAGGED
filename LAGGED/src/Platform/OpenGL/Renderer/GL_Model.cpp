@@ -226,15 +226,8 @@ namespace LAG
 
 	void LAG::Model::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
-		glm::mat4 modelMat = glm::mat4(1.f);
-		modelMat = glm::translate(modelMat, transform.position);
-		modelMat = glm::rotate(modelMat, transform.rotation.x, glm::vec3(1.f, 0.f, 0.f));
-		modelMat = glm::rotate(modelMat, transform.rotation.y, glm::vec3(0.f, 1.f, 0.f));
-		modelMat = glm::rotate(modelMat, transform.rotation.z, glm::vec3(0.f, 0.f, 1.f));
-		modelMat = glm::scale(modelMat, transform.scale);
-
 		shader.Bind();
-		shader.SetMat4("a_ModelMat", modelMat);
+		shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
 		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
 		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
 
@@ -245,7 +238,7 @@ namespace LAG
 			{
 				if (i < lights.size())
 				{
-					shader.SetVec3(std::string("a_PointLightData[" + std::to_string(i) + "].a_LightPosition"), lights[i].first->position);
+					shader.SetVec3(std::string("a_PointLightData[" + std::to_string(i) + "].a_LightPosition"), lights[i].first->GetPosition());
 					shader.SetVec3("a_PointLightData[" + std::to_string(i) + "].a_LightColor", lights[i].second->lightColor);
 					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightIntensity", lights[i].second->lightIntensity);
 					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", lights[i].second->lightAttenuation);

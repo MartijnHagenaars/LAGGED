@@ -25,10 +25,13 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
+#include "ImGuizmo/ImGuizmo.h"
 
 #include "Utility/Timer.h"
 
 #include "Core/Resources/Surface.h"
+
+#include "Editor/EditorLayout.h"
 
 namespace LAG::Renderer
 {
@@ -37,6 +40,8 @@ namespace LAG::Renderer
 		Surface* testSurface = nullptr;
 		Surface* floorSurface = nullptr;
 		FrameBuffer* frameBuffer = nullptr;
+
+		EditorLayout* editorLayout = nullptr;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -56,6 +61,9 @@ namespace LAG::Renderer
 		renderData = new RendererData();
 		renderData->frameBuffer = new FrameBuffer();
 
+		renderData->editorLayout = new EditorLayout();
+		renderData->editorLayout->Initialize();
+
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 
@@ -68,11 +76,16 @@ namespace LAG::Renderer
 		renderData->floorSurface = new Surface();
 		renderData->floorSurface->Reload();
 
+		renderData->editorLayout = new EditorLayout();
+		renderData->editorLayout->Initialize();
+
 		return true;
 	}
 
 	bool Shutdown()
 	{
+		//TODO: Proper cleanup
+
 		return false;
 	}
 
@@ -81,6 +94,9 @@ namespace LAG::Renderer
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
+
+		ImGui::ShowDemoWindow();
 	}
 
 	void ImGuiFrameEnd()
@@ -107,8 +123,11 @@ namespace LAG::Renderer
 
 	void Render()
 	{
+		//Start timer for measuring render time
 		renderData->renderTimer.ResetTimer();
 
+
+		// Begin of ImGui rendering
 		ImGuiFrameStart();
 
 		//Render ImGui editor windows
@@ -117,6 +136,7 @@ namespace LAG::Renderer
 		renderData->testSurface->DrawDebugWindow();
 
 		renderData->frameBuffer->DrawPostProcessWindow();
+		renderData->editorLayout->Render();
 
 		//First render pass using custom frame buffer
 		renderData->frameBuffer->FrameStart(renderData->showWireframe);
