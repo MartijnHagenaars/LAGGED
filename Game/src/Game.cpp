@@ -69,9 +69,9 @@ void Game::Initialize()
 	ent4Light->lightColor = glm::vec3(1.f, 0.f, 0.f);
 
 	LAG::Entity ent5 = LAG::GetEngine().GetScene()->AddEntity();
-	ent5.AddComponent<LAG::NameComponent>("Camera");
-	ent5.AddComponent<LAG::TransformComponent>()->position = glm::vec3(0.f, -120.f, 0.f);
-	ent5.AddComponent<LAG::TransformComponent>()->rotation = glm::vec3(1.57f, 0.f, 0.f);
+	ent5.AddComponent<LAG::DefaultComponent>("Camera");
+	ent5.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, -120.f, 0.f));
+	ent5.AddComponent<LAG::TransformComponent>()->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
 	ent5.AddComponent<LAG::CameraComponent>();
 }
 

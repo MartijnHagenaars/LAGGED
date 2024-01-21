@@ -114,9 +114,9 @@ namespace LAG::CameraSystem
 		if (ImGui::BeginListBox("Cameras in level"))
 		{	
 			std::vector<std::string> cameraDisplayNames;
-			GetScene()->Loop<CameraComponent, NameComponent>([&cameraDisplayNames](uint32_t entityID, CameraComponent& camComp, NameComponent& nameComp)
+			GetScene()->Loop<CameraComponent, DefaultComponent>([&cameraDisplayNames](uint32_t entityID, CameraComponent& camComp, DefaultComponent& defaultComp)
 				{
-					if (ImGui::Selectable(nameComp.name.c_str(), entityID == selectedCameraID))
+					if (ImGui::Selectable(defaultComp.name.c_str(), entityID == selectedCameraID))
 						selectedCameraID = entityID;
 				});
 		}
