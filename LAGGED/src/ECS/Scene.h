@@ -36,9 +36,14 @@ namespace LAG
 			return true;
 		}
 
-		//TODO: Temporarily public to figure out Meta reflection
-		entt::registry m_Registry;
-	private:
+		void DrawComponentWidgets(uint32_t entityID);
 
+
+	private:
+		bool ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, uint32_t entityID);
+		void ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, uint32_t entityID);
+		void ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, uint32_t entityID, const std::string& propName);
+
+		entt::registry m_Registry;
 	};
 }

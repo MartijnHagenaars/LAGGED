@@ -17,7 +17,7 @@ namespace LAG
 		static entt::meta_factory<T> SetupReflectionType()
 		{
 			auto type = entt::meta<T>();
-			type.template func<&Reflection::TypeAdapter<T>>(entt::hashed_string("EDITOR_WIDGET"));
+			type.func<&Reflection::TypeAdapter<T>>(entt::hashed_string("EDITOR_WIDGET"));
 			return type;
 		}
 

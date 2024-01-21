@@ -27,57 +27,6 @@ namespace LAG
 	{
 	}
 
-
-	void ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, uint32_t entityID, const std::string& propName)
-	{
-		if (typeValues.type().func(Reflection::EDITOR_WIDGET))
-		{
-			typeValues.type().func(Reflection::EDITOR_WIDGET).invoke<const char*, entt::meta_any, entt::meta_data&>({ 0 },
-				propName.c_str(), entt::forward_as_meta(typeValues), typeData
-			);
-		}
-		else
-			ImGui::Text("No meta inspect function detected\n");
-	}
-
-	void ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, uint32_t entityID)
-	{
-		std::string propDisplayName;
-		entt::meta_prop displayNameProp = propData.prop(Reflection::DISPLAY_NAME);
-		if (displayNameProp.value() != nullptr)
-		{
-			propDisplayName = displayNameProp.value().cast<std::string>();
-			ImGui::PushID(std::string(std::to_string(propValues.type().id()) + propDisplayName).c_str());
-			ReflectType(propData, propValues, entityID, propDisplayName);
-			ImGui::PopID();
-		}
-		else
-			propDisplayName = "Undefined property display name";
-	}
-
-	bool ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, uint32_t entityID)
-	{
-		std::string compName = std::string(compMeta.info().name());
-		ImGui::Text(compName.c_str());
-
-		entt::meta_any compElement = compMeta.from_void(storageSet.value(entt::entity(entityID)));
-		if (compElement == nullptr)
-			return false;
-
-		for (auto&& [idType, propMetaData] : compMeta.data())
-		{
-			entt::meta_any propInstance, propInstanceCompare;
-			propInstanceCompare = propInstance = propMetaData.get(compElement);
-			ReflectProperty(propMetaData, propInstance, entityID);
-
-			//Check if the component has been modified. If so, (re)set the values
-			if (propInstance != propInstanceCompare)
-				propMetaData.set(compElement, propInstance);
-		}
-
-		return true;
-	}
-
 	void EntityViewer::Render()
 	{
 		ImGui::Begin("Entity Viewer");
@@ -116,24 +65,8 @@ namespace LAG
 		ImGui::BeginChild("EntityProperties", ImVec2(0.f, 0.f), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
 		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
 		ImGui::Text(selectedEntityDisplay.c_str());
-		
-		for (auto&& [idType, storageSet] : GetScene()->m_Registry.storage())
-		{
-			if (storageSet.contains(entt::entity(m_SelectedEntityID)))
-			{
-				auto componentMeta = entt::resolve(storageSet.type());
-				if (!componentMeta)
-					continue;
 
-				if (!ReflectComponent(componentMeta, storageSet, m_SelectedEntityID))
-					ImGui::Text("Failed to load reflection data for component.");
-				else ImGui::Separator();
-
-
-
-
-			}
-		}
+		GetScene()->DrawComponentWidgets(m_SelectedEntityID);
 
 		ImGui::EndChild();
 

@@ -12,8 +12,8 @@ namespace LAG
 		inline const int REFLECTION_CHAR_ARRAY_SIZE = 256;
 		static char reflectionWidgetTextBuffer[REFLECTION_CHAR_ARRAY_SIZE];
 
-		template <typename Type>
-		static void SetWidgetType(const entt::meta_data& meta, const std::string& name, Type& value)
+		template <typename T>
+		static void SetWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
 		{
 			std::string errorMessage = "No Reflection type set up for " + name;
 			ImGui::Text(errorMessage);
