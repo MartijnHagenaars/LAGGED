@@ -19,11 +19,21 @@ namespace LAG
 	{
 		TransformComponent* transform = GetScene()->GetEntity(targetEntityID).GetComponent<TransformComponent>();
 		if (transform == nullptr)
+		{
+			ImGuizmo::Enable(false);
 			return;
+		}
+
+		ImGuizmo::Enable(true);
+
+		//ImGuizmo::DecomposeMatrixToComponents(transform.);
+
+
 	}
 
 	void Gizmo::DrawViewManipulator(uint32_t cameraEntityID)
 	{
+		TransformComponent* transform = GetScene()->GetEntity(cameraEntityID).GetComponent<TransformComponent>();
 		CameraComponent* cameraComp = GetScene()->GetEntity(cameraEntityID).GetComponent<CameraComponent>();
 
 		float viewManipulateRight = ImGui::GetWindowPos().x + (float)ImGui::GetWindowWidth();
@@ -31,6 +41,7 @@ namespace LAG
 
 		//TODO: To fix crash, first create an actual ImGui window that gizmo shit needs to go onto
 		// then set the drawlist
-		ImGuizmo::ViewManipulate(&cameraComp->viewMat[0][0], 8.f, ImVec2(0, 0), ImVec2(128, 128), 0x10101010);
+		glm::mat4 viewMat = transform->GetTransformMatrix();
+		ImGuizmo::ViewManipulate(&viewMat[0][0], 8.f, ImVec2(0, 0), ImVec2(128, 128), 0x10101010);
 	}
 }

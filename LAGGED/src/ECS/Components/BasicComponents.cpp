@@ -5,6 +5,8 @@
 #include "ECS/Scene.h"
 #include "ECS/Meta/ReflectionDefines.h"
 
+#include "glm/ext/matrix_transform.inl"
+
 bool LAG::DefaultComponent::InitializeReflection()
 {
     auto factory = entt::meta<DefaultComponent>();
@@ -13,6 +15,27 @@ bool LAG::DefaultComponent::InitializeReflection()
     factory.data<&DefaultComponent::name>(entt::hashed_string("name")).prop(Reflection::DISPLAY_NAME, std::string("Name"));
 
     return false; 
+}
+
+LAG::TransformComponent::TransformComponent() : 
+    position(glm::vec3(0.f)), rotation(glm::vec3(0.f)), scale(glm::vec3(1.f))
+{
+}
+
+const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
+{
+    if (dirty)
+    {
+        transform = glm::identity<glm::mat4>();
+        transform = glm::translate(transform, position);
+        transform = glm::rotate(transform, rotation.x, glm::vec3(1.f, 0.f, 0.f));
+        transform = glm::rotate(transform, rotation.y, glm::vec3(0.f, 1.f, 0.f));
+        transform = glm::rotate(transform, rotation.z, glm::vec3(0.f, 0.f, 1.f));
+        transform = glm::scale(transform, scale);
+        dirty = false;
+    }
+
+    return transform;
 }
 
 bool LAG::TransformComponent::InitializeReflection()

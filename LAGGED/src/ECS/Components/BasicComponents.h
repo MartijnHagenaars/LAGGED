@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "glm/vec3.hpp"
+#include "glm/mat4x4.hpp"
 
 namespace LAG
 {
@@ -21,7 +22,7 @@ namespace LAG
 
 	struct TransformComponent
 	{
-		TransformComponent() = default;
+		TransformComponent();
 		explicit TransformComponent(const glm::vec3& position) : 
 			position(position)
 		{}
@@ -30,9 +31,23 @@ namespace LAG
 			position(position), rotation(rotation), scale(scale)
 		{}
 
-		glm::vec3 position = glm::vec3(0.f);
-		glm::vec3 rotation = glm::vec3(0.f);
-		glm::vec3 scale = glm::vec3(1.f);
+		void SetTransformMatrix(const glm::mat4 transformMat) { transform = transformMat; dirty = false; }
+		const glm::mat4& GetTransformMatrix();
+
+		void SetPosition(const glm::vec3& position) { this->position = position; dirty = true; }
+		void SetRotation(const glm::vec3& rotation) { this->rotation = rotation; dirty = true; }
+		void SetScale(const glm::vec3& scale) { this->scale = scale; dirty = true; }
+
+		glm::vec3 GetPosition() const { return position; }
+		glm::vec3 GetRotation() const { return rotation; }
+		glm::vec3 GetScale() const { return scale; }
+
+	private:
+		glm::vec3 position;
+		glm::vec3 rotation;
+		glm::vec3 scale;
+		glm::mat4 transform;
+		bool dirty = true;
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();
