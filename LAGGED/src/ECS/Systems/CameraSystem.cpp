@@ -25,7 +25,7 @@ namespace LAG::CameraSystem
 			return;
 
 		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
-		float cameraRotationSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
+		float cameraRotationSpeed = 1.f * camera->rotationSpeed * GetEngine().GetDeltaTime();
 
 		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
 		glm::vec3 preCameraPosition = transform->position;
