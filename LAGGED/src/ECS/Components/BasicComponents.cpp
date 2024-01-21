@@ -5,7 +5,9 @@
 #include "ECS/Scene.h"
 #include "ECS/Meta/ReflectionDefines.h"
 
-#include "glm/ext/matrix_transform.inl"
+#include "glm/ext/matrix_transform.hpp"
+#include "glm/gtx/matrix_decompose.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 bool LAG::DefaultComponent::InitializeReflection()
 {
@@ -18,8 +20,19 @@ bool LAG::DefaultComponent::InitializeReflection()
 }
 
 LAG::TransformComponent::TransformComponent() : 
-    position(glm::vec3(0.f)), rotation(glm::vec3(0.f)), scale(glm::vec3(1.f))
+    translation(glm::vec3(0.f)), rotation(glm::vec3(0.f)), scale(glm::vec3(1.f)), transform(glm::identity<glm::mat4>())
 {
+}
+
+void LAG::TransformComponent::SetTransformMatrix(const glm::mat4 transformMat)
+{
+    dirty = false;
+    transform = transformMat; 
+
+    glm::quat rotQuat;
+    glm::vec3 skew;
+    glm::vec4 perspective;
+    glm::decompose(transform, scale, rotQuat, translation, skew, perspective);
 }
 
 const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
@@ -27,7 +40,7 @@ const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
     if (dirty)
     {
         transform = glm::identity<glm::mat4>();
-        transform = glm::translate(transform, position);
+        transform = glm::translate(transform, translation);
         transform = glm::rotate(transform, rotation.x, glm::vec3(1.f, 0.f, 0.f));
         transform = glm::rotate(transform, rotation.y, glm::vec3(0.f, 1.f, 0.f));
         transform = glm::rotate(transform, rotation.z, glm::vec3(0.f, 0.f, 1.f));
@@ -43,7 +56,7 @@ bool LAG::TransformComponent::InitializeReflection()
     auto factory = entt::meta<TransformComponent>();
     factory.type(entt::type_hash<TransformComponent>::value());
 
-    factory.data<&TransformComponent::position>(entt::hashed_string("position")).prop(Reflection::DISPLAY_NAME, std::string("Position"));
+    factory.data<&TransformComponent::translation>(entt::hashed_string("translation")).prop(Reflection::DISPLAY_NAME, std::string("Position"));
     factory.data<&TransformComponent::rotation>(entt::hashed_string("rotation")).prop(Reflection::DISPLAY_NAME, std::string("Rotation"));
     factory.data<&TransformComponent::scale>(entt::hashed_string("scale")).prop(Reflection::DISPLAY_NAME, std::string("Scale"));
 

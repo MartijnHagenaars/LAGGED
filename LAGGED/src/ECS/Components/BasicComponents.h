@@ -23,27 +23,27 @@ namespace LAG
 	struct TransformComponent
 	{
 		TransformComponent();
-		explicit TransformComponent(const glm::vec3& position) : 
-			position(position)
+		explicit TransformComponent(const glm::vec3& translation) : 
+			translation(translation)
 		{}
 
-		TransformComponent(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) :
-			position(position), rotation(rotation), scale(scale)
+		TransformComponent(const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scale) :
+			translation(translation), rotation(rotation), scale(scale)
 		{}
 
-		void SetTransformMatrix(const glm::mat4 transformMat) { transform = transformMat; dirty = false; }
+		void SetTransformMatrix(const glm::mat4 transformMat);
 		const glm::mat4& GetTransformMatrix();
 
-		void SetPosition(const glm::vec3& position) { this->position = position; dirty = true; }
+		void SetPosition(const glm::vec3& translation) { this->translation = translation; dirty = true; }
 		void SetRotation(const glm::vec3& rotation) { this->rotation = rotation; dirty = true; }
 		void SetScale(const glm::vec3& scale) { this->scale = scale; dirty = true; }
 
-		glm::vec3 GetPosition() const { return position; }
+		glm::vec3 GetPosition() const { return translation; }
 		glm::vec3 GetRotation() const { return rotation; }
 		glm::vec3 GetScale() const { return scale; }
 
 	private:
-		glm::vec3 position;
+		glm::vec3 translation;
 		glm::vec3 rotation;
 		glm::vec3 scale;
 		glm::mat4 transform;

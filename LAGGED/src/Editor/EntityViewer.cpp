@@ -55,7 +55,7 @@ namespace LAG
 
 		ImGui::EndChild();
 
-		ImGui::InvisibleButton("splitter", ImVec2(-1.f, 10.0f));
+		ImGui::InvisibleButton("splitButton", ImVec2(-1.f, 10.0f));
 		if (ImGui::IsItemActive())
 			m_BrowserHeight += ImGui::GetIO().MouseDelta.y;
 
