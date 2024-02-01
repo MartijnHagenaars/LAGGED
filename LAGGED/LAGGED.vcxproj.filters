@@ -397,4 +397,12 @@
     <Natvis Include="src\Utility\Natvis\glm.natvis" />
     <Natvis Include="src\Utility\Natvis\imgui.natvis" />
   </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoiseD.dll">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
 </Project>

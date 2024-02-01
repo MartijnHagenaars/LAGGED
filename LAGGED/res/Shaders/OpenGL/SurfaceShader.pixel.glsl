@@ -16,7 +16,7 @@ struct PointLightData
 	float a_LightIntensity;
 	float a_LightAttenuation;
 };
-#define TOTAL_POINT_LIGHTS 1
+#define TOTAL_POINT_LIGHTS 3
 uniform PointLightData a_PointLightData[TOTAL_POINT_LIGHTS];
 
 vec3 CalculateDiffuse(vec3 lightPosition, vec3 lightColor)
@@ -42,6 +42,6 @@ void main()
 	}
 	else lightCalculation = vec3(1.0);
 
-	vec3 baseColor = vec3(1.0, 0.0, 0.0) * lightCalculation;
+	vec3 baseColor = vec3(0.337, 0.71, 0.0) * lightCalculation;
 	colorOut = vec4(baseColor, 1.0);
 } 

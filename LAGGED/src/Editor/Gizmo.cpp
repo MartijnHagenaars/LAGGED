@@ -30,13 +30,20 @@ namespace LAG
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
-		ImGui::Begin("GizmoView", 0, ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking);
+		ImGui::Begin("GizmoView", 0, ImGuiWindowFlags_NoBackground | 
+			ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | 
+			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking
+		);
 
 		ImGuizmo::SetDrawlist();
 		ImGuizmo::SetRect(viewport->Pos.x, viewport->Pos.y, viewport->Size.x, viewport->Size.y);
 
 		glm::mat4 targetEntityMatrix = targetTransform->GetTransformMatrix();
-		if (ImGuizmo::Manipulate(&camera->viewMat[0][0], &camera->projMat[0][0], static_cast<ImGuizmo::OPERATION>(m_GizmoOperation), static_cast<ImGuizmo::MODE>(m_GizmoMode), &targetEntityMatrix[0][0], NULL, m_UseSnap ? &m_SnapScale[0] : NULL))
+		if (ImGuizmo::Manipulate(&camera->viewMat[0][0], &camera->projMat[0][0], 
+			static_cast<ImGuizmo::OPERATION>(m_GizmoOperation), 
+			static_cast<ImGuizmo::MODE>(m_GizmoMode), 
+			&targetEntityMatrix[0][0], NULL, 
+			m_UseSnap ? &m_SnapScale[0] : NULL))
 		{
 			targetTransform->SetTransformMatrix(targetEntityMatrix);
 		}

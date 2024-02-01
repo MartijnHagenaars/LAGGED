@@ -55,10 +55,9 @@ namespace LAG
 
 		ImGui::EndChild();
 
-		ImGui::InvisibleButton("splitButton", ImVec2(-1.f, 10.0f));
+		ImGui::InvisibleButton("SplitButton", ImVec2(-1.f, 10.0f));
 		if (ImGui::IsItemActive())
 			m_BrowserHeight += ImGui::GetIO().MouseDelta.y;
-
 
 
 		//Selected entity container
@@ -66,6 +65,7 @@ namespace LAG
 		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
 		ImGui::Text(selectedEntityDisplay.c_str());
 
+		//Draw all 
 		GetScene()->DrawComponentWidgets(m_SelectedEntityID);
 
 		ImGui::EndChild();

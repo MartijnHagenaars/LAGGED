@@ -12,10 +12,7 @@ namespace LAG
 		Surface(const std::string& heightTexturePath);
 		~Surface() override;
 		
-
-		//TODO: Make this a virtual in the SurfaceBase
-		void SetTessellationQuality();
-		void SetTessellationQuality(const std::string& heightTexturePath);
+		void GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed = 0);
 
 		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
 
@@ -24,6 +21,13 @@ namespace LAG
 	private:
 		virtual bool Load() override;
 		virtual bool Unload() override;
+
+		//Load a height map from a texture
+		//TODO: Needs to be reworked
+		void LoadTextureHeightMap(const std::string& heightTexturePath);
+
+		//Creates a vector of 2D noise data
+		std::vector<float> GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed = 0);
 
 		void CalculateVertices();
 		void CalculateIndices();
@@ -46,8 +50,7 @@ namespace LAG
 		int m_Width = 0;
 		int m_Height = 0;
 
-		int m_HeightMapColorChannels;
-		unsigned char* m_HeightMap;
+		std::vector<float> m_HeightMapData;
 
 		int m_TextureWidth = 0;
 		int m_TextureHeight = 0;
@@ -56,7 +59,7 @@ namespace LAG
 		int m_EditorHeight = 0;
 
 		float m_Resolution = 0;
-		float m_YScale = 0.25f;
+		float m_Amplitude = 0.25f;
 		float m_YScaleShift = 16.f;
 
 	};

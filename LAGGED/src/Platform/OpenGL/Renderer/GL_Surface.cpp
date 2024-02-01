@@ -16,68 +16,48 @@
 
 #include "stb_image.h"
 
+
+#include "FastNoise/FastNoise.h"
+
 //For debugging only. 
 #include "ImGui/imgui.h"
 
 namespace LAG
 {
-	Surface::Surface() : 
+	Surface::Surface() :
 		SurfaceBase()
 	{
-		SetTessellationQuality();
 	}
 
 	Surface::Surface(const std::string& heightTexturePath) :
 		SurfaceBase()
 	{
-		int texWidth, texHeight, colorChannels;
-		stbi_info(heightTexturePath.c_str(), &texWidth, &texHeight, &colorChannels);
-		m_TextureWidth = texWidth, m_TextureHeight = texHeight;
-
-		m_Width = m_TextureWidth, m_Height = m_TextureHeight;
-		m_EditorWidth = m_Width, m_EditorHeight = m_Height;
-
-		SetTessellationQuality(heightTexturePath);
+		Logger::Error("Constructor for loading height map from texture has not been implemented.");
 	}
 
 	Surface::~Surface()
 	{
 	}
 
-	void Surface::SetTessellationQuality()
-	{
-		m_VertexData =
-		{
-			VertexData{glm::vec3(-0.5f, 0.0f,-0.5f)},
-			VertexData{glm::vec3(-0.5f, 0.0f, 0.5f)},
-			VertexData{glm::vec3( 0.5f, 0.0f, 0.5f)},
-			VertexData{glm::vec3( 0.5f, 0.0f,-0.5f)}
-		};
+	
+	//////////////////////////////////////////
+	// Loading height map data from texture //
+	//////////////////////////////////////////
 
-		m_Indices =
-		{
-			0, 1, 2,
-			0, 2, 3
-		};
+	void Surface::LoadTextureHeightMap(const std::string& heightTexturePath)
+	{
+		Logger::Error("LoadTextureHeightMap() has not been implemented.");
 	}
 
-	void Surface::SetTessellationQuality(const std::string& heightTexturePath)
+
+	////////////////////////////////////////
+	// Loading height map data from noise //
+	////////////////////////////////////////
+
+	void Surface::GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed)
 	{
-		//TODO: Add some sort of check here to see if the terrain is too big
-
-		//Texture width and height are currently just kind of ignored. This is bad. Some downscaling thing should be added.
-		int textureWidth, textureHeight;
-
-		//Check if there is a way of loading without getting the texture width and height. It's not important here.
-		m_HeightMap = stbi_load(heightTexturePath.c_str(), &m_TextureWidth, &m_TextureHeight, &m_HeightMapColorChannels, 0);
-		if (m_HeightMap == nullptr)
-		{
-			Logger::Error("Failed to load height map texture data for height map texture with the following path: {0}", heightTexturePath);
-			return;
-		}
-
-		//Check if parameters are valid
-		//TODO: This check is dumb and should be changed. 
+		//Check if sizes are valid
+		m_Width = xSize, m_Height = ySize;
 		if (m_Width <= 0 || m_Height <= 0)
 			return;
 
@@ -93,12 +73,30 @@ namespace LAG
 			m_Indices.shrink_to_fit();
 		}
 
+		m_TextureWidth = m_Width, m_TextureHeight = m_Height;
+		m_Amplitude = amplitude;
+
+		m_HeightMapData = GenerateNoise(xStart, yStart, xSize, ySize, frequency, seed);
 
 		CalculateVertices();
 		CalculateIndices();
 		CalculateNormals();
+	}
 
-		stbi_image_free(m_HeightMap);
+	std::vector<float> Surface::GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed)
+	{
+		std::vector<float> noiseData(xSize * ySize);
+
+		if (xSize > 0 && ySize > 0)
+		{
+			//TODO: generator should be stored
+			auto generator = FastNoise::NewFromEncodedNodeTree("DQAGAAAACtcjPwcAAI/Cdb0A9ih0QQ==");
+			generator->GenUniformGrid2D(noiseData.data(), xStart, yStart, xSize, ySize, frequency, seed);
+		}
+		else
+			Logger::Warning("Invalid noise map size");
+
+		return noiseData;
 	}
 
 	void Surface::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
@@ -138,13 +136,13 @@ namespace LAG
 
 		ImGui::SliderInt("Width", &m_EditorWidth, 0, 1280);
 		ImGui::SliderInt("Height", &m_EditorHeight, 0, 1280);
-		ImGui::SliderFloat("Y-Scale", &m_YScale, 0.f, 1.f);
+		ImGui::SliderFloat("Amplitude", &m_Amplitude, 0.f, 1.f);
 		ImGui::SliderFloat("Y-Scale Shift", &m_YScaleShift, 0.f, 512.f);
 
 		if (ImGui::Button("Apply"))
 		{
 			m_Width = m_EditorWidth, m_Height = m_EditorHeight;
-			SetTessellationQuality("res/Assets/Textures/face.png");
+			//GenerateSurface("res/Assets/Textures/face.png");
 			Reload();
 		}
 
@@ -206,8 +204,7 @@ namespace LAG
 
 				unsigned int xResize = static_cast<unsigned int>(widthAdjustment * static_cast<float>(w));
 				unsigned int zResize = static_cast<unsigned int>(heightAdjustment * static_cast<float>(h));
-				unsigned char* heightPosData = m_HeightMap + ((xResize + m_TextureWidth * zResize) * m_HeightMapColorChannels);
-				float yVert = static_cast<int>(heightPosData[0]) * m_YScale - m_YScaleShift;
+				float yVert = m_HeightMapData[xResize + m_TextureWidth * zResize] * m_Amplitude - m_YScaleShift;
 
 				VertexData vd;
 				vd.vertex = glm::vec3(xVert, yVert, zVert);
