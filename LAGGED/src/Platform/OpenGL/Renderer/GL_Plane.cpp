@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "GL_Plane.h"
 
 #include "Core/Resources/Shader.h"

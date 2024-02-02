@@ -1,5 +1,3 @@
-#include "Precomp.h"
-
 #include "Platform/OpenGL/Window/GL_Window.h"
 #include "Platform/Base/Window/WindowManager.h"
 

@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "Timer.h"
 
 LAG::Timer::Timer()

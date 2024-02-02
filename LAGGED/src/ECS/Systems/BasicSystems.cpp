@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "BasicSystems.h"
 #include "Core/Engine.h"
 #include "ECS/Scene.h"

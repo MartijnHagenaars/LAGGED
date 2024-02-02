@@ -1,9 +1,10 @@
-#include "Precomp.h"
 #include "GL_Model.h"
 #include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
 
 #include "Core/Engine.h"
+#include "Utility/Logger.h"
+
 #include "Platform/Base/Window/WindowManager.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Texture.h"

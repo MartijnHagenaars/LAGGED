@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "CameraComponent.h"
 
 #include "Core/Engine.h"
