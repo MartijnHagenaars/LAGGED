@@ -348,6 +348,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Platform\Base\Window\WindowManager.h" />
     <ClInclude Include="src\Utility\UniqueID.h" />
+    <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
@@ -468,6 +469,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp" />
     <ClCompile Include="src\Utility\UniqueID.cpp" />
+    <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl">
