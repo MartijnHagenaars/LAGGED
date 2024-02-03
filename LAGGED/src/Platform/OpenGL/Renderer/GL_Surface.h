@@ -15,9 +15,6 @@ namespace LAG
 		void GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed = 0);
 
 		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
-
-		void DrawDebugWindow();
-
 	private:
 		virtual bool Load() override;
 		virtual bool Unload() override;
@@ -54,9 +51,6 @@ namespace LAG
 
 		int m_TextureWidth = 0;
 		int m_TextureHeight = 0;
-
-		int m_EditorWidth = 0;
-		int m_EditorHeight = 0;
 
 		float m_Amplitude = 0.25f;
 		float m_YScaleShift = 16.f;

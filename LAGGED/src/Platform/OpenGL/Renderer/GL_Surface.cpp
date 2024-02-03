@@ -130,26 +130,6 @@ namespace LAG
 		glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
 	}
 
-	void Surface::DrawDebugWindow()
-	{
-		ImGui::Begin("Surface Properties");
-
-		ImGui::SliderInt("Width", &m_EditorWidth, 0, 1280);
-		ImGui::SliderInt("Height", &m_EditorHeight, 0, 1280);
-		ImGui::SliderFloat("Amplitude", &m_Amplitude, 0.f, 1.f);
-		ImGui::SliderFloat("Y-Scale Shift", &m_YScaleShift, 0.f, 512.f);
-
-		if (ImGui::Button("Apply"))
-		{
-			m_Width = m_EditorWidth, m_Height = m_EditorHeight;
-			//GenerateSurface("res/Assets/Textures/face.png");
-			Reload();
-		}
-
-
-		ImGui::End();
-	}
-
 	bool Surface::Load()
 	{
 		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));

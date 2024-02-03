@@ -5,6 +5,8 @@
 
 #include "glm/vec3.hpp"
 
+#include "Core/Resources/Texture.h"
+
 namespace LAG
 {
 	namespace Reflection
@@ -16,7 +18,7 @@ namespace LAG
 		[[maybe_unused]] static void SetWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
 		{
 			std::string errorMessage = "No Reflection type set up for " + name;
-			ImGui::Text(errorMessage);
+			ImGui::Text(errorMessage.c_str());
 		}
 
 		template <>
@@ -54,6 +56,31 @@ namespace LAG
 		[[maybe_unused]] static void SetWidgetType<glm::vec3>(const entt::meta_data& meta, const std::string& name, glm::vec3& value)
 		{
 			ImGui::DragFloat3(name.c_str(), &value[0], 0.1f);
+		}
+
+		template <>
+		static void SetWidgetType<Texture*>(const entt::meta_data& meta, const std::string& name, Texture*& value)
+		{
+			if (value != nullptr)
+				ImGui::Image((void*)(intptr_t)value->GetEditorHandle(), ImVec2(value->GetWidth(), value->GetHeight()));
+			else
+			{
+				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No texture assigned.");
+			}
+
+
+			ImGui::BeginTabBar("TextureType", ImGuiTabBarFlags_None);
+			if (ImGui::BeginTabItem("Resource"))
+			{
+				ImGui::Text("This is for textures stored in the resource manager");
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Generate"))
+			{
+				ImGui::Text("This is for ones created with perlin noise");
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
 		}
 
 	}

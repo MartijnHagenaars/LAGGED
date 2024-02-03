@@ -34,7 +34,7 @@ namespace LAG
 
 		//Load image data
 		stbi_set_flip_vertically_on_load(true);
-		stbi_uc* texData = stbi_load(filePath.c_str(), &m_TexWidth, &m_TexHeight, &m_TexChannels, 0);
+		unsigned char* texData = stbi_load(filePath.c_str(), &m_TexWidth, &m_TexHeight, &m_TexChannels, 0);
 		if (texData == nullptr)
 		{
 			Logger::Error("Failed to load texture data for texture with the following path: {0}", filePath);

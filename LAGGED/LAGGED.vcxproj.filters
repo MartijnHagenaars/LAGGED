@@ -386,6 +386,9 @@
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ECS\Components\TerrainComponents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />

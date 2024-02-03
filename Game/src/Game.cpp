@@ -14,6 +14,7 @@
 #include "ECS/Components/MeshComponent.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
+#include "ECS/Components/TerrainComponents.h"
 
 ENTRY_APP(Game)
 
@@ -72,6 +73,9 @@ void Game::Initialize()
 	ent5.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, -120.f, 0.f));
 	ent5.AddComponent<LAG::TransformComponent>()->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
 	ent5.AddComponent<LAG::CameraComponent>();
+
+	LAG::Entity ent6 = LAG::GetEngine().GetScene()->AddEntity("Surface");
+	ent6.AddComponent<LAG::PlaneComponent>();
 }
 
 void Game::Shutdown()

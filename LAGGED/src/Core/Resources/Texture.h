@@ -14,6 +14,10 @@ namespace LAG
 		virtual void Bind(size_t textureUnit) = 0;
 		virtual void Unbind(size_t textureUnit) = 0;
 
+		int GetWidth() const { return m_TexWidth; }
+		int GetHeight() const { return m_TexHeight; }
+		virtual void* GetEditorHandle() = 0;
+
 	protected:
 		int m_TexWidth = 0;
 		int m_TexHeight = 0;

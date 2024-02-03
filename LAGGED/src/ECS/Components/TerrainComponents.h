@@ -1,17 +1,26 @@
 #pragma once
 #include "Core/Resources/Texture.h"
+#include "Core/Resources/Surface.h"
 
 namespace LAG
 {
 	struct PlaneComponent
 	{
-		Texture* texture = nullptr;
+		Surface* m_Surface = nullptr;
+		Texture* m_Texture = nullptr;
+
+		static bool InitializeReflection();
+		static inline bool m_ReflectionState = InitializeReflection();
 	};
 
 	struct ProceduralTerrainComponent
 	{
-		float frequency = 0.f;
-		float amplitude = 0.f;
-		int seed = 0;
+		Surface* m_Surface = nullptr;
+		Texture* texture = nullptr;
+		Texture* heightmap = nullptr;
+
+		float m_Frequency = 0.f;
+		float m_Amplitude = 0.f;
+		int m_Seed = 0;
 	};
 }

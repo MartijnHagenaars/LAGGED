@@ -365,6 +365,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
+    <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
     <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
     <ClCompile Include="src\Editor\EditorLayout.cpp" />
     <ClCompile Include="src\Editor\EntityViewer.cpp" />
