@@ -9,11 +9,12 @@ namespace ImGuizmo
 
 namespace LAG
 {
+	class Entity;
 	class Gizmo
 	{
 	public: 
 		Gizmo();
-		void RenderGizmo(uint32_t targetEntityID, uint32_t cameraEntityID);
+		void RenderGizmo(Entity* targetEntity, Entity* cameraEntity);
 		void RenderViewManipulator(uint32_t cameraEntityID);
 
 		void RenderGizmoProperties();

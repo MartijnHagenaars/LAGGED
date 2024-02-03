@@ -8,15 +8,15 @@ namespace LAG
 {
 	void BasicSystems::UpdateBasicSystems()
 	{
-		GetScene()->Loop<SinWaveComponent>([](uint32_t entityID, SinWaveComponent& component)
+		GetScene()->Loop<SinWaveComponent>([](Entity entity, SinWaveComponent& component)
 			{
-				SinWaveSystem::Update(entityID);
+				SinWaveSystem::Update(&entity);
 			});
 	}
 
-	void SinWaveSystem::Update(uint32_t entityID)
+	void SinWaveSystem::Update(Entity* entity)
 	{
-		SinWaveComponent* component = GetScene()->GetEntity(entityID).GetComponent<SinWaveComponent>();
+		SinWaveComponent* component = entity->GetComponent<SinWaveComponent>();
 		component->time += GetEngine().GetDeltaTime();
 		component->sinValue = component->amplitude * sinf(component->frequency * component->time);
 	}

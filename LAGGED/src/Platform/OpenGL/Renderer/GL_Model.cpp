@@ -9,6 +9,7 @@
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Texture.h"
 
+#include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/CameraComponent.h"
@@ -225,12 +226,12 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 	}
 
-	void LAG::Model::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
+	void LAG::Model::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
 		shader.Bind();
 		shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
-		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
-		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
+		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntity));
+		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntity));
 
 		if (lights.size() > 0)
 		{

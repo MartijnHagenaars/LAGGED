@@ -1,8 +1,9 @@
 #pragma once
-#include <stdint.h> //TODO: REMOVE! BAD! uint32_t should NOT be used as an entity handle
+#include "ECS/Entity.h"
 
 namespace LAG
 {
+	class Entity;
 	class EntityViewer
 	{
 	public: 
@@ -12,10 +13,10 @@ namespace LAG
 		void Update();
 		void Render(); 
 
-		uint32_t GetSelectedEntityID() const { return m_SelectedEntityID; }
+		Entity* GetSelectedEntityID() { return &m_SelectedEntity; }
 
 	private:
-		uint32_t m_SelectedEntityID = 0;
+		Entity m_SelectedEntity;
 		float m_BrowserHeight = 0;
 	};
 }

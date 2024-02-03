@@ -66,29 +66,29 @@ namespace LAG
 	//Functionality for Entt Meta widgets, used in Editor Tools//
 	/////////////////////////////////////////////////////////////
 
-	void Scene::DrawComponentWidgets(uint32_t entityID)
+	void Scene::DrawComponentWidgets(Entity* entity)
 	{
 		for (auto&& [idType, storageSet] : m_Registry.storage())
 		{
-			if (storageSet.contains(entt::entity(entityID)))
+			if (storageSet.contains(entt::entity(entity->GetEntityID())))
 			{
 				auto componentMeta = entt::resolve(storageSet.type());
 				if (!componentMeta)
 					continue;
 
-				if (!ReflectComponent(componentMeta, storageSet, entityID))
+				if (!ReflectComponent(componentMeta, storageSet, entity->m_EntityID))
 					ImGui::Text("Failed to load reflection data for component.");
 				else ImGui::Separator();
 			}
 		}
 	}
 
-	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, uint32_t entityID)
+	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, entt::entity entity)
 	{
 		std::string compName = std::string(compMeta.info().name());
 		ImGui::Text(compName.c_str());
 
-		entt::meta_any compElement = compMeta.from_void(storageSet.value(entt::entity(entityID)));
+		entt::meta_any compElement = compMeta.from_void(storageSet.value(entity));
 		if (compElement == nullptr)
 			return false;
 
@@ -96,7 +96,7 @@ namespace LAG
 		{
 			entt::meta_any propInstance, propInstanceCompare;
 			propInstanceCompare = propInstance = propMetaData.get(compElement);
-			ReflectProperty(propMetaData, propInstance, entityID);
+			ReflectProperty(propMetaData, propInstance);
 
 			//Check if the component has been modified. If so, (re)set the values
 			if (propInstance != propInstanceCompare)
@@ -106,7 +106,7 @@ namespace LAG
 		return true;
 	}
 
-	void Scene::ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, uint32_t entityID)
+	void Scene::ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues)
 	{
 		std::string propDisplayName;
 		entt::meta_prop displayNameProp = propData.prop(Reflection::DISPLAY_NAME);
@@ -114,14 +114,14 @@ namespace LAG
 		{
 			propDisplayName = displayNameProp.value().cast<std::string>();
 			ImGui::PushID(std::string(std::to_string(propValues.type().id()) + propDisplayName).c_str());
-			ReflectType(propData, propValues, entityID, propDisplayName);
+			ReflectType(propData, propValues, propDisplayName);
 			ImGui::PopID();
 		}
 		else
 			propDisplayName = "Undefined property display name";
 	}
 
-	void Scene::ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, uint32_t entityID, const std::string& propName)
+	void Scene::ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, const std::string& propName)
 	{
 		if (typeValues.type().func(Reflection::EDITOR_WIDGET))
 		{

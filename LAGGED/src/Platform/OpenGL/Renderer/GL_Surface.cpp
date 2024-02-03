@@ -99,12 +99,12 @@ namespace LAG
 		return noiseData;
 	}
 
-	void Surface::Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
+	void Surface::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
 		shader.Bind();
 		shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
-		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
-		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
+		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntity));
+		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntity));
 
 		//TODO: The way lights are currently handled isn't that good and should be revisited in the future.
 		if (lights.size() > 0)

@@ -18,6 +18,7 @@ namespace LAG
 	};
 
 	class Shader;
+	class Entity;
 	struct LightComponent;
 	struct TransformComponent;
 	class ModelBase : public Resource
@@ -27,7 +28,7 @@ namespace LAG
 		explicit ModelBase(const HashedString& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
-		virtual void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
+		virtual void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
 	protected:
 		tinygltf::Model* m_Model = nullptr;

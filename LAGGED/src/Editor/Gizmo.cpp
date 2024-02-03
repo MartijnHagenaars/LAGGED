@@ -4,6 +4,7 @@
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "ECS/Scene.h"
+#include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "Core/Engine.h"
 
@@ -14,10 +15,10 @@ namespace LAG
 	{
 	}
 
-	void Gizmo::RenderGizmo(uint32_t targetEntityID, uint32_t cameraEntityID)
+	void Gizmo::RenderGizmo(Entity* targetEntity, Entity* cameraEntity)
 	{
-		TransformComponent* targetTransform = GetScene()->GetEntity(targetEntityID).GetComponent<TransformComponent>();
-		CameraComponent* camera = GetScene()->GetEntity(cameraEntityID).GetComponent<CameraComponent>();
+		TransformComponent* targetTransform = targetEntity->GetComponent<TransformComponent>();
+		CameraComponent* camera = cameraEntity->GetComponent<CameraComponent>();
 		if (targetTransform == nullptr || camera == nullptr)
 		{
 			ImGuizmo::Enable(false);

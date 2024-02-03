@@ -40,15 +40,15 @@ namespace LAG
 
 		//Browser container
 		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-		scene->Loop<DefaultComponent>([&scene, &selectedEntityID = m_SelectedEntityID](uint32_t entityID, DefaultComponent& comp)
+		scene->Loop<DefaultComponent>([&scene, &selectedEntity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
 			{
-				ImGui::PushID(entityID);
+				ImGui::PushID(entity.GetEntityID());
 				if (ImGui::Button(comp.visible ? "Hide" : "Show"))
 					comp.visible = !comp.visible;
 
 				ImGui::SameLine();
 				if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
-					selectedEntityID = entityID;
+					selectedEntity = entity;
 				ImGui::PopID();
 			});
 
@@ -61,17 +61,20 @@ namespace LAG
 
 		//Selected entity container
 		ImGui::BeginChild("EntityProperties", ImVec2(0.f, 0.f), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
-		ImGui::Text(selectedEntityDisplay.c_str());
 
-		//Draw all 
-		GetScene()->DrawComponentWidgets(m_SelectedEntityID);
+		if (m_SelectedEntity.IsValid())
+		{
+			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity.GetEntityID());
+			ImGui::Text(selectedEntityDisplay.c_str());
+
+			//Draw all component widgets
+			GetScene()->DrawComponentWidgets(&m_SelectedEntity);
+		}
+		else ImGui::Text("Select an entity to view its properties");
 
 		ImGui::EndChild();
-
 		ImGui::PopStyleVar();
 
 		ImGui::End();
-
 	}
 }

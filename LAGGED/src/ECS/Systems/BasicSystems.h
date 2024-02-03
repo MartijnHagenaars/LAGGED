@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include "ECS/Entity.h"
 
 namespace LAG
 {
@@ -10,6 +11,6 @@ namespace LAG
 
 	namespace SinWaveSystem
 	{
-		void Update(uint32_t entityID);
+		void Update(Entity* entity);
 	}
 }

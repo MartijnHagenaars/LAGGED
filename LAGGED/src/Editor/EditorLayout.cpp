@@ -37,9 +37,18 @@ namespace LAG
 	{
 		m_EntityViewer->Render();
 
-		uint32_t cameraEntityID = entt::tombstone;
-		GetScene()->Loop<CameraComponent>([&cameraEntityID](uint32_t entityID, CameraComponent& camera) {if (camera.isActive) cameraEntityID = entityID; });
-		m_Gizmo->RenderGizmo(m_EntityViewer->GetSelectedEntityID(), cameraEntityID);
-		m_Gizmo->RenderGizmoProperties();
+		Entity cameraEntity;
+		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera) 
+			{
+				if (camera.isActive) 
+					cameraEntity = entity; 
+			});
+
+		if (cameraEntity.IsValid() && m_EntityViewer->GetSelectedEntityID()->IsValid())
+		{
+			m_Gizmo->RenderGizmo(m_EntityViewer->GetSelectedEntityID(), &cameraEntity);
+			m_Gizmo->RenderGizmoProperties();
+		}
+
 	}
 }

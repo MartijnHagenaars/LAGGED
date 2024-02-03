@@ -24,6 +24,7 @@ namespace LAG
 		glm::vec2 textureCoords;
 	};
 
+	class Entity;
 	class Model : public ModelBase
 	{
 		friend class ResourceManager;
@@ -32,7 +33,7 @@ namespace LAG
 		explicit Model(const HashedString& path);
 		~Model() override;
 
-		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
+		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
 
 	private:
 		bool Load() override;

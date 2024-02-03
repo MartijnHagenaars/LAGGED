@@ -14,7 +14,7 @@ namespace LAG
 		
 		void GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed = 0);
 
-		void Render(TransformComponent& transform, uint32_t cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
+		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
 
 		void DrawDebugWindow();
 

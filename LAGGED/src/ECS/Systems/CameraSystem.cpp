@@ -17,9 +17,9 @@
 
 namespace LAG::CameraSystem
 {
-	void Update(uint32_t entityID)
+	void Update(Entity* entity)
 	{
-		CameraComponent* camera = GetScene()->GetEntity(entityID).GetComponent<CameraComponent>();
+		CameraComponent* camera = entity->GetComponent<CameraComponent>();
 
 		//Only update active cameras
 		if (!camera->isActive)
@@ -28,7 +28,7 @@ namespace LAG::CameraSystem
 		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
 		float cameraRotationSpeed = 1.f * camera->rotationSpeed * GetEngine().GetDeltaTime();
 
-		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
+		TransformComponent* transform = entity->GetComponent<TransformComponent>();
 		glm::vec3 camPosAdjustment = glm::vec3(0.f);
 		if (Input::IsActionPressed(HashedString("cameraMoveForward")))
 			camPosAdjustment += camera->forwardVector * cameraMovementSpeed;
@@ -67,10 +67,10 @@ namespace LAG::CameraSystem
 		
 	}
 	
-	glm::mat4 CalculateViewMat(uint32_t entityID)
+	glm::mat4 CalculateViewMat(Entity* entity)
 	{
-		CameraComponent* camera = GetScene()->GetEntity(entityID).GetComponent<CameraComponent>();
-		TransformComponent* transform = GetScene()->GetEntity(entityID).GetComponent<TransformComponent>();
+		CameraComponent* camera = entity->GetComponent<CameraComponent>();
+		TransformComponent* transform = entity->GetComponent<TransformComponent>();
 		if (camera == nullptr || transform == nullptr)
 			return glm::mat4(0.f);
 
@@ -93,9 +93,9 @@ namespace LAG::CameraSystem
 		return camera->viewMat;
 	}
 
-	glm::mat4 CalculateProjMat(uint32_t entityID)
+	glm::mat4 CalculateProjMat(Entity* entity)
 	{
-		CameraComponent* camera = GetScene()->GetEntity(entityID).GetComponent<CameraComponent>();
+		CameraComponent* camera = entity->GetComponent<CameraComponent>();
 		if (!camera->hasCameraDimensionChanged)
 			return camera->projMat;
 

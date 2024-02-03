@@ -1,6 +1,5 @@
 #pragma once
 #include "entt/entt.hpp"
-#include "Core/Defines.h"
 #include "Utility/Logger.h"
 
 namespace LAG
@@ -8,9 +7,11 @@ namespace LAG
 	class Entity
 	{
 	public:
-		Entity() = delete;
-		Entity(const Entity&) = delete;
+		Entity() = default;
 		~Entity();
+		Entity(const Entity& entity);
+
+		bool IsValid();
 
 		template<typename T>
 		bool HasComponent()
@@ -58,13 +59,13 @@ namespace LAG
 			return nullptr;
 		}
 
-		uint32_t GetEntityID() const { return static_cast<uint32_t>(m_EntityID); }
+		uint32_t GetEntityID() const;
 
 	private:
 		friend class Scene;
 		Entity(entt::entity entityID, entt::registry& registryPtr);
 
-		entt::entity m_EntityID;
+		entt::entity m_EntityID = entt::tombstone;
 		entt::registry* m_RegistryPtr = nullptr;
 
 	};

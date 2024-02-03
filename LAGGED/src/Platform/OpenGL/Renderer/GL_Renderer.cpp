@@ -9,6 +9,7 @@
 #include "Platform/OpenGL/Renderer/GL_FrameBuffer.h"
 #include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
 
+#include "ECS/Entity.h"
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/MeshComponent.h"
@@ -141,14 +142,14 @@ namespace LAG::Renderer
 		renderData->frameBuffer->FrameStart(renderData->showWireframe);
 
 		//Render all meshes
-		GetScene()->Loop<MeshComponent, TransformComponent>([](uint32_t entityID, MeshComponent& meshComp, TransformComponent& meshTransformComp)
+		GetScene()->Loop<MeshComponent, TransformComponent>([](Entity entity, MeshComponent& meshComp, TransformComponent& meshTransformComp)
 			{
 				std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
 
 				if (renderData->useLighting)
 				{
 					lights.reserve(3);
-					GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](uint32_t entityID, LightComponent& lightComp, TransformComponent& lightTransformComp)
+					GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](Entity entity, LightComponent& lightComp, TransformComponent& lightTransformComp)
 						{
 							if (lights.size() < TOTAL_POINT_LIGHTS)
 								lights.push_back({ &lightTransformComp, &lightComp });
@@ -156,12 +157,12 @@ namespace LAG::Renderer
 				}
 
 				bool doesCameraExist;
-				uint32_t selectedCameraID;
-				doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCameraID](uint32_t entityID, CameraComponent& camera, TransformComponent& transform)
+				Entity selectedCamera;
+				doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCamera](Entity entity, CameraComponent& camera, TransformComponent& transform)
 					{
 						if (camera.isActive)
 						{
-							selectedCameraID = entityID;
+							selectedCamera = entity;
 						}
 					});
 
@@ -169,11 +170,11 @@ namespace LAG::Renderer
 				if (!doesCameraExist)
 					return;
 
-				CameraSystem::Update(selectedCameraID);
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
+				CameraSystem::Update(&selectedCamera);
+				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
 
 				TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				renderData->testSurface->Render(testPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 
 				//TransformComponent floorPlaneTransform(glm::vec3(0.f, -2.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
 				//renderData->floorSurface->Render(floorPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));

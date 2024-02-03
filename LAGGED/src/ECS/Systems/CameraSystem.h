@@ -1,10 +1,11 @@
 #pragma once
 #include "glm/glm.hpp"
+#include "ECS/Entity.h"
 
 namespace LAG::CameraSystem
 {
-	void Update(uint32_t entityID);
+	void Update(Entity* entity);
 
-	glm::mat4 CalculateViewMat(uint32_t entityID);
-	glm::mat4 CalculateProjMat(uint32_t entityID);
+	glm::mat4 CalculateViewMat(Entity* entity);
+	glm::mat4 CalculateProjMat(Entity* entity);
 }
