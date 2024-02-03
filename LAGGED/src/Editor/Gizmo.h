@@ -1,12 +1,6 @@
 #pragma once
 #include "ECS/Components/CameraComponent.h"
 
-namespace ImGuizmo
-{
-	enum OPERATION;
-	enum MODE;
-}
-
 namespace LAG
 {
 	class Entity;
