@@ -60,6 +60,16 @@ namespace LAG
 			glfwTerminate();
 			return;
 		}
+
+		if (centerWindow)
+		{
+			RECT displayRect = {};
+			HWND windowHandle = glfwGetWin32Window(m_Window);
+			GetWindowRect(windowHandle, &displayRect);
+
+			glfwSetWindowPos(m_Window, displayRect.right / 2 - m_WindowWidth / 2, displayRect.bottom / 2 - m_WindowHeight / 2);
+		}
+
 		glfwSetWindowUserPointer(m_Window, this);
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);

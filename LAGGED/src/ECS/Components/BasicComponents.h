@@ -23,31 +23,26 @@ namespace LAG
 	struct TransformComponent
 	{
 		TransformComponent();
-		explicit TransformComponent(const glm::vec3& translation) : 
-			translation(translation)
-		{}
-
-		TransformComponent(const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scale) :
-			translation(translation), rotation(rotation), scale(scale)
-		{}
+		explicit TransformComponent(const glm::vec3& translation);
+		TransformComponent(const glm::vec3& translation, const glm::vec3& rotation, const glm::vec3& scale);
 
 		void SetTransformMatrix(const glm::mat4 transformMat);
 		const glm::mat4& GetTransformMatrix();
 
-		void SetPosition(const glm::vec3& translation) { this->translation = translation; dirty = true; }
-		void SetRotation(const glm::vec3& rotation) { this->rotation = rotation; dirty = true; }
-		void SetScale(const glm::vec3& scale) { this->scale = scale; dirty = true; }
+		void SetPosition(const glm::vec3& translation) { m_Translation = translation; m_Dirty = true; }
+		void SetRotation(const glm::vec3& rotation) { m_Rotation = rotation; m_Dirty = true; }
+		void SetScale(const glm::vec3& scale) { m_Scale = scale; m_Dirty = true; }
 
-		glm::vec3 GetPosition() const { return translation; }
-		glm::vec3 GetRotation() const { return rotation; }
-		glm::vec3 GetScale() const { return scale; }
+		glm::vec3 GetPosition() const { return m_Translation; }
+		glm::vec3 GetRotation() const { return m_Rotation; }
+		glm::vec3 GetScale() const { return m_Scale; }
 
 	private:
-		glm::vec3 translation;
-		glm::vec3 rotation;
-		glm::vec3 scale;
-		glm::mat4 transform;
-		bool dirty = true;
+		glm::vec3 m_Translation;
+		glm::vec3 m_Rotation;
+		glm::vec3 m_Scale;
+		glm::mat4 m_Transform;
+		bool m_Dirty = true;
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();

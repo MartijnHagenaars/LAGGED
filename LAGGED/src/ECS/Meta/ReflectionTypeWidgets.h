@@ -13,33 +13,32 @@ namespace LAG
 		static char reflectionWidgetTextBuffer[REFLECTION_CHAR_ARRAY_SIZE];
 
 		template <typename T>
-		static void SetWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
+		[[maybe_unused]] static void SetWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
 		{
 			std::string errorMessage = "No Reflection type set up for " + name;
 			ImGui::Text(errorMessage);
 		}
 
-
 		template <>
-		static void SetWidgetType<int>(const entt::meta_data& meta, const std::string& name, int& value)
+		[[maybe_unused]] static void SetWidgetType<int>(const entt::meta_data& meta, const std::string& name, int& value)
 		{
 			ImGui::DragInt(name.c_str(), &value);
 		}
 
 		template <>
-		static void SetWidgetType<bool>(const entt::meta_data& meta, const std::string& name, bool& value)
+		[[maybe_unused]] static void SetWidgetType<bool>(const entt::meta_data& meta, const std::string& name, bool& value)
 		{
 			ImGui::Checkbox(name.c_str(), &value);
 		}
 
 		template <>
-		static void SetWidgetType<float>(const entt::meta_data& meta, const std::string& name, float& value)
+		[[maybe_unused]] static void SetWidgetType<float>(const entt::meta_data& meta, const std::string& name, float& value)
 		{
 			ImGui::DragFloat(name.c_str(), &value, 0.1f);
 		}
 
 		template <>
-		static void SetWidgetType<std::string>(const entt::meta_data& meta, const std::string& name, std::string& value)
+		[[maybe_unused]] static void SetWidgetType<std::string>(const entt::meta_data& meta, const std::string& name, std::string& value)
 		{
 			//Clear the text buffer and copy the current value into it
 			memset(reflectionWidgetTextBuffer, 0, REFLECTION_CHAR_ARRAY_SIZE);
@@ -52,7 +51,7 @@ namespace LAG
 		}
 
 		template <>
-		static void SetWidgetType<glm::vec3>(const entt::meta_data& meta, const std::string& name, glm::vec3& value)
+		[[maybe_unused]] static void SetWidgetType<glm::vec3>(const entt::meta_data& meta, const std::string& name, glm::vec3& value)
 		{
 			ImGui::DragFloat3(name.c_str(), &value[0], 0.1f);
 		}

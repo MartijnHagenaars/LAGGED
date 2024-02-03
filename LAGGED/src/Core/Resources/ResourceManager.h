@@ -31,7 +31,6 @@ namespace LAG
 			{
 				LAG_ASSERT("Cannot load resource: Template type of is not child of type \"Resource\".");
 			}
-			return false;
 		}
 
 		template<typename T>

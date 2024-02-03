@@ -58,7 +58,6 @@ namespace LAG
 		int m_EditorWidth = 0;
 		int m_EditorHeight = 0;
 
-		float m_Resolution = 0;
 		float m_Amplitude = 0.25f;
 		float m_YScaleShift = 16.f;
 

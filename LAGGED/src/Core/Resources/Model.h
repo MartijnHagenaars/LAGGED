@@ -38,8 +38,7 @@ namespace LAG
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
 
-		virtual void LoadTextures(tinygltf::Model& modelData, std::string& directoryPath) = 0;
-		virtual void LoadModel(tinygltf::Model& modelData, std::string& directoryPath) = 0;
+		virtual void LoadModel(tinygltf::Model& modelData) = 0;
 	};
 }
 

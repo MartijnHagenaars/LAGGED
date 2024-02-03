@@ -39,8 +39,7 @@ namespace LAG
 		bool Load() override;
 		bool Unload() override;
 
-		void LoadTextures(tinygltf::Model& modelData, std::string& directoryPath) override {}; //CURRENTLY NOT BEING USED
-		void LoadModel(tinygltf::Model& modelData, std::string& directoryPath) override;
+		void LoadModel(tinygltf::Model& modelData) override;
 		
 		std::vector<size_t> m_Textures;
 

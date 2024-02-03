@@ -79,7 +79,7 @@ namespace LAG
 			Logger::Warning("Warning while loading Model: {0}", warningMsg);
 
 		std::string modelDirPath = std::filesystem::path(filePath).parent_path().string();
-		LoadModel(*m_Model, modelDirPath);
+		LoadModel(*m_Model);
 
 		m_PreTransformScale = 1.f;
 		return true;
@@ -156,7 +156,6 @@ namespace LAG
 		const auto& accessors = modelData.accessors[primitive.indices];
 		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
 		const auto& buffers = modelData.buffers[bufferViews.buffer];
-		auto whatever = accessors.componentType;
 		size_t accessorSize = tinygltf::GetNumComponentsInType(accessors.type) * tinygltf::GetComponentSizeInBytes(accessors.componentType);
 		indices.reserve((bufferViews.byteLength / accessorSize));
 		{
@@ -172,7 +171,7 @@ namespace LAG
 		return indices;
 	}
 
-	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive, std::string modelPath)
+	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, std::string modelPath)
 	{
 		std::vector<size_t> textures;
 
@@ -192,7 +191,7 @@ namespace LAG
 		return textures;
 	}
 
-	void Model::LoadModel(tinygltf::Model& modelData, std::string& directoryPath)
+	void Model::LoadModel(tinygltf::Model& modelData)
 	{
 		//Create buffer objects and such
 		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
@@ -203,7 +202,7 @@ namespace LAG
 		auto& primitive = modelData.meshes[0].primitives[0];
 		std::vector<MeshData> meshData = LoadVertices(modelData, primitive);
 		std::vector<unsigned short> indices = LoadIndices(modelData, primitive);
-		m_Textures = LoadTexture(modelData, primitive, GetPath().GetString());
+		m_Textures = LoadTexture(modelData, GetPath().GetString());
 		m_TotalIndices = static_cast<unsigned int>(indices.size());
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));

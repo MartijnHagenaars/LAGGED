@@ -29,7 +29,7 @@ namespace LAG
 		}
 
 	private:
-		size_t Hash(const std::string& str, int i = 0)
+		size_t Hash(const std::string& str)
 		{
 			std::hash<std::string> hasher;
 			return hasher(str);
