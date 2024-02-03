@@ -36,6 +36,19 @@ void LAG::Logger::Initialize()
 
 void LAG::Logger::Shutdown()
 {
+    if (loggerData != nullptr)
+    {
+        loggerData->consoleSink->flush();
+        loggerData->consoleSink.reset();
+
+        loggerData->fileSink->flush();
+        loggerData->fileSink.reset();
+
+        spdlog::default_logger().reset();
+    }
+    delete loggerData;
+    loggerData = nullptr;
+
     //TODO: Causes a crash. Look into this at some point
     //spdlog::shutdown();
 }

@@ -139,8 +139,7 @@ namespace LAG
 		}
 		m_WindowManager = nullptr;
 
-
-		Logger::Shutdown(); //TODO: Logger shutdown should happen after every other shutdowns. Fix the crash first. 
+		Logger::Shutdown();
 
 		return true;
 	}

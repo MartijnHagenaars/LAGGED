@@ -1,5 +1,4 @@
 #pragma once
-#include <stdint.h>
 #include "ECS/Entity.h"
 
 namespace LAG
