@@ -130,6 +130,6 @@ namespace LAG
 			);
 		}
 		else
-			ImGui::Text("No meta inspect function detected\n");
+			ImGui::Text(std::string("No meta inspect function detected for " + propName).c_str());
 	}
 }
