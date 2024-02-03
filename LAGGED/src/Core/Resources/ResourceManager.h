@@ -5,6 +5,8 @@
 #include <memory>
 
 #include "Resource.h"
+#include "Utility/Logger.h"
+#include "Core/Defines.h"
 
 namespace LAG
 {

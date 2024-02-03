@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "EditorLayout.h"
 
 #include "Gizmo.h"

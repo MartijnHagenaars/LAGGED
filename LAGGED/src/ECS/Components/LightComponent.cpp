@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "LightComponent.h"
 
 #include "ECS/Scene.h"

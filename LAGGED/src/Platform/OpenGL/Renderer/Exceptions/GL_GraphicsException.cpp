@@ -1,6 +1,6 @@
-#include "Precomp.h"
 #include "GL_GraphicsException.h"
 #include "GL/glew.h"
+#include <sstream>
 
 namespace LAG
 {

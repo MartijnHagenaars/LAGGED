@@ -1,5 +1,4 @@
 #pragma once
-#include "Precomp.h"
 #include "ApplicationInterface.h"
 
 #include "Engine.h"

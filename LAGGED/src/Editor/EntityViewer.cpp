@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "EntityViewer.h"
 
 #include "ECS/Entity.h"
@@ -38,7 +37,7 @@ namespace LAG
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());
-		
+
 		//Browser container
 		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
 		scene->Loop<DefaultComponent>([&scene, &selectedEntityID = m_SelectedEntityID](uint32_t entityID, DefaultComponent& comp)

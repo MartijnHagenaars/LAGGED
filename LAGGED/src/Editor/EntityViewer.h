@@ -1,4 +1,5 @@
 #pragma once
+#include <stdint.h> //TODO: REMOVE! BAD! uint32_t should NOT be used as an entity handle
 
 namespace LAG
 {

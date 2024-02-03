@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "Scene.h"
 
 #include "Components/BasicComponents.h"

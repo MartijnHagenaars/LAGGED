@@ -1,5 +1,4 @@
 #pragma once
-#include "Precomp.h"
 #include "Core/Defines.h"
 #include "Core/ApplicationInterface.h"
 

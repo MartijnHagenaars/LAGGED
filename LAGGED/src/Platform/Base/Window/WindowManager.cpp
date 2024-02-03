@@ -1,5 +1,5 @@
-#include "Precomp.h"
 #include "WindowManager.h"
+#include "Utility/Logger.h"
 
 namespace LAG
 {

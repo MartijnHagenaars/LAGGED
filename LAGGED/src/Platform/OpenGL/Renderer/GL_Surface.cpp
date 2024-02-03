@@ -1,5 +1,5 @@
-#include "Precomp.h"
 #include "GL_Surface.h"
+#include "Utility/Logger.h"
 
 #include "Core/Resources/Shader.h"
 #include "Core/Resources/Texture.h"

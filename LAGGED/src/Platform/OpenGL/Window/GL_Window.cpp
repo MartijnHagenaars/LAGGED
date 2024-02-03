@@ -1,8 +1,9 @@
-#include "Precomp.h"
 #include "GL_Window.h"
 #include "Events/EventBase.h"
 #include "Platform/Base/Window/WindowManager.h"
+
 #include "Core/Engine.h"
+#include "Utility/Logger.h"
 
 #include "GL_InputEnumConversion.h"
 

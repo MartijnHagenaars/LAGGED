@@ -1,8 +1,10 @@
 #pragma once
 #include "Core/Resources/Model.h"
 #include "glm/glm.hpp" //TODO: Remove glm here
+
 #include <map>
 #include <utility>
+#include <vector>
 
 namespace tinygltf
 {

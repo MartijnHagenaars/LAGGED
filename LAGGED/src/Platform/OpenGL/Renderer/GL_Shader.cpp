@@ -1,8 +1,9 @@
-#include "Precomp.h"
 #include "GL_Shader.h"
 
+#include <sstream>
 #include <fstream>
 #include <filesystem>
+#include "Utility/Logger.h"
 
 #include "GL/glew.h"
 #include "glm/gtc/type_ptr.hpp"

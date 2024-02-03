@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "Gizmo.h"
 
 #include "ImGui/imgui.h"

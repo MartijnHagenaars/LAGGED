@@ -1,10 +1,10 @@
-#include "Precomp.h"
 #include "GL_Texture.h"
 #include "GL/glew.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+#include "Utility/Logger.h"
 #include "Exceptions/GL_GraphicsExceptionMacros.h"
 
 namespace LAG

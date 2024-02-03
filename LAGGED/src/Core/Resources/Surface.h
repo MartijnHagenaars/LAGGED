@@ -1,6 +1,6 @@
 #pragma once
 #include "Core/Resources/Resource.h"
-
+#include <vector>
 
 namespace LAG
 {

@@ -1,7 +1,8 @@
-#include "Precomp.h"
 #include "Input.h"
 
 #include <unordered_map>
+#include "Utility/Logger.h"
+
 #include "Core/Engine.h"
 #include "Platform/Base/Window/WindowBase.h"
 #include "Platform/Base/Window/WindowManager.h"

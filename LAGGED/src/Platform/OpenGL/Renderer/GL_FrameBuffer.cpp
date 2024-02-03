@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "GL_FrameBuffer.h"
 
 #include "Core/Engine.h"
@@ -11,6 +10,7 @@
 
 #include "ImGui/imgui.h"
 
+#include "Utility/Logger.h"
 
 namespace LAG
 {
