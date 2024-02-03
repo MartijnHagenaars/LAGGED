@@ -18,8 +18,6 @@
 
 ENTRY_APP(Game)
 
-static uint32_t meshEntityID = 0;
-
 Game::Game()
 {
 	std::cout << "Construct..." << std::endl;
@@ -47,7 +45,6 @@ void Game::Initialize()
 	//ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/BoomBox/BoomBox.gltf");
 	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
-	meshEntityID = ent1.GetEntityID();
 
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");
 	ent2.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));
@@ -89,16 +86,6 @@ void Game::Update()
 	{
 		float x, y;
 		LAG::Input::GetMousePosition(x, y);
-		LAG::Logger::Info("Clickity at {0}, {1}!\n", x, y);
+		LAG::Logger::Info("Clickity at {0}, {1}!", x, y);
 	}
-
-	LAG::Entity meshEntity = LAG::GetScene()->GetEntity(meshEntityID);
-	
-	//meshEntity.GetComponent<LAG::TransformComponent>()->SetPosition(
-	//	glm::vec3(meshEntity.GetComponent<LAG::SinWaveComponent>()->sinValue, 
-	//	meshEntity.GetComponent<LAG::TransformComponent>()->GetPosition().y, 
-	//	meshEntity.GetComponent<LAG::TransformComponent>()->GetPosition().x
-	//));
-
-
 }

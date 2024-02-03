@@ -2,15 +2,15 @@
 
 namespace LAG::TerrainSystems
 {
-	void GenerateFlatPlane(Entity* entityID)
+	void GenerateFlatPlane(Entity* entity)
 	{
 	}
 
-	void GenerateFlatPlane(Entity* entityID, float subdivision)
+	void GenerateFlatPlane(Entity* entity, float subdivision)
 	{
 	}
 
-	void SetHeightMapTexture(Entity* entityID, Texture* texture)
+	void SetHeightMapTexture(Entity* entity, Texture* texture)
 	{
 	}
 }
