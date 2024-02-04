@@ -7,7 +7,7 @@ namespace LAG
 	struct SurfaceComponent
 	{
 		Surface* m_Surface = nullptr;
-		TextureHandle* m_SurfaceTexture = {};
+		TextureHandle m_SurfaceTexture = {};
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();

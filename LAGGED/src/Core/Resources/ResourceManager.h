@@ -36,13 +36,19 @@ namespace LAG
 		template<typename T>
 		T* GetResource(size_t assetID) const
 		{
-			T* res = dynamic_cast<T*>(m_Resources.find(assetID)->second.get());
-			if (!res)
+			auto resource = m_Resources.find(assetID);
+			if (resource != m_Resources.end())
 			{
-				Logger::Error("Could not find resource.");
-				return nullptr;
+				T* res = dynamic_cast<T*>(resource->second.get());
+				if (res != nullptr)
+					return res;
+				else
+					Logger::Error("Resource could not be converted.");
 			}
-			else return res;
+			else 
+				Logger::Error("Resource is not stored in resource manager.");
+
+			return nullptr;
 		}
 
 		template<typename T>
