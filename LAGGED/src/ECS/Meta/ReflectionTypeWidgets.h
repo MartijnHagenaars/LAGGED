@@ -5,7 +5,9 @@
 
 #include "glm/vec3.hpp"
 
+#include "Core/Engine.h"
 #include "Core/Resources/Texture.h"
+#include "Core/Resources/ResourceManager.h"
 
 namespace LAG
 {
@@ -68,7 +70,23 @@ namespace LAG
 				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No texture assigned.");
 			}
 
+			if (ImGui::BeginCombo("Textures", "Hmm yes, exquisite"))
+			{
+				std::vector<HashedString> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
+				for (int i = 0; i < textures.size(); i++)
+				{
+					const bool isSelected = (value != nullptr) && (value->GetPath().GetValue() == textures[i].GetValue());
+					if (ImGui::Selectable(textures[i].GetString().c_str(), isSelected))
+					{
+						printf("");
+					}
+				}
 
+
+				ImGui::EndCombo();
+			}
+
+			//ImGui::Combo();
 			ImGui::BeginTabBar("TextureType", ImGuiTabBarFlags_None);
 			if (ImGui::BeginTabItem("Resource"))
 			{

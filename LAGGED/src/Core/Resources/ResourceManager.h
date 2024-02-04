@@ -51,6 +51,22 @@ namespace LAG
 			return GetResource<T>(path.GetValue());
 		}
 
+		template<typename T>
+		std::vector<HashedString> GetResourceNames() const
+		{
+			std::vector<HashedString> nameVec;
+			for (const auto& it : m_Resources)
+			{
+				T* resourcePtr = dynamic_cast<T*>(it.second.get());
+				if (resourcePtr != nullptr)
+				{
+					nameVec.emplace_back(it.second->GetPath());
+				}
+			}
+			return nameVec;
+		}
+
+
 		void Clear();
 
 	private:

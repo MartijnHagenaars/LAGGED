@@ -90,7 +90,7 @@ namespace LAG
 		if (xSize > 0 && ySize > 0)
 		{
 			//TODO: generator should be stored
-			auto generator = FastNoise::NewFromEncodedNodeTree("DQAGAAAACtcjPwcAAI/Cdb0A9ih0QQ==");
+			auto generator = FastNoise::NewFromEncodedNodeTree("GQANAAIAAAC4HoU+BwAAuB4lQACF61E/ASQAAgAAABwAARkADQACAAAAuB4FQP//AAAAj8I1QQB7FK4+AQ0AAgAAAMP1qED//wAAAJqZmT4AcT0KPwAAAABA");
 			generator->GenUniformGrid2D(noiseData.data(), xStart, yStart, xSize, ySize, frequency, seed);
 		}
 		else
