@@ -6,7 +6,8 @@
 #include "glm/vec3.hpp"
 
 #include "Core/Engine.h"
-#include "Core/Resources/Texture.h"
+#include "Core/Resources/Texture.h" //TODO: Maybe not necessary anymore?
+#include "Core/Resources/ResourceHandles.h"
 #include "Core/Resources/ResourceManager.h"
 
 namespace LAG
@@ -61,10 +62,11 @@ namespace LAG
 		}
 
 		template <>
-		static void SetWidgetType<Texture*>(const entt::meta_data& meta, const std::string& name, Texture*& value)
+		static void SetWidgetType<TextureHandle>(const entt::meta_data& meta, const std::string& name, TextureHandle& value)
 		{
-			if (value != nullptr)
-				ImGui::Image((void*)(intptr_t)value->GetEditorHandle(), ImVec2(value->GetWidth(), value->GetHeight()));
+			Texture* texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureHandle);
+			if (texture != nullptr)
+				ImGui::Image((void*)(intptr_t)texture->GetEditorHandle(), ImVec2(texture->GetWidth(), texture->GetHeight()));
 			else
 			{
 				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No texture assigned.");
@@ -75,7 +77,7 @@ namespace LAG
 				std::vector<HashedString> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
 				for (int i = 0; i < textures.size(); i++)
 				{
-					const bool isSelected = (value != nullptr) && (value->GetPath().GetValue() == textures[i].GetValue());
+					const bool isSelected = (texture != nullptr) && (texture->GetPath().GetValue() == textures[i].GetValue());
 					if (ImGui::Selectable(textures[i].GetString().c_str(), isSelected))
 					{
 						printf("");

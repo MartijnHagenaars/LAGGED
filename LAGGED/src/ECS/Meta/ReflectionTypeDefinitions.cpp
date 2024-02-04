@@ -13,7 +13,7 @@ namespace LAG
 
 			SetupReflectionType<glm::vec3>();
 
-			SetupReflectionType<LAG::Texture*>();
+			SetupReflectionType<LAG::TextureHandle>();
 
 			return true;
 		}
