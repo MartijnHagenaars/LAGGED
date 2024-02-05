@@ -49,13 +49,16 @@ namespace LAG
 				ImGui::SameLine();
 				if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
 				{
-					//Unload the previously selected entity (if it's valid)
-					if (selectedEntity.IsValid())
-						GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::UNLOAD);
+					if (selectedEntity.GetEntityID() != entity.GetEntityID())
+					{
+						//Unload the previously selected entity (if it's valid)
+						if (selectedEntity.IsValid())
+							GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::UNLOAD);
 
-					//Set new selected entity and load its widgets
-					selectedEntity = entity;
-					GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::LOAD);
+						//Set new selected entity and load its widgets
+						selectedEntity = entity;
+						GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::LOAD);
+					}
 				}
 				ImGui::PopID();
 			});
