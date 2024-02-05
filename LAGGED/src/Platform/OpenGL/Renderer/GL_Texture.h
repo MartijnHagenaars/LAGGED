@@ -15,7 +15,7 @@ namespace LAG
 		void Bind(size_t textureUnit) override;
 		void Unbind(size_t textureUnit)  override;
 
-		void* GetEditorHandle() override { return static_cast<void*>(&m_ID); }
+		void* GetEditorHandle() override { return (void*)(intptr_t)m_ID; }
 
 	private:
 		bool Load() override;

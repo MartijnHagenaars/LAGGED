@@ -66,7 +66,13 @@ namespace LAG
 		{
 			Texture* texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureHandle);
 			if (texture != nullptr)
-				ImGui::Image((void*)(intptr_t)texture->GetEditorHandle(), ImVec2(texture->GetWidth(), texture->GetHeight()));
+			{
+				//Draw texture in ImGui window
+				ImGui::Image(texture->GetEditorHandle(), ImVec2(
+					std::clamp<float>(ImGui::GetWindowSize().x, 0.f, 256.f), 
+					std::clamp<float>((ImGui::GetWindowSize().x / texture->GetHeight()) * texture->GetHeight(), 0.f, 256.f)
+				));
+			}
 			else
 			{
 				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No texture assigned.");
@@ -80,7 +86,7 @@ namespace LAG
 					const bool isSelected = (texture != nullptr) && (texture->GetPath().GetValue() == textures[i].GetValue());
 					if (ImGui::Selectable(textures[i].GetString().c_str(), isSelected))
 					{
-						printf("");
+						value.m_TextureHandle = textures[i].GetValue();
 					}
 				}
 
