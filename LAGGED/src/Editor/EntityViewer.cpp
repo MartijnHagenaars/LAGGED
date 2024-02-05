@@ -48,7 +48,15 @@ namespace LAG
 
 				ImGui::SameLine();
 				if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
+				{
+					//Unload the previously selected entity (if it's valid)
+					if (selectedEntity.IsValid())
+						GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::UNLOAD);
+
+					//Set new selected entity and load its widgets
 					selectedEntity = entity;
+					GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::LOAD);
+				}
 				ImGui::PopID();
 			});
 
@@ -68,7 +76,7 @@ namespace LAG
 			ImGui::Text(selectedEntityDisplay.c_str());
 
 			//Draw all component widgets
-			GetScene()->DrawComponentWidgets(&m_SelectedEntity);
+			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);
 		}
 		else ImGui::Text("Select an entity to view its properties");
 

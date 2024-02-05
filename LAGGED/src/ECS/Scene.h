@@ -5,6 +5,11 @@
 
 namespace LAG
 {
+	namespace Reflection
+	{
+		enum class WidgetModes;
+	}
+
 	class Scene
 	{
 	public: 
@@ -39,13 +44,13 @@ namespace LAG
 			return true;
 		}
 
-		void DrawComponentWidgets(Entity* entity);
+		void HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode);
 
 
 	private:
-		bool ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, entt::entity entity);
-		void ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues);
-		void ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, const std::string& propName);
+		bool ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, entt::entity entity, Reflection::WidgetModes mode);
+		void ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, Reflection::WidgetModes mode);
+		void ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, const std::string& propName, Reflection::WidgetModes mode);
 
 		entt::registry m_Registry;
 	};

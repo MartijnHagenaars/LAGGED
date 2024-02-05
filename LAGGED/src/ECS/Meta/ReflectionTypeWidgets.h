@@ -6,7 +6,7 @@
 #include "glm/vec3.hpp"
 
 #include "Core/Engine.h"
-#include "Core/Resources/Texture.h" //TODO: Maybe not necessary anymore?
+#include "Core/Resources/Texture.h"
 #include "Core/Resources/ResourceHandles.h"
 #include "Core/Resources/ResourceManager.h"
 
@@ -17,33 +17,37 @@ namespace LAG
 		inline const int REFLECTION_CHAR_ARRAY_SIZE = 256;
 		static char reflectionWidgetTextBuffer[REFLECTION_CHAR_ARRAY_SIZE];
 
+		////////////////////////
+		// Drawing of widgets //
+		////////////////////////
+
 		template <typename T>
-		[[maybe_unused]] static void SetWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
+		[[maybe_unused]] static void DrawWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
 		{
 			std::string errorMessage = "No Reflection type set up for " + name;
 			ImGui::Text(errorMessage.c_str());
 		}
 
 		template <>
-		[[maybe_unused]] static void SetWidgetType<int>(const entt::meta_data& meta, const std::string& name, int& value)
+		[[maybe_unused]] static void DrawWidgetType<int>(const entt::meta_data& meta, const std::string& name, int& value)
 		{
 			ImGui::DragInt(name.c_str(), &value);
 		}
 
 		template <>
-		[[maybe_unused]] static void SetWidgetType<bool>(const entt::meta_data& meta, const std::string& name, bool& value)
+		[[maybe_unused]] static void DrawWidgetType<bool>(const entt::meta_data& meta, const std::string& name, bool& value)
 		{
 			ImGui::Checkbox(name.c_str(), &value);
 		}
 
 		template <>
-		[[maybe_unused]] static void SetWidgetType<float>(const entt::meta_data& meta, const std::string& name, float& value)
+		[[maybe_unused]] static void DrawWidgetType<float>(const entt::meta_data& meta, const std::string& name, float& value)
 		{
 			ImGui::DragFloat(name.c_str(), &value, 0.1f);
 		}
 
 		template <>
-		[[maybe_unused]] static void SetWidgetType<std::string>(const entt::meta_data& meta, const std::string& name, std::string& value)
+		[[maybe_unused]] static void DrawWidgetType<std::string>(const entt::meta_data& meta, const std::string& name, std::string& value)
 		{
 			//Clear the text buffer and copy the current value into it
 			memset(reflectionWidgetTextBuffer, 0, REFLECTION_CHAR_ARRAY_SIZE);
@@ -56,13 +60,13 @@ namespace LAG
 		}
 
 		template <>
-		[[maybe_unused]] static void SetWidgetType<glm::vec3>(const entt::meta_data& meta, const std::string& name, glm::vec3& value)
+		[[maybe_unused]] static void DrawWidgetType<glm::vec3>(const entt::meta_data& meta, const std::string& name, glm::vec3& value)
 		{
 			ImGui::DragFloat3(name.c_str(), &value[0], 0.1f);
 		}
 
 		template <>
-		static void SetWidgetType<TextureHandle>(const entt::meta_data& meta, const std::string& name, TextureHandle& value)
+		static void DrawWidgetType<TextureHandle>(const entt::meta_data& meta, const std::string& name, TextureHandle& value)
 		{
 			Texture* texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureLookup.GetValue());
 			if (texture != nullptr)
@@ -93,5 +97,26 @@ namespace LAG
 			}
 		}
 
+
+
+		////////////////////////
+		// Loading of widgets //
+		////////////////////////
+
+		template <typename T>
+		[[maybe_unused]] static void LoadWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
+		{
+		}
+
+
+
+		//////////////////////////
+		// Unloading of widgets //
+		//////////////////////////
+
+		template <typename T>
+		[[maybe_unused]] static void UnloadWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
+		{
+		}
 	}
 }
