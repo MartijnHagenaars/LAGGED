@@ -15,9 +15,11 @@
 #include "ECS/Components/MeshComponent.h"
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/CameraComponent.h"
+#include "ECS/Components/TerrainComponents.h"
 
 #include "ECS/Systems/CameraSystem.h"
 
+#include <type_traits>
 #include <utility>
 #include "glm/glm.hpp"
 
@@ -141,43 +143,53 @@ namespace LAG::Renderer
 		//First render pass using custom frame buffer
 		renderData->frameBuffer->FrameStart(renderData->showWireframe);
 
-		//Render all meshes
-		GetScene()->Loop<MeshComponent, TransformComponent>([](Entity entity, MeshComponent& meshComp, TransformComponent& meshTransformComp)
+
+		//Get an active camera
+		//TODO: This should be done in some sort of camera system. We shouldn't have to loop through the entire scene every single time to find a camera
+		bool doesCameraExist;
+		Entity selectedCamera;
+		doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCamera](Entity entity, CameraComponent& camera, TransformComponent& transform)
 			{
-				std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
-
-				if (renderData->useLighting)
+				if (camera.isActive)
 				{
-					lights.reserve(3);
-					GetScene()->Loop<LightComponent, TransformComponent>([&meshTransformComp, &lights](Entity entity, LightComponent& lightComp, TransformComponent& lightTransformComp)
-						{
-							if (lights.size() < TOTAL_POINT_LIGHTS)
-								lights.push_back({ &lightTransformComp, &lightComp });
-						});
+					selectedCamera = entity;
 				}
+			});
 
-				bool doesCameraExist;
-				Entity selectedCamera;
-				doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCamera](Entity entity, CameraComponent& camera, TransformComponent& transform)
-					{
-						if (camera.isActive)
-						{
-							selectedCamera = entity;
-						}
-					});
+		//Don't render anything if there isn't a valid camera.
+		if (!doesCameraExist)
+			return;
+		CameraSystem::Update(&selectedCamera);
 
-				//Don't render anything if there isn't a valid camera.
-				if (!doesCameraExist)
-					return;
+		//Get some lights
+		//TODO: Should be redone. Doesn't allow for more than three lights
+		std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
+		if (renderData->useLighting)
+		{
+			lights.reserve(3);
+			GetScene()->Loop<LightComponent, TransformComponent>([&lights](Entity entity, LightComponent& lightComp, TransformComponent& lightTransformComp)
+				{
+					if (lights.size() < TOTAL_POINT_LIGHTS)
+						lights.push_back({ &lightTransformComp, &lightComp });
+				});
+		}
 
-				CameraSystem::Update(&selectedCamera);
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(meshTransformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), lights);
+		//Render all meshes
+		GetScene()->Loop<MeshComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, MeshComponent& meshComp, TransformComponent& transformComp)
+			{
+				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
+					transformComp, &selectedCamera,
+					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), 
+					lights);
+			});
 
+		//Render all surfaces
+		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
+			{
 				TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
 				renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 
-				//TransformComponent floorPlaneTransform(glm::vec3(0.f, -2.f, 0.f), glm::vec3(0.f), glm::vec3(75.f));
-				//renderData->floorSurface->Render(floorPlaneTransform, selectedCameraID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/PlaneShader")));
+				//surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
 		renderData->frameBuffer->FrameEnd();
