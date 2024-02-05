@@ -4,11 +4,11 @@ namespace LAG
 {
 	struct TextureHandle
 	{
-		size_t m_TextureHandle;
+		HashedString m_TextureLookup;
 	};
 
 	struct ModelHandle
 	{
-		size_t m_TextureHandle;
+		HashedString m_TextureLookup;
 	};
 }

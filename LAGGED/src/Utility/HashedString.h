@@ -7,7 +7,10 @@ namespace LAG
 	class HashedString
 	{
 	public: 
-		HashedString() = delete;
+		HashedString() : 
+			m_HashValue(0), m_String("") 
+		{}
+
 		explicit HashedString(const std::string& str) :
 			m_HashValue(0),m_String(str)
 		{

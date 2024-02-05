@@ -64,7 +64,7 @@ namespace LAG
 		template <>
 		static void SetWidgetType<TextureHandle>(const entt::meta_data& meta, const std::string& name, TextureHandle& value)
 		{
-			Texture* texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureHandle);
+			Texture* texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureLookup.GetValue());
 			if (texture != nullptr)
 			{
 				//Draw texture in ImGui window
@@ -78,7 +78,7 @@ namespace LAG
 				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No texture assigned.");
 			}
 
-			if (ImGui::BeginCombo("Textures", "Hmm yes, exquisite"))
+			if (ImGui::BeginCombo("Textures", value.m_TextureLookup.GetValue() != 0 ? value.m_TextureLookup.GetString().c_str() : "No texture selected..."))
 			{
 				std::vector<HashedString> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
 				for (int i = 0; i < textures.size(); i++)
@@ -86,27 +86,11 @@ namespace LAG
 					const bool isSelected = (texture != nullptr) && (texture->GetPath().GetValue() == textures[i].GetValue());
 					if (ImGui::Selectable(textures[i].GetString().c_str(), isSelected))
 					{
-						value.m_TextureHandle = textures[i].GetValue();
+						value.m_TextureLookup = textures[i];
 					}
 				}
-
-
 				ImGui::EndCombo();
 			}
-
-			//ImGui::Combo();
-			ImGui::BeginTabBar("TextureType", ImGuiTabBarFlags_None);
-			if (ImGui::BeginTabItem("Resource"))
-			{
-				ImGui::Text("This is for textures stored in the resource manager");
-				ImGui::EndTabItem();
-			}
-			if (ImGui::BeginTabItem("Generate"))
-			{
-				ImGui::Text("This is for ones created with perlin noise");
-				ImGui::EndTabItem();
-			}
-			ImGui::EndTabBar();
 		}
 
 	}
