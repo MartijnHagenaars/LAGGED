@@ -22,7 +22,7 @@ namespace LAG
 
 		//TextureHandle m_SurfaceHeightmap = {};
 
-		NoiseData m_NoiseData = {};
+		NoiseProperties m_NoiseData = {};
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();

@@ -100,7 +100,7 @@ namespace LAG
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<NoiseData>(const entt::meta_data& meta, const std::string& name, NoiseData& value)
+		[[maybe_unused]] static void DrawWidgetType<NoiseProperties>(const entt::meta_data& meta, const std::string& name, NoiseProperties& value)
 		{
 			ImGui::DragFloat("Amplitude", &value.m_Amplitude, 0.1f);
 			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.1f);
