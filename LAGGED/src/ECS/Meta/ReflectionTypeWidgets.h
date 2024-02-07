@@ -10,6 +10,8 @@
 #include "Core/Resources/ResourceHandles.h"
 #include "Core/Resources/ResourceManager.h"
 
+#include "Utility/Noise.h"
+
 namespace LAG
 {
 	namespace Reflection
@@ -95,6 +97,17 @@ namespace LAG
 				}
 				ImGui::EndCombo();
 			}
+		}
+
+		template <>
+		[[maybe_unused]] static void DrawWidgetType<NoiseData>(const entt::meta_data& meta, const std::string& name, NoiseData& value)
+		{
+			ImGui::DragFloat("Amplitude", &value.m_Amplitude, 0.1f);
+			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.1f);
+			ImGui::DragInt("Seed", &value.m_Seed, 1.f);
+
+			ImGui::Button("Preview"); ImGui::SameLine();
+			ImGui::Button("Apply");
 		}
 
 

@@ -74,6 +74,7 @@ void Game::Initialize()
 	LAG::Entity ent6 = LAG::GetEngine().GetScene()->AddEntity("Surface");
 	ent6.AddComponent<LAG::TransformComponent>();
 	ent6.AddComponent<LAG::SurfaceComponent>();
+	ent6.AddComponent<LAG::ProceduralTerrainComponent>();
 }
 
 void Game::Shutdown()
