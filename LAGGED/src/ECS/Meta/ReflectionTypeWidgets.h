@@ -5,6 +5,7 @@
 
 #include "glm/vec3.hpp"
 
+#include "ECS/Entity.h"
 #include "Core/Engine.h"
 #include "Core/Resources/Texture.h"
 #include "Core/Resources/ResourceHandles.h"
@@ -23,33 +24,35 @@ namespace LAG
 		// Drawing of widgets //
 		////////////////////////
 
+		//DrawWidgetType<T>(entity, value.cast<T&>(), name);
+
 		template <typename T>
-		[[maybe_unused]] static void DrawWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
+		[[maybe_unused]] static void DrawWidgetType(LAG::Entity* entity, T& value, const std::string& name)
 		{
 			std::string errorMessage = "No Reflection type set up for " + name;
 			ImGui::Text(errorMessage.c_str());
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<int>(const entt::meta_data& meta, const std::string& name, int& value)
+		[[maybe_unused]] static void DrawWidgetType<int>(LAG::Entity* entity, int& value, const std::string& name)
 		{
 			ImGui::DragInt(name.c_str(), &value);
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<bool>(const entt::meta_data& meta, const std::string& name, bool& value)
+		[[maybe_unused]] static void DrawWidgetType<bool>(LAG::Entity* entity, bool& value, const std::string& name)
 		{
 			ImGui::Checkbox(name.c_str(), &value);
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<float>(const entt::meta_data& meta, const std::string& name, float& value)
+		[[maybe_unused]] static void DrawWidgetType<float>(LAG::Entity* entity, float& value, const std::string& name)
 		{
 			ImGui::DragFloat(name.c_str(), &value, 0.1f);
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<std::string>(const entt::meta_data& meta, const std::string& name, std::string& value)
+		[[maybe_unused]] static void DrawWidgetType<std::string>(LAG::Entity* entity, std::string& value, const std::string& name)
 		{
 			//Clear the text buffer and copy the current value into it
 			memset(reflectionWidgetTextBuffer, 0, REFLECTION_CHAR_ARRAY_SIZE);
@@ -62,13 +65,13 @@ namespace LAG
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<glm::vec3>(const entt::meta_data& meta, const std::string& name, glm::vec3& value)
+		[[maybe_unused]] static void DrawWidgetType<glm::vec3>(LAG::Entity* entity, glm::vec3& value, const std::string& name)
 		{
 			ImGui::DragFloat3(name.c_str(), &value[0], 0.1f);
 		}
 
 		template <>
-		static void DrawWidgetType<TextureHandle>(const entt::meta_data& meta, const std::string& name, TextureHandle& value)
+		static void DrawWidgetType<TextureHandle>(LAG::Entity* entity, TextureHandle& value, const std::string& name)
 		{
 			Texture* texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureLookup.GetValue());
 			if (texture != nullptr)
@@ -100,7 +103,7 @@ namespace LAG
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<NoiseProperties>(const entt::meta_data& meta, const std::string& name, NoiseProperties& value)
+		[[maybe_unused]] static void DrawWidgetType<NoiseProperties>(LAG::Entity* entity, NoiseProperties& value, const std::string& name)
 		{
 			ImGui::DragFloat("Amplitude", &value.m_Amplitude, 0.1f);
 			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.1f);
@@ -117,7 +120,7 @@ namespace LAG
 		////////////////////////
 
 		template <typename T>
-		[[maybe_unused]] static void LoadWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
+		[[maybe_unused]] static void LoadWidgetType(LAG::Entity* entity, T& value, const std::string& name)
 		{
 		}
 
@@ -128,7 +131,7 @@ namespace LAG
 		//////////////////////////
 
 		template <typename T>
-		[[maybe_unused]] static void UnloadWidgetType(const entt::meta_data& meta, const std::string& name, T& value)
+		[[maybe_unused]] static void UnloadWidgetType(LAG::Entity* entity, T& value, const std::string& name)
 		{
 		}
 	}
