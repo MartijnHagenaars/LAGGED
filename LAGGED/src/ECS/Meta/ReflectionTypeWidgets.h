@@ -115,10 +115,9 @@ namespace LAG
 				ImGui::Image(value.m_PreviewTexture.GetEditorHandle(), ImVec2(value.m_PreviewTexture.GetWidth(), value.m_PreviewTexture.GetHeight()));
 			if (ImGui::Button("Preview"))
 			{
-				NoiseProperties noiseProps = {};
 				glm::vec2 position = glm::vec2(0.f, 0.f);
 				glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale();
-				value.m_PreviewTexture = Noise::GeneratePreviewTexture(noiseProps, position, glm::vec2(planeScale.x, planeScale.z));
+				value.m_PreviewTexture = Noise::GeneratePreviewTexture(value, position, glm::vec2(planeScale.x, planeScale.z));
 			}
 			ImGui::SameLine();
 			ImGui::Button("Apply");

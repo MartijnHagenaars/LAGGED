@@ -20,7 +20,8 @@ namespace LAG
 		}
 		else
 		{
-			Logger::Error("Invalid path ({0}) used for texture.");
+			if (path.length() != 0)
+				Logger::Error("Invalid path (\"{0}\") used for texture.", path);
 			return false;
 		}
 	}

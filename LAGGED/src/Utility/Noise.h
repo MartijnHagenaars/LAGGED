@@ -9,7 +9,7 @@ namespace LAG
 	struct NoiseProperties
 	{
 		int m_Seed = 0;
-		float m_Frequency = 0.f;
+		float m_Frequency = 1.f;
 		float m_Amplitude = 1.f;
 
 		std::string m_NodeTreeString = 
