@@ -20,6 +20,7 @@ namespace LAG
 
 	protected:
 		void SetPath(const HashedString& path) { m_Path = path; }
+		void SetLoaded(bool loaded) { m_Loaded = loaded; }
 
 	private:
 		bool m_Loaded = false;

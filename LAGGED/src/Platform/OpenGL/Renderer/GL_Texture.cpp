@@ -19,37 +19,62 @@ namespace LAG
 
 	bool Texture::Load()
 	{
-		std::string filePath = GetPath().GetString();
-		//Check if the texture hasn't been loaded yet. 
-		if (m_ID != 0)
+		if (IsLoaded())
 		{
-			Logger::Warning("Texture \"{0}\" has already been loaded.", filePath);
+			Logger::Warning("Tried to load an already loaded Texture class.");
 			return false;
 		}
 
-		LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ID));
-		LAG_GRAPHICS_EXCEPTION(Bind(0));
-
-		FileIO::ImageData data;
-		if (!FileIO::LoadImageFromFile(filePath, data))
+		//Load from file
+		if (m_LoadFromFile && GetPath().GetString().length() > 0)
 		{
-			Logger::Error("Failed to load texture.");
+			std::string filePath = GetPath().GetString();
+			//Check if the texture hasn't been loaded yet. 
+			if (m_ID != 0)
+			{
+				Logger::Warning("Texture \"{0}\" has already been loaded.", filePath);
+				return false;
+			}
+
+			FileIO::ImageData data;
+			if (!FileIO::LoadImageFromFile(filePath, data))
+			{
+				Logger::Error("Failed to load texture.");
+				return false;
+			}
+
+			//Assign correct channel enum
+			if (data.channels == 4) m_Format = TextureFormat::FORMAT_RGBA;
+			else if (data.channels == 3) m_Format = TextureFormat::FORMAT_RGB;
+			else if (data.channels == 2) m_Format = TextureFormat::FORMAT_RG;
+			else if (data.channels == 1) m_Format = TextureFormat::FORMAT_R;
+
+			m_Width = data.width;
+			m_Height = data.height;
+
+			//Create GL texture
+			LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ID));
+			LAG_GRAPHICS_EXCEPTION(Bind(0));
+
+			//Apply image data
+			LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data));
+			LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
+			FileIO::FreeImageData(data);
+		}
+		else if (!m_LoadFromFile && m_TempBuffer)
+		{
+			//Create GL texture
+			LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ID));
+			LAG_GRAPHICS_EXCEPTION(Bind(0));
+
+			LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_FLOAT, m_TempBuffer));
+			LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
+		}
+		else 
+		{
+			Logger::Error("Trying to load invalid texture.");
 			return false;
 		}
-
-		//Assign correct channel enum
-		if (data.channels == 4) m_Format = TextureFormat::FORMAT_RGBA;
-		else if(data.channels == 3) m_Format = TextureFormat::FORMAT_RGB;
-		else if(data.channels == 2) m_Format = TextureFormat::FORMAT_RG;
-		else if(data.channels == 1) m_Format = TextureFormat::FORMAT_R;
-
-		m_Width = data.width;
-		m_Height = data.height;
-
-		//Apply image data
-		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data));
-		LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
-		FileIO::FreeImageData(data);
 
 		//Apply some texture paramters before finishing loading
 		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));				//Use nearest texture filtering when texture is minified. 
@@ -59,12 +84,14 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
 		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT));
 
+		SetLoaded(true);
 		return true;
 	}
 
 	bool Texture::Unload()
 	{
 		glDeleteTextures(1, &m_ID);
+		SetLoaded(false);
 		return true;
 	}
 
@@ -93,6 +120,17 @@ namespace LAG
 	void Texture::Unbind(size_t textureUnit)
 	{
 		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, 0));
+	}
+
+	GLenum Texture::ConvertFormatToGLEnum(TextureFormat format)
+	{
+		switch (format)
+		{
+		default: case TextureFormat::FORMAT_RGB: return GL_RGB;
+		case TextureFormat::FORMAT_RGBA: return GL_RGBA;
+		case TextureFormat::FORMAT_RG: return GL_RG;
+		case TextureFormat::FORMAT_R: return GL_RED;
+		}
 	}
 
 }

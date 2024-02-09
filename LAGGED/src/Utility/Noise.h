@@ -14,6 +14,8 @@ namespace LAG
 
 		std::string m_NodeTreeString = 
 			"GQANAAIAAAC4HoU+BwAAuB4lQACF61E/ASQAAgAAABwAARkADQACAAAAuB4FQP//AAAAj8I1QQB7FK4+AQ0AAgAAAMP1qED//wAAAJqZmT4AcT0KPwAAAABA";
+
+		Texture m_PreviewTexture;
 	};
 
 	namespace Noise

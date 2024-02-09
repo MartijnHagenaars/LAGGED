@@ -3,12 +3,13 @@
 
 namespace LAG
 {
+	typedef unsigned int GLenum;
 	class Texture : public TextureBase
 	{
 		friend class Model;
 		friend class ResourceManager;
 	public:
-		Texture() = delete;
+		Texture() = default;
 
 		/// <summary>
 		/// Load a texture from file
@@ -26,6 +27,7 @@ namespace LAG
 		void* GetEditorHandle() override { return (void*)(intptr_t)m_ID; }
 
 	private:
+		GLenum ConvertFormatToGLEnum(TextureFormat format);
 		unsigned int m_ID = 0;
 	};
 

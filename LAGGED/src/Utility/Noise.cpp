@@ -30,8 +30,10 @@ namespace LAG
 	{
 		std::vector<float> noiseData = GenerateNoiseData(noiseProperties, position, size);
 		Texture texture(HashedString(""));
-		texture.SetBuffer(noiseData.data(), noiseData.size(), LAG::TextureFormat::FORMAT_R);
+
+		texture.SetBuffer(noiseData.data(), noiseData.size(), size.x, size.y, LAG::TextureFormat::FORMAT_R);
 		texture.Load();
+
 		return texture;
 	}
 }

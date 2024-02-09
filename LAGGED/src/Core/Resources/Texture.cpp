@@ -4,7 +4,8 @@
 
 namespace LAG
 {
-	TextureBase::TextureBase(const HashedString& path) : Resource(path) {}
+	TextureBase::TextureBase() : Resource(HashedString()), m_LoadFromFile(false) {}
+	TextureBase::TextureBase(const HashedString& path) : Resource(path), m_LoadFromFile(true) {}
 
 	bool TextureBase::SetPath(const std::string& path)
 	{
@@ -24,8 +25,14 @@ namespace LAG
 		}
 	}
 
-	bool TextureBase::SetBuffer(const float* buffer, size_t bufferSize, TextureFormat format)
+	bool TextureBase::SetBuffer(const float* buffer, size_t bufferSize, int width, int height, TextureFormat format)
 	{
+		if (width <= 0 && height <= 0)
+		{
+			Logger::Error("Invalid texture size: {0}x{1}.", width, height);
+			return false;
+		}
+
 		if (buffer)
 		{
 			if (format == TextureFormat::FORMAT_RGBA && (bufferSize % 4) != 0)
@@ -43,6 +50,9 @@ namespace LAG
 			m_Format = format;
 			m_TempBuffer = buffer;
 			m_BufferSize = bufferSize;
+
+			m_Width = width;
+			m_Height = height;
 
 			return true;
 		}
