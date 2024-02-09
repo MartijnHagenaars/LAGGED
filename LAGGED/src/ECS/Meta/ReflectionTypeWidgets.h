@@ -109,7 +109,14 @@ namespace LAG
 			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.1f);
 			ImGui::DragInt("Seed", &value.m_Seed, 1.f);
 
-			ImGui::Button("Preview"); ImGui::SameLine();
+			if (ImGui::Button("Preview"))
+			{
+				NoiseProperties noiseProps;
+				glm::vec2 position = glm::vec2(0.f, 0.f);
+				glm::vec2 scale = glm::vec2(10.f, 10.f);
+				Noise::GeneratePreviewTexture(noiseProps, position, scale);
+			}
+			ImGui::SameLine();
 			ImGui::Button("Apply");
 		}
 

@@ -20,7 +20,7 @@ namespace LAG
 		virtual ~TextureBase() {};
 
 		bool SetPath(const std::string& path);
-		bool SetBuffer(const float* buffer, TextureFormat format);
+		bool SetBuffer(const float* buffer, size_t bufferSize, TextureFormat format);
 
 		virtual void Bind(size_t textureUnit) = 0;
 		virtual void Unbind(size_t textureUnit) = 0;
@@ -35,10 +35,12 @@ namespace LAG
 	protected:
 		int m_Width = 0;
 		int m_Height = 0;
-		TextureFormat m_Format;
+		TextureFormat m_Format = TextureFormat::FORMAT_RGB;
 
 		bool m_LoadFromFile = false;
-		float* m_TextureBuffer = nullptr;
+
+		size_t m_BufferSize = -1;
+		const float* m_TempBuffer = nullptr;
 	};
 }
 

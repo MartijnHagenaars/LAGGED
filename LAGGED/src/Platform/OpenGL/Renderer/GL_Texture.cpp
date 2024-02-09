@@ -1,9 +1,7 @@
 #include "GL_Texture.h"
 #include "GL/glew.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
+#include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
 #include "Exceptions/GL_GraphicsExceptionMacros.h"
 
@@ -32,28 +30,26 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ID));
 		LAG_GRAPHICS_EXCEPTION(Bind(0));
 
-		//Load image data
-		stbi_set_flip_vertically_on_load(true);
-
-		int textureChannel = -1;
-		unsigned char* texData = stbi_load(filePath.c_str(), &m_Width, &m_Height, &textureChannel, 0);
-		if (texData == nullptr)
+		FileIO::ImageData data;
+		if (!FileIO::LoadImageFromFile(filePath, data))
 		{
-			Logger::Error("Failed to load texture data for texture with the following path: {0}", filePath);
-			glDeleteTextures(1, &m_ID);
+			Logger::Error("Failed to load texture.");
 			return false;
 		}
 
 		//Assign correct channel enum
-		if (textureChannel == 4) m_Format = TextureFormat::FORMAT_RGBA;
-		else if(textureChannel == 3) m_Format = TextureFormat::FORMAT_RGB;
-		else if(textureChannel == 2) m_Format = TextureFormat::FORMAT_RG;
-		else if(textureChannel == 1) m_Format = TextureFormat::FORMAT_R;
+		if (data.channels == 4) m_Format = TextureFormat::FORMAT_RGBA;
+		else if(data.channels == 3) m_Format = TextureFormat::FORMAT_RGB;
+		else if(data.channels == 2) m_Format = TextureFormat::FORMAT_RG;
+		else if(data.channels == 1) m_Format = TextureFormat::FORMAT_R;
+
+		m_Width = data.width;
+		m_Height = data.height;
 
 		//Apply image data
-		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, texData));
+		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data));
 		LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
-		stbi_image_free(texData);
+		FileIO::FreeImageData(data);
 
 		//Apply some texture paramters before finishing loading
 		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));				//Use nearest texture filtering when texture is minified. 
