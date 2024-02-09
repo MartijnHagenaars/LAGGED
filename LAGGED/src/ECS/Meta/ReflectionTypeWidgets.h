@@ -18,6 +18,7 @@ namespace LAG
 {
 	namespace Reflection
 	{
+		const float IMAGE_MAX_SIZE = 360.f;
 		inline const int REFLECTION_CHAR_ARRAY_SIZE = 256;
 		static char reflectionWidgetTextBuffer[REFLECTION_CHAR_ARRAY_SIZE];
 
@@ -79,8 +80,8 @@ namespace LAG
 			{
 				//Draw texture in ImGui window
 				ImGui::Image(texture->GetEditorHandle(), ImVec2(
-					std::clamp<float>(ImGui::GetWindowSize().x, 0.f, 256.f), 
-					std::clamp<float>((ImGui::GetWindowSize().x / texture->GetHeight()) * texture->GetHeight(), 0.f, 256.f)
+					std::clamp<float>(ImGui::GetWindowSize().x, 0.f, IMAGE_MAX_SIZE),
+					std::clamp<float>((ImGui::GetWindowSize().x / texture->GetHeight()) * texture->GetHeight(), 0.f, IMAGE_MAX_SIZE)
 				));
 			}
 			else
@@ -106,13 +107,15 @@ namespace LAG
 		template <>
 		[[maybe_unused]] static void DrawWidgetType<NoiseProperties>(LAG::Entity* entity, NoiseProperties& value, const std::string& name)
 		{
-			ImGui::DragFloat("Amplitude", &value.m_Amplitude, 0.1f);
-			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.1f);
+			ImGui::DragFloat("Amplitude", &value.m_Amplitude, 0.05f);
+			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.5f, -1024.f, 1024.f, "%.3f", ImGuiSliderFlags_Logarithmic);
 			ImGui::DragInt("Seed", &value.m_Seed, 1.f);
 
 			//Texture preview functionality
 			if(value.m_PreviewTexture.IsLoaded())
-				ImGui::Image(value.m_PreviewTexture.GetEditorHandle(), ImVec2(value.m_PreviewTexture.GetWidth(), value.m_PreviewTexture.GetHeight()));
+				ImGui::Image(value.m_PreviewTexture.GetEditorHandle(), ImVec2(
+					std::clamp<float>(ImGui::GetWindowSize().x, 0.f, IMAGE_MAX_SIZE),
+					std::clamp<float>((ImGui::GetWindowSize().x / value.m_PreviewTexture.GetHeight()) * value.m_PreviewTexture.GetHeight(), 0.f, IMAGE_MAX_SIZE)));
 			if (ImGui::Button("Preview"))
 			{
 				glm::vec2 position = glm::vec2(0.f, 0.f);
