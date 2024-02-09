@@ -11,7 +11,7 @@
 #include "Core/Resources/ResourceHandles.h"
 #include "Core/Resources/ResourceManager.h"
 
-#include "ECS/Components/TerrainComponents.h"
+#include "ECS/Components/BasicComponents.h"
 #include "Utility/Noise.h"
 
 namespace LAG
@@ -110,15 +110,15 @@ namespace LAG
 			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.1f);
 			ImGui::DragInt("Seed", &value.m_Seed, 1.f);
 
+			//Texture preview functionality
 			if(value.m_PreviewTexture.IsLoaded())
 				ImGui::Image(value.m_PreviewTexture.GetEditorHandle(), ImVec2(value.m_PreviewTexture.GetWidth(), value.m_PreviewTexture.GetHeight()));
 			if (ImGui::Button("Preview"))
 			{
 				NoiseProperties noiseProps = {};
 				glm::vec2 position = glm::vec2(0.f, 0.f);
-				glm::vec2 scale = glm::vec2(10.f, 10.f);
-				value.m_PreviewTexture = Noise::GeneratePreviewTexture(noiseProps, position, scale);
-
+				glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale();
+				value.m_PreviewTexture = Noise::GeneratePreviewTexture(noiseProps, position, glm::vec2(planeScale.x, planeScale.z));
 			}
 			ImGui::SameLine();
 			ImGui::Button("Apply");

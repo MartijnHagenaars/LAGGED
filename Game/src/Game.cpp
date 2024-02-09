@@ -72,7 +72,7 @@ void Game::Initialize()
 	ent5.AddComponent<LAG::CameraComponent>();
 
 	LAG::Entity ent6 = LAG::GetEngine().GetScene()->AddEntity("Surface");
-	ent6.AddComponent<LAG::TransformComponent>();
+	ent6.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(256.f));
 	ent6.AddComponent<LAG::SurfaceComponent>();
 	ent6.AddComponent<LAG::ProceduralTerrainComponent>();
 }

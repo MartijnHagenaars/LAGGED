@@ -32,7 +32,7 @@ namespace LAG
 		Texture texture(HashedString(""));
 
 		texture.SetBuffer(noiseData.data(), noiseData.size(), size.x, size.y, LAG::TextureFormat::FORMAT_R);
-		texture.Load();
+		texture.Reload();
 
 		return texture;
 	}
