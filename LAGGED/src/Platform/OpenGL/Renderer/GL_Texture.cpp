@@ -34,7 +34,9 @@ namespace LAG
 
 		//Load image data
 		stbi_set_flip_vertically_on_load(true);
-		unsigned char* texData = stbi_load(filePath.c_str(), &m_TexWidth, &m_TexHeight, &m_TexChannels, 0);
+
+		int textureChannel = -1;
+		unsigned char* texData = stbi_load(filePath.c_str(), &m_Width, &m_Height, &textureChannel, 0);
 		if (texData == nullptr)
 		{
 			Logger::Error("Failed to load texture data for texture with the following path: {0}", filePath);
@@ -42,8 +44,14 @@ namespace LAG
 			return false;
 		}
 
+		//Assign correct channel enum
+		if (textureChannel == 4) m_Format = TextureFormat::FORMAT_RGBA;
+		else if(textureChannel == 3) m_Format = TextureFormat::FORMAT_RGB;
+		else if(textureChannel == 2) m_Format = TextureFormat::FORMAT_RG;
+		else if(textureChannel == 1) m_Format = TextureFormat::FORMAT_R;
+
 		//Apply image data
-		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_TexWidth, m_TexHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, texData));
+		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, texData));
 		LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
 		stbi_image_free(texData);
 

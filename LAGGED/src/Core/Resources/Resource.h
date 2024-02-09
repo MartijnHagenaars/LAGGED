@@ -18,8 +18,11 @@ namespace LAG
 		bool IsLoaded() const { return m_Loaded; }
 		const HashedString& GetPath() const;
 
+	protected:
+		void SetPath(const HashedString& path) { m_Path = path; }
+
 	private:
 		bool m_Loaded = false;
-		const HashedString m_Path;
+		HashedString m_Path;
 	};
 }
