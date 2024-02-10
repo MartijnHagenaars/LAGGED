@@ -4,6 +4,8 @@
 
 namespace LAG
 {
+	struct ProceduralSurfaceComponent;
+
 	class Texture;
 	class Surface : public SurfaceBase
 	{
@@ -12,19 +14,22 @@ namespace LAG
 		Surface(const std::string& heightTexturePath);
 		~Surface() override;
 		
-		void GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed = 0);
-
-		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
-	private:
-		virtual bool Load() override;
-		virtual bool Unload() override;
+		//Generates a flat surface
+		void GenerateSurface(int width, int height);
 
 		//Load a height map from a texture
 		//TODO: Needs to be reworked
-		void LoadTextureHeightMap(const std::string& heightTexturePath);
+		void ApplyTextureHeightMap(const std::string& heightTexturePath);
+		void ApplyNoiseHeightMap(const ProceduralSurfaceComponent& procSurfaceComp);
 
-		//Creates a vector of 2D noise data
-		std::vector<float> GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed = 0);
+		virtual bool Load() override;
+		virtual bool Unload() override;
+
+
+		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
+	private:
+		////Creates a vector of 2D noise data
+		//std::vector<float> GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed = 0);
 
 		void CalculateVertices();
 		void CalculateIndices();
@@ -37,7 +42,6 @@ namespace LAG
 		};
 
 		std::vector<VertexData> m_VertexData;
-		//std::vector<float> m_Normals;
 		std::vector<unsigned int> m_Indices;
 
 		unsigned int m_VBO = 0;
@@ -51,9 +55,6 @@ namespace LAG
 
 		int m_TextureWidth = 0;
 		int m_TextureHeight = 0;
-
-		float m_Amplitude = 0.25f;
-		float m_YScaleShift = 16.f;
 
 	};
 }

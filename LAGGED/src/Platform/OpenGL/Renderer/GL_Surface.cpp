@@ -7,6 +7,7 @@
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
+#include "ECS/Components/TerrainComponents.h"
 
 #include "ECS/Systems/CameraSystem.h"
 
@@ -14,10 +15,7 @@
 #include "Exceptions/GL_GraphicsExceptionMacros.h"
 #include <glm/ext/matrix_transform.hpp>
 
-#include "stb_image.h"
-
-
-#include "FastNoise/FastNoise.h"
+#include "Utility/Noise.h"
 
 //For debugging only. 
 #include "ImGui/imgui.h"
@@ -39,25 +37,10 @@ namespace LAG
 	{
 	}
 
-	
-	//////////////////////////////////////////
-	// Loading height map data from texture //
-	//////////////////////////////////////////
-
-	void Surface::LoadTextureHeightMap(const std::string& heightTexturePath)
-	{
-		Logger::Error("LoadTextureHeightMap() has not been implemented.");
-	}
-
-
-	////////////////////////////////////////
-	// Loading height map data from noise //
-	////////////////////////////////////////
-
-	void Surface::GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed)
+	void Surface::GenerateSurface(int width, int height)
 	{
 		//Check if sizes are valid
-		m_Width = xSize, m_Height = ySize;
+		m_Width = width, m_Height = height;
 		if (m_Width <= 0 || m_Height <= 0)
 			return;
 
@@ -73,30 +56,35 @@ namespace LAG
 			m_Indices.shrink_to_fit();
 		}
 
-		m_TextureWidth = m_Width, m_TextureHeight = m_Height;
-		m_Amplitude = amplitude;
-
-		m_HeightMapData = GenerateNoise(xStart, yStart, xSize, ySize, frequency, seed);
+		//m_TextureWidth = m_Width, m_TextureHeight = m_Height;
 
 		CalculateVertices();
 		CalculateIndices();
-		CalculateNormals();
+		
+		//Clear data that we no longer need
+		m_HeightMapData.clear();
+		m_HeightMapData.shrink_to_fit();
 	}
 
-	std::vector<float> Surface::GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed)
+	//////////////////////////////////////////
+	// Loading height map data from texture //
+	//////////////////////////////////////////
+	void Surface::ApplyTextureHeightMap(const std::string& heightTexturePath)
 	{
-		std::vector<float> noiseData(xSize * ySize);
+		Logger::Error("LoadTextureHeightMap() has not been implemented.");
+	}
 
-		if (xSize > 0 && ySize > 0)
+	////////////////////////////////////////
+	// Loading height map data from noise //
+	////////////////////////////////////////
+	void Surface::ApplyNoiseHeightMap(const ProceduralSurfaceComponent& procSurfaceComp)
+	{
+		m_HeightMapData = Noise::GenerateNoiseData(xStart, yStart, xSize, ySize, frequency, seed);
+
+		for (size_t i = 0; i < m_Width * m_Height; i++)
 		{
-			//TODO: generator should be stored
-			auto generator = FastNoise::NewFromEncodedNodeTree("GQANAAIAAAC4HoU+BwAAuB4lQACF61E/ASQAAgAAABwAARkADQACAAAAuB4FQP//AAAAj8I1QQB7FK4+AQ0AAgAAAMP1qED//wAAAJqZmT4AcT0KPwAAAABA");
-			generator->GenUniformGrid2D(noiseData.data(), xStart, yStart, xSize, ySize, frequency, seed);
+			m_HeightMapData[xResize + m_TextureWidth * zResize];
 		}
-		else
-			Logger::Warning("Invalid noise map size");
-
-		return noiseData;
 	}
 
 	void Surface::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
@@ -132,6 +120,10 @@ namespace LAG
 
 	bool Surface::Load()
 	{
+		//Before GL objects can be created, we first need to calculate the normals
+		CalculateNormals();
+
+		//Now create all GL objects
 		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
@@ -184,7 +176,9 @@ namespace LAG
 
 				unsigned int xResize = static_cast<unsigned int>(widthAdjustment * static_cast<float>(w));
 				unsigned int zResize = static_cast<unsigned int>(heightAdjustment * static_cast<float>(h));
-				float yVert = m_HeightMapData[xResize + m_TextureWidth * zResize] * m_Amplitude - m_YScaleShift;
+				
+				//float yVert = m_HeightMapData[xResize + m_TextureWidth * zResize];
+				float yVert = 0.f;
 
 				VertexData vd;
 				vd.vertex = glm::vec3(xVert, yVert, zVert);

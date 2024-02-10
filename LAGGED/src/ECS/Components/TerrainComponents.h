@@ -3,26 +3,35 @@
 #include "Core/Resources/ResourceHandles.h"
 
 #include "Utility/Noise.h"
+#include <memory>
 
 namespace LAG
 {
 	struct SurfaceComponent
 	{
-		Surface* m_Surface = nullptr;
+		SurfaceComponent();
+		~SurfaceComponent();
+
+		std::unique_ptr<Surface> m_Surface = nullptr;
 		TextureHandle m_SurfaceTexture = {};
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();
 	};
 
-	struct ProceduralTerrainComponent
+	struct ProceduralSurfaceComponent
 	{
-		Surface* m_Surface = nullptr;
+		ProceduralSurfaceComponent();
+		~ProceduralSurfaceComponent();
+
+		std::unique_ptr<Surface> m_Surface = nullptr;
 		TextureHandle m_SurfaceTexture = {};
 
 		//TextureHandle m_SurfaceHeightmap = {};
 
 		NoiseProperties m_NoiseData = {};
+
+		bool m_UseTransformPositionForNoise = true;
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();
