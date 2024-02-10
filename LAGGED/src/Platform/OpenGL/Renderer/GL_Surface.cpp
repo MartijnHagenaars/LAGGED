@@ -183,8 +183,8 @@ namespace LAG
 			for (unsigned int w = 0; w < m_Subdivisions; w++)
 			{
 				//Calculate vertices
-				float xVert = h / static_cast<float>(m_Subdivisions);
-				float zVert = w / static_cast<float>(m_Subdivisions);
+				float xVert = h / static_cast<float>(m_Subdivisions - 1);
+				float zVert = w / static_cast<float>(m_Subdivisions - 1);
 
 				float yVert = 0;
 				if (!m_HeightMapData.empty())
