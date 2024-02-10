@@ -115,10 +115,10 @@ namespace LAG
 			ImGui::DragInt("Seed", &value.m_Seed, 1.f);
 
 			ImGui::Checkbox("Use Transform component for Noise position", &value.m_UseTransformPositionForNoise);
-			if (!value.m_UseTransformPositionForNoise)
+			if (value.m_UseTransformPositionForNoise)
 				ImGui::BeginDisabled();
 			ImGui::DragFloat2("Noise positions", &value.m_NoisePosition[0], 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
-			if (!value.m_UseTransformPositionForNoise)
+			if (value.m_UseTransformPositionForNoise)
 				ImGui::EndDisabled();
 
 

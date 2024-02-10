@@ -25,10 +25,10 @@ namespace LAG
 		~ProceduralSurfaceComponent();
 
 		Surface m_Surface = {};
-		//std::unique_ptr<Surface> m_Surface = nullptr;
-		TextureHandle m_SurfaceTexture = {};
+		int m_SurfaceSubdivisions = 16;
+		glm::vec2 m_SurfaceScale = glm::vec2(1.f);
 
-		//TextureHandle m_SurfaceHeightmap = {};
+		TextureHandle m_SurfaceTexture = {};
 
 		NoiseProperties m_NoiseProperties = {};
 

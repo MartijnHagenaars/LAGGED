@@ -85,10 +85,13 @@ namespace LAG
 		glm::vec2 noisePos = procSurfaceComp.m_NoiseProperties.m_UseTransformPositionForNoise ?
 			glm::vec2(transformComp.GetPosition().x, transformComp.GetPosition().z) :
 			procSurfaceComp.m_NoiseProperties.m_NoisePosition;
-		glm::vec2 noiseScale = glm::vec2(transformComp.GetScale().x, transformComp.GetScale().z);
+		
+		glm::vec2 noiseScale = glm::vec2(procSurfaceComp.m_SurfaceSubdivisions);
+		//glm::vec2 noiseScale = glm::vec2(transformComp.GetScale().x, transformComp.GetScale().z);
 
+		m_Subdivisions = procSurfaceComp.m_SurfaceSubdivisions;
 		m_HeightMapData = Noise::GenerateNoiseData(procSurfaceComp.m_NoiseProperties, noisePos, noiseScale);
-		GenerateSurface(noiseScale.x, noiseScale.y);
+		GenerateSurface(procSurfaceComp.m_SurfaceSubdivisions, procSurfaceComp.m_SurfaceSubdivisions);
 	}
 
 	void Surface::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
@@ -174,14 +177,14 @@ namespace LAG
 		float heightAdjustment = static_cast<float>(m_TextureHeight) / m_Height;
 
 		//TODO: m_Height and m_Width should be renamed to m_Column and m_Row
-		m_VertexData.reserve(m_Height * m_Width);
-		for (unsigned int h = 0; h < m_Height; h++)
+		m_VertexData.reserve(m_Subdivisions * m_Subdivisions);
+		for (unsigned int h = 0; h < m_Subdivisions; h++)
 		{
-			for (unsigned int w = 0; w < m_Width; w++)
+			for (unsigned int w = 0; w < m_Subdivisions; w++)
 			{
 				//Calculate vertices
-				float xVert = -m_Height * 0.5f + m_Height * h / static_cast<float>(m_Height);
-				float zVert = -m_Width * 0.5f + (m_Width * w / static_cast<float>(m_Width));
+				float xVert = -m_Subdivisions * 0.5f + m_Subdivisions * h / static_cast<float>(m_Subdivisions);
+				float zVert = -m_Subdivisions * 0.5f + (m_Subdivisions * w / static_cast<float>(m_Subdivisions));
 
 				float yVert = 0;
 				if (!m_HeightMapData.empty())
@@ -200,15 +203,15 @@ namespace LAG
 
 	void Surface::CalculateIndices()
 	{
-		m_Indices.reserve((m_Height - 1) * (m_Width - 1) * 6);
+		m_Indices.reserve((m_Subdivisions - 1) * (m_Subdivisions - 1) * 6);
 
-		for (int h = 0; h < m_Height - 1; ++h) {
-			for (int w = 0; w < m_Width - 1; ++w) 
+		for (int h = 0; h < m_Subdivisions - 1; ++h) {
+			for (int w = 0; w < m_Subdivisions - 1; ++w)
 			{
 				// Calculate indices for two triangles, forming a quad
-				unsigned int topLeft = h * m_Width + w;
+				unsigned int topLeft = h * m_Subdivisions + w;
 				unsigned int topRight = topLeft + 1;
-				unsigned int bottomLeft = (h + 1) * m_Width + w;
+				unsigned int bottomLeft = (h + 1) * m_Subdivisions + w;
 				unsigned int bottomRight = bottomLeft + 1;
 
 				//First triangle

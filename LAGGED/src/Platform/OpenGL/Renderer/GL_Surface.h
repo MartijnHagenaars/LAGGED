@@ -57,6 +57,7 @@ namespace LAG
 
 		int m_Width = 0;
 		int m_Height = 0;
+		int m_Subdivisions = 0;
 
 		std::vector<float> m_HeightMapData;
 
