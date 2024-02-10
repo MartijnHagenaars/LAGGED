@@ -12,6 +12,9 @@
 #include "Core/Resources/ResourceManager.h"
 
 #include "ECS/Components/BasicComponents.h"
+
+#include "ECS/Systems/TerrainSystems.h"
+
 #include "Utility/Noise.h"
 
 namespace LAG
@@ -111,19 +114,32 @@ namespace LAG
 			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.5f, -1024.f, 1024.f, "%.3f", ImGuiSliderFlags_Logarithmic);
 			ImGui::DragInt("Seed", &value.m_Seed, 1.f);
 
+			ImGui::Checkbox("Use Transform component for Noise position", &value.m_UseTransformPositionForNoise);
+			if (!value.m_UseTransformPositionForNoise)
+				ImGui::BeginDisabled();
+			ImGui::DragFloat2("Noise positions", &value.m_NoisePosition[0], 0.25f, -FLT_MAX, FLT_MAX, "%.3f");
+			if (!value.m_UseTransformPositionForNoise)
+				ImGui::EndDisabled();
+
+
 			//Texture preview functionality
-			if(value.m_PreviewTexture.IsLoaded())
+			if (value.m_PreviewTexture.IsLoaded())
 				ImGui::Image(value.m_PreviewTexture.GetEditorHandle(), ImVec2(
 					std::clamp<float>(ImGui::GetWindowSize().x, 0.f, IMAGE_MAX_SIZE),
 					std::clamp<float>((ImGui::GetWindowSize().x / value.m_PreviewTexture.GetHeight()) * value.m_PreviewTexture.GetHeight(), 0.f, IMAGE_MAX_SIZE)));
 			if (ImGui::Button("Preview"))
 			{
-				glm::vec2 position = glm::vec2(0.f, 0.f);
+				//TODO: This looks terrible
+				glm::vec2 position = value.m_UseTransformPositionForNoise ?
+					glm::vec2(entity->GetComponent<TransformComponent>()->GetPosition().x, entity->GetComponent<TransformComponent>()->GetPosition().z) :
+					value.m_NoisePosition;
+
 				glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale();
 				value.m_PreviewTexture = Noise::GeneratePreviewTexture(value, position, glm::vec2(planeScale.x, planeScale.z));
 			}
 			ImGui::SameLine();
-			ImGui::Button("Apply");
+			if (ImGui::Button("Apply"))
+				SurfaceSystems::GenerateNoiseSurface(entity);
 		}
 
 

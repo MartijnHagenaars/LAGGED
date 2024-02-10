@@ -16,6 +16,8 @@
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/TerrainComponents.h"
 
+#include "ECS/Systems/TerrainSystems.h"
+
 ENTRY_APP(Game)
 
 Game::Game()
@@ -72,9 +74,10 @@ void Game::Initialize()
 	ent5.AddComponent<LAG::CameraComponent>();
 
 	LAG::Entity ent6 = LAG::GetEngine().GetScene()->AddEntity("Surface");
-	ent6.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(256.f));
-	ent6.AddComponent<LAG::SurfaceComponent>();
+	ent6.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(1.f));
+	//ent6.AddComponent<LAG::SurfaceComponent>();
 	ent6.AddComponent<LAG::ProceduralSurfaceComponent>();
+	LAG::SurfaceSystems::GenerateNoiseSurface(&ent6);
 }
 
 void Game::Shutdown()

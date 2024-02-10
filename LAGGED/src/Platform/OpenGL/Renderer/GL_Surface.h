@@ -6,6 +6,12 @@ namespace LAG
 {
 	struct ProceduralSurfaceComponent;
 
+	enum class SurfaceType
+	{
+		FLAT = 0,
+
+	};
+
 	class Texture;
 	class Surface : public SurfaceBase
 	{
@@ -14,13 +20,10 @@ namespace LAG
 		Surface(const std::string& heightTexturePath);
 		~Surface() override;
 		
-		//Generates a flat surface
-		void GenerateSurface(int width, int height);
-
 		//Load a height map from a texture
 		//TODO: Needs to be reworked
-		void ApplyTextureHeightMap(const std::string& heightTexturePath);
-		void ApplyNoiseHeightMap(const ProceduralSurfaceComponent& procSurfaceComp);
+		void GenerateHeightMapSurface(const std::string& heightTexturePath);
+		void GenerateNoiseSurface(const TransformComponent& transformComp, const ProceduralSurfaceComponent& procSurfaceComp);
 
 		virtual bool Load() override;
 		virtual bool Unload() override;
@@ -30,6 +33,10 @@ namespace LAG
 	private:
 		////Creates a vector of 2D noise data
 		//std::vector<float> GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed = 0);
+
+		//Generates the surface. Calculates vertices, indices and normals.
+		void GenerateSurface(int width, int height);
+
 
 		void CalculateVertices();
 		void CalculateIndices();

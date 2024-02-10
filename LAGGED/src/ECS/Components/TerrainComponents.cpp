@@ -42,8 +42,7 @@ namespace LAG
 
         //factory.data<&ProceduralSurfaceComponent::m_Surface>(entt::hashed_string("m_Surface")).prop(Reflection::DISPLAY_NAME, std::string("Surface"));
         factory.data<&ProceduralSurfaceComponent::m_SurfaceTexture>(entt::hashed_string("m_SurfaceTexture")).prop(Reflection::DISPLAY_NAME, std::string("Texture"));
-        factory.data<&ProceduralSurfaceComponent::m_NoiseData>(entt::hashed_string("m_NoiseData")).prop(Reflection::DISPLAY_NAME, std::string("Noise Data"));
-        factory.data<&ProceduralSurfaceComponent::m_UseTransformPositionForNoise>(entt::hashed_string("m_UseTransformPositionForNoise")).prop(Reflection::DISPLAY_NAME, std::string("Use transform position for noise"));
+        factory.data<&ProceduralSurfaceComponent::m_NoiseProperties>(entt::hashed_string("m_NoiseData")).prop(Reflection::DISPLAY_NAME, std::string("Noise properties"));
 
         return false;
     }

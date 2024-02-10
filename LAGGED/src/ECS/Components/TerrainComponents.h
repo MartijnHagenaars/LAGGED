@@ -24,14 +24,13 @@ namespace LAG
 		ProceduralSurfaceComponent();
 		~ProceduralSurfaceComponent();
 
-		std::unique_ptr<Surface> m_Surface = nullptr;
+		Surface m_Surface = {};
+		//std::unique_ptr<Surface> m_Surface = nullptr;
 		TextureHandle m_SurfaceTexture = {};
 
 		//TextureHandle m_SurfaceHeightmap = {};
 
-		NoiseProperties m_NoiseData = {};
-
-		bool m_UseTransformPositionForNoise = true;
+		NoiseProperties m_NoiseProperties = {};
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();
