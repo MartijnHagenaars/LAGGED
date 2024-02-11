@@ -38,14 +38,19 @@ void World::Update()
 	{
 		m_PrevCameraPos = camTransform->GetPosition();
 
-		int xGridPos = static_cast<int>(camTransform->GetPosition().x / static_cast<float>(CHUNK_SIZE));
-		int zGridPos = static_cast<int>(camTransform->GetPosition().z / static_cast<float>(CHUNK_SIZE));
-		printf("Camera position in chunk world: %i %i\n", xGridPos, zGridPos);
+		int xCamGridPos = static_cast<int>(camTransform->GetPosition().x / static_cast<float>(CHUNK_SIZE));
+		int zCamGridPos = static_cast<int>(camTransform->GetPosition().z / static_cast<float>(CHUNK_SIZE));
+		printf("Camera position in chunk world: %i %i\n", xCamGridPos, zCamGridPos);
 		
 		for (int h = -(m_LoadDistance * .5f); h <= (m_LoadDistance * .5f); h++)
 		{
 			for (int w = -(m_LoadDistance * .5f); w <= (m_LoadDistance * .5f); w++)
 			{
+				if (m_ChunkMap.find(ChunkKey(w, h)) == m_ChunkMap.end())
+				{
+					m_ChunkMap.insert({ ChunkKey(w, h), Chunk(glm::vec2(w, h)) });
+				}
+
 				printf("%i %i - ", w, h);
 			}
 			printf("\n");
