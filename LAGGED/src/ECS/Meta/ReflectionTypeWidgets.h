@@ -164,5 +164,12 @@ namespace LAG
 		[[maybe_unused]] static void UnloadWidgetType(LAG::Entity* entity, T& value, const std::string& name)
 		{
 		}
+
+		template <>
+		[[maybe_unused]] static void UnloadWidgetType(LAG::Entity* entity, NoiseProperties& value, const std::string& name)
+		{
+			if (value.m_PreviewTexture.IsLoaded())
+				value.m_PreviewTexture.Unload();
+		}
 	}
 }
