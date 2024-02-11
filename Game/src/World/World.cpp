@@ -7,7 +7,6 @@
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/TerrainComponents.h"
 #include "ECS/Components/CameraComponent.h"
-
 #include "Chunk.h"
 
 World::World(int loadDistance) : 
@@ -53,7 +52,4 @@ void World::Update()
 		}
 		printf("======================\n\n");
 	}
-
-
-
 }

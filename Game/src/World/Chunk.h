@@ -1,7 +1,7 @@
 #pragma once
 #include "glm/vec2.hpp"
 
-static const int CHUNK_SIZE = 16;
+static const int CHUNK_SIZE = 8;
 
 class Chunk
 {
