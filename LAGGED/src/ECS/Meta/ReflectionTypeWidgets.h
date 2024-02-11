@@ -12,6 +12,7 @@
 #include "Core/Resources/ResourceManager.h"
 
 #include "ECS/Components/BasicComponents.h"
+#include "ECS/Components/TerrainComponents.h"
 
 #include "ECS/Systems/TerrainSystems.h"
 
@@ -121,7 +122,6 @@ namespace LAG
 			if (value.m_UseTransformPositionForNoise)
 				ImGui::EndDisabled();
 
-
 			//Texture preview functionality
 			if (value.m_PreviewTexture.IsLoaded())
 				ImGui::Image(value.m_PreviewTexture.GetEditorHandle(), ImVec2(
@@ -134,7 +134,7 @@ namespace LAG
 					glm::vec2(entity->GetComponent<TransformComponent>()->GetPosition().x, entity->GetComponent<TransformComponent>()->GetPosition().z) :
 					value.m_NoisePosition;
 
-				glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale();
+				glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale() * static_cast<float>(entity->GetComponent<ProceduralSurfaceComponent>()->m_SurfaceSubdivisions);
 				value.m_PreviewTexture = Noise::GeneratePreviewTexture(value, position, glm::vec2(planeScale.x, planeScale.z));
 			}
 			ImGui::SameLine();

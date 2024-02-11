@@ -87,10 +87,16 @@ namespace LAG
 			procSurfaceComp.m_NoiseProperties.m_NoisePosition;
 		
 		glm::vec2 noiseScale = glm::vec2(procSurfaceComp.m_SurfaceSubdivisions);
+
+		float scaleLength = glm::vec2(transformComp.GetScale().x, transformComp.GetScale().z).length();
+		float noiseFrequencyAdjustment = scaleLength / procSurfaceComp.m_SurfaceSubdivisions;
 		//glm::vec2 noiseScale = glm::vec2(transformComp.GetScale().x, transformComp.GetScale().z);
 
+		NoiseProperties tempProps = procSurfaceComp.m_NoiseProperties;
+		tempProps.m_Frequency *= noiseFrequencyAdjustment;
+
 		m_Subdivisions = procSurfaceComp.m_SurfaceSubdivisions;
-		m_HeightMapData = Noise::GenerateNoiseData(procSurfaceComp.m_NoiseProperties, noisePos, noiseScale);
+		m_HeightMapData = Noise::GenerateNoiseData(tempProps, noisePos, noiseScale);
 		GenerateSurface(procSurfaceComp.m_SurfaceSubdivisions, procSurfaceComp.m_SurfaceSubdivisions);
 	}
 
