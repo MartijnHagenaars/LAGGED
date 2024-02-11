@@ -28,9 +28,9 @@ namespace LAG
 		return noiseData;
 	}
 
-	Texture Noise::GeneratePreviewTexture(const NoiseProperties& noiseProperties, const glm::vec2& position, const glm::vec2& size)
+	Texture Noise::GeneratePreviewTexture(const NoiseProperties& noiseProperties, const glm::vec2& position, const glm::vec2& size, int surfaceSubdivision)
 	{
-		std::vector<float> noiseData = GenerateNoiseData(noiseProperties, position, size, 1);
+		std::vector<float> noiseData = GenerateNoiseData(noiseProperties, position, size, surfaceSubdivision);
 		Texture texture(HashedString(""));
 
 		texture.SetBuffer(noiseData.data(), noiseData.size(), size.x, size.y, LAG::TextureFormat::FORMAT_R);

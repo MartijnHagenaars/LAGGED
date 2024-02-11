@@ -25,6 +25,6 @@ namespace LAG
 	{
 		std::vector<float> GenerateNoiseData(const NoiseProperties& noiseProperties, const glm::vec2& position, const glm::vec2& size, int surfaceSubdivision);
 
-		Texture GeneratePreviewTexture(const NoiseProperties& noiseProperties, const glm::vec2& position, const glm::vec2& size);
+		Texture GeneratePreviewTexture(const NoiseProperties& noiseProperties, const glm::vec2& position, const glm::vec2& size, int surfaceSubdivision = 1);
 	}
 }
