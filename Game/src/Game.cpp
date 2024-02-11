@@ -18,6 +18,10 @@
 
 #include "ECS/Systems/TerrainSystems.h"
 
+
+
+#include "World/World.h"
+
 ENTRY_APP(Game)
 
 Game::Game()
@@ -78,6 +82,8 @@ void Game::Initialize()
 	//ent6.AddComponent<LAG::SurfaceComponent>();
 	ent6.AddComponent<LAG::ProceduralSurfaceComponent>();
 	LAG::SurfaceSystems::GenerateNoiseSurface(&ent6);
+
+	m_World = new World(4);
 }
 
 void Game::Shutdown()
@@ -87,10 +93,5 @@ void Game::Shutdown()
 
 void Game::Update()
 {
-	if (LAG::Input::IsActionPressedOnce(LAG::HashedString("LMB")))
-	{
-		float x, y;
-		LAG::Input::GetMousePosition(x, y);
-		LAG::Logger::Info("Clickity at {0}, {1}!", x, y);
-	}
+	m_World->Update();
 }
