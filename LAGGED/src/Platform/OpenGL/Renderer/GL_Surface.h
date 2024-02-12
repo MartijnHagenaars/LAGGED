@@ -60,9 +60,8 @@ namespace LAG
 		int m_Subdivisions = 0;
 
 		std::vector<float> m_HeightMapData;
-
-		int m_TextureWidth = 0;
-		int m_TextureHeight = 0;
+		int m_HeightMapWidth = 0;
+		int m_HeightMapHeight = 0;
 
 	};
 }

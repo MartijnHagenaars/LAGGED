@@ -56,9 +56,6 @@ namespace LAG
 			m_Indices.shrink_to_fit();
 		}
 
-		//TODO: Temp solution
-		m_TextureWidth = m_Width, m_TextureHeight = m_Height;
-
 		CalculateVertices();
 		CalculateIndices();
 		CalculateNormals();
@@ -89,7 +86,11 @@ namespace LAG
 		glm::vec2 noiseScale = glm::vec2(procSurfaceComp.m_SurfaceSubdivisions);
 
 		m_Subdivisions = procSurfaceComp.m_SurfaceSubdivisions;
-		m_HeightMapData = Noise::GenerateNoiseData(procSurfaceComp.m_NoiseProperties, noisePos, noiseScale, m_Subdivisions);
+		Noise::GeneratedData noiseData = Noise::GenerateNoiseData(procSurfaceComp.m_NoiseProperties, noisePos, noiseScale, m_Subdivisions);
+		m_HeightMapData = noiseData.m_Data;
+		m_HeightMapWidth = noiseData.m_Size.x;
+		m_HeightMapHeight = noiseData.m_Size.y;
+
 		GenerateSurface(procSurfaceComp.m_SurfaceSubdivisions, procSurfaceComp.m_SurfaceSubdivisions);
 	}
 
@@ -171,12 +172,9 @@ namespace LAG
 
 	void Surface::CalculateVertices()
 	{
-		m_TextureWidth += 1;
-		m_TextureHeight += 1;
-
 		//float widthAdjustment = static_cast<float>(m_Width) / textureWidth;
-		float widthAdjustment = static_cast<float>(m_TextureWidth) / m_Width;
-		float heightAdjustment = static_cast<float>(m_TextureHeight) / m_Height;
+		float widthAdjustment = static_cast<float>(m_HeightMapWidth) / m_Width;
+		float heightAdjustment = static_cast<float>(m_HeightMapHeight) / m_Height;
 
 		//TODO: m_Height and m_Width should be renamed to m_Column and m_Row
 		m_VertexData.reserve(m_Subdivisions * m_Subdivisions);
@@ -193,7 +191,7 @@ namespace LAG
 				{
 					unsigned int xResize = static_cast<unsigned int>(std::round(widthAdjustment * static_cast<float>(w)));
 					unsigned int zResize = static_cast<unsigned int>(std::round(heightAdjustment * static_cast<float>(h)));
-					yVert = m_HeightMapData[zResize + m_TextureWidth * xResize];
+					yVert = m_HeightMapData[zResize + m_HeightMapWidth * xResize];
 				}
 
 				VertexData vd;

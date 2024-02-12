@@ -14,7 +14,7 @@ namespace LAG
 			SetupReflectionType<glm::vec3>();
 
 			SetupReflectionType<LAG::TextureHandle>();
-			SetupReflectionType<LAG::NoiseProperties>();
+			SetupReflectionType<LAG::Noise::Properties>();
 
 			return true;
 		}

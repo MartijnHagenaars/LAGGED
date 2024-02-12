@@ -109,7 +109,7 @@ namespace LAG
 		}
 
 		template <>
-		[[maybe_unused]] static void DrawWidgetType<NoiseProperties>(LAG::Entity* entity, NoiseProperties& value, const std::string& name)
+		[[maybe_unused]] static void DrawWidgetType<Noise::Properties>(LAG::Entity* entity, Noise::Properties& value, const std::string& name)
 		{
 			ImGui::DragFloat("Amplitude", &value.m_Amplitude, 0.05f);
 			ImGui::DragFloat("Frequency", &value.m_Frequency, 0.5f, -1024.f, 1024.f, "%.3f", ImGuiSliderFlags_Logarithmic);
@@ -166,7 +166,7 @@ namespace LAG
 		}
 
 		template <>
-		[[maybe_unused]] static void UnloadWidgetType(LAG::Entity* entity, NoiseProperties& value, const std::string& name)
+		[[maybe_unused]] static void UnloadWidgetType<Noise::Properties>(LAG::Entity* entity, Noise::Properties& value, const std::string& name)
 		{
 			if (value.m_PreviewTexture.IsLoaded())
 				value.m_PreviewTexture.Unload();

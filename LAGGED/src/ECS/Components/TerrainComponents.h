@@ -30,7 +30,7 @@ namespace LAG
 
 		TextureHandle m_SurfaceTexture = {};
 
-		NoiseProperties m_NoiseProperties = {};
+		Noise::Properties m_NoiseProperties = {};
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();
