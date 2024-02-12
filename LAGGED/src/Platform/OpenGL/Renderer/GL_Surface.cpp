@@ -171,6 +171,9 @@ namespace LAG
 
 	void Surface::CalculateVertices()
 	{
+		m_TextureWidth += 1;
+		m_TextureHeight += 1;
+
 		//float widthAdjustment = static_cast<float>(m_Width) / textureWidth;
 		float widthAdjustment = static_cast<float>(m_TextureWidth) / m_Width;
 		float heightAdjustment = static_cast<float>(m_TextureHeight) / m_Height;
@@ -188,9 +191,9 @@ namespace LAG
 				float yVert = 0;
 				if (!m_HeightMapData.empty())
 				{
-					unsigned int xResize = static_cast<unsigned int>(widthAdjustment * static_cast<float>(w));
-					unsigned int zResize = static_cast<unsigned int>(heightAdjustment * static_cast<float>(h));
-					yVert = m_HeightMapData[xResize + m_TextureWidth * zResize];
+					unsigned int xResize = static_cast<unsigned int>(std::round(widthAdjustment * static_cast<float>(w)));
+					unsigned int zResize = static_cast<unsigned int>(std::round(heightAdjustment * static_cast<float>(h)));
+					yVert = m_HeightMapData[zResize + m_TextureWidth * xResize];
 				}
 
 				VertexData vd;
