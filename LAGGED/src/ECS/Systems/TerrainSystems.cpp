@@ -10,7 +10,6 @@ namespace LAG::SurfaceSystems
 
 	void GenerateNoiseSurface(Entity* entity)
 	{
-		
 		entity->GetComponent<ProceduralSurfaceComponent>()->m_Surface.GenerateNoiseSurface(*entity->GetComponent<TransformComponent>(), *entity->GetComponent<ProceduralSurfaceComponent>());
 		entity->GetComponent<ProceduralSurfaceComponent>()->m_Surface.Reload();
 	}

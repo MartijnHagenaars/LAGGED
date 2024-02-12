@@ -48,7 +48,9 @@ void World::Update()
 			{
 				if (m_ChunkMap.find(ChunkKey(w, h)) == m_ChunkMap.end())
 				{
-					m_ChunkMap.insert({ ChunkKey(w, h), Chunk(glm::vec2(w, h)) });
+					Chunk newChunk = {};
+					newChunk.Load(glm::vec2(w, h));
+					m_ChunkMap.insert({ ChunkKey(w, h), newChunk });
 				}
 
 				printf("%i %i - ", w, h);
