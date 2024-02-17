@@ -83,13 +83,13 @@ namespace LAG
 			glm::vec2(transformComp.GetPosition().x, transformComp.GetPosition().z) :
 			procSurfaceComp.m_NoiseProperties.m_NoisePosition;
 		
-		glm::vec2 noiseScale = glm::vec2(procSurfaceComp.m_SurfaceSubdivisions);
+		glm::vec2 noiseScale = glm::vec2(static_cast<float>(procSurfaceComp.m_SurfaceSubdivisions));
 
 		m_Subdivisions = procSurfaceComp.m_SurfaceSubdivisions;
 		Noise::GeneratedData noiseData = Noise::GenerateNoiseData(procSurfaceComp.m_NoiseProperties, noisePos, noiseScale, m_Subdivisions);
 		m_HeightMapData = noiseData.m_Data;
-		m_HeightMapWidth = noiseData.m_Size.x;
-		m_HeightMapHeight = noiseData.m_Size.y;
+		m_HeightMapWidth = static_cast<int>(noiseData.m_Size.x);
+		m_HeightMapHeight = static_cast<int>(noiseData.m_Size.y);
 
 		GenerateSurface(procSurfaceComp.m_SurfaceSubdivisions, procSurfaceComp.m_SurfaceSubdivisions);
 	}
@@ -122,7 +122,7 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 
 		//TOOD: Should use unsigned short
-		glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, static_cast<int>(m_Indices.size()), GL_UNSIGNED_INT, 0);
 	}
 
 	bool Surface::Load()
@@ -178,9 +178,9 @@ namespace LAG
 
 		//TODO: m_Height and m_Width should be renamed to m_Column and m_Row
 		m_VertexData.reserve(m_Subdivisions * m_Subdivisions);
-		for (unsigned int h = 0; h < m_Subdivisions; h++)
+		for (int h = 0; h < m_Subdivisions; h++)
 		{
-			for (unsigned int w = 0; w < m_Subdivisions; w++)
+			for (int w = 0; w < m_Subdivisions; w++)
 			{
 				//Calculate vertices
 				float xVert = h / static_cast<float>(m_Subdivisions - 1);
