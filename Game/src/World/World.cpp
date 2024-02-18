@@ -40,12 +40,15 @@ void World::Update()
 
 		int xCamGridPos = static_cast<int>(camTransform->GetPosition().x / static_cast<float>(CHUNK_SIZE));
 		int zCamGridPos = static_cast<int>(camTransform->GetPosition().z / static_cast<float>(CHUNK_SIZE));
-		printf("Camera position in chunk world: %i %i\n", xCamGridPos, zCamGridPos);
+		//printf("Camera position in chunk world: %i %i\n", xCamGridPos, zCamGridPos);
 		
-		for (int h = -(m_LoadDistance * .5f); h <= (m_LoadDistance * .5f); h++)
+		for (int h = -static_cast<int>(zCamGridPos * .5f); h <= static_cast<int>(zCamGridPos * .5f); h++)
 		{
-			for (int w = -(m_LoadDistance * .5f); w <= (m_LoadDistance * .5f); w++)
+			for (int w = -static_cast<int>(xCamGridPos * .5f); w <= static_cast<int>(xCamGridPos * .5f); w++)
 			{
+				//w -= xCamGridPos;
+				//h -= zCamGridPos;
+
 				if (m_ChunkMap.find(ChunkKey(w, h)) == m_ChunkMap.end())
 				{
 					Chunk newChunk = {};
@@ -53,10 +56,10 @@ void World::Update()
 					m_ChunkMap.insert({ ChunkKey(w, h), newChunk });
 				}
 
-				printf("%i %i - ", w, h);
+				//printf("%i %i - ", w, h);
 			}
-			printf("\n");
+			//printf("\n");
 		}
-		printf("======================\n\n");
+		//printf("======================\n\n");
 	}
 }
