@@ -18,6 +18,7 @@ private:
 
 	const int m_LoadDistance = 0;
 
+	bool m_UpdateChunks = false;
 	glm::vec3 m_PrevCameraPos = glm::vec3(0.f);
 };
 

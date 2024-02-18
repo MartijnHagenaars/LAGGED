@@ -83,7 +83,7 @@ void Game::Initialize()
 	ent6.AddComponent<LAG::ProceduralSurfaceComponent>();
 	LAG::SurfaceSystems::GenerateNoiseSurface(&ent6);
 
-	m_World = new World(4);
+	m_World = new World(8);
 }
 
 void Game::Shutdown()

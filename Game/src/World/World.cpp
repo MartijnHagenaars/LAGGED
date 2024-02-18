@@ -33,14 +33,20 @@ void World::Update()
 		return;
 	}
 
+
 	LAG::TransformComponent* camTransform = cameraEntity.GetComponent<LAG::TransformComponent>();
 	if (camTransform->GetPosition() != m_PrevCameraPos)
 	{
 		m_PrevCameraPos = camTransform->GetPosition();
+		m_UpdateChunks = true;
+	}
 
+	if(m_UpdateChunks)
+	{
 		int xCamGridPos = static_cast<int>(camTransform->GetPosition().x / static_cast<float>(CHUNK_SIZE));
 		int zCamGridPos = static_cast<int>(camTransform->GetPosition().z / static_cast<float>(CHUNK_SIZE));
 
+		//Add new chunks if necessary
 		for (int loadDistance = 1; loadDistance < m_LoadDistance; loadDistance++)
 		{
 			int halfLoadDistance = static_cast<int>(std::ceil(loadDistance * 0.5f));
@@ -57,9 +63,24 @@ void World::Update()
 						Chunk newChunk = {};
 						newChunk.Load(glm::vec2(chunkXPos, chunkZPos));
 						m_ChunkMap.insert({ ck, newChunk });
+						return;
 					}
 				}
 			}
+		}
+
+		//Unloading of distant chunks
+		for (auto it = m_ChunkMap.begin(); it != m_ChunkMap.end();)
+		{
+			glm::vec2 chunkPos = glm::vec2(it->first.m_X, it->first.m_Y);
+			glm::vec2 camPos = glm::vec2(-xCamGridPos, -zCamGridPos);
+			int length = glm::length(chunkPos - camPos);
+			if (static_cast<float>(length) > m_LoadDistance)
+			{
+				it->second.Unload();
+				m_ChunkMap.erase(it++);
+			}
+			else ++it;
 		}
 	}
 }
