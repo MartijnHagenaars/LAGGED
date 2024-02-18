@@ -2,7 +2,7 @@
 #include "glm/vec2.hpp"
 #include "ECS/Entity.h"
 
-static const int CHUNK_SIZE = 8;
+static const int CHUNK_SIZE = 64;
 
 namespace LAG
 {
