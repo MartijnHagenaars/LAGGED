@@ -49,10 +49,10 @@ void World::Update()
 		//Add new chunks if necessary
 		for (int loadDistance = 1; loadDistance < m_LoadDistance; loadDistance++)
 		{
-			int halfLoadDistance = static_cast<int>(std::ceil(loadDistance * 0.5f));
-			for (int z = -halfLoadDistance; z <= halfLoadDistance; z++)
+			int halfLoadDistance = static_cast<int>(std::floor(loadDistance * 0.5f));
+			for (int z = -halfLoadDistance + 1; z <= halfLoadDistance; z++)
 			{
-				for (int x = -halfLoadDistance; x <= halfLoadDistance; x++)
+				for (int x = -halfLoadDistance + 1; x <= halfLoadDistance; x++)
 				{
 					int chunkXPos = -(xCamGridPos + x);
 					int chunkZPos = -(zCamGridPos + z);
@@ -75,7 +75,7 @@ void World::Update()
 			glm::vec2 chunkPos = glm::vec2(it->first.m_X, it->first.m_Y);
 			glm::vec2 camPos = glm::vec2(-xCamGridPos, -zCamGridPos);
 			int length = glm::length(chunkPos - camPos);
-			if (static_cast<float>(length) > m_LoadDistance)
+			if (static_cast<float>(length) > m_LoadDistance * 0.5f)
 			{
 				it->second.Unload();
 				m_ChunkMap.erase(it++);
