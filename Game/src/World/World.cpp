@@ -9,8 +9,8 @@
 #include "ECS/Components/CameraComponent.h"
 #include "Chunk.h"
 
-World::World(int loadDistance) : 
-	m_LoadDistance(loadDistance)
+World::World(int loadDistance, bool infiniteTerrain) :
+	m_LoadDistance(loadDistance), m_UseInfiniteTerrain(infiniteTerrain)
 {
 }
 
@@ -20,6 +20,9 @@ World::~World()
 
 void World::Update()
 {
+	if (!m_UseInfiniteTerrain && m_HasGeneratedTerrain)
+		return;
+
 	LAG::Entity cameraEntity = {};
 	LAG::GetEngine().GetScene()->Loop<LAG::CameraComponent>([&cameraEntity](LAG::Entity entity, LAG::CameraComponent& cameraComp)
 		{
@@ -82,5 +85,7 @@ void World::Update()
 			}
 			else ++it;
 		}
+
+		m_HasGeneratedTerrain = true;
 	}
 }
