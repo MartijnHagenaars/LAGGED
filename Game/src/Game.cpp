@@ -75,7 +75,7 @@ void Game::Initialize()
 	LAG::Entity ent5 = LAG::GetEngine().GetScene()->AddEntity("Camera");
 	ent5.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, -10.f, 0.f));
 	ent5.AddComponent<LAG::TransformComponent>()->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
-	ent5.AddComponent<LAG::CameraComponent>();
+	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 80.f;
 
 	LAG::Entity ent6 = LAG::GetEngine().GetScene()->AddEntity("Surface");
 	ent6.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(1.f));
