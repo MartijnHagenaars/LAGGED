@@ -49,20 +49,24 @@ namespace LAG
         }
     }
 
-    bool WindowManager::RemoveWindow(std::unique_ptr<Window>& window)
+    bool WindowManager::RemoveWindow(Window* window)
     {
-        if (window.get() == m_MainWindow.get())
+        if (window == nullptr)
+            return false;
+
+        if (window == m_MainWindow.get())
         {
-            window.reset();
             Shutdown();
             return true;
         }
         else
         {
             for (auto it = m_AdditionalWindows.begin(); it != m_AdditionalWindows.end();)
-                if (window == *it)
+                if (window == it->get())
                 {
-                    window.reset();
+                    delete it->get();
+                    *it = nullptr;
+
                     m_AdditionalWindows.erase(it);
                     return true;
                 }

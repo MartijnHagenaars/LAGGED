@@ -22,7 +22,7 @@ namespace LAG
 		void Shutdown();
 
 		Window* AddWindow(unsigned int winWidth, unsigned int winHeight, const char* winName, bool fullscreen, bool useVSync = true, bool centerWindow = true);
-		bool RemoveWindow(std::unique_ptr<Window>& window);
+		bool RemoveWindow(Window* window);
 		
 		void Update();
 

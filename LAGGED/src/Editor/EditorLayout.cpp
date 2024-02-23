@@ -5,6 +5,7 @@
 
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
+#include "Platform/Base/Window/WindowManager.h"
 
 //TODO: Potentially move
 #include "ImGui/imgui.h"
@@ -62,7 +63,8 @@ namespace LAG
         {
             if (ImGui::BeginMenu("File"))
             {
-                if (ImGui::MenuItem("Exit")) {}
+				if (ImGui::MenuItem("Exit"))
+					GetEngine().GetWindowManager()->RemoveWindow(GetEngine().GetWindowManager()->GetPrimaryWindow());
 
                 ImGui::EndMenu();
             }
