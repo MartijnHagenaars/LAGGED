@@ -42,9 +42,10 @@ namespace LAG
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
 
-		ImGuiWindowFlags dockspaceFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDecoration;
-		dockspaceFlags |= ImGuiWindowFlags_NoMove;
-		dockspaceFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNav;
+		ImGuiWindowFlags dockspaceFlags = 
+			ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDecoration | 
+			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNav | 
+			ImGuiWindowFlags_NoBackground;
 
 		bool isOpen = true;
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -54,7 +55,7 @@ namespace LAG
 		//Create the dockspace
         ImGuiIO& io = ImGui::GetIO();
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingOverCentralNode);
+			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingOverCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
 
 		//Create the menu bar, displayed at the top of the window
         if (ImGui::BeginMenuBar())
@@ -73,6 +74,7 @@ namespace LAG
 
 
 		m_EntityViewer->Render();
+		m_Gizmo->RenderGizmoProperties();
 
 		Entity cameraEntity;
 		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera) 
@@ -84,7 +86,6 @@ namespace LAG
 		if (cameraEntity.IsValid() && m_EntityViewer->GetSelectedEntityID()->IsValid())
 		{
 			m_Gizmo->RenderGizmo(m_EntityViewer->GetSelectedEntityID(), &cameraEntity);
-			m_Gizmo->RenderGizmoProperties();
 		}
 
 	}
