@@ -6,6 +6,9 @@
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
 
+//TODO: Potentially move
+#include "ImGui/imgui.h"
+
 namespace LAG
 {
 	void EditorLayout::Initialize()
@@ -35,6 +38,40 @@ namespace LAG
 
 	void EditorLayout::Render()
 	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+
+		ImGuiWindowFlags dockspaceFlags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDecoration;
+		dockspaceFlags |= ImGuiWindowFlags_NoMove;
+		dockspaceFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNav;
+
+		bool isOpen = true;
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		if (!ImGui::Begin("Editor", &isOpen, dockspaceFlags))
+			Logger::Critical("Failed to load dockspace");
+
+		//Create the dockspace
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingOverCentralNode);
+
+		//Create the menu bar, displayed at the top of the window
+        if (ImGui::BeginMenuBar())
+        {
+            if (ImGui::BeginMenu("File"))
+            {
+                if (ImGui::MenuItem("Exit")) {}
+
+                ImGui::EndMenu();
+            }
+            ImGui::EndMenuBar();
+        }
+
+        ImGui::End();
+		ImGui::PopStyleVar();
+
+
 		m_EntityViewer->Render();
 
 		Entity cameraEntity;
