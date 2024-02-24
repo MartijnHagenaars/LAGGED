@@ -2,6 +2,7 @@
 
 #include "Tools/Gizmo.h"
 #include "Tools/EntityViewer.h"
+#include "Tools/ImGuiTools.h"
 
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
@@ -19,6 +20,12 @@ namespace LAG
 
 		if (m_Gizmo == nullptr)
 			m_Gizmo = new Gizmo();
+
+		if (m_ImGuiDemoViewer == nullptr)
+			m_ImGuiDemoViewer = new ImGuiDemoViewer;
+
+		if (m_ImGuiStyleEditor == nullptr)
+			m_ImGuiStyleEditor = new ImGuiStyleEditor;
 	}
 
 	void EditorLayout::Shutdown()
@@ -32,9 +39,9 @@ namespace LAG
 		m_Gizmo = nullptr;
 	}
 
+	//TODO: Remove?
 	void EditorLayout::Update(float deltaTime)
 	{
-		m_EntityViewer->Update();
 	}
 
 	void EditorLayout::Render()
@@ -76,8 +83,10 @@ namespace LAG
 
 
 		m_EntityViewer->Render();
-		m_Gizmo->RenderGizmoProperties();
-		ImGui::ShowDemoWindow();
+		m_Gizmo->Render();
+
+		m_ImGuiDemoViewer->Render();
+		m_ImGuiStyleEditor->Render();
 
 		Entity cameraEntity;
 		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera) 

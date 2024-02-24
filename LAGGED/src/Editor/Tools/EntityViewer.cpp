@@ -14,7 +14,7 @@
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
-		m_BrowserHeight(200.f)
+		ToolBase(ToolType::LEVEL, "Entity Editor"), m_BrowserHeight(200.f)
 	{
 	}
 
@@ -22,18 +22,14 @@ namespace LAG
 	{
 	}
 
-	void EntityViewer::Update()
-	{
-	}
-
 	void EntityViewer::Render()
 	{
-		ImGui::Begin("Entity Viewer");
+		ImGui::Begin("Entity Editor");
 
 		Scene* scene = GetEngine().GetScene();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-		ImGui::SeparatorText("Entity Viewer");
+		ImGui::SeparatorText("Entity Editor");
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());

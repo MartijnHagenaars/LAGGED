@@ -11,7 +11,7 @@
 namespace LAG
 {
 	Gizmo::Gizmo() :
-		m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)
+		ToolBase(ToolType::LEVEL, "Gizmo Properties"), m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)
 	{
 	}
 
@@ -65,10 +65,9 @@ namespace LAG
 		ImGuizmo::ViewManipulate(&viewMat[0][0], 8.f, ImVec2(0, 0), ImVec2(128, 128), 0x10101010);
 	}
 
-	void Gizmo::RenderGizmoProperties()
+	void Gizmo::Render()
 	{
 		ImGui::Begin("Gizmo Properties");
-
 
 		ImGui::Checkbox("Enable Gizmo", &m_UseGizmo);
 

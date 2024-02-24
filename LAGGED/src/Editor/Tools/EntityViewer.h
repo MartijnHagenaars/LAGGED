@@ -1,17 +1,17 @@
 #pragma once
+#include "Editor/ToolBase.h"
 #include "ECS/Entity.h"
 
 namespace LAG
 {
 	class Entity;
-	class EntityViewer
+	class EntityViewer : public ToolBase
 	{
 	public: 
 		EntityViewer();
 		~EntityViewer();
 
-		void Update();
-		void Render(); 
+		void Render() override; 
 
 		Entity* GetSelectedEntityID() { return &m_SelectedEntity; }
 
