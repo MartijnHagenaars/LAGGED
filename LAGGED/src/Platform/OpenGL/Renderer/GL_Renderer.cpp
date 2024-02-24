@@ -70,14 +70,9 @@ namespace LAG::Renderer
 
 		glEnable(GL_DEPTH_TEST);
 
-		//renderData->surface = new Surface();
 		renderData->testSurface = new Surface("res/Assets/Textures/face.png");
 		renderData->testSurface->GenerateSurface(0, 0, 512, 512, 0.02f, 25.f, 1234);
 		renderData->testSurface->Reload();
-
-		//renderData->floorSurface = new Surface();
-		//renderData->floorSurface->GenerateSurface(0, 0, 16, 16, 0.2f, 1337);
-		//renderData->floorSurface->Reload();
 
 		return true;
 	}

@@ -1,4 +1,5 @@
 #pragma once
+#include "ToolBase.h"
 
 namespace LAG
 {
@@ -19,6 +20,10 @@ namespace LAG
 
 		void Update(float deltaTime);
 		void Render();
+
+	private:
+		void BeginDockSpace();
+		void EndDockSpace();
 
 		Gizmo* m_Gizmo = nullptr;
 		EntityViewer* m_EntityViewer = nullptr;

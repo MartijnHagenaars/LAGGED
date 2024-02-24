@@ -8,7 +8,6 @@
 #include "ECS/Scene.h"
 #include "Platform/Base/Window/WindowManager.h"
 
-//TODO: Potentially move
 #include "ImGui/imgui.h"
 
 namespace LAG
@@ -46,25 +45,8 @@ namespace LAG
 
 	void ToolsManager::Render()
 	{
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
-
-		ImGuiWindowFlags dockspaceFlags = 
-			ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDecoration | 
-			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNav | 
-			ImGuiWindowFlags_NoBackground;
-
-		bool isOpen = true;
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		if (!ImGui::Begin("Editor", &isOpen, dockspaceFlags))
-			Logger::Critical("Failed to load dockspace");
-
-		//Create the dockspace
-        ImGuiIO& io = ImGui::GetIO();
-        if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingOverCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
-
+		BeginDockSpace();
+		
 		//Create the menu bar, displayed at the top of the window
         if (ImGui::BeginMenuBar())
         {
@@ -74,12 +56,16 @@ namespace LAG
 					GetEngine().GetWindowManager()->RemoveWindow(GetEngine().GetWindowManager()->GetPrimaryWindow());
 
                 ImGui::EndMenu();
-            }
+			}
+
+			if (ImGui::BeginMenu("File"))
+			{
+
+			}
             ImGui::EndMenuBar();
         }
 
-        ImGui::End();
-		ImGui::PopStyleVar();
+		EndDockSpace();
 
 
 		m_EntityViewer->Render();
@@ -100,5 +86,34 @@ namespace LAG
 			m_Gizmo->RenderGizmo(m_EntityViewer->GetSelectedEntityID(), &cameraEntity);
 		}
 
+	}
+
+	void ToolsManager::BeginDockSpace()
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+
+		ImGuiWindowFlags dockspaceFlags =
+			ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDecoration |
+			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNav |
+			ImGuiWindowFlags_NoBackground;
+
+		bool isOpen = true;
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		if (!ImGui::Begin("Editor", &isOpen, dockspaceFlags))
+			Logger::Critical("Failed to load dockspace");
+
+		//Create the dockspace
+		ImGuiIO& io = ImGui::GetIO();
+		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
+			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingOverCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
+
+	}
+
+	void ToolsManager::EndDockSpace()
+	{
+		ImGui::End();
+		ImGui::PopStyleVar();
 	}
 }
