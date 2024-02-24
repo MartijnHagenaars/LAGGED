@@ -237,7 +237,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\ECS\Meta\ReflectionDefines.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
-    <ClInclude Include="src\Editor\EditorLayout.h" />
+    <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
     <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
@@ -362,7 +362,6 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Platform\Base\Window\WindowManager.h" />
     <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
-    <ClInclude Include="src\Editor\ToolsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
@@ -371,7 +370,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
     <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
-    <ClCompile Include="src\Editor\EditorLayout.cpp" />
+    <ClCompile Include="src\Editor\ToolsManager.cpp" />
     <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">NotUsing</PrecompiledHeader>
@@ -518,7 +517,6 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp" />
     <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
-    <ClCompile Include="src\Editor\ToolsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl">

@@ -225,7 +225,7 @@
     <ClInclude Include="src\Editor\Tools\EntityViewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\EditorLayout.h">
+    <ClInclude Include="src\Editor\ToolsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\ECS\Meta\ReflectionDefines.h">
@@ -247,9 +247,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\ToolBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\ToolsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h">
@@ -377,7 +374,7 @@
     <ClCompile Include="src\Editor\Tools\EntityViewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\EditorLayout.cpp">
+    <ClCompile Include="src\Editor\ToolsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp">
@@ -396,9 +393,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\ToolsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp">

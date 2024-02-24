@@ -32,7 +32,7 @@
 
 #include "Core/Resources/Surface.h"
 
-#include "Editor/EditorLayout.h"
+#include "Editor/ToolsManager.h"
 
 namespace LAG::Renderer
 {
@@ -42,7 +42,7 @@ namespace LAG::Renderer
 		Surface* floorSurface = nullptr;
 		FrameBuffer* frameBuffer = nullptr;
 
-		EditorLayout* editorLayout = nullptr;
+		ToolsManager* toolsManager = nullptr;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -62,8 +62,8 @@ namespace LAG::Renderer
 		renderData = new RendererData();
 		renderData->frameBuffer = new FrameBuffer();
 
-		renderData->editorLayout = new EditorLayout();
-		renderData->editorLayout->Initialize();
+		renderData->toolsManager = new ToolsManager();
+		renderData->toolsManager->Initialize();
 
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
@@ -78,9 +78,6 @@ namespace LAG::Renderer
 		//renderData->floorSurface = new Surface();
 		//renderData->floorSurface->GenerateSurface(0, 0, 16, 16, 0.2f, 1337);
 		//renderData->floorSurface->Reload();
-
-		renderData->editorLayout = new EditorLayout();
-		renderData->editorLayout->Initialize();
 
 		return true;
 	}
@@ -139,7 +136,7 @@ namespace LAG::Renderer
 		//renderData->testSurface->DrawDebugWindow();
 
 		renderData->frameBuffer->DrawPostProcessWindow();
-		renderData->editorLayout->Render();
+		renderData->toolsManager->Render();
 
 		//First render pass using custom frame buffer
 		renderData->frameBuffer->FrameStart(renderData->showWireframe);
