@@ -219,13 +219,13 @@
     <ClInclude Include="src\ECS\Systems\BasicSystems.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\Gizmo.h">
+    <ClInclude Include="src\Editor\Tools\Gizmo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Editor\EntityViewer.h">
+    <ClInclude Include="src\Editor\Tools\EntityViewer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Editor\EditorLayout.h">
@@ -362,13 +362,13 @@
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\Gizmo.cpp">
+    <ClCompile Include="src\Editor\Tools\Gizmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Editor\EntityViewer.cpp">
+    <ClCompile Include="src\Editor\Tools\EntityViewer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\EditorLayout.cpp">

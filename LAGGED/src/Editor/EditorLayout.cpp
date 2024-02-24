@@ -1,7 +1,7 @@
 #include "EditorLayout.h"
 
-#include "Gizmo.h"
-#include "EntityViewer.h"
+#include "Tools/Gizmo.h"
+#include "Tools/EntityViewer.h"
 
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
@@ -77,6 +77,7 @@ namespace LAG
 
 		m_EntityViewer->Render();
 		m_Gizmo->RenderGizmoProperties();
+		ImGui::ShowDemoWindow();
 
 		Entity cameraEntity;
 		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera) 

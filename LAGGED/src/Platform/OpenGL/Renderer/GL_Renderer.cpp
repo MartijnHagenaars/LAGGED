@@ -98,8 +98,6 @@ namespace LAG::Renderer
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
-
-		ImGui::ShowDemoWindow();
 	}
 
 	void ImGuiFrameEnd()

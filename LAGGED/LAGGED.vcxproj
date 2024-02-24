@@ -237,9 +237,9 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
     <ClInclude Include="src\Editor\EditorLayout.h" />
-    <ClInclude Include="src\Editor\EntityViewer.h" />
+    <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="src\Editor\Gizmo.h" />
+    <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
@@ -369,7 +369,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
     <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
     <ClCompile Include="src\Editor\EditorLayout.cpp" />
-    <ClCompile Include="src\Editor\EntityViewer.cpp" />
+    <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">NotUsing</PrecompiledHeader>
@@ -380,7 +380,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">Level3</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">Level3</WarningLevel>
     </ClCompile>
-    <ClCompile Include="src\Editor\Gizmo.cpp" />
+    <ClCompile Include="src\Editor\Tools\Gizmo.cpp" />
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp" />
