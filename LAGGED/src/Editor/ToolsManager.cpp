@@ -57,8 +57,8 @@ namespace LAG
 					{
 						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
 							m_Tools[i]->OpenTool();
-						ImGui::EndMenu();
 					}
+				ImGui::EndMenu();
 			}
 
 			if (ImGui::BeginMenu("Graphics"))
@@ -68,8 +68,8 @@ namespace LAG
 					{
 						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
 							m_Tools[i]->OpenTool();
-						ImGui::EndMenu();
 					}
+				ImGui::EndMenu();
 			}
 
 			if (ImGui::BeginMenu("Performance"))
@@ -79,8 +79,8 @@ namespace LAG
 					{
 						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
 							m_Tools[i]->OpenTool();
-						ImGui::EndMenu();
 					}
+				ImGui::EndMenu();
 			}
 
 			ImGui::EndMenuBar();
