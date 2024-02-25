@@ -1,5 +1,7 @@
 #include "ToolsManager.h"
 
+#include "ToolBase.h"
+
 #include "Tools/Gizmo.h"
 #include "Tools/EntityViewer.h"
 #include "Tools/ImGuiTools.h"
@@ -12,35 +14,25 @@
 
 namespace LAG
 {
+	//TODO: Rewrite should remove this
+	static Gizmo* m_TempGizmoPtr = nullptr;
+	static EntityViewer* m_TempEntViewerPtr = nullptr;
+
 	void ToolsManager::Initialize()
 	{
-		if(m_EntityViewer == nullptr)
-			m_EntityViewer = new EntityViewer();
-
-		if (m_Gizmo == nullptr)
-			m_Gizmo = new Gizmo();
-
-		if (m_ImGuiDemoViewer == nullptr)
-			m_ImGuiDemoViewer = new ImGuiDemoViewer;
-
-		if (m_ImGuiStyleEditor == nullptr)
-			m_ImGuiStyleEditor = new ImGuiStyleEditor;
+		m_Tools.push_back(m_TempEntViewerPtr = new EntityViewer());
+		m_Tools.push_back(m_TempGizmoPtr = new Gizmo());
+		m_Tools.push_back(new ImGuiDemoViewer());
+		m_Tools.push_back(new ImGuiStyleEditor());
 	}
 
 	void ToolsManager::Shutdown()
 	{
-		if (m_EntityViewer != nullptr)
-			delete m_EntityViewer;
-		m_EntityViewer = nullptr;
-
-		if (m_Gizmo != nullptr)
-			delete m_Gizmo;
-		m_Gizmo = nullptr;
-	}
-
-	//TODO: Remove?
-	void ToolsManager::Update(float deltaTime)
-	{
+		for (int i = 0; i < m_Tools.size(); i++)
+		{
+			delete m_Tools[i];
+			m_Tools[i] = nullptr;
+		}
 	}
 
 	void ToolsManager::Render()
@@ -58,21 +50,44 @@ namespace LAG
                 ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("File"))
+			if (ImGui::BeginMenu("Level"))
 			{
-
+				for (int i = 0; i < m_Tools.size(); i++)
+					if (m_Tools[i]->GetType() == ToolType::LEVEL)
+					{
+						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
+							m_Tools[i]->OpenTool();
+						ImGui::EndMenu();
+					}
 			}
-            ImGui::EndMenuBar();
+
+			if (ImGui::BeginMenu("Graphics"))
+			{
+				for (int i = 0; i < m_Tools.size(); i++)
+					if (m_Tools[i]->GetType() == ToolType::GRAPHICS)
+					{
+						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
+							m_Tools[i]->OpenTool();
+						ImGui::EndMenu();
+					}
+			}
+
+			if (ImGui::BeginMenu("Performance"))
+			{
+				for (int i = 0; i < m_Tools.size(); i++)
+					if (m_Tools[i]->GetType() == ToolType::PERFORMANCE)
+					{
+						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
+							m_Tools[i]->OpenTool();
+						ImGui::EndMenu();
+					}
+			}
+
+			ImGui::EndMenuBar();
         }
 
 		EndDockSpace();
 
-
-		m_EntityViewer->Render();
-		m_Gizmo->Render();
-
-		m_ImGuiDemoViewer->Render();
-		m_ImGuiStyleEditor->Render();
 
 		Entity cameraEntity;
 		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera) 
@@ -81,9 +96,14 @@ namespace LAG
 					cameraEntity = entity; 
 			});
 
-		if (cameraEntity.IsValid() && m_EntityViewer->GetSelectedEntityID()->IsValid())
+		for (int i = 0; i < m_Tools.size(); i++)
+			if (m_Tools[i]->IsOpen())
+				m_Tools[i]->Render();
+
+		//TODO: This has to be fully reworked. This is not good. 
+		if (cameraEntity.IsValid() && m_TempEntViewerPtr->GetSelectedEntityID()->IsValid())
 		{
-			m_Gizmo->RenderGizmo(m_EntityViewer->GetSelectedEntityID(), &cameraEntity);
+			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID(), &cameraEntity);
 		}
 
 	}

@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #include "ToolBase.h"
 
 namespace LAG
@@ -8,6 +9,7 @@ namespace LAG
 
 	class ImGuiDemoViewer;
 	class ImGuiStyleEditor;
+	class ToolBase;
 
 	class ToolsManager
 	{
@@ -18,18 +20,19 @@ namespace LAG
 		void Initialize();
 		void Shutdown();
 
-		void Update(float deltaTime);
 		void Render();
 
 	private:
 		void BeginDockSpace();
 		void EndDockSpace();
 
-		Gizmo* m_Gizmo = nullptr;
-		EntityViewer* m_EntityViewer = nullptr;
+		std::vector<ToolBase*> m_Tools;
 
-		ImGuiDemoViewer* m_ImGuiDemoViewer = nullptr;
-		ImGuiStyleEditor* m_ImGuiStyleEditor = nullptr;
+		//Gizmo* m_Gizmo = nullptr;
+		//EntityViewer* m_EntityViewer = nullptr;
+
+		//ImGuiDemoViewer* m_ImGuiDemoViewer = nullptr;
+		//ImGuiStyleEditor* m_ImGuiStyleEditor = nullptr;
 	};
 }
 
