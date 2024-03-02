@@ -66,6 +66,17 @@ namespace LAG::CameraSystem
 		}
 		
 	}
+
+	void SetActiveCameraEntity(Entity* entity)
+	{
+		GetScene()->Loop<CameraComponent>([&entity](Entity* cameraEntity, CameraComponent& cameraComp)
+			{
+				if (entity->GetEntityID() == cameraEntity->GetEntityID())
+					cameraComp.isActive = true;
+				else cameraComp.isActive = false;
+			});
+
+	}
 	
 	glm::mat4 CalculateViewMat(Entity* entity)
 	{
