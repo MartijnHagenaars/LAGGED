@@ -69,9 +69,9 @@ namespace LAG::CameraSystem
 
 	void SetActiveCameraEntity(Entity* entity)
 	{
-		GetScene()->Loop<CameraComponent>([&entity](Entity* cameraEntity, CameraComponent& cameraComp)
+		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
 			{
-				if (entity->GetEntityID() == cameraEntity->GetEntityID())
+				if (entity->GetEntityID() == cameraEntity.GetEntityID())
 					cameraComp.isActive = true;
 				else cameraComp.isActive = false;
 			});
@@ -80,10 +80,10 @@ namespace LAG::CameraSystem
 	Entity* GetActiveCameraEntity()
 	{
 		Entity* entity = nullptr;
-		GetScene()->Loop<CameraComponent>([&entity](Entity* cameraEntity, CameraComponent& cameraComp)
+		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
 			{
 				if (cameraComp.isActive && entity == nullptr)
-					entity = cameraEntity;
+					entity = &cameraEntity;
 				else cameraComp.isActive = false;
 			});
 
