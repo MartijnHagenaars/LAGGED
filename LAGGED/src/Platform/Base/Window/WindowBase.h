@@ -34,14 +34,6 @@ namespace LAG
 		virtual unsigned int GetWidth() const { return m_WindowWidth; }
 		virtual unsigned int GetHeight() const { return m_WindowHeight; }
 
-		//TODO: Remove
-		virtual unsigned int GetHalfWidth() const { return m_WindowHalfWidth; }
-		virtual unsigned int GetHalfHeight() const { return m_WindowHalfHeight; }
-
-		//TODO: Remove
-		virtual unsigned int GetNonClientWidth() = 0;
-		virtual unsigned int GetNonClientHeight() = 0;
-
 	protected:
 		virtual void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true) = 0;
 		virtual void Update() = 0;
@@ -49,8 +41,6 @@ namespace LAG
 		//Window property values
 		unsigned int m_WindowWidth = 0;
 		unsigned int m_WindowHeight = 0;
-		unsigned int m_WindowHalfWidth = 0;
-		unsigned int m_WindowHalfHeight = 0;
 
 		const char* m_WindowName = "";
 		bool m_IsFullscreen = false;
