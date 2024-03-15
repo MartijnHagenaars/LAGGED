@@ -38,10 +38,6 @@ namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		Surface* testSurface = nullptr;
-		Surface* floorSurface = nullptr;
-		FrameBuffer* frameBuffer = nullptr;
-
 		EditorLayout* editorLayout = nullptr;
 
 		bool showWireframe = false;
@@ -60,7 +56,6 @@ namespace LAG::Renderer
 			return false;
 		}
 		renderData = new RendererData();
-		renderData->frameBuffer = new FrameBuffer();
 
 		renderData->editorLayout = new EditorLayout();
 		renderData->editorLayout->Initialize();
@@ -140,7 +135,7 @@ namespace LAG::Renderer
 		renderData->editorLayout->Render();
 
 		//First render pass using custom frame buffer
-		renderData->frameBuffer->FrameStart(renderData->showWireframe);
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->showWireframe);
 
 
 		//Get an active camera
@@ -198,7 +193,7 @@ namespace LAG::Renderer
 				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
-		renderData->frameBuffer->FrameEnd();
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
 		ImGuiFrameEnd();
 
 		renderData->renderTime = renderData->renderTimer.GetMilliseconds();

@@ -77,17 +77,17 @@ namespace LAG::CameraSystem
 			});
 	}
 
-	Entity* GetActiveCameraEntity()
+	Entity GetActiveCameraEntity()
 	{
-		Entity* entity = nullptr;
+		Entity entity = {};
 		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
 			{
-				if (cameraComp.isActive && entity == nullptr)
-					entity = &cameraEntity;
+				if (cameraComp.isActive && cameraEntity.IsValid())
+					entity = cameraEntity;
 				else cameraComp.isActive = false;
 			});
 
-		if (entity == nullptr)
+		if (!entity.IsValid())
 			Logger::Warning("Failed to find active camera in GetActiveCameraEntity()");
 		return entity;
 	}
