@@ -231,6 +231,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionDefines.h" />
@@ -357,12 +358,15 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\Utility\HashedString.h" />
+    <ClInclude Include="src\Utility\Noise.h" />
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Platform\Base\Window\WindowManager.h" />
     <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Core\Resources\Texture.cpp" />
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
@@ -511,6 +515,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="src\Utility\Noise.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp" />
     <ClCompile Include="src\Utility\UniqueID.cpp" />

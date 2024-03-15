@@ -11,14 +11,19 @@ namespace LAG
 		explicit Resource(const HashedString& path);
 		virtual ~Resource() {};
 
+		virtual bool Load() = 0;
+		virtual bool Unload() = 0;
 		virtual bool Reload();
+
+		bool IsLoaded() const { return m_Loaded; }
 		const HashedString& GetPath() const;
 
 	protected:
-		virtual bool Load() = 0;
-		virtual bool Unload() = 0;
+		void SetPath(const HashedString& path) { m_Path = path; }
+		void SetLoaded(bool loaded) { m_Loaded = loaded; }
 
 	private:
-		const HashedString m_Path;
+		bool m_Loaded = false;
+		HashedString m_Path;
 	};
 }

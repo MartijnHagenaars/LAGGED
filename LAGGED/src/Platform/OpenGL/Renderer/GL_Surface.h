@@ -4,6 +4,14 @@
 
 namespace LAG
 {
+	struct ProceduralSurfaceComponent;
+
+	enum class SurfaceType
+	{
+		FLAT = 0,
+
+	};
+
 	class Texture;
 	class Surface : public SurfaceBase
 	{
@@ -12,19 +20,23 @@ namespace LAG
 		Surface(const std::string& heightTexturePath);
 		~Surface() override;
 		
-		void GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed = 0);
+		//Load a height map from a texture
+		//TODO: Needs to be reworked
+		void GenerateHeightMapSurface(const std::string& heightTexturePath);
+		void GenerateNoiseSurface(const TransformComponent& transformComp, const ProceduralSurfaceComponent& procSurfaceComp);
 
-		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
-	private:
 		virtual bool Load() override;
 		virtual bool Unload() override;
 
-		//Load a height map from a texture
-		//TODO: Needs to be reworked
-		void LoadTextureHeightMap(const std::string& heightTexturePath);
 
-		//Creates a vector of 2D noise data
-		std::vector<float> GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed = 0);
+		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
+	private:
+		////Creates a vector of 2D noise data
+		//std::vector<float> GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed = 0);
+
+		//Generates the surface. Calculates vertices, indices and normals.
+		void GenerateSurface(int width, int height);
+
 
 		void CalculateVertices();
 		void CalculateIndices();
@@ -37,7 +49,6 @@ namespace LAG
 		};
 
 		std::vector<VertexData> m_VertexData;
-		//std::vector<float> m_Normals;
 		std::vector<unsigned int> m_Indices;
 
 		unsigned int m_VBO = 0;
@@ -46,14 +57,11 @@ namespace LAG
 
 		int m_Width = 0;
 		int m_Height = 0;
+		int m_Subdivisions = 0;
 
 		std::vector<float> m_HeightMapData;
-
-		int m_TextureWidth = 0;
-		int m_TextureHeight = 0;
-
-		float m_Amplitude = 0.25f;
-		float m_YScaleShift = 16.f;
+		int m_HeightMapWidth = 0;
+		int m_HeightMapHeight = 0;
 
 	};
 }

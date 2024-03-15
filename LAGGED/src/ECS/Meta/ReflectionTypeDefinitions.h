@@ -3,23 +3,25 @@
 #include "ReflectionDefines.h"
 #include "ReflectionTypeWidgets.h"
 
+#include "ECS/Entity.h"
+
 namespace LAG
 {
 	namespace Reflection
 	{
 		template <typename T>
-		static void TypeAdapter(const char* name, entt::meta_any& value, const entt::meta_data& meta, Reflection::WidgetModes mode)
+		static void TypeAdapter(Entity& entity, entt::meta_any& value, const char* name, const Reflection::WidgetModes& mode)
 		{
 			switch (mode)
 			{
 			case Reflection::WidgetModes::DRAW:
-				DrawWidgetType<T>(meta, name, value.cast<T&>());
+				DrawWidgetType<T>(&entity, value.cast<T&>(), name);
 				return;
 			case Reflection::WidgetModes::LOAD:
-				LoadWidgetType<T>(meta, name, value.cast<T&>());
+				LoadWidgetType<T>(&entity, value.cast<T&>(), name);
 				return;
 			case Reflection::WidgetModes::UNLOAD:
-				UnloadWidgetType<T>(meta, name, value.cast<T&>());
+				UnloadWidgetType<T>(&entity, value.cast<T&>(), name);
 				return;
 			}
 		}

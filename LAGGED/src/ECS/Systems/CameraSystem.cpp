@@ -66,6 +66,31 @@ namespace LAG::CameraSystem
 		}
 		
 	}
+
+	void SetActiveCameraEntity(Entity* entity)
+	{
+		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
+			{
+				if (entity->GetEntityID() == cameraEntity.GetEntityID())
+					cameraComp.isActive = true;
+				else cameraComp.isActive = false;
+			});
+	}
+
+	Entity* GetActiveCameraEntity()
+	{
+		Entity* entity = nullptr;
+		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
+			{
+				if (cameraComp.isActive && entity == nullptr)
+					entity = &cameraEntity;
+				else cameraComp.isActive = false;
+			});
+
+		if (entity == nullptr)
+			Logger::Warning("Failed to find active camera in GetActiveCameraEntity()");
+		return entity;
+	}
 	
 	glm::mat4 CalculateViewMat(Entity* entity)
 	{

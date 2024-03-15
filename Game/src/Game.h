@@ -2,6 +2,7 @@
 #include "Core/Defines.h"
 #include "Core/ApplicationInterface.h"
 
+class World;
 class Game : public LAG::IApplication
 {
 public:
@@ -12,5 +13,8 @@ public:
 	void Shutdown() override;
 
 	void Update() override;
+
+private:
+	World* m_World = nullptr;
 };
 
