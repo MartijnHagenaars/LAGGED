@@ -12,6 +12,8 @@ namespace LAG
 		void FrameStart(bool showWireframe) override;
 		void FrameEnd() override;
 
+		void Resize() override;
+
 	private:
 		bool Initialize();
 		bool Shutdown();

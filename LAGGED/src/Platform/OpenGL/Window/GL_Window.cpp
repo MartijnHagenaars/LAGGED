@@ -9,6 +9,10 @@
 
 #include "Platform/Base/Renderer/RendererBase.h"
 
+
+//TODO: MOVE
+#include "ECS/Systems/CameraSystem.h"
+
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3native.h"
 
@@ -127,6 +131,7 @@ namespace LAG
 				glfwMakeContextCurrent(window->m_Window);
 				glViewport(0, 0, width, height);
 
+				CameraSystem::ResizeCameraBuffers();
 			}
 		};
 		glfwSetWindowSizeCallback(m_Window, windowResizeCallback);

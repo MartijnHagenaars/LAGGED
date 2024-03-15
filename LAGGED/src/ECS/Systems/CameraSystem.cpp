@@ -91,6 +91,14 @@ namespace LAG::CameraSystem
 			Logger::Warning("Failed to find active camera in GetActiveCameraEntity()");
 		return entity;
 	}
+
+	void ResizeCameraBuffers()
+	{
+		GetScene()->Loop<CameraComponent>([](Entity cameraEntity, CameraComponent& cameraComp)
+			{
+				cameraComp.m_Framebuffer->Resize();
+			});
+	}
 	
 	glm::mat4 CalculateViewMat(Entity* entity)
 	{
