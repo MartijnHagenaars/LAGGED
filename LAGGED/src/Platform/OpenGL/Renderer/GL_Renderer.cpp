@@ -1,3 +1,5 @@
+#include "Platform/Base/Renderer/RendererBase.h"
+
 #include "Platform/OpenGL/Window/GL_Window.h"
 #include "Platform/Base/Window/WindowManager.h"
 
@@ -19,8 +21,6 @@
 
 #include "ECS/Systems/CameraSystem.h"
 
-#include <type_traits>
-#include <utility>
 #include "glm/glm.hpp"
 
 #include "ImGui/imgui.h"
@@ -29,8 +29,6 @@
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "Utility/Timer.h"
-
-#include "Core/Resources/Surface.h"
 
 #include "Editor/EditorLayout.h"
 
@@ -65,15 +63,10 @@ namespace LAG::Renderer
 
 		glEnable(GL_DEPTH_TEST);
 
-		//renderData->surface = new Surface();
-		//renderData->testSurface = new Surface("res/Assets/Textures/face.png");
-		//renderData->testSurface->GenerateSurface(0, 0, 512, 512, 0.02f, 25.f, 1234);
-		//renderData->testSurface->Reload();
+		//Setup resize callback
+		GetEngine().GetWindowManager()->GetPrimaryWindow()->SetResizeCallBack(&OnResize);
 
-		//renderData->floorSurface = new Surface();
-		//renderData->floorSurface->GenerateSurface(0, 0, 16, 16, 0.2f, 1337);
-		//renderData->floorSurface->Reload();
-
+		//Create editor layout
 		renderData->editorLayout = new EditorLayout();
 		renderData->editorLayout->Initialize();
 
@@ -85,6 +78,13 @@ namespace LAG::Renderer
 		//TODO: Proper cleanup
 
 		return false;
+	}
+
+	void OnResize(unsigned int width, unsigned int height)
+	{
+		Logger::Info("Window resize: {0}, {1}", width, height);
+
+		CameraSystem::ResizeCameraBuffers();
 	}
 
 	void ImGuiFrameStart()

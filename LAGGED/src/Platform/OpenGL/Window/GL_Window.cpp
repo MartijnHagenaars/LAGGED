@@ -127,11 +127,10 @@ namespace LAG
 				window->m_WindowHeight = height;
 				window->m_WindowHalfWidth = static_cast<unsigned int>(width * 0.5f);
 				window->m_WindowHalfHeight = static_cast<unsigned int>(height * 0.5f);
-
 				glfwMakeContextCurrent(window->m_Window);
 				glViewport(0, 0, width, height);
 
-				CameraSystem::ResizeCameraBuffers();
+				window->m_ResizeCallbackFunc(window->m_WindowWidth, window->m_WindowHeight);
 			}
 		};
 		glfwSetWindowSizeCallback(m_Window, windowResizeCallback);
