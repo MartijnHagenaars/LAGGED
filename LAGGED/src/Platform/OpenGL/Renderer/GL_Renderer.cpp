@@ -137,7 +137,6 @@ namespace LAG::Renderer
 		DrawOptionsWindow();
 		//renderData->testSurface->DrawDebugWindow();
 
-		renderData->frameBuffer->DrawPostProcessWindow();
 		renderData->editorLayout->Render();
 
 		//First render pass using custom frame buffer

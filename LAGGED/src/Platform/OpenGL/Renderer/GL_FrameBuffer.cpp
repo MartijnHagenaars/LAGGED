@@ -14,7 +14,7 @@
 
 namespace LAG
 {
-	FrameBuffer::FrameBuffer()
+	FrameBuffer::FrameBuffer() : FrameBufferBase()
 	{
 		if (!Initialize())
 			Logger::Critical("Failed to create frame buffer.");
@@ -124,20 +124,10 @@ namespace LAG
 		shader->Bind();
 
 		//Assign post-processing values
-		shader->SetFloat("a_InversionAmount", m_InversionAmount);
-		shader->SetFloat("a_GrayScaleAmount", m_GrayScaleAmount);
+		shader->SetFloat("a_InversionAmount", m_PostProcessingProperties.m_InversionAmount);
+		shader->SetFloat("a_GrayScaleAmount", m_PostProcessingProperties.m_GrayScaleAmount);
 
 		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
 		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
-	}
-
-	void FrameBuffer::DrawPostProcessWindow()
-	{
-		ImGui::Begin("Post processing options");
-
-		ImGui::SliderFloat("Inversion", &m_InversionAmount, 0.f, 1.f, "%.3f");
-		ImGui::SliderFloat("Gray scale", &m_GrayScaleAmount, 0.f, 1.f, "%.3f");
-
-		ImGui::End();
 	}
 }
