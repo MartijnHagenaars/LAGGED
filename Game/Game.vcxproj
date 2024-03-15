@@ -165,10 +165,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\World\Chunk.h" />
     <ClInclude Include="src\Game.h" />
+    <ClInclude Include="src\World\ChunkKey.h" />
+    <ClInclude Include="src\World\World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\World\Chunk.cpp" />
     <ClCompile Include="src\Game.cpp" />
+    <ClCompile Include="src\World\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LAGGED\LAGGED.vcxproj">

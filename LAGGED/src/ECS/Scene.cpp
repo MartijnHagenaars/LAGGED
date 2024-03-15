@@ -79,16 +79,16 @@ namespace LAG
 				std::string compName = std::string(componentMeta.info().name());
 				ImGui::Text(compName.c_str());
 
-				if (!ReflectComponent(componentMeta, storageSet, entity->m_EntityID, mode))
+				if (!ReflectComponent(componentMeta, storageSet, entity, mode))
 					ImGui::Text("Failed to load reflection data for component.");
 				else ImGui::Separator();
 			}
 		}
 	}
 
-	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, entt::entity entity, Reflection::WidgetModes mode)
+	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, Entity* entity, Reflection::WidgetModes mode)
 	{
-		entt::meta_any compElement = compMeta.from_void(storageSet.value(entity));
+		entt::meta_any compElement = compMeta.from_void(storageSet.value(entt::entity(entity->GetEntityID())));
 		if (compElement == nullptr)
 			return false;
 
@@ -96,7 +96,7 @@ namespace LAG
 		{
 			entt::meta_any propInstance, propInstanceCompare;
 			propInstanceCompare = propInstance = propMetaData.get(compElement);
-			ReflectProperty(propMetaData, propInstance, mode);
+			ReflectProperty(propMetaData, propInstance, entity, mode);
 
 			//Check if the component has been modified. If so, (re)set the values
 			if (propInstance != propInstanceCompare)
@@ -106,7 +106,7 @@ namespace LAG
 		return true;
 	}
 
-	void Scene::ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, Reflection::WidgetModes mode)
+	void Scene::ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode)
 	{
 		std::string propDisplayName;
 		entt::meta_prop displayNameProp = propData.prop(Reflection::DISPLAY_NAME);
@@ -114,19 +114,20 @@ namespace LAG
 		{
 			propDisplayName = displayNameProp.value().cast<std::string>();
 			ImGui::PushID(std::string(std::to_string(propValues.type().id()) + propDisplayName).c_str());
-			ReflectType(propData, propValues, propDisplayName, mode);
+			ReflectType(propValues, entity, propDisplayName, mode);
 			ImGui::PopID();
 		}
 		else
 			propDisplayName = "Undefined property display name";
 	}
 
-	void Scene::ReflectType(entt::meta_data& typeData, entt::meta_any& typeValues, const std::string& propName, Reflection::WidgetModes mode)
+	void Scene::ReflectType(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode)
 	{
 		if (typeValues.type().func(Reflection::EDITOR_WIDGET_DRAW))
 		{
-			typeValues.type().func(Reflection::EDITOR_WIDGET_DRAW).invoke<const char*, entt::meta_any, entt::meta_data&>({ 0 },
-				propName.c_str(), entt::forward_as_meta(typeValues), typeData, mode
+			//Entity* entity, entt::meta_any& value, const char* name, Reflection::WidgetModes mode
+			typeValues.type().func(Reflection::EDITOR_WIDGET_DRAW).invoke<LAG::Entity&, entt::meta_any, const char*, const Reflection::WidgetModes&>(
+				entt::meta_handle(), *entity, entt::forward_as_meta(typeValues), propName.c_str(), mode
 			);
 		}
 		else

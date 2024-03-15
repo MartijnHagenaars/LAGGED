@@ -2,13 +2,12 @@
 #include "ECS/Entity.h"
 #include "Core/Resources/Texture.h"
 
-namespace LAG::TerrainSystems
+namespace LAG::SurfaceSystems
 {
 	//Generates a flat plane using two vertices
 	void GenerateFlatPlane(Entity* entity);
 
-	//Generates a flat plane with an amount of subdivisions
-	void GenerateFlatPlane(Entity* entity, float subdivision);
+	void GenerateNoiseSurface(Entity* entity);
 
 	//Apply a height map to the plane
 	void SetHeightMapTexture(Entity* entity, Texture* texture);

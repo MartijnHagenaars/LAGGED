@@ -71,9 +71,9 @@ namespace LAG::Renderer
 		glEnable(GL_DEPTH_TEST);
 
 		//renderData->surface = new Surface();
-		renderData->testSurface = new Surface("res/Assets/Textures/face.png");
-		renderData->testSurface->GenerateSurface(0, 0, 512, 512, 0.02f, 25.f, 1234);
-		renderData->testSurface->Reload();
+		//renderData->testSurface = new Surface("res/Assets/Textures/face.png");
+		//renderData->testSurface->GenerateSurface(0, 0, 512, 512, 0.02f, 25.f, 1234);
+		//renderData->testSurface->Reload();
 
 		//renderData->floorSurface = new Surface();
 		//renderData->floorSurface->GenerateSurface(0, 0, 16, 16, 0.2f, 1337);
@@ -185,10 +185,17 @@ namespace LAG::Renderer
 		//Render all surfaces
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
+				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 
-				//surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+			});
+		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
+			{
+				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
+				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+
+				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
 		renderData->frameBuffer->FrameEnd();

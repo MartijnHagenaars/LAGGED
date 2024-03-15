@@ -17,12 +17,13 @@ namespace LAG
 
 		virtual void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
-	protected:
-		//TODO: Move surface size variables here
-
-	private:
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
+
+		//TODO: Pure virtual functions for generation surface, applying height map/noise map need to be added here
+
+	private:
+		//TODO: Add booleans for checking whether everything has been loaded in order. Maybe an enum describing the different states?
 	};
 }
 
