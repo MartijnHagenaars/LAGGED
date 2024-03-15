@@ -12,7 +12,7 @@ namespace LAG
 	{
 	public:
 		FrameBufferBase() = default;
-		virtual ~FrameBufferBase() = 0;
+		virtual ~FrameBufferBase() {};
 
 		virtual void FrameStart(bool showWireframe) = 0;
 		virtual void FrameEnd() = 0;
