@@ -14,6 +14,8 @@ namespace LAG
 
 		void Resize() override;
 
+		void* GetEditorHandle() override;
+
 	private:
 		bool Initialize();
 		bool Shutdown();

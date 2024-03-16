@@ -174,16 +174,10 @@ namespace LAG::Renderer
 		//Render all surfaces
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-
 				surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-
 				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 

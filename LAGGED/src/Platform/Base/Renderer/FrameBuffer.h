@@ -19,6 +19,8 @@ namespace LAG
 
 		virtual void SetPostProcessingProperties(const PostProcessingProperties& postProcessingProps) { m_PostProcessingProperties = postProcessingProps; }
 
+		virtual void* GetEditorHandle() = 0;
+
 		virtual void Resize() = 0;
 
 	protected:

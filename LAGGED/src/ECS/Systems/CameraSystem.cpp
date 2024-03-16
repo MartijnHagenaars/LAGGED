@@ -77,6 +77,11 @@ namespace LAG::CameraSystem
 			});
 	}
 
+	CameraComponent* GetActiveCameraComponent()
+	{
+		return GetActiveCameraEntity().GetComponent<CameraComponent>();
+	}
+
 	Entity GetActiveCameraEntity()
 	{
 		Entity entity = {};

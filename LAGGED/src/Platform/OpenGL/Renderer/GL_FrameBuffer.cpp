@@ -141,4 +141,9 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
 		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
 	}
+
+	void* FrameBuffer::GetEditorHandle()
+	{
+		return (void*)(intptr_t)m_FrameBuffer;
+	}
 }

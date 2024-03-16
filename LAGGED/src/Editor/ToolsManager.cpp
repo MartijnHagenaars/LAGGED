@@ -1,16 +1,16 @@
 #include "ToolsManager.h"
 
 #include "ToolBase.h"
-
-#include "Tools/Gizmo.h"
-#include "Tools/EntityViewer.h"
-#include "Tools/ImGuiTools.h"
+#include "ImGui/imgui.h"
 
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
 #include "Platform/Base/Window/WindowManager.h"
 
-#include "ImGui/imgui.h"
+#include "Tools/Gizmo.h"
+#include "Tools/EntityViewer.h"
+#include "Tools/ImGuiTools.h"
+#include "Tools/CameraViewport.h"
 
 namespace LAG
 {
@@ -24,6 +24,8 @@ namespace LAG
 		m_Tools.push_back(m_TempGizmoPtr = new Gizmo());
 		m_Tools.push_back(new ImGuiDemoViewer());
 		m_Tools.push_back(new ImGuiStyleEditor());
+		m_Tools.push_back(new ImGuiStyleEditor());
+		m_Tools.push_back(new CameraViewport());
 	}
 
 	void ToolsManager::Shutdown()
