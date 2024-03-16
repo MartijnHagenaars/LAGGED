@@ -1,3 +1,5 @@
+#include "Platform/Base/Renderer/RendererBase.h"
+
 #include "Platform/OpenGL/Window/GL_Window.h"
 #include "Platform/Base/Window/WindowManager.h"
 
@@ -19,8 +21,6 @@
 
 #include "ECS/Systems/CameraSystem.h"
 
-#include <type_traits>
-#include <utility>
 #include "glm/glm.hpp"
 
 #include "ImGui/imgui.h"
@@ -29,20 +29,13 @@
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "Utility/Timer.h"
-
-#include "Core/Resources/Surface.h"
-
 #include "Editor/ToolsManager.h"
 
 namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		Surface* testSurface = nullptr;
-		Surface* floorSurface = nullptr;
-		FrameBuffer* frameBuffer = nullptr;
-
-		ToolsManager* toolsManager = nullptr;
+		ToolsManager* m_ToolsManager = nullptr;
 
 		bool showWireframe = false;
 		bool useLighting = true;
@@ -60,19 +53,17 @@ namespace LAG::Renderer
 			return false;
 		}
 		renderData = new RendererData();
-		renderData->frameBuffer = new FrameBuffer();
 
-		renderData->toolsManager = new ToolsManager();
-		renderData->toolsManager->Initialize();
+		renderData->m_ToolsManager = new ToolsManager();
+		renderData->m_ToolsManager->Initialize();
 
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 
 		glEnable(GL_DEPTH_TEST);
 
-		renderData->testSurface = new Surface("res/Assets/Textures/face.png");
-		renderData->testSurface->GenerateSurface(0, 0, 512, 512, 0.02f, 25.f, 1234);
-		renderData->testSurface->Reload();
+		//Setup resize callback
+		GetEngine().GetWindowManager()->GetPrimaryWindow()->SetResizeCallBack(&OnResize);
 
 		return true;
 	}
@@ -82,6 +73,13 @@ namespace LAG::Renderer
 		//TODO: Proper cleanup
 
 		return false;
+	}
+
+	void OnResize(unsigned int width, unsigned int height)
+	{
+		Logger::Info("Window resize: {0}, {1}", width, height);
+
+		CameraSystem::ResizeCameraBuffers();
 	}
 
 	void ImGuiFrameStart()
@@ -130,11 +128,10 @@ namespace LAG::Renderer
 		DrawOptionsWindow();
 		//renderData->testSurface->DrawDebugWindow();
 
-		renderData->frameBuffer->DrawPostProcessWindow();
-		renderData->toolsManager->Render();
+		renderData->m_ToolsManager->Render();
 
 		//First render pass using custom frame buffer
-		renderData->frameBuffer->FrameStart(renderData->showWireframe);
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->showWireframe);
 
 
 		//Get an active camera
@@ -179,13 +176,20 @@ namespace LAG::Renderer
 		//Render all surfaces
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
+				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 
-				//surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+			});
+		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
+			{
+				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
+				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+
+				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
-		renderData->frameBuffer->FrameEnd();
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
 		ImGuiFrameEnd();
 
 		renderData->renderTime = renderData->renderTimer.GetMilliseconds();

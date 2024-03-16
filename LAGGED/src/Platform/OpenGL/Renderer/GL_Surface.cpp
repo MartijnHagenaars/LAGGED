@@ -7,6 +7,7 @@
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
+#include "ECS/Components/TerrainComponents.h"
 
 #include "ECS/Systems/CameraSystem.h"
 
@@ -14,10 +15,7 @@
 #include "Exceptions/GL_GraphicsExceptionMacros.h"
 #include <glm/ext/matrix_transform.hpp>
 
-#include "stb_image.h"
-
-
-#include "FastNoise/FastNoise.h"
+#include "Utility/Noise.h"
 
 //For debugging only. 
 #include "ImGui/imgui.h"
@@ -39,25 +37,10 @@ namespace LAG
 	{
 	}
 
-	
-	//////////////////////////////////////////
-	// Loading height map data from texture //
-	//////////////////////////////////////////
-
-	void Surface::LoadTextureHeightMap(const std::string& heightTexturePath)
-	{
-		Logger::Error("LoadTextureHeightMap() has not been implemented.");
-	}
-
-
-	////////////////////////////////////////
-	// Loading height map data from noise //
-	////////////////////////////////////////
-
-	void Surface::GenerateSurface(int xStart, int yStart, int xSize, int ySize, float frequency, float amplitude, int seed)
+	void Surface::GenerateSurface(int width, int height)
 	{
 		//Check if sizes are valid
-		m_Width = xSize, m_Height = ySize;
+		m_Width = width, m_Height = height;
 		if (m_Width <= 0 || m_Height <= 0)
 			return;
 
@@ -73,30 +56,42 @@ namespace LAG
 			m_Indices.shrink_to_fit();
 		}
 
-		m_TextureWidth = m_Width, m_TextureHeight = m_Height;
-		m_Amplitude = amplitude;
-
-		m_HeightMapData = GenerateNoise(xStart, yStart, xSize, ySize, frequency, seed);
-
 		CalculateVertices();
 		CalculateIndices();
 		CalculateNormals();
+		
+		//Clear data that we no longer need
+		m_HeightMapData.clear();
+		m_HeightMapData.shrink_to_fit();
 	}
 
-	std::vector<float> Surface::GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed)
+	//////////////////////////////////////////
+	// Loading height map data from texture //
+	//////////////////////////////////////////
+	void Surface::GenerateHeightMapSurface(const std::string& heightTexturePath)
 	{
-		std::vector<float> noiseData(xSize * ySize);
+		Logger::Critical("GenerateHeightMapSurface() has not been implemented.");
+	}
 
-		if (xSize > 0 && ySize > 0)
-		{
-			//TODO: generator should be stored
-			auto generator = FastNoise::NewFromEncodedNodeTree("GQANAAIAAAC4HoU+BwAAuB4lQACF61E/ASQAAgAAABwAARkADQACAAAAuB4FQP//AAAAj8I1QQB7FK4+AQ0AAgAAAMP1qED//wAAAJqZmT4AcT0KPwAAAABA");
-			generator->GenUniformGrid2D(noiseData.data(), xStart, yStart, xSize, ySize, frequency, seed);
-		}
-		else
-			Logger::Warning("Invalid noise map size");
+	////////////////////////////////////////
+	// Loading height map data from noise //
+	////////////////////////////////////////
+	void Surface::GenerateNoiseSurface(const TransformComponent& transformComp, const ProceduralSurfaceComponent& procSurfaceComp)
+	{
+		//Set noise positions
+		glm::vec2 noisePos = procSurfaceComp.m_NoiseProperties.m_UseTransformPositionForNoise ?
+			glm::vec2(transformComp.GetPosition().x, transformComp.GetPosition().z) :
+			procSurfaceComp.m_NoiseProperties.m_NoisePosition;
+		
+		glm::vec2 noiseScale = glm::vec2(static_cast<float>(procSurfaceComp.m_SurfaceSubdivisions));
 
-		return noiseData;
+		m_Subdivisions = procSurfaceComp.m_SurfaceSubdivisions;
+		Noise::GeneratedData noiseData = Noise::GenerateNoiseData(procSurfaceComp.m_NoiseProperties, noisePos, noiseScale, m_Subdivisions);
+		m_HeightMapData = noiseData.m_Data;
+		m_HeightMapWidth = static_cast<int>(noiseData.m_Size.x);
+		m_HeightMapHeight = static_cast<int>(noiseData.m_Size.y);
+
+		GenerateSurface(procSurfaceComp.m_SurfaceSubdivisions, procSurfaceComp.m_SurfaceSubdivisions);
 	}
 
 	void Surface::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
@@ -127,11 +122,18 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 
 		//TOOD: Should use unsigned short
-		glDrawElements(GL_TRIANGLES, m_Indices.size(), GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, static_cast<int>(m_Indices.size()), GL_UNSIGNED_INT, 0);
 	}
 
 	bool Surface::Load()
 	{
+		if (IsLoaded())
+		{
+			Logger::Warning("Tried to load a surface thats's already loaded");
+			return false;
+		}
+
+		//Now create all GL objects
 		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
@@ -150,6 +152,7 @@ namespace LAG
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
 
+		SetLoaded(true);
 		return true;
 	}
 
@@ -163,28 +166,33 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &m_EBO));
 		LAG_GRAPHICS_EXCEPTION(glDeleteVertexArrays(1, &m_VAO));
 
+		SetLoaded(false);
 		return true;
 	}
 
 	void Surface::CalculateVertices()
 	{
 		//float widthAdjustment = static_cast<float>(m_Width) / textureWidth;
-		float widthAdjustment = static_cast<float>(m_TextureWidth) / m_Width;
-		float heightAdjustment = static_cast<float>(m_TextureHeight) / m_Height;
+		float widthAdjustment = static_cast<float>(m_HeightMapWidth) / m_Width;
+		float heightAdjustment = static_cast<float>(m_HeightMapHeight) / m_Height;
 
 		//TODO: m_Height and m_Width should be renamed to m_Column and m_Row
-		m_VertexData.reserve(m_Height * m_Width);
-		for (unsigned int h = 0; h < m_Height; h++)
+		m_VertexData.reserve(m_Subdivisions * m_Subdivisions);
+		for (int h = 0; h < m_Subdivisions; h++)
 		{
-			for (unsigned int w = 0; w < m_Width; w++)
+			for (int w = 0; w < m_Subdivisions; w++)
 			{
 				//Calculate vertices
-				float xVert = -m_Height * 0.5f + m_Height * h / static_cast<float>(m_Height);
-				float zVert = -m_Width * 0.5f + (m_Width * w / static_cast<float>(m_Width));
+				float xVert = h / static_cast<float>(m_Subdivisions - 1);
+				float zVert = w / static_cast<float>(m_Subdivisions - 1);
 
-				unsigned int xResize = static_cast<unsigned int>(widthAdjustment * static_cast<float>(w));
-				unsigned int zResize = static_cast<unsigned int>(heightAdjustment * static_cast<float>(h));
-				float yVert = m_HeightMapData[xResize + m_TextureWidth * zResize] * m_Amplitude - m_YScaleShift;
+				float yVert = 0;
+				if (!m_HeightMapData.empty())
+				{
+					unsigned int xResize = static_cast<unsigned int>(std::round(widthAdjustment * static_cast<float>(w)));
+					unsigned int zResize = static_cast<unsigned int>(std::round(heightAdjustment * static_cast<float>(h)));
+					yVert = m_HeightMapData[zResize + m_HeightMapWidth * xResize];
+				}
 
 				VertexData vd;
 				vd.vertex = glm::vec3(xVert, yVert, zVert);
@@ -195,15 +203,15 @@ namespace LAG
 
 	void Surface::CalculateIndices()
 	{
-		m_Indices.reserve((m_Height - 1) * (m_Width - 1) * 6);
+		m_Indices.reserve((m_Subdivisions - 1) * (m_Subdivisions - 1) * 6);
 
-		for (int h = 0; h < m_Height - 1; ++h) {
-			for (int w = 0; w < m_Width - 1; ++w) 
+		for (int h = 0; h < m_Subdivisions - 1; ++h) {
+			for (int w = 0; w < m_Subdivisions - 1; ++w)
 			{
 				// Calculate indices for two triangles, forming a quad
-				unsigned int topLeft = h * m_Width + w;
+				unsigned int topLeft = h * m_Subdivisions + w;
 				unsigned int topRight = topLeft + 1;
-				unsigned int bottomLeft = (h + 1) * m_Width + w;
+				unsigned int bottomLeft = (h + 1) * m_Subdivisions + w;
 				unsigned int bottomRight = bottomLeft + 1;
 
 				//First triangle

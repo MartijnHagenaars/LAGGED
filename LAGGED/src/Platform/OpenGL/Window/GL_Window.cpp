@@ -9,6 +9,10 @@
 
 #include "Platform/Base/Renderer/RendererBase.h"
 
+
+//TODO: MOVE
+#include "ECS/Systems/CameraSystem.h"
+
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include "GLFW/glfw3native.h"
 
@@ -49,7 +53,6 @@ namespace LAG
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
-		m_WindowHalfWidth = static_cast<unsigned int>(winWidth * 0.5f), m_WindowHalfHeight = static_cast<unsigned int>(winHeight * 0.5f);
 		GLFWwindow* sharedWindow = (GetWindowManager()->GetPrimaryWindow() == nullptr) ? NULL : GetWindowManager()->GetPrimaryWindow()->m_Window;
 
 		//Create the window. 
@@ -122,12 +125,10 @@ namespace LAG
 				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
 				window->m_WindowWidth = width;
 				window->m_WindowHeight = height;
-				window->m_WindowHalfWidth = static_cast<unsigned int>(width * 0.5f);
-				window->m_WindowHalfHeight = static_cast<unsigned int>(height * 0.5f);
-
 				glfwMakeContextCurrent(window->m_Window);
 				glViewport(0, 0, width, height);
 
+				window->m_ResizeCallbackFunc(window->m_WindowWidth, window->m_WindowHeight);
 			}
 		};
 		glfwSetWindowSizeCallback(m_Window, windowResizeCallback);
@@ -215,8 +216,6 @@ namespace LAG
 
 	void Window::GetMousePosition(float& xPos, float& yPos)
 	{
-		//glfwMakeContextCurrent(m_Window);
-
 		double xPosD = 0.f, yPosD = 0.f;
 		
 		//Since glfwGetCursorPos only works with doubles, we need to cast it back to floats.
@@ -229,19 +228,5 @@ namespace LAG
 	{
 		m_WindowName = windowName;
 		glfwSetWindowTitle(m_Window, m_WindowName);
-	}
-
-	unsigned int Window::GetNonClientWidth()
-	{
-		RECT betterRect = { 0 };
-		GetWindowRect(glfwGetWin32Window(m_Window), &betterRect);
-		return betterRect.right;
-	}
-
-	unsigned int Window::GetNonClientHeight()
-	{
-		RECT nonClientRect = { 0 };
-		GetWindowRect(glfwGetWin32Window(m_Window), &nonClientRect);
-		return nonClientRect.bottom;
 	}
 }

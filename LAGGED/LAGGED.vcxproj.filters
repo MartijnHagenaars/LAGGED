@@ -246,6 +246,11 @@
     <ClInclude Include="src\Core\Resources\ResourceHandles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h">
+    <ClInclude Include="src\Utility\Noise.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileIO\FileIO.h">
     <ClInclude Include="src\Editor\ToolBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -396,6 +401,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp">
+    <ClCompile Include="src\Utility\Noise.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Core\Resources\Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileIO\FileIO.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
