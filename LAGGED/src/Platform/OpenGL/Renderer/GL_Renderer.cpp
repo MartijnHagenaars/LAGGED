@@ -1,3 +1,5 @@
+#include "Platform/Base/Renderer/RendererBase.h"
+
 #include "Platform/OpenGL/Window/GL_Window.h"
 #include "Platform/Base/Window/WindowManager.h"
 
@@ -19,8 +21,6 @@
 
 #include "ECS/Systems/CameraSystem.h"
 
-#include <type_traits>
-#include <utility>
 #include "glm/glm.hpp"
 
 #include "ImGui/imgui.h"
@@ -30,18 +30,12 @@
 
 #include "Utility/Timer.h"
 
-#include "Core/Resources/Surface.h"
-
 #include "Editor/EditorLayout.h"
 
 namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		Surface* testSurface = nullptr;
-		Surface* floorSurface = nullptr;
-		FrameBuffer* frameBuffer = nullptr;
-
 		EditorLayout* editorLayout = nullptr;
 
 		bool showWireframe = false;
@@ -60,7 +54,6 @@ namespace LAG::Renderer
 			return false;
 		}
 		renderData = new RendererData();
-		renderData->frameBuffer = new FrameBuffer();
 
 		renderData->editorLayout = new EditorLayout();
 		renderData->editorLayout->Initialize();
@@ -70,15 +63,10 @@ namespace LAG::Renderer
 
 		glEnable(GL_DEPTH_TEST);
 
-		//renderData->surface = new Surface();
-		//renderData->testSurface = new Surface("res/Assets/Textures/face.png");
-		//renderData->testSurface->GenerateSurface(0, 0, 512, 512, 0.02f, 25.f, 1234);
-		//renderData->testSurface->Reload();
+		//Setup resize callback
+		GetEngine().GetWindowManager()->GetPrimaryWindow()->SetResizeCallBack(&OnResize);
 
-		//renderData->floorSurface = new Surface();
-		//renderData->floorSurface->GenerateSurface(0, 0, 16, 16, 0.2f, 1337);
-		//renderData->floorSurface->Reload();
-
+		//Create editor layout
 		renderData->editorLayout = new EditorLayout();
 		renderData->editorLayout->Initialize();
 
@@ -90,6 +78,13 @@ namespace LAG::Renderer
 		//TODO: Proper cleanup
 
 		return false;
+	}
+
+	void OnResize(unsigned int width, unsigned int height)
+	{
+		Logger::Info("Window resize: {0}, {1}", width, height);
+
+		CameraSystem::ResizeCameraBuffers();
 	}
 
 	void ImGuiFrameStart()
@@ -137,11 +132,10 @@ namespace LAG::Renderer
 		DrawOptionsWindow();
 		//renderData->testSurface->DrawDebugWindow();
 
-		renderData->frameBuffer->DrawPostProcessWindow();
 		renderData->editorLayout->Render();
 
 		//First render pass using custom frame buffer
-		renderData->frameBuffer->FrameStart(renderData->showWireframe);
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->showWireframe);
 
 
 		//Get an active camera
@@ -199,7 +193,7 @@ namespace LAG::Renderer
 				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
-		renderData->frameBuffer->FrameEnd();
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
 		ImGuiFrameEnd();
 
 		renderData->renderTime = renderData->renderTimer.GetMilliseconds();

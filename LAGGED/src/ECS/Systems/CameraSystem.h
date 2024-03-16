@@ -7,7 +7,9 @@ namespace LAG::CameraSystem
 	void Update(Entity* entity);
 
 	void SetActiveCameraEntity(Entity* entity);
-	Entity* GetActiveCameraEntity();
+	Entity GetActiveCameraEntity();
+
+	void ResizeCameraBuffers();
 
 	glm::mat4 CalculateViewMat(Entity* entity);
 	glm::mat4 CalculateProjMat(Entity* entity);

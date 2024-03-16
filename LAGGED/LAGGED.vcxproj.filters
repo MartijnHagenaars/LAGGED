@@ -249,6 +249,7 @@
     <ClInclude Include="src\Core\Resources\ResourceHandles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h">
     <ClInclude Include="src\Utility\Noise.h">
       <Filter>Header Files</Filter>
     </ClInclude>

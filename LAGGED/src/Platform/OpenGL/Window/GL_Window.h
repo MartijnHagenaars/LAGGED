@@ -28,9 +28,6 @@ namespace LAG
 		void SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc) override;
 
 		void SetWindowName(const char* windowName) override;
-		
-		unsigned int GetNonClientWidth() override;
-		unsigned int GetNonClientHeight() override;
 
 	private:
 		void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true) override;

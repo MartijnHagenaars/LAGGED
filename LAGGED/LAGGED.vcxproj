@@ -242,6 +242,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="src\Editor\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />

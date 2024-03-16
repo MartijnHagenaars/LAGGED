@@ -14,7 +14,7 @@
 
 namespace LAG
 {
-	FrameBuffer::FrameBuffer()
+	FrameBuffer::FrameBuffer() : FrameBufferBase()
 	{
 		if (!Initialize())
 			Logger::Critical("Failed to create frame buffer.");
@@ -124,20 +124,21 @@ namespace LAG
 		shader->Bind();
 
 		//Assign post-processing values
-		shader->SetFloat("a_InversionAmount", m_InversionAmount);
-		shader->SetFloat("a_GrayScaleAmount", m_GrayScaleAmount);
+		shader->SetFloat("a_InversionAmount", m_PostProcessingProperties.m_InversionAmount);
+		shader->SetFloat("a_GrayScaleAmount", m_PostProcessingProperties.m_GrayScaleAmount);
 
 		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
 		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
 	}
 
-	void FrameBuffer::DrawPostProcessWindow()
+	void FrameBuffer::Resize()
 	{
-		ImGui::Begin("Post processing options");
+		//Resize frame buffer
+		LAG_GRAPHICS_EXCEPTION(glBindRenderbuffer(GL_RENDERBUFFER, m_DepthStencilBuffer));
+		LAG_GRAPHICS_EXCEPTION(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight()));
 
-		ImGui::SliderFloat("Inversion", &m_InversionAmount, 0.f, 1.f, "%.3f");
-		ImGui::SliderFloat("Gray scale", &m_GrayScaleAmount, 0.f, 1.f, "%.3f");
-
-		ImGui::End();
+		//Resize texture
+		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
+		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetWindowManager()->GetPrimaryWindow()->GetWidth(), GetWindowManager()->GetPrimaryWindow()->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
 	}
 }

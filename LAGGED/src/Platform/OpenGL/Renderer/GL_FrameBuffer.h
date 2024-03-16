@@ -1,20 +1,18 @@
 #pragma once
+#include "Platform/Base/Renderer/FrameBuffer.h"
+
 namespace LAG
 {
-	class FrameBuffer
+	class FrameBuffer : public FrameBufferBase
 	{
 	public:
 		FrameBuffer();
-		~FrameBuffer();
+		~FrameBuffer() override;
 
-		void FrameStart(bool showWireframe);
-		void FrameEnd();
+		void FrameStart(bool showWireframe) override;
+		void FrameEnd() override;
 
-		void DrawPostProcessWindow();
-
-		void PostProcessInversion(float inversionAmount) { m_InversionAmount = inversionAmount; };
-		void PostProcessGrayScale(float grayScaleAmount) { m_GrayScaleAmount = grayScaleAmount; }
-
+		void Resize() override;
 
 	private:
 		bool Initialize();
@@ -27,9 +25,6 @@ namespace LAG
 		unsigned int m_FrameBuffer = 0;
 		unsigned int m_ColorBuffer = 0;
 		unsigned int m_DepthStencilBuffer = 0;
-
-		float m_InversionAmount = 0.f;
-		float m_GrayScaleAmount = 0.f;
 	};
 }
 
