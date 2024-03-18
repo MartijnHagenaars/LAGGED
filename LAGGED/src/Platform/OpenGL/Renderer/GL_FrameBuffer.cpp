@@ -144,6 +144,6 @@ namespace LAG
 
 	void* FrameBuffer::GetEditorHandle()
 	{
-		return (void*)(intptr_t)m_FrameBuffer;
+		return (void*)(intptr_t)m_ColorBuffer;
 	}
 }

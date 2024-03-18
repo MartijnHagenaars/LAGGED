@@ -28,7 +28,7 @@ namespace LAG
 		ImVec2 size = ImVec2(vMax.x - vMin.x, vMax.y - vMin.y);
 
 		CameraComponent* cameraComp = CameraSystem::GetActiveCameraComponent();
-		ImGui::Image(cameraComp->m_Framebuffer->GetEditorHandle(), size);
+		ImGui::Image(cameraComp->m_Framebuffer->GetEditorHandle(), size, ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
 
 		ImGui::End();
 	}
