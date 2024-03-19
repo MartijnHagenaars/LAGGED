@@ -16,7 +16,7 @@ namespace LAG
 
 	void CameraViewport::Render()
 	{
-		ImGui::Begin("Viewport");
+		ImGui::Begin("Viewport", &m_IsOpen);
 
 		ImVec2 vMin = ImGui::GetWindowContentRegionMin();
 		ImVec2 vMax = ImGui::GetWindowContentRegionMax();

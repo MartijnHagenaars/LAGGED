@@ -24,7 +24,7 @@ namespace LAG
 
 	void EntityViewer::Render()
 	{
-		ImGui::Begin("Entity Editor");
+		ImGui::Begin("Entity Editor", &m_IsOpen);
 
 		Scene* scene = GetEngine().GetScene();
 

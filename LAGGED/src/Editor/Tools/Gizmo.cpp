@@ -67,7 +67,7 @@ namespace LAG
 
 	void Gizmo::Render()
 	{
-		ImGui::Begin("Gizmo Properties");
+		ImGui::Begin("Gizmo Properties", &m_IsOpen);
 
 		ImGui::Checkbox("Enable Gizmo", &m_UseGizmo);
 
