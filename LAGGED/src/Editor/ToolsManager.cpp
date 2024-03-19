@@ -58,7 +58,7 @@ namespace LAG
 					if (m_Tools[i]->GetType() == ToolType::LEVEL)
 					{
 						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
-							m_Tools[i]->OpenTool();
+							m_Tools[i]->ToggleTool();
 					}
 				ImGui::EndMenu();
 			}
@@ -69,7 +69,7 @@ namespace LAG
 					if (m_Tools[i]->GetType() == ToolType::GRAPHICS)
 					{
 						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
-							m_Tools[i]->OpenTool();
+							m_Tools[i]->ToggleTool();
 					}
 				ImGui::EndMenu();
 			}
@@ -80,7 +80,7 @@ namespace LAG
 					if (m_Tools[i]->GetType() == ToolType::PERFORMANCE)
 					{
 						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
-							m_Tools[i]->OpenTool();
+							m_Tools[i]->ToggleTool();
 					}
 				ImGui::EndMenu();
 			}

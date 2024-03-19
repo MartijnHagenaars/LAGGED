@@ -21,6 +21,7 @@ namespace LAG
 		virtual void Render() = 0;
 
 		void OpenTool() { m_IsOpen = true; }
+		void ToggleTool() { m_IsOpen = !m_IsOpen; }
 		bool IsOpen() const { return m_IsOpen; }
 
 		ToolType GetType() const { return m_Type; }
