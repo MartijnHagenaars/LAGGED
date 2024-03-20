@@ -21,6 +21,7 @@ namespace LAG
 		Shutdown(); 
 	}
 
+	// This applicationPtr will leak, smart pointers please.
 	int Engine::Run(IApplication* applicationPtr)
 	{
 		try
@@ -58,6 +59,8 @@ namespace LAG
 
 			return 0;
 		}
+
+		// Exceptions are frowned upon in a realtime 3D application
 		catch (ExceptionBase& e)
 		{
 			Logger::Critical(e.GetExceptionMessage().c_str());

@@ -4,6 +4,9 @@
 
 namespace LAG
 {
+	// What is this class supposed to be doing?
+	// I know it hashes the string but why?
+	// Are you making some form of String ID?
 	class HashedString
 	{
 	public: 

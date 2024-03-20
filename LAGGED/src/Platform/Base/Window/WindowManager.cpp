@@ -28,14 +28,24 @@ namespace LAG
     {
         if (winWidth <= 1 && winHeight <= 1)
         {
+            // Print the window size here
+            // Also keep in mind that there is a max resolution as well
             Logger::Error("Failed to add window: Invalid window size.");
             return nullptr;
         }
 
         std::unique_ptr<Window> newWindow = std::make_unique<Window>();
+
+        // This will initialize GLFW again?
+        // Don't think this is ever tested with multiple windows
         newWindow->Initialize(winWidth, winHeight, fullscreen, useVSync, centerWindow);
         newWindow->SetWindowName(winName);
 
+        // I would look at QT on how they solved the API for this.
+        // They have a central widget or a dedicated class for the Main Window
+        // Although I'm not sure why you require more windows when you work on a game, the game is running in one window only right?
+        // If this is going to be the base of creating an editor as well, you have IMGUI as dependency, use the functionality of that library to create your editor
+        // Look at the docking branch of IMGUI
         if (m_MainWindow == nullptr)
         {
             m_MainWindow = std::move(newWindow);

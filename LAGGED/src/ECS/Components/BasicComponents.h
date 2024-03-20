@@ -19,7 +19,8 @@ namespace LAG
 		static inline bool m_ReflectionState = InitializeReflection();
 	};
 
-
+	// structures usually don't have functions (with exceptions to constructors and operator overloading)
+	// if you do like functions I would either offload it to some other object/namespace or make this a class instead of struct
 	struct TransformComponent
 	{
 		TransformComponent();

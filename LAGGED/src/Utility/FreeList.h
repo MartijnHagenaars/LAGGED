@@ -4,6 +4,7 @@
 
 namespace LAG
 {
+	// Not used?
 	template<typename T>
 	class FreeList
 	{

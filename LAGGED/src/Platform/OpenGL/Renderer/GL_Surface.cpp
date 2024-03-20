@@ -101,7 +101,8 @@ namespace LAG
 		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntity));
 		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntity));
 
-		//TODO: The way lights are currently handled isn't that good and should be revisited in the future.
+		//TODO: The way lights are currently handled isn't that good and should be revisited in the future. <= Go for a deferred rendering approach, it will make light calculations a lot less heavy
+		
 		if (lights.size() > 0)
 		{
 			shader.SetBool("a_UseLight", true);

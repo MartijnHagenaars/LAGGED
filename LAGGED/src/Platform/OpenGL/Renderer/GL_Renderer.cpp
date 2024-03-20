@@ -58,9 +58,16 @@ namespace LAG::Renderer
 		renderData->editorLayout = new EditorLayout();
 		renderData->editorLayout->Initialize();
 
+		// this is probbaly not tackled yet but shaders should not be loaded & compiled every time the engine boots
+		// the engine should load in the shader, compile it ( once ) and write the compiled binaries back to disk
+		// next time you will load the compile shader instead of the file
+		// only when changes are made to the shader file you should load and compile again
+		// I think when using OpenGL you will need the GL_ARB_get_program_binary extension in order for this to work.
+		// so make sure you check driver compatibility when you implement this
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 
+		// This should be a togglable state
 		glEnable(GL_DEPTH_TEST);
 
 		//Setup resize callback
@@ -87,6 +94,12 @@ namespace LAG::Renderer
 		CameraSystem::ResizeCameraBuffers();
 	}
 
+	// IMGUI should not be part of your renderer IMO
+	// IMGUI should have it's own dedicated systems in place
+	// When you ship your engine/game the renderer will still include IMGUI code
+	// Which is editor only code, so this should not even be compiled when we ship
+	// Therefore strip it out and move it to another file so in a buildsystem (when there is one) you can take this into account
+	// however, it can use functions from your renderer
 	void ImGuiFrameStart()
 	{
 		ImGui_ImplOpenGL3_NewFrame();
@@ -176,6 +189,9 @@ namespace LAG::Renderer
 					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), 
 					lights);
 			});
+
+		// Collecting surface with the same material and moving them into one big vertex buffer chunck would reduce the draw calls here
+		// So you can draw everything with the same material ( that is static! ) all at once
 
 		//Render all surfaces
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)

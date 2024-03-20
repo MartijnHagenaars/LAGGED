@@ -23,6 +23,9 @@
 
 namespace LAG
 {
+	// Why is there a base class for a window if you use GLFW
+	// GLFW already provides the abstraction I don't see any use in having inheritance tree
+	// You can hide the GLFW API in your class but just make it a Window class
 	Window::Window()
 		: WindowBase()
 	{

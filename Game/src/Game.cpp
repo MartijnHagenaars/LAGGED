@@ -22,6 +22,7 @@
 
 #include "World/World.h"
 
+// Not sure what the point of this macro is?
 ENTRY_APP(Game)
 
 Game::Game()
@@ -41,9 +42,16 @@ void Game::Initialize()
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::HashedString("LMB"));
 
 	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
+
+	//// Try not to commit commented code, this is not useful to anybody
+	//// Commented code is not maintained and within a month from now you have no idea if this is still relevant
+	//// If you do push commented code add a comment on top of it what this is supposed to represent
 	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Avocado/Avocado.gltf"));
 	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/BoomBox/BoomBox.gltf"));
 
+	// It is probably not implement yet but these type of things could be loaded from a JSON or YAML file
+	// That would make initialization of the game a lot cleaner
+	// -> LoadScene(scene.json);
 	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
 	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));

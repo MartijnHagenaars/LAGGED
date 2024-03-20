@@ -14,6 +14,8 @@ namespace LAG::Renderer
 
 	void OnResize(unsigned int width, unsigned int height);
 
+	// This is supposed to be the base of the renderer but I don't think OpenGL has any pipeline state objects
+	// So why is this part of your base API?
 	void SetPipelineState(int pipelineID);
 
 }
