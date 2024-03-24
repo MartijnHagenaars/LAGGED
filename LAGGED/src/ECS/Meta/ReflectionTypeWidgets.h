@@ -135,7 +135,8 @@ namespace LAG
 					value.m_NoisePosition;
 
 				int surfaceSubdivisions = entity->GetComponent<ProceduralSurfaceComponent>()->m_SurfaceSubdivisions;
-				glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale() * static_cast<float>(surfaceSubdivisions);
+				//glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale() * static_cast<float>(surfaceSubdivisions);
+				glm::vec3 planeScale = entity->GetComponent<TransformComponent>()->GetScale();
 				value.m_PreviewTexture = Noise::GeneratePreviewTexture(value, position, glm::vec2(planeScale.x, planeScale.z), surfaceSubdivisions);
 			}
 			ImGui::SameLine();
