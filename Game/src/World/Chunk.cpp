@@ -30,5 +30,10 @@ void Chunk::Load(const glm::vec2& position)
 void Chunk::Unload()
 {
 	if (m_Entity.IsValid())
+	{
+		//TODO: The user should not have to do this. There should be some sort of function in the entity object that gets all components and checks if they have unload functions.
+		//		If they do, the Unload function is called.
+		m_Entity.GetComponent<LAG::ProceduralSurfaceComponent>()->m_Surface.Unload();
 		LAG::GetScene()->RemoveEntity(m_Entity.GetEntityID());
+	}
 }
