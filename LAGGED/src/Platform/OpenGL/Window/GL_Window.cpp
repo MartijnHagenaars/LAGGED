@@ -146,11 +146,6 @@ namespace LAG
 				else ++it;
 			}
 		}
-
-		if (glfwWindowShouldClose(m_Window))
-		{
-			printf("INJECTED\n");
-		}
 	}
 
 	void Window::PresentFrame()
