@@ -9,6 +9,7 @@
 
 #include "Platform/Base/Renderer/RendererBase.h"
 
+#include "Platform/OpenGL/Renderer/GL_ErrorCodeLookup.h"
 
 //TODO: MOVE
 #include "ECS/Systems/CameraSystem.h"
@@ -49,7 +50,7 @@ namespace LAG
 		}
 
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
 		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
@@ -76,7 +77,7 @@ namespace LAG
 		glfwSetWindowUserPointer(m_Window, this);
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
-	
+
 		if (glewInit() != GLEW_OK)
 		{
 			Logger::Critical("Failed to initialize GLEW.");
@@ -102,6 +103,13 @@ namespace LAG
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
 		ImGui_ImplOpenGL3_Init("#version 140");
 
+		//Setup debugging messages
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+			{
+				Logger::Error("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
+			}, 0);
+
 		//Window is ready to be used! Set initialized to true!
 		m_Initialized = true;
 	}
@@ -110,27 +118,27 @@ namespace LAG
 	{
 		//Setup window focus callback
 		auto windowFocusCallback = [](GLFWwindow* winPtr, int focused)
-		{
-			Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
-			if(GetWindowManager()->GetFocussedWindow() != window)
-				GetWindowManager()->SetFocussedWindow(window);
-		};
+			{
+				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
+				if (GetWindowManager()->GetFocussedWindow() != window)
+					GetWindowManager()->SetFocussedWindow(window);
+			};
 		glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
 
 		//Setup window resize callback
 		auto windowResizeCallback = [](GLFWwindow* winPtr, int width, int height)
-		{
-			if (width > 0 && height > 0)
 			{
-				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
-				window->m_WindowWidth = width;
-				window->m_WindowHeight = height;
-				glfwMakeContextCurrent(window->m_Window);
-				glViewport(0, 0, width, height);
+				if (width > 0 && height > 0)
+				{
+					Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
+					window->m_WindowWidth = width;
+					window->m_WindowHeight = height;
+					glfwMakeContextCurrent(window->m_Window);
+					glViewport(0, 0, width, height);
 
-				window->m_ResizeCallbackFunc(window->m_WindowWidth, window->m_WindowHeight);
-			}
-		};
+					window->m_ResizeCallbackFunc(window->m_WindowWidth, window->m_WindowHeight);
+				}
+			};
 		glfwSetWindowSizeCallback(m_Window, windowResizeCallback);
 	}
 
@@ -192,7 +200,7 @@ namespace LAG
 		{
 			buttonState = glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_LEFT);
 		}
-		
+
 		//Process the input if it's being pressed
 		if (buttonState > 0)
 		{
@@ -202,7 +210,7 @@ namespace LAG
 					pressedButtonIDs.emplace(inputType.actionID);
 				else return false;
 			}
-			
+
 			return true;
 		}
 
@@ -212,7 +220,7 @@ namespace LAG
 	void Window::GetMousePosition(float& xPos, float& yPos)
 	{
 		double xPosD = 0.f, yPosD = 0.f;
-		
+
 		//Since glfwGetCursorPos only works with doubles, we need to cast it back to floats.
 		glfwGetCursorPos(m_Window, &xPosD, &yPosD);
 		xPos = static_cast<float>(xPosD);

@@ -146,6 +146,7 @@
     <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />

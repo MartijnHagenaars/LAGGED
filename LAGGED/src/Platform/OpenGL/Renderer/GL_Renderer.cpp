@@ -92,6 +92,9 @@ namespace LAG::Renderer
 
 	void ImGuiFrameEnd()
 	{
+
+		LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -182,8 +185,8 @@ namespace LAG::Renderer
 			});
 
 		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
-		ImGuiFrameEnd();
 
+		ImGuiFrameEnd();
 		renderData->m_RenderTime = renderData->m_RenderTimer.GetMilliseconds();
 	}
 
