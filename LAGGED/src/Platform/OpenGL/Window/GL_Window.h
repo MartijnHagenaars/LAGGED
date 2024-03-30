@@ -29,13 +29,14 @@ namespace LAG
 
 		void SetWindowName(const char* windowName) override;
 
+		//This should be fixed in a future update
+		GLFWwindow* m_Window = nullptr;
 	private:
 		void Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync = true, bool centerWindow = true) override;
 		void SetupCallbackFunctions();
 
 		void Update() override;
 
-		GLFWwindow* m_Window = nullptr;
 		WindowEventCallbackFunc m_WinEventCallback = NULL;
 
 		std::unordered_set<size_t> pressedButtonIDs;

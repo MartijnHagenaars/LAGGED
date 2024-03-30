@@ -92,14 +92,13 @@ namespace LAG::Renderer
 
 	void ImGuiFrameEnd()
 	{
-
-		LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+		GLFWwindow* prePlatformUpdateContext = glfwGetCurrentContext();
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(prePlatformUpdateContext);
 	}
 
 	void DrawOptionsWindow()
@@ -170,7 +169,7 @@ namespace LAG::Renderer
 			{
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
 					transformComp, &selectedCamera,
-					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), 
+					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
 					lights);
 			});
 
