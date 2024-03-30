@@ -84,12 +84,18 @@ namespace LAG
 			return;
 		}
 
-		//Not sure if necessary
 		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
-
 		SetupCallbackFunctions();
 		pressedButtonIDs.reserve(8);
+
+		//Setup OpenGL debug message callback
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+			{
+				if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
+					Logger::Error("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
+			}, 0);
 
 		//Now that the window is initialized, initialize ImGui
 		IMGUI_CHECKVERSION();
@@ -101,15 +107,7 @@ namespace LAG
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
-		ImGui_ImplOpenGL3_Init("#version 140");
-
-		//Setup debugging messages
-		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
-			{
-				if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
-					Logger::Error("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
-			}, 0);
+		ImGui_ImplOpenGL3_Init("#version 130");
 
 		//Window is ready to be used! Set initialized to true!
 		m_Initialized = true;

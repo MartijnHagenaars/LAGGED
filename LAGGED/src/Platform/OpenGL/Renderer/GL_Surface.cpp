@@ -162,8 +162,6 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
 
-		std::cout << "Creating VAO with ID " << m_VAO << "\n";
-
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
 
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
@@ -171,24 +169,12 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
 		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned int), &m_Indices[0], GL_STATIC_DRAW));
 
-		GLenum err = glGetError();
-		if (err != GL_NO_ERROR)
-		{
-			__debugbreak();
-		}
-
 		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
 		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
 		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
 
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
-
-		GLenum err2 = glGetError();
-		if (err2 != GL_NO_ERROR)
-		{
-			__debugbreak();
-		}
 
 		SetLoaded(true);
 		return true;
