@@ -86,6 +86,12 @@ namespace LAG
 		//Setup window resize callback
 		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* glfwWindow, int width, int height)
 			{
+				//Ensure that width/height cannot go below zero
+				if (width <= 0)
+					width = 1;
+				if (height <= 0)
+					height = 1;
+
 				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(glfwWindow));
 				window->m_WindowWidth = width;
 				window->m_WindowHeight = height;
