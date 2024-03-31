@@ -1,9 +1,9 @@
 #include "Platform/Base/Renderer/RendererBase.h"
 
-#include "Platform/OpenGL/Window/GL_Window.h"
-#include "Platform/Base/Window/WindowManager.h"
-
 #include "Core/Engine.h"
+#include "Platform/Window.h"
+#include "GL/glew.h"
+
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
 #include "Core/Resources/Shader.h"
@@ -64,7 +64,7 @@ namespace LAG::Renderer
 		glEnable(GL_DEPTH_TEST);
 
 		//Setup resize callback
-		GetEngine().GetWindowManager()->GetPrimaryWindow()->SetResizeCallBack(&OnResize);
+		GetWindow()->SetResizeCallBack(&OnResize);
 
 		//Create editor layout
 		renderData->editorLayout = new EditorLayout();
@@ -84,6 +84,7 @@ namespace LAG::Renderer
 	{
 		Logger::Info("Window resize: {0}, {1}", width, height);
 
+		glViewport(0, 0, width, height);
 		CameraSystem::ResizeCameraBuffers();
 	}
 

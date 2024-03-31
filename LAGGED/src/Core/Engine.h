@@ -3,14 +3,12 @@
 #include "Defines.h"
 
 #include "Core/ApplicationInterface.h"
-#include "Events/EventBase.h"
 
 namespace LAG
 {
 	class Window;
 	class Scene;
 	class ResourceManager;
-	class WindowManager;
 	class Engine
 	{
 	public:
@@ -19,29 +17,26 @@ namespace LAG
 
 		int Run(IApplication* applicationPtr);
 
+		Window* GetWindow() const { return m_Window; }
 		ResourceManager* GetResources() const { return m_ResourceManager; }
-		WindowManager* GetWindowManager() const { return m_WindowManager; }
 		Scene* GetScene() const { return m_Scene; }
+
 		float GetFPS() const { return m_FPS; }
 		float GetDeltaTime() const { return m_DeltaTime; }
 
 	private:
 		friend Engine& GetEngine();
-		Engine()
-		{}
+		Engine() {}
 
 		bool Initialize(IApplication* applicationPtr);
 		bool Shutdown();
 
-		void EventCallback(EventBase& event);
-
 	private:
-		LAG::IApplication* m_Application = nullptr;
-		WindowManager* m_WindowManager = nullptr;
-
-
-		ResourceManager* m_ResourceManager = nullptr;
+		IApplication* m_Application = nullptr;
+		
+		Window* m_Window = nullptr;
 		Scene* m_Scene = nullptr;
+		ResourceManager* m_ResourceManager = nullptr;
 
 		float m_FPS = 0.f;
 		float m_DeltaTime = 0.f;
@@ -49,7 +44,7 @@ namespace LAG
 
 	Engine& GetEngine();
 
+	inline Window* GetWindow() { return GetEngine().GetWindow(); }
 	inline ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
-	inline WindowManager* GetWindowManager() { return GetEngine().GetWindowManager(); }
 	inline Scene* GetScene() { return GetEngine().GetScene(); }
 }

@@ -1,6 +1,7 @@
 #include "Game.h"
-#include <iostream>
 #include "Core/EntryPoint.h"
+
+#include "Core/Input/Input.h"
 
 #include "Core/Engine.h"
 #include "Platform/Base/Renderer/RendererBase.h"

@@ -1,436 +1,153 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\Core\ApplicationInterface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Defines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\EntryPoint.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\Base\Window\WindowBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Window\DX12_WindowClass.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\Base\PlatformIncludes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowExceptionMacros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\Base\ExceptionBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="External\DirectX\d3dx12.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\d3dx12.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderExceptionMacros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Renderer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\EventBase.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Events\WindowEvents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Common.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Utility.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility\Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility\FreeList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility\Logger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_CommandQueue.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility\Clamp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Window\GL_Window.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Input\Input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility\HashedString.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Window\DX12_InputEnumConversion.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\Base\Window\WindowManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utility\UniqueID.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Memory\ResourcePtr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Resources\ResourceManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Resources\Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Resources\Model.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsExceptionMacros.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Resources\Texture.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Scene.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Components\BasicComponents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Components\MeshComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Entity.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Components\LightComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imconfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imgui.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imgui_impl_glfw.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imgui_impl_opengl3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imgui_impl_opengl3_loader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imgui_internal.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imstb_rectpack.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imstb_textedit.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGui\imstb_truetype.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Components\CameraComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Systems\CameraSystem.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\Grid.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Resources\Surface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Resources\Shader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Systems\BasicSystems.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\Gizmo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EntityViewer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Editor\EditorLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Meta\ReflectionDefines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Components\TerrainComponents.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ECS\Systems\TerrainSystems.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Core\Resources\ResourceHandles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h">
-    <ClInclude Include="src\Utility\Noise.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FileIO\FileIO.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Window\DX12_WindowClass.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\Base\ExceptionBase.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Utility.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utility\Timer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utility\Logger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_CommandQueue.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Mesh.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Window\GL_Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Input\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\Base\Window\WindowManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utility\UniqueID.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Resources\ResourceManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Resources\Resource.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Scene.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Entity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGui\imgui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGui\imgui_demo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGui\imgui_draw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGui\imgui_impl_glfw.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGui\imgui_impl_opengl3.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGui\imgui_tables.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGui\imgui_widgets.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Systems\CameraSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Systems\BasicSystems.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\Gizmo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EntityViewer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Editor\EditorLayout.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Components\CameraComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Components\BasicComponents.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Components\LightComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\ECS\Components\TerrainComponents.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Utility\Noise.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Core\Resources\Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\FileIO\FileIO.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />
-    <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
-    <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
-    <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
-    <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
-    <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
-    <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
-  </ItemGroup>
-  <ItemGroup>
     <Natvis Include="src\Utility\Natvis\glm.natvis" />
     <Natvis Include="src\Utility\Natvis\imgui.natvis" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoiseD.dll">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
+    <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl" />
+    <FxCompile Include="res\Shaders\DX12\VertexShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Core\Resources\Texture.cpp" />
+    <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
+    <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
+    <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
+    <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
+    <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
+    <ClCompile Include="src\Editor\EditorLayout.cpp" />
+    <ClCompile Include="src\Editor\EntityViewer.cpp" />
+    <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="src\Editor\Gizmo.cpp" />
+    <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp" />
+    <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />
+    <ClCompile Include="imgui\ImGui\imgui.cpp" />
+    <ClCompile Include="imgui\ImGui\imgui_demo.cpp" />
+    <ClCompile Include="imgui\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="imgui\ImGui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="imgui\ImGui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="imgui\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="imgui\ImGui\imgui_widgets.cpp" />
+    <ClCompile Include="src\ECS\Entity.cpp" />
+    <ClCompile Include="src\ECS\Scene.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.cpp" />
+    <ClCompile Include="src\Core\Resources\Resource.cpp" />
+    <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp" />
+    <ClCompile Include="src\Core\Input\Input.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Renderer.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Window\GL_Window.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_CommandQueue.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Mesh.cpp" />
+    <ClCompile Include="src\Utility\Logger.cpp" />
+    <ClCompile Include="src\Core\Engine.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Renderer.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.cpp" />
+    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Utility.cpp" />
+    <ClCompile Include="src\Platform\Base\ExceptionBase.cpp" />
+    <ClCompile Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.cpp" />
+    <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp" />
+    <ClCompile Include="src\Platform\DX12\Window\DX12_WindowClass.cpp" />
+    <ClCompile Include="src\Utility\Noise.cpp" />
+    <ClCompile Include="src\Utility\Timer.cpp" />
+    <ClCompile Include="src\Utility\UniqueID.cpp" />
+    <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
+    <ClCompile Include="src\Platform\Base\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\FileIO\FileIO.h" />
+    <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
+    <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
+    <ClInclude Include="src\ECS\Meta\ReflectionDefines.h" />
+    <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
+    <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
+    <ClInclude Include="src\Editor\EditorLayout.h" />
+    <ClInclude Include="src\Editor\EntityViewer.h" />
+    <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
+    <ClInclude Include="src\Editor\Gizmo.h" />
+    <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
+    <ClInclude Include="src\Core\Resources\Shader.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
+    <ClInclude Include="src\Core\Resources\Surface.h" />
+    <ClInclude Include="src\Editor\Grid.h" />
+    <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
+    <ClInclude Include="imgui\ImGui\imconfig.h" />
+    <ClInclude Include="imgui\ImGui\imgui.h" />
+    <ClInclude Include="imgui\ImGui\imgui_impl_glfw.h" />
+    <ClInclude Include="imgui\ImGui\imgui_impl_opengl3.h" />
+    <ClInclude Include="imgui\ImGui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="imgui\ImGui\imgui_internal.h" />
+    <ClInclude Include="imgui\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="imgui\ImGui\imstb_textedit.h" />
+    <ClInclude Include="imgui\ImGui\imstb_truetype.h" />
+    <ClInclude Include="src\ECS\Components\BasicComponents.h" />
+    <ClInclude Include="src\ECS\Components\CameraComponent.h" />
+    <ClInclude Include="src\ECS\Components\LightComponent.h" />
+    <ClInclude Include="src\ECS\Components\MeshComponent.h" />
+    <ClInclude Include="src\ECS\Entity.h" />
+    <ClInclude Include="src\ECS\Scene.h" />
+    <ClInclude Include="src\Core\Resources\Texture.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h" />
+    <ClInclude Include="src\Core\Resources\Resource.h" />
+    <ClInclude Include="src\Core\Resources\ResourceManager.h" />
+    <ClInclude Include="src\Core\Resources\Model.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsExceptionMacros.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h" />
+    <ClInclude Include="src\Core\Input\Input.h" />
+    <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
+    <ClInclude Include="src\Platform\DX12\Window\DX12_InputEnumConversion.h" />
+    <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Mesh.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_CommandQueue.h" />
+    <ClInclude Include="src\Utility\Clamp.h" />
+    <ClInclude Include="src\Utility\Logger.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Common.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Renderer.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.h" />
+    <ClInclude Include="External\DirectX\d3dx12.h" />
+    <ClInclude Include="src\Core\Engine.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\d3dx12.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderExceptionMacros.h" />
+    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Utility.h" />
+    <ClInclude Include="src\Platform\Base\ExceptionBase.h" />
+    <ClInclude Include="src\Core\Defines.h" />
+    <ClInclude Include="src\Core\ApplicationInterface.h" />
+    <ClInclude Include="src\Core\EntryPoint.h" />
+    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowExceptionMacros.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h" />
+    <ClInclude Include="src\Platform\Window.h" />
+    <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
+    <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h" />
+    <ClInclude Include="src\Platform\DX12\Window\DX12_WindowClass.h" />
+    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.h" />
+    <ClInclude Include="src\Utility\HashedString.h" />
+    <ClInclude Include="src\Utility\Noise.h" />
+    <ClInclude Include="src\Utility\Timer.h" />
+    <ClInclude Include="src\Utility\UniqueID.h" />
+    <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />
+    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoiseD.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
   </ItemGroup>
 </Project>
