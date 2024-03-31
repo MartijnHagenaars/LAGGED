@@ -3,7 +3,7 @@
 
 namespace LAG
 {
-	class WindowBase;
+	class Window;
 }
 
 namespace LAG::Input
@@ -114,16 +114,13 @@ namespace LAG::Input
 
 	//Returns true/false based on whether the action is pressed or not.
 	bool IsActionPressed(HashedString actionName);
-	bool IsActionPressed(HashedString actionName, LAG::WindowBase* window);
 
 	//Returns true/false based on whether the action is pressed once. 
 	//Will automatically turn false again when the button is held down for more than one frame.
 	bool IsActionPressedOnce(HashedString actionName);
-	bool IsActionPressedOnce(HashedString actionName, LAG::WindowBase* window);
 
 	//Contains two argument references that return the position of the cursor on the x- and y-axis.
 	void GetMousePosition(float& xPos, float& yPos);
-	void GetMousePosition(float& xPos, float& yPos, LAG::WindowBase* window);
 
 	//Get the input device type for an input type.
 	//Determines if an input type is of input device Keyboard, Mouse or Controller.

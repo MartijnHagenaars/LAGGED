@@ -5,7 +5,6 @@
 #include "Core/Engine.h"
 #include "Utility/Logger.h"
 
-#include "Platform/Base/Window/WindowManager.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Texture.h"
 

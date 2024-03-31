@@ -4,8 +4,8 @@
 #include "ImGui/imgui.h"
 
 #include "Core/Engine.h"
+#include "Platform/Window.h"
 #include "ECS/Scene.h"
-#include "Platform/Base/Window/WindowManager.h"
 
 #include "Tools/Gizmo.h"
 #include "Tools/EntityViewer.h"
@@ -47,7 +47,7 @@ namespace LAG
             if (ImGui::BeginMenu("File"))
             {
 				if (ImGui::MenuItem("Exit"))
-					GetEngine().GetWindowManager()->RemoveWindow(GetEngine().GetWindowManager()->GetPrimaryWindow());
+					GetWindow()->Close();
 
                 ImGui::EndMenu();
 			}

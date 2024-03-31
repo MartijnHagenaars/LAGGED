@@ -1,11 +1,11 @@
 #include "CameraSystem.h"
 
 #include "Core/Engine.h"
+#include "Platform/Window.h"
+
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
-
-#include "Platform/Base/Window/WindowManager.h"
 
 #include "Core/Input/Input.h"
 
@@ -138,7 +138,7 @@ namespace LAG::CameraSystem
 			return camera->projMat;
 
 		camera->projMat = glm::mat4(1.f);
-		camera->projMat = glm::perspective(glm::radians(camera->fov), static_cast<float>(GetWindowManager()->GetFocussedWindow()->GetWidth()) / GetWindowManager()->GetFocussedWindow()->GetHeight(), 0.1f, 100000.f);
+		camera->projMat = glm::perspective(glm::radians(camera->fov), static_cast<float>(GetWindow()->GetWidth()) / GetWindow()->GetHeight(), 0.1f, 100000.f);
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;
 	}

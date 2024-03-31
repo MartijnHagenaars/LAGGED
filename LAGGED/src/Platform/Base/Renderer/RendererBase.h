@@ -1,6 +1,5 @@
 #pragma once
 #include "Core/Defines.h"
-#include "Platform/Base/Window/WindowBase.h"
 
 namespace LAG::Renderer
 {
