@@ -31,6 +31,7 @@ namespace LAG
 		const char* GetWindowName() const { return m_WindowTitle; }
 
 		bool IsOpen() const { return m_IsOpen; }
+		void Close() { m_IsOpen = false; }
 
 		unsigned int GetWidth() const { return m_WindowWidth; }
 		unsigned int GetHeight() const { return m_WindowHeight; }
