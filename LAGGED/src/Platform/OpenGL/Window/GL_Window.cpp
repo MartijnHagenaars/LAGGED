@@ -49,6 +49,8 @@ namespace LAG
 
 	void Window::Update()
 	{
+		HandleWindowMessages();
+
 		//Handle the releasing of button presses
 		if (pressedButtonIDs.size() > 0)
 		{
@@ -73,10 +75,7 @@ namespace LAG
 	{
 		glfwPollEvents();
 		if (glfwWindowShouldClose(m_Window))
-		{
-			return false;
-		}
-
+			m_IsOpen = false;
 		return true;
 	}
 
