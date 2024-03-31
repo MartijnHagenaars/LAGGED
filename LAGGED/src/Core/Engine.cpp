@@ -2,8 +2,7 @@
 #include "Platform/Base/ExceptionBase.h"
 #include "Utility/Timer.h"
 
-#include "Platform/Base/Window/WindowBase.h"
-#include "Platform/Base/Window/WindowManager.h"
+#include "Platform/Window.h"
 #include "Platform/Base/Renderer/RendererBase.h"
 
 #include "Resources/ResourceManager.h"
@@ -37,14 +36,17 @@ namespace LAG
 
 			
 			//Main loop
-			while (m_WindowManager->AreWindowsOpen())
+			while (GetWindow()->IsOpen())
 			{
-				m_WindowManager->Update();
+				GetWindow()->Update();
 
 				//Update all basic systems
 				BasicSystems::UpdateBasicSystems();
 
 				m_Application->Update();
+
+				//TODO: Do I move this somewhere else?
+				GetWindow()->PresentFrame();
 
 				//Calculate the framerate
 				m_DeltaTime = timer.MarkSeconds();
@@ -84,9 +86,7 @@ namespace LAG
 		Logger::Initialize();
 
 		//Create the window manager and a primary window
-		m_WindowManager = new WindowManager();
-		Window* newWindow = m_WindowManager->AddWindow(1920, 1280, "Main window!", false);
-		newWindow->SetWindowEventCallback(std::bind(&Engine::EventCallback, this, std::placeholders::_1));
+		m_Window = new Window(1920, 1280, "Main window!", false);
 
 		m_ResourceManager = new ResourceManager();
 		m_Scene = new Scene();
@@ -132,21 +132,13 @@ namespace LAG
 
 		Renderer::Shutdown();
 
-		if (m_WindowManager != nullptr)
-		{
-			m_WindowManager->Shutdown();
-			delete m_WindowManager;
-		}
-		m_WindowManager = nullptr;
+		GetWindow()->Shutdown();
+		delete m_Window;
+		m_Window = nullptr;
 
 		Logger::Shutdown();
 
 		return true;
-	}
-
-	void Engine::EventCallback(EventBase& event)
-	{
-		std::cout << "Event callback detected.\n";
 	}
 
 	Engine& GetEngine()

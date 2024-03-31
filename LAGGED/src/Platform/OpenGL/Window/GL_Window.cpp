@@ -1,20 +1,13 @@
-#include "GL_Window.h"
-#include "Events/EventBase.h"
-#include "Platform/Base/Window/WindowManager.h"
+#include "Platform/Window.h"
 
 #include "Core/Engine.h"
 #include "Utility/Logger.h"
 
+#include "GL/glew.h"
+
 #include "GL_InputEnumConversion.h"
 
 #include "Platform/Base/Renderer/RendererBase.h"
-
-
-//TODO: MOVE
-#include "ECS/Systems/CameraSystem.h"
-
-#define GLFW_EXPOSE_NATIVE_WIN32
-#include "GLFW/glfw3native.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
@@ -23,73 +16,23 @@
 
 namespace LAG
 {
-	Window::Window()
-		: WindowBase()
+	bool Window::PlatformInitialize()
 	{
-	}
-
-	Window::~Window()
-	{
-		glfwDestroyWindow(m_Window);
-		//glfwTerminate();
-	}
-
-	void Window::Initialize(unsigned int winWidth, unsigned int winHeight, bool fullscreen, bool useVSync, bool centerWindow)
-	{
-		if (m_Initialized)
-		{
-			Logger::Error("Window already initialized.");
-			return;
-		}
-
-		if (glfwInit() != GLFW_TRUE)
-		{
-			Logger::Critical("GLFW failed to initialize.");
-			return;
-		}
-
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-		m_WindowWidth = winWidth, m_WindowHeight = winHeight, m_IsFullscreen = fullscreen, m_UseVSync = useVSync;
-		GLFWwindow* sharedWindow = (GetWindowManager()->GetPrimaryWindow() == nullptr) ? NULL : GetWindowManager()->GetPrimaryWindow()->m_Window;
-
-		//Create the window. 
-		m_Window = glfwCreateWindow(winWidth, winHeight, "LAGGED Engine", NULL, sharedWindow);
-		if (m_Window == nullptr)
-		{
-			Logger::Critical("Failed to create GLFW window");
-			glfwTerminate();
-			return;
-		}
-
-		if (centerWindow)
-		{
-			RECT displayRect = {};
-			HWND windowHandle = glfwGetWin32Window(m_Window);
-			GetWindowRect(windowHandle, &displayRect);
-
-			glfwSetWindowPos(m_Window, displayRect.right / 2 - m_WindowWidth / 2, displayRect.bottom / 2 - m_WindowHeight / 2);
-		}
-
-		glfwSetWindowUserPointer(m_Window, this);
-		glfwMakeContextCurrent(m_Window);
-		glfwSwapInterval(1);
-	
 		if (glewInit() != GLEW_OK)
 		{
 			Logger::Critical("Failed to initialize GLEW.");
-			return;
+			return false;
 		}
 
-		//Not sure if necessary
-		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
-		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
+		return true;
+	}
 
-		SetupCallbackFunctions();
-		pressedButtonIDs.reserve(8);
-
+	bool Window::ImGuiInitialize()
+	{
 		//Now that the window is initialized, initialize ImGui
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -101,36 +44,7 @@ namespace LAG
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
 		ImGui_ImplOpenGL3_Init("#version 140");
 
-		//Window is ready to be used! Set initialized to true!
-		m_Initialized = true;
-	}
-
-	void Window::SetupCallbackFunctions()
-	{
-		//Setup window focus callback
-		auto windowFocusCallback = [](GLFWwindow* winPtr, int focused)
-		{
-			Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
-			if(GetWindowManager()->GetFocussedWindow() != window)
-				GetWindowManager()->SetFocussedWindow(window);
-		};
-		glfwSetWindowFocusCallback(m_Window, windowFocusCallback);
-
-		//Setup window resize callback
-		auto windowResizeCallback = [](GLFWwindow* winPtr, int width, int height)
-		{
-			if (width > 0 && height > 0)
-			{
-				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(winPtr));
-				window->m_WindowWidth = width;
-				window->m_WindowHeight = height;
-				glfwMakeContextCurrent(window->m_Window);
-				glViewport(0, 0, width, height);
-
-				window->m_ResizeCallbackFunc(window->m_WindowWidth, window->m_WindowHeight);
-			}
-		};
-		glfwSetWindowSizeCallback(m_Window, windowResizeCallback);
+		return true;
 	}
 
 	void Window::Update()
@@ -144,11 +58,6 @@ namespace LAG
 					it = pressedButtonIDs.erase(it);
 				else ++it;
 			}
-		}
-
-		if (glfwWindowShouldClose(m_Window))
-		{
-			printf("INJECTED\n");
 		}
 	}
 
@@ -169,11 +78,6 @@ namespace LAG
 		}
 
 		return true;
-	}
-
-	void Window::SetWindowEventCallback(const WindowEventCallbackFunc& callbackFunc)
-	{
-		m_WinEventCallback = callbackFunc;
 	}
 
 
@@ -223,11 +127,5 @@ namespace LAG
 		glfwGetCursorPos(m_Window, &xPosD, &yPosD);
 		xPos = static_cast<float>(xPosD);
 		yPos = static_cast<float>(yPosD);
-	}
-
-	void Window::SetWindowName(const char* windowName)
-	{
-		m_WindowName = windowName;
-		glfwSetWindowTitle(m_Window, m_WindowName);
 	}
 }
