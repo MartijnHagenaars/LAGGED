@@ -84,6 +84,7 @@ namespace LAG::Renderer
 	{
 		Logger::Info("Window resize: {0}, {1}", width, height);
 
+		glViewport(0, 0, width, height);
 		CameraSystem::ResizeCameraBuffers();
 	}
 

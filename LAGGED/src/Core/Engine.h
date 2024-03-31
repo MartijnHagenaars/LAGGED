@@ -20,6 +20,7 @@ namespace LAG
 		Window* GetWindow() const { return m_Window; }
 		ResourceManager* GetResources() const { return m_ResourceManager; }
 		Scene* GetScene() const { return m_Scene; }
+
 		float GetFPS() const { return m_FPS; }
 		float GetDeltaTime() const { return m_DeltaTime; }
 

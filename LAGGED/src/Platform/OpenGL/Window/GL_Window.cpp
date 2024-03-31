@@ -47,36 +47,12 @@ namespace LAG
 		return true;
 	}
 
-	void Window::Update()
-	{
-		HandleWindowMessages();
-
-		//Handle the releasing of button presses
-		if (pressedButtonIDs.size() > 0)
-		{
-			for (auto it = pressedButtonIDs.begin(); it != pressedButtonIDs.end();)
-			{
-				if (!CheckButtonPress(*Input::GetInputAction(*it), false))
-					it = pressedButtonIDs.erase(it);
-				else ++it;
-			}
-		}
-	}
-
 	void Window::PresentFrame()
 	{
 		glfwMakeContextCurrent(m_Window);
 
 		LAG::Renderer::Render();
 		glfwSwapBuffers(m_Window);
-	}
-
-	bool Window::HandleWindowMessages()
-	{
-		glfwPollEvents();
-		if (glfwWindowShouldClose(m_Window))
-			m_IsOpen = false;
-		return true;
 	}
 
 

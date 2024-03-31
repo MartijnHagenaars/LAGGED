@@ -58,6 +58,43 @@ namespace LAG
 		m_IsOpen = false;
 	}
 
+	void Window::Update()
+	{
+		HandleWindowMessages();
+
+		//Handle the releasing of button presses
+		if (pressedButtonIDs.size() > 0)
+		{
+			for (auto it = pressedButtonIDs.begin(); it != pressedButtonIDs.end();)
+			{
+				if (!CheckButtonPress(*Input::GetInputAction(*it), false))
+					it = pressedButtonIDs.erase(it);
+				else ++it;
+			}
+		}
+	}
+
+	bool Window::HandleWindowMessages()
+	{
+		//Process all pending events
+		glfwPollEvents();
+
+		//Check if window should close
+		if (glfwWindowShouldClose(m_Window))
+			m_IsOpen = false;
+
+		//Setup window resize callback
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* glfwWindow, int width, int height)
+			{
+				Window* window = static_cast<LAG::Window*>(glfwGetWindowUserPointer(glfwWindow));
+				window->m_WindowWidth = width;
+				window->m_WindowHeight = height;
+				window->m_ResizeCallbackFunc(width, height); 
+			});
+
+		return true;
+	}
+	
 	void Window::SetWindowTitle(const char* windowTitle)
 	{
 		m_WindowTitle = windowTitle;
