@@ -332,7 +332,6 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Core\Defines.h" />
     <ClInclude Include="src\Core\ApplicationInterface.h" />
     <ClInclude Include="src\Core\EntryPoint.h" />
-    <ClInclude Include="src\Utility\FreeList.h" />
     <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowExceptionMacros.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
