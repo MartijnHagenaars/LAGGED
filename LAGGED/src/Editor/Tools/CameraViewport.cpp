@@ -19,13 +19,17 @@ namespace LAG
 
 	void CameraViewport::Render()
 	{
-		ImGui::Begin(GetInternalName().c_str(), &m_IsOpen);
+		ImGui::Begin(GetInternalName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
 		CameraComponent* cameraComp = CameraSystem::GetActiveCameraComponent();
 		glm::vec2 winSize = glm::vec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
 		if (m_ViewportSize != winSize)
 		{
+			//Ensure that a valid width and height are used
+			if (winSize.x <= 0) winSize.x = 1;
+			if (winSize.y <= 0) winSize.y = 1;
+
 			m_ViewportSize = winSize;
 			cameraComp->hasCameraDimensionChanged = true;
 			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
