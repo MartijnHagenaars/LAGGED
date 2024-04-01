@@ -269,7 +269,6 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Texture.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Core\Resources\Model.h" />
@@ -461,7 +460,6 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </ClCompile>
     <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp" />
