@@ -15,7 +15,10 @@ namespace LAG
 	{
 	public:
 		ToolBase() = delete;
-		ToolBase(ToolType type, const std::string& name) : m_Type(type), m_IsOpen(false), m_Name(name) {};
+		ToolBase(ToolType type, const std::string& displayName, const std::string& internalName) : 
+			m_Type(type), m_IsOpen(false), 
+			m_DisplayName(displayName), m_InternalName(internalName) 
+		{};
 		virtual ~ToolBase() {};
 
 		virtual void Render() = 0;
@@ -25,13 +28,15 @@ namespace LAG
 		bool IsOpen() const { return m_IsOpen; }
 
 		ToolType GetType() const { return m_Type; }
-		const std::string& GetName() const { return m_Name; }
+		const std::string& GetDisplayName() const { return m_DisplayName; }
+		const std::string& GetInternalName() const { return m_InternalName; }
 
 	protected:
 		bool m_IsOpen = false;
 
 	private:
-		std::string m_Name;
+		std::string m_DisplayName;
+		std::string m_InternalName;
 		ToolType m_Type;
 	};
 }

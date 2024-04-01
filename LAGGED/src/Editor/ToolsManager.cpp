@@ -57,7 +57,7 @@ namespace LAG
 				for (int i = 0; i < m_Tools.size(); i++)
 					if (m_Tools[i]->GetType() == ToolType::LEVEL)
 					{
-						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
+						if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
 							m_Tools[i]->ToggleTool();
 					}
 				ImGui::EndMenu();
@@ -68,7 +68,7 @@ namespace LAG
 				for (int i = 0; i < m_Tools.size(); i++)
 					if (m_Tools[i]->GetType() == ToolType::GRAPHICS)
 					{
-						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
+						if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
 							m_Tools[i]->ToggleTool();
 					}
 				ImGui::EndMenu();
@@ -79,7 +79,7 @@ namespace LAG
 				for (int i = 0; i < m_Tools.size(); i++)
 					if (m_Tools[i]->GetType() == ToolType::PERFORMANCE)
 					{
-						if (ImGui::MenuItem(m_Tools[i]->GetName().c_str()))
+						if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
 							m_Tools[i]->ToggleTool();
 					}
 				ImGui::EndMenu();
@@ -110,14 +110,14 @@ namespace LAG
 
 	}
 
-	bool ToolsManager::IsToolOpen(const std::string& toolName)
+	bool ToolsManager::IsToolOpen(const std::string& internalToolName)
 	{
 		for(const auto& it : m_Tools)
-			if (it->GetName() == toolName)
+			if (it->GetInternalName() == internalToolName)
 				return it->IsOpen();
 
-		//Return false if toool hasn't been found.
-		Logger::Error("Tool name \"{0}\" not found.", toolName);
+		//Return false if tool hasn't been found.
+		Logger::Error("Tool with internal name \"{0}\" not found.", internalToolName);
 		return false;
 	}
 

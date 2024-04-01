@@ -17,12 +17,24 @@ namespace LAG
 		ToolsManager() = default;
 		~ToolsManager() = default;
 
+		/// <summary>
+		/// Sets up all tools. Needs to be called on startup when the user wants to use the editor. 
+		/// </summary>
 		void Initialize();
+
+		/// <summary>
+		/// Removes all tools. Needs to be called on shutdown of the editor.
+		/// </summary>
 		void Shutdown();
 
 		void Render();
 
-		bool IsToolOpen(const std::string& toolName);
+		/// <summary>
+		/// Check if a tool is open. Uses the internal tool name for lookup. 
+		/// </summary>
+		/// <param name="internalToolName">Internal tool name that is used to look up the tool.</param>
+		/// <returns>Boolean that determines whether the tool is open or not.</returns>
+		bool IsToolOpen(const std::string& internalToolName);
 
 	private:
 		void BeginDockSpace();

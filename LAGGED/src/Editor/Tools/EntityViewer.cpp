@@ -14,7 +14,7 @@
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
-		ToolBase(ToolType::LEVEL, "Entity Editor"), m_BrowserHeight(200.f)
+		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
 	{
 	}
 

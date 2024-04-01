@@ -4,7 +4,7 @@
 namespace LAG
 {
 	ImGuiDemoViewer::ImGuiDemoViewer() : 
-		ToolBase(ToolType::GRAPHICS, "ImGui Demo Viewer")
+		ToolBase(ToolType::GRAPHICS, "ImGui Demo Viewer", "DemoViewer")
 	{
 	}
 
@@ -15,7 +15,7 @@ namespace LAG
 
 
 	ImGuiStyleEditor::ImGuiStyleEditor() : 
-		ToolBase(ToolType::GRAPHICS, "ImGui Style Editor")
+		ToolBase(ToolType::GRAPHICS, "ImGui Style Editor", "StyleEditor")
 	{
 
 	}

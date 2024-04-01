@@ -11,7 +11,7 @@
 namespace LAG
 {
 	Gizmo::Gizmo() :
-		ToolBase(ToolType::LEVEL, "Gizmo Properties"), m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)
+		ToolBase(ToolType::LEVEL, "Gizmo Properties", "GizmoProperties"), m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)
 	{
 	}
 
