@@ -927,6 +927,7 @@ namespace ImGuizmo
       ImGui::PushStyleColor(ImGuiCol_Border, 0);
       ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 
+      ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
       ImGui::Begin("gizmo", NULL, flags);
       gContext.mDrawList = ImGui::GetWindowDrawList();
       ImGui::End();

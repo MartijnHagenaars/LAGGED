@@ -115,6 +115,7 @@ namespace LAG
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
 
 		ImGuiWindowFlags dockspaceFlags =
 			ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDecoration |
@@ -130,7 +131,6 @@ namespace LAG
 		ImGuiIO& io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
 			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingOverCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
-
 	}
 
 	void ToolsManager::EndDockSpace()

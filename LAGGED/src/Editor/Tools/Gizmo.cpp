@@ -30,6 +30,7 @@ namespace LAG
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGui::SetNextWindowPos(viewport->Pos);
 		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
 		ImGui::Begin("GizmoView", 0, ImGuiWindowFlags_NoBackground | 
 			ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | 
 			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking
