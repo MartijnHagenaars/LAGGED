@@ -101,7 +101,7 @@ namespace LAG::CameraSystem
 	{
 		GetScene()->Loop<CameraComponent>([](Entity cameraEntity, CameraComponent& cameraComp)
 			{
-				cameraComp.m_Framebuffer->Resize();
+				cameraComp.m_Framebuffer->Resize(glm::vec2(GetWindow()->GetWidth(), GetWindow()->GetHeight()));
 			});
 	}
 	

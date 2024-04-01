@@ -1,4 +1,5 @@
 #pragma once
+#include "glm/vec2.hpp"
 
 namespace LAG
 {
@@ -21,7 +22,7 @@ namespace LAG
 
 		virtual void* GetEditorHandle() = 0;
 
-		virtual void Resize() = 0;
+		virtual void Resize(const glm::vec2 size) = 0;
 
 	protected:
 		PostProcessingProperties m_PostProcessingProperties;

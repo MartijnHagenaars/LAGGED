@@ -1,5 +1,6 @@
 #pragma once
 #include "Editor/ToolBase.h"
+#include "glm/vec2.hpp"
 
 namespace LAG
 {
@@ -10,6 +11,9 @@ namespace LAG
 		~CameraViewport();
 
 		void Render() override;
+
+	private:
+		glm::vec2 m_ViewportSize;
 
 	};
 }

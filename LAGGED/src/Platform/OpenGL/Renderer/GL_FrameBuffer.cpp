@@ -131,7 +131,7 @@ namespace LAG
 		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
 	}
 
-	void FrameBuffer::Resize()
+	void FrameBuffer::Resize(const glm::vec2 size)
 	{
 		//Resize frame buffer
 		LAG_GRAPHICS_EXCEPTION(glBindRenderbuffer(GL_RENDERBUFFER, m_DepthStencilBuffer));

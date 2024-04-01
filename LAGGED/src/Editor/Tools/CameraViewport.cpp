@@ -17,19 +17,18 @@ namespace LAG
 	void CameraViewport::Render()
 	{
 		ImGui::Begin("Viewport", &m_IsOpen);
-
-		ImVec2 vMin = ImGui::GetWindowContentRegionMin();
-		ImVec2 vMax = ImGui::GetWindowContentRegionMax();
-
-		vMin.x += ImGui::GetWindowPos().x;
-		vMin.y += ImGui::GetWindowPos().y;
-		vMax.x += ImGui::GetWindowPos().x;
-		vMax.y += ImGui::GetWindowPos().y;
-		ImVec2 size = ImVec2(vMax.x - vMin.x, vMax.y - vMin.y);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
 		CameraComponent* cameraComp = CameraSystem::GetActiveCameraComponent();
-		ImGui::Image(cameraComp->m_Framebuffer->GetEditorHandle(), size, ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
+		glm::vec2 winSize = glm::vec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
+		if (m_ViewportSize != winSize)
+		{
+			m_ViewportSize = winSize;
+			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
+		}
 
+		ImGui::PopStyleVar();
+		ImGui::Image(cameraComp->m_Framebuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
 		ImGui::End();
 	}
 }

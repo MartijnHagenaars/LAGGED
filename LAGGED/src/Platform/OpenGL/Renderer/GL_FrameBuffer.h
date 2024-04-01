@@ -12,7 +12,7 @@ namespace LAG
 		void FrameStart(bool showWireframe) override;
 		void FrameEnd() override;
 
-		void Resize() override;
+		void Resize(const glm::vec2 size) override;
 
 		void* GetEditorHandle() override;
 
