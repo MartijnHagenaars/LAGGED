@@ -139,7 +139,7 @@ namespace LAG::CameraSystem
 			return camera->projMat;
 
 		camera->projMat = glm::mat4(1.f);
-		float aspectRatio = static_cast<float>(GetWindow()->GetWidth()) / GetWindow()->GetHeight();
+		float aspectRatio = static_cast<float>(camera->m_Framebuffer->GetSize().x) / camera->m_Framebuffer->GetSize().y;
 		camera->projMat = glm::perspective(glm::radians(camera->fov), aspectRatio, 0.1f, 100000.f);
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;

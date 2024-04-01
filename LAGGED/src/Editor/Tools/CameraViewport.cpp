@@ -25,7 +25,10 @@ namespace LAG
 		if (m_ViewportSize != winSize)
 		{
 			m_ViewportSize = winSize;
+			cameraComp->hasCameraDimensionChanged = true;
+			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
 			cameraComp->m_Framebuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
+			
 			Renderer::OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
 		}
 
