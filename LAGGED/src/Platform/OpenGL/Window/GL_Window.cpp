@@ -14,6 +14,7 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 #include "ImGuizmo/ImGuizmo.h"
+#include "ImGuiTheme.h"
 
 namespace LAG
 {
@@ -53,6 +54,8 @@ namespace LAG
 
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
 		ImGui_ImplOpenGL3_Init("#version 130");
+
+		ApplyImGuiTheme();
 
 		return true;
 	}

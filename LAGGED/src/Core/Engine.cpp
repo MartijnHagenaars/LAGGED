@@ -134,6 +134,10 @@ namespace LAG
 			delete m_ResourceManager;
 		m_ResourceManager = nullptr;
 
+		if(m_ToolsManager != nullptr)
+			m_ToolsManager->Shutdown();
+		delete m_ToolsManager;
+
 		Renderer::Shutdown();
 
 		GetWindow()->Shutdown();

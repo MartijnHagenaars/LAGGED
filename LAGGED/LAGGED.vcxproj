@@ -231,6 +231,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />

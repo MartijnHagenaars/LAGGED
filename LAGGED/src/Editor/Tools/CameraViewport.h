@@ -12,6 +12,9 @@ namespace LAG
 
 		void Render() override;
 
+		void OnOpen() override;
+		void OnClose() override;
+
 	private:
 		glm::vec2 m_ViewportSize;
 

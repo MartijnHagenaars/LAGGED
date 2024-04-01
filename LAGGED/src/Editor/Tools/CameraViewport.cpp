@@ -13,7 +13,9 @@ namespace LAG
 	{
 	}
 
-	CameraViewport::~CameraViewport() {}
+	CameraViewport::~CameraViewport() 
+	{
+	}
 
 	void CameraViewport::Render()
 	{
@@ -35,5 +37,13 @@ namespace LAG
 		ImGui::PopStyleVar();
 		ImGui::Image(cameraComp->m_Framebuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
 		ImGui::End();
+	}
+
+	void CameraViewport::OnOpen()
+	{
+	}
+
+	void CameraViewport::OnClose()
+	{
 	}
 }

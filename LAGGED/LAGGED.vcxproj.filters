@@ -17,10 +17,7 @@
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
     <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
-    <ClCompile Include="src\Editor\EditorLayout.cpp" />
-    <ClCompile Include="src\Editor\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="src\Editor\Gizmo.cpp" />
     <ClCompile Include="src\Editor\ToolsManager.cpp" />
     <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
@@ -64,6 +61,7 @@
     <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Base\Window.cpp" />
+    <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FileIO\FileIO.h" />
@@ -83,7 +81,6 @@
     <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
     <ClInclude Include="src\Core\Resources\Surface.h" />
-    <ClInclude Include="src\Editor\Grid.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
     <ClInclude Include="imgui\ImGui\imgui.h" />
@@ -143,6 +140,10 @@
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
+    <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
+    <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
+    <ClInclude Include="imgui\ImGuiTheme.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />
