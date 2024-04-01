@@ -1,4 +1,5 @@
 #include "CameraViewport.h"
+#include "Platform/Base/Renderer/RendererBase.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Systems/CameraSystem.h"
@@ -24,7 +25,8 @@ namespace LAG
 		if (m_ViewportSize != winSize)
 		{
 			m_ViewportSize = winSize;
-			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
+			cameraComp->m_Framebuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
+			Renderer::OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
 		}
 
 		ImGui::PopStyleVar();
