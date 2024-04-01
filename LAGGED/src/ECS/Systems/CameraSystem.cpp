@@ -77,6 +77,11 @@ namespace LAG::CameraSystem
 			});
 	}
 
+	CameraComponent* GetActiveCameraComponent()
+	{
+		return GetActiveCameraEntity().GetComponent<CameraComponent>();
+	}
+
 	Entity GetActiveCameraEntity()
 	{
 		Entity entity = {};
@@ -96,7 +101,8 @@ namespace LAG::CameraSystem
 	{
 		GetScene()->Loop<CameraComponent>([](Entity cameraEntity, CameraComponent& cameraComp)
 			{
-				cameraComp.m_Framebuffer->Resize();
+				cameraComp.m_Framebuffer->Resize(cameraComp.m_Framebuffer->GetSize());
+				cameraComp.hasCameraDimensionChanged = true;
 			});
 	}
 	
@@ -133,7 +139,8 @@ namespace LAG::CameraSystem
 			return camera->projMat;
 
 		camera->projMat = glm::mat4(1.f);
-		camera->projMat = glm::perspective(glm::radians(camera->fov), static_cast<float>(GetWindow()->GetWidth()) / GetWindow()->GetHeight(), 0.1f, 100000.f);
+		float aspectRatio = static_cast<float>(camera->m_Framebuffer->GetSize().x) / camera->m_Framebuffer->GetSize().y;
+		camera->projMat = glm::perspective(glm::radians(camera->fov), aspectRatio, 0.1f, 100000.f);
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;
 	}

@@ -11,15 +11,17 @@
   <ItemGroup>
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Core\Resources\Texture.cpp" />
+    <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
     <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
-    <ClCompile Include="src\Editor\EditorLayout.cpp" />
-    <ClCompile Include="src\Editor\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="src\Editor\Gizmo.cpp" />
+    <ClCompile Include="src\Editor\ToolsManager.cpp" />
+    <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
+    <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
+    <ClCompile Include="src\Editor\Tools\Gizmo.cpp" />
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp" />
@@ -33,7 +35,6 @@
     <ClCompile Include="imgui\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp" />
@@ -59,6 +60,7 @@
     <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Base\Window.cpp" />
+    <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FileIO\FileIO.h" />
@@ -67,17 +69,17 @@
     <ClInclude Include="src\ECS\Meta\ReflectionDefines.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
-    <ClInclude Include="src\Editor\EditorLayout.h" />
-    <ClInclude Include="src\Editor\EntityViewer.h" />
+    <ClInclude Include="src\Editor\ToolsManager.h" />
+    <ClInclude Include="src\Editor\ToolBase.h" />
+    <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="src\Editor\Gizmo.h" />
+    <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
     <ClInclude Include="src\Core\Resources\Surface.h" />
-    <ClInclude Include="src\Editor\Grid.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
     <ClInclude Include="imgui\ImGui\imgui.h" />
@@ -95,7 +97,6 @@
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Texture.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsException.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Core\Resources\Model.h" />
@@ -137,6 +138,10 @@
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
+    <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
+    <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
+    <ClInclude Include="imgui\ImGuiTheme.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />

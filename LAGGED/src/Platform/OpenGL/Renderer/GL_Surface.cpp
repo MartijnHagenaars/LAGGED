@@ -33,6 +33,30 @@ namespace LAG
 		Logger::Error("Constructor for loading height map from texture has not been implemented.");
 	}
 
+	Surface::Surface(const Surface& other) : m_VAO(other.m_VAO), m_VBO(other.m_VBO), m_EBO(other.m_EBO),
+		m_Width(other.m_Width), m_Height(other.m_Height), m_Subdivisions(other.m_Subdivisions),
+		m_HeightMapData(other.m_HeightMapData), m_HeightMapWidth(other.m_HeightMapWidth), m_HeightMapHeight(other.m_HeightMapHeight)
+	{ }
+
+	Surface& Surface::operator=(Surface& other)
+	{
+		if (this != &other)
+		{
+			m_VAO = other.m_VAO;
+			m_VBO = other.m_VBO;
+			m_EBO = other.m_EBO;
+
+			m_Width = other.m_Width;
+			m_Height = other.m_Height;
+			m_Subdivisions = other.m_Height;
+
+			m_HeightMapData = other.m_HeightMapData;
+			m_HeightMapWidth = other.m_HeightMapWidth;
+			m_HeightMapHeight = other.m_HeightMapHeight;
+		}
+		return *this;
+	}
+
 	Surface::~Surface()
 	{
 	}
@@ -59,7 +83,7 @@ namespace LAG
 		CalculateVertices();
 		CalculateIndices();
 		CalculateNormals();
-		
+
 		//Clear data that we no longer need
 		m_HeightMapData.clear();
 		m_HeightMapData.shrink_to_fit();
@@ -82,7 +106,7 @@ namespace LAG
 		glm::vec2 noisePos = procSurfaceComp.m_NoiseProperties.m_UseTransformPositionForNoise ?
 			glm::vec2(transformComp.GetPosition().x, transformComp.GetPosition().z) :
 			procSurfaceComp.m_NoiseProperties.m_NoisePosition;
-		
+
 		glm::vec2 noiseScale = glm::vec2(static_cast<float>(procSurfaceComp.m_SurfaceSubdivisions));
 
 		m_Subdivisions = procSurfaceComp.m_SurfaceSubdivisions;
@@ -158,13 +182,12 @@ namespace LAG
 
 	bool Surface::Unload()
 	{
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, 0));
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+		if (!IsLoaded())
+			return true;
 
+		LAG_GRAPHICS_EXCEPTION(glDeleteVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &m_EBO));
-		LAG_GRAPHICS_EXCEPTION(glDeleteVertexArrays(1, &m_VAO));
 
 		SetLoaded(false);
 		return true;
@@ -172,7 +195,6 @@ namespace LAG
 
 	void Surface::CalculateVertices()
 	{
-		//float widthAdjustment = static_cast<float>(m_Width) / textureWidth;
 		float widthAdjustment = static_cast<float>(m_HeightMapWidth) / m_Width;
 		float heightAdjustment = static_cast<float>(m_HeightMapHeight) / m_Height;
 

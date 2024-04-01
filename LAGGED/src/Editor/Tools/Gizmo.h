@@ -1,17 +1,18 @@
 #pragma once
+#include "Editor/ToolBase.h"
 #include "ECS/Components/CameraComponent.h"
 
 namespace LAG
 {
 	class Entity;
-	class Gizmo
+	class Gizmo : public ToolBase
 	{
 	public: 
 		Gizmo();
 		void RenderGizmo(Entity* targetEntity, Entity* cameraEntity);
 		void RenderViewManipulator(uint32_t cameraEntityID);
 
-		void RenderGizmoProperties();
+		void Render() override;
 
 	private:
 		int m_GizmoOperation;

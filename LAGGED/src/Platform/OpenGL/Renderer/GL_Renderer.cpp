@@ -2,7 +2,9 @@
 
 #include "Core/Engine.h"
 #include "Platform/Window.h"
+
 #include "GL/glew.h"
+#include "GLFW/glfw3.h"
 
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
@@ -29,20 +31,17 @@
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "Utility/Timer.h"
-
-#include "Editor/EditorLayout.h"
+#include "Editor/ToolsManager.h"
 
 namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		EditorLayout* editorLayout = nullptr;
+		bool m_ShowWireframe = false;
+		bool m_UseLighting = true;
 
-		bool showWireframe = false;
-		bool useLighting = true;
-
-		float renderTime = 0.f;
-		LAG::Timer renderTimer;
+		LAG::Timer m_RenderTimer;
+		float m_RenderTime = 0.f;
 	};
 	RendererData* renderData = nullptr;
 
@@ -55,9 +54,6 @@ namespace LAG::Renderer
 		}
 		renderData = new RendererData();
 
-		renderData->editorLayout = new EditorLayout();
-		renderData->editorLayout->Initialize();
-
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 
@@ -65,10 +61,6 @@ namespace LAG::Renderer
 
 		//Setup resize callback
 		GetWindow()->SetResizeCallBack(&OnResize);
-
-		//Create editor layout
-		renderData->editorLayout = new EditorLayout();
-		renderData->editorLayout->Initialize();
 
 		return true;
 	}
@@ -94,14 +86,17 @@ namespace LAG::Renderer
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 		ImGuizmo::BeginFrame();
-
-		ImGui::ShowDemoWindow();
 	}
 
 	void ImGuiFrameEnd()
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		GLFWwindow* prePlatformUpdateContext = glfwGetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(prePlatformUpdateContext);
 	}
 
 	void DrawOptionsWindow()
@@ -110,12 +105,12 @@ namespace LAG::Renderer
 
 		ImGui::Text("LAGGED Renderer");
 		ImGui::Text(std::string("FPS: " + std::to_string(GetEngine().GetFPS())).c_str());
-		ImGui::Text(std::string("Render time: " + std::to_string(renderData->renderTime) + "ms").c_str());
+		ImGui::Text(std::string("Render time: " + std::to_string(renderData->m_RenderTime) + "ms").c_str());
 		ImGui::Separator();
 
-		ImGui::Checkbox("Enable wireframe", &renderData->showWireframe);
+		ImGui::Checkbox("Enable wireframe", &renderData->m_ShowWireframe);
 
-		ImGui::Checkbox("Enable lighting", &renderData->useLighting);
+		ImGui::Checkbox("Enable lighting", &renderData->m_UseLighting);
 
 		ImGui::End();
 	}
@@ -123,20 +118,18 @@ namespace LAG::Renderer
 	void Render()
 	{
 		//Start timer for measuring render time
-		renderData->renderTimer.ResetTimer();
-
+		renderData->m_RenderTimer.ResetTimer();
 
 		// Begin of ImGui rendering
 		ImGuiFrameStart();
 
 		//Render ImGui editor windows
 		DrawOptionsWindow();
-		//renderData->testSurface->DrawDebugWindow();
 
-		renderData->editorLayout->Render();
+		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
-		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->showWireframe);
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->m_ShowWireframe);
 
 
 		//Get an active camera
@@ -159,7 +152,7 @@ namespace LAG::Renderer
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
 		std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
-		if (renderData->useLighting)
+		if (renderData->m_UseLighting)
 		{
 			lights.reserve(3);
 			GetScene()->Loop<LightComponent, TransformComponent>([&lights](Entity entity, LightComponent& lightComp, TransformComponent& lightTransformComp)
@@ -174,30 +167,24 @@ namespace LAG::Renderer
 			{
 				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
 					transformComp, &selectedCamera,
-					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")), 
+					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
 					lights);
 			});
 
 		//Render all surfaces
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-
 				surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				//TransformComponent testPlaneTransform(glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f), glm::vec3(1.f));
-				//renderData->testSurface->Render(testPlaneTransform, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-
 				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
 		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
-		ImGuiFrameEnd();
 
-		renderData->renderTime = renderData->renderTimer.GetMilliseconds();
+		ImGuiFrameEnd();
+		renderData->m_RenderTime = renderData->m_RenderTimer.GetMilliseconds();
 	}
 
 	void Clear()

@@ -18,6 +18,8 @@ namespace LAG
 	public:
 		Surface();
 		Surface(const std::string& heightTexturePath);
+		Surface(const Surface& other);
+		Surface& operator=(Surface& other);
 		~Surface() override;
 		
 		//Load a height map from a texture

@@ -1,13 +1,16 @@
 #pragma once
 #include "glm/glm.hpp"
 #include "ECS/Entity.h"
+#include "ECS/Components/CameraComponent.h"
 
 namespace LAG::CameraSystem
 {
 	void Update(Entity* entity);
 
 	void SetActiveCameraEntity(Entity* entity);
+
 	Entity GetActiveCameraEntity();
+	CameraComponent* GetActiveCameraComponent();
 
 	void ResizeCameraBuffers();
 

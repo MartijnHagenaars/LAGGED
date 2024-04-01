@@ -6,6 +6,7 @@
 #include "GL/glew.h"
 
 #include "GL_InputEnumConversion.h"
+#include "Platform/OpenGL/Renderer/GL_ErrorCodeLookup.h"
 
 #include "Platform/Base/Renderer/RendererBase.h"
 
@@ -13,6 +14,7 @@
 #include "ImGui/imgui_impl_glfw.h"
 #include "ImGui/imgui_impl_opengl3.h"
 #include "ImGuizmo/ImGuizmo.h"
+#include "ImGuiTheme.h"
 
 namespace LAG
 {
@@ -28,6 +30,14 @@ namespace LAG
 			return false;
 		}
 
+		//Setup OpenGL debug message callback
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+			{
+				if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
+					Logger::Error("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
+			}, 0);
+
 		return true;
 	}
 
@@ -39,10 +49,13 @@ namespace LAG
 		ImGuiIO& io = ImGui::GetIO();
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 		io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+		io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 		io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
 		ImGui_ImplGlfw_InitForOpenGL(m_Window, true);
-		ImGui_ImplOpenGL3_Init("#version 140");
+		ImGui_ImplOpenGL3_Init("#version 130");
+
+		ApplyImGuiTheme();
 
 		return true;
 	}
@@ -75,7 +88,7 @@ namespace LAG
 		{
 			buttonState = glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_LEFT);
 		}
-		
+
 		//Process the input if it's being pressed
 		if (buttonState > 0)
 		{
@@ -85,7 +98,7 @@ namespace LAG
 					pressedButtonIDs.emplace(inputType.actionID);
 				else return false;
 			}
-			
+
 			return true;
 		}
 
@@ -94,10 +107,8 @@ namespace LAG
 
 	void Window::GetMousePosition(float& xPos, float& yPos)
 	{
-		//glfwMakeContextCurrent(m_Window);
-
 		double xPosD = 0.f, yPosD = 0.f;
-		
+
 		//Since glfwGetCursorPos only works with doubles, we need to cast it back to floats.
 		glfwGetCursorPos(m_Window, &xPosD, &yPosD);
 		xPos = static_cast<float>(xPosD);

@@ -3,9 +3,10 @@
 #include "Utility/Timer.h"
 
 #include "Platform/Window.h"
+#include "Resources/ResourceManager.h"
+#include "Editor/ToolsManager.h"
 #include "Platform/Base/Renderer/RendererBase.h"
 
-#include "Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
 
 #include "ECS/Scene.h"
@@ -98,6 +99,9 @@ namespace LAG
 			return false;
 		}
 
+		m_ToolsManager = new ToolsManager();
+		m_ToolsManager->Initialize();
+
 		//Add some input actions that'll be used by the engine and the editor. 
 		Input::AddInputAction(Input::InputType::LAG_W, HashedString("cameraMoveForward"));
 		Input::AddInputAction(Input::InputType::LAG_S, HashedString("cameraMoveBackward"));
@@ -129,6 +133,10 @@ namespace LAG
 		if (m_ResourceManager != nullptr)
 			delete m_ResourceManager;
 		m_ResourceManager = nullptr;
+
+		if(m_ToolsManager != nullptr)
+			m_ToolsManager->Shutdown();
+		delete m_ToolsManager;
 
 		Renderer::Shutdown();
 
