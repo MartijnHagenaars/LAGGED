@@ -17,6 +17,7 @@ namespace LAG
 
 	private:
 		glm::vec2 m_ViewportSize;
+		bool isWindowOpen = false;
 
 	};
 }
