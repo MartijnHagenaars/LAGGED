@@ -16,7 +16,7 @@ namespace LAG
 		void OnClose() override;
 
 	private:
-		glm::vec2 m_ViewportSize;
+		glm::uvec2 m_ViewportSize;
 		bool isWindowOpen = false;
 
 	};

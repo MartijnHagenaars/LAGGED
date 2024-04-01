@@ -23,7 +23,7 @@ namespace LAG
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
 		CameraComponent* cameraComp = CameraSystem::GetActiveCameraComponent();
-		glm::vec2 winSize = glm::vec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
+		glm::uvec2 winSize = glm::uvec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
 		if (m_ViewportSize != winSize)
 		{
 			//Ensure that a valid width and height are used

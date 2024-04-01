@@ -185,7 +185,6 @@ namespace LAG
 		if (!IsLoaded())
 			return true;
 
-		std::cout << "Deleting VAO with ID " << m_VAO << "\n";
 		LAG_GRAPHICS_EXCEPTION(glDeleteVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &m_VBO));
 		LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &m_EBO));
