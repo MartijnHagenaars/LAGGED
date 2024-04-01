@@ -37,8 +37,6 @@ namespace LAG::Renderer
 {
 	struct RendererData
 	{
-		ToolsManager* m_ToolsManager = nullptr;
-
 		bool m_ShowWireframe = false;
 		bool m_UseLighting = true;
 
@@ -55,9 +53,6 @@ namespace LAG::Renderer
 			return false;
 		}
 		renderData = new RendererData();
-
-		renderData->m_ToolsManager = new ToolsManager();
-		renderData->m_ToolsManager->Initialize();
 
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
@@ -131,7 +126,7 @@ namespace LAG::Renderer
 		//Render ImGui editor windows
 		DrawOptionsWindow();
 
-		renderData->m_ToolsManager->Render();
+		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
 		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->m_ShowWireframe);

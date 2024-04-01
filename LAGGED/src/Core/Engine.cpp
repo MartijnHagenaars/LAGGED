@@ -3,9 +3,10 @@
 #include "Utility/Timer.h"
 
 #include "Platform/Window.h"
+#include "Resources/ResourceManager.h"
+#include "Editor/ToolsManager.h"
 #include "Platform/Base/Renderer/RendererBase.h"
 
-#include "Resources/ResourceManager.h"
 #include "Core/Resources/Model.h"
 
 #include "ECS/Scene.h"
@@ -97,6 +98,9 @@ namespace LAG
 			LAG::Logger::Critical("Failed to initialize renderer.");
 			return false;
 		}
+
+		m_ToolsManager = new ToolsManager();
+		m_ToolsManager->Initialize();
 
 		//Add some input actions that'll be used by the engine and the editor. 
 		Input::AddInputAction(Input::InputType::LAG_W, HashedString("cameraMoveForward"));

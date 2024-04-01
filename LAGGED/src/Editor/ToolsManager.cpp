@@ -110,17 +110,28 @@ namespace LAG
 
 	}
 
+	bool ToolsManager::IsToolOpen(const std::string& toolName)
+	{
+		for(const auto& it : m_Tools)
+			if (it->GetName() == toolName)
+				return it->IsOpen();
+
+		//Return false if toool hasn't been found.
+		Logger::Error("Tool name \"{0}\" not found.", toolName);
+		return false;
+	}
+
 	void ToolsManager::BeginDockSpace()
 	{
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
 		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
 
 		ImGuiWindowFlags dockspaceFlags =
 			ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDecoration |
 			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNav |
-			ImGuiWindowFlags_NoBackground;
+			ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoSavedSettings;
 
 		bool isOpen = true;
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
@@ -130,7 +141,7 @@ namespace LAG
 		//Create the dockspace
 		ImGuiIO& io = ImGui::GetIO();
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
-			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_NoDockingOverCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
+			ImGui::DockSpace(ImGui::GetID("Dockspace"), ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
 	}
 
 	void ToolsManager::EndDockSpace()

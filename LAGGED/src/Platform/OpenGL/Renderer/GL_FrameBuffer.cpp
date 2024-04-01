@@ -2,6 +2,7 @@
 
 #include "Core/Engine.h"
 #include "Platform/Window.h"
+#include "Editor/ToolsManager.h"
 
 #include "Core/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
@@ -117,6 +118,10 @@ namespace LAG
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
+
+		//We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
+		if (GetToolsManager()->IsToolOpen("Viewport"))
+			return;
 
 		//Bind VAO and Shader
 		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));

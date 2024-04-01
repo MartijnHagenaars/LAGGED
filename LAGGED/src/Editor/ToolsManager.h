@@ -22,6 +22,8 @@ namespace LAG
 
 		void Render();
 
+		bool IsToolOpen(const std::string& toolName);
+
 	private:
 		void BeginDockSpace();
 		void EndDockSpace();

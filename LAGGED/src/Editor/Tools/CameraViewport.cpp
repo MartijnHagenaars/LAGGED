@@ -9,7 +9,7 @@
 
 namespace LAG
 {
-	CameraViewport::CameraViewport() : ToolBase(ToolType::LEVEL, "Camera viewport")
+	CameraViewport::CameraViewport() : ToolBase(ToolType::LEVEL, "Viewport")
 	{
 	}
 

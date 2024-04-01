@@ -6,6 +6,7 @@
 
 namespace LAG
 {
+	class ToolsManager;
 	class Window;
 	class Scene;
 	class ResourceManager;
@@ -20,6 +21,7 @@ namespace LAG
 		Window* GetWindow() const { return m_Window; }
 		ResourceManager* GetResources() const { return m_ResourceManager; }
 		Scene* GetScene() const { return m_Scene; }
+		ToolsManager* GetToolsManager() const { return m_ToolsManager; }
 
 		float GetFPS() const { return m_FPS; }
 		float GetDeltaTime() const { return m_DeltaTime; }
@@ -37,6 +39,7 @@ namespace LAG
 		Window* m_Window = nullptr;
 		Scene* m_Scene = nullptr;
 		ResourceManager* m_ResourceManager = nullptr;
+		ToolsManager* m_ToolsManager = nullptr;
 
 		float m_FPS = 0.f;
 		float m_DeltaTime = 0.f;
@@ -47,4 +50,5 @@ namespace LAG
 	inline Window* GetWindow() { return GetEngine().GetWindow(); }
 	inline ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
 	inline Scene* GetScene() { return GetEngine().GetScene(); }
+	inline ToolsManager* GetToolsManager() { return GetEngine().GetToolsManager(); }
 }
