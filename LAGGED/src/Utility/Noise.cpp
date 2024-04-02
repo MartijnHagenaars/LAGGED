@@ -18,7 +18,7 @@ namespace LAG::Noise
 			float frequencyAdjustment = size.length() / static_cast<float>(surfaceSubdivision);
 
 			//TODO: generator should be stored
-			auto generator = FastNoise::NewFromEncodedNodeTree("GQANAAIAAAC4HoU+BwAAuB4lQACF61E/ASQAAgAAABwAARkADQACAAAAuB4FQP//AAAAj8I1QQB7FK4+AQ0AAgAAAMP1qED//wAAAJqZmT4AcT0KPwAAAABA");
+			auto generator = FastNoise::NewFromEncodedNodeTree("GQANAAMAAACamRk/GwANAAIAAAC4HoU+BwAAuB4lQACF61E/AAAAgEAAAAAAQQAAAAAAASQAAgAAABwAARkADQACAAAAuB4FQP//AAAAj8I1QQB7FK4+AQ0AAgAAAMP1qED//wAAAJqZmT4AcT0KPwApXE9A");
 			generator->GenUniformGrid2D(noiseData.m_Data.data(), static_cast<int>(position.x), static_cast<int>(position.y), scale.x, scale.y, noiseProps.m_Frequency * frequencyAdjustment, noiseProps.m_Seed);
 			if (noiseProps.m_Amplitude != 1.f)
 			{

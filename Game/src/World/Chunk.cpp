@@ -21,7 +21,10 @@ void Chunk::Load(const glm::vec2& position)
 		transformComp->SetScale(glm::vec3(64));
 
 		//Add procedural surface component
-		m_Entity.AddComponent<LAG::ProceduralSurfaceComponent>()->m_SurfaceSubdivisions = 64;
+		LAG::ProceduralSurfaceComponent* procSurface = m_Entity.AddComponent<LAG::ProceduralSurfaceComponent>();
+		procSurface->m_SurfaceSubdivisions = 64;
+		procSurface->m_NoiseProperties.m_Amplitude = 0.7f;
+		procSurface->m_NoiseProperties.m_Frequency = 0.5f;
 		LAG::SurfaceSystems::GenerateNoiseSurface(&m_Entity);
 	}
 	//TODO: Noise movement is incorrecct
