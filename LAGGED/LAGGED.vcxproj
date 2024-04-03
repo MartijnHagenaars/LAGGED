@@ -354,7 +354,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h" />
+    <ClInclude Include="src\Platform\Renderer.h" />
     <ClInclude Include="src\Platform\Window.h" />
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
     <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h">

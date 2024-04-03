@@ -1,4 +1,4 @@
-#include "Platform/Base/Renderer/RendererBase.h"
+#include "Platform/Renderer.h"
 
 #include "Core/Engine.h"
 #include "Platform/Window.h"
@@ -33,7 +33,7 @@
 #include "Utility/Timer.h"
 #include "Editor/ToolsManager.h"
 
-namespace LAG::Renderer
+namespace LAG
 {
 	struct RendererData
 	{
@@ -45,7 +45,15 @@ namespace LAG::Renderer
 	};
 	RendererData* renderData = nullptr;
 
-	bool Initialize()
+	Renderer::Renderer()
+	{
+	}
+
+	Renderer::~Renderer()
+	{
+	}
+
+	bool Renderer::Initialize()
 	{
 		if (renderData != nullptr)
 		{
@@ -60,19 +68,19 @@ namespace LAG::Renderer
 		glEnable(GL_DEPTH_TEST);
 
 		//Setup resize callback
-		GetWindow()->SetResizeCallBack(&OnResize);
+		GetWindow()->SetResizeCallBack(&Renderer::OnResize);
 
 		return true;
 	}
 
-	bool Shutdown()
+	bool Renderer::Shutdown()
 	{
 		//TODO: Proper cleanup
 
 		return false;
 	}
 
-	void OnResize(unsigned int width, unsigned int height)
+	void Renderer::OnResize(unsigned int width, unsigned int height)
 	{
 		Logger::Info("Window resize: {0}, {1}", width, height);
 
@@ -80,7 +88,7 @@ namespace LAG::Renderer
 		CameraSystem::ResizeCameraBuffers();
 	}
 
-	void ImGuiFrameStart()
+	void Renderer::ImGuiFrameStart()
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -88,7 +96,7 @@ namespace LAG::Renderer
 		ImGuizmo::BeginFrame();
 	}
 
-	void ImGuiFrameEnd()
+	void Renderer::ImGuiFrameEnd()
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -99,6 +107,7 @@ namespace LAG::Renderer
 		glfwMakeContextCurrent(prePlatformUpdateContext);
 	}
 
+	//TODO: NEEDS TO BE MOVED!
 	void DrawOptionsWindow()
 	{
 		ImGui::Begin("Render options");
@@ -115,7 +124,7 @@ namespace LAG::Renderer
 		ImGui::End();
 	}
 
-	void Render()
+	void Renderer::Render()
 	{
 		//Start timer for measuring render time
 		renderData->m_RenderTimer.ResetTimer();
@@ -185,10 +194,5 @@ namespace LAG::Renderer
 
 		ImGuiFrameEnd();
 		renderData->m_RenderTime = renderData->m_RenderTimer.GetMilliseconds();
-	}
-
-	void Clear()
-	{
-
 	}
 }
