@@ -7,7 +7,7 @@
 
 #include "GL/glew.h"
 #include "glm/gtc/type_ptr.hpp"
-#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "GL_ErrorChecks.h"
 
 namespace LAG
 {
@@ -84,15 +84,15 @@ namespace LAG
 
 		unsigned int shaderID = glCreateShader(shaderType);
 		const char* shaderSourceChars = shaderSource.c_str();
-		LAG_GRAPHICS_EXCEPTION(glShaderSource(shaderID, 1, &shaderSourceChars, NULL));
-		LAG_GRAPHICS_EXCEPTION(glCompileShader(shaderID));
+		LAG_GRAPHICS_CHECK(glShaderSource(shaderID, 1, &shaderSourceChars, NULL));
+		LAG_GRAPHICS_CHECK(glCompileShader(shaderID));
 
 		int compileStatus = 0;
-		LAG_GRAPHICS_EXCEPTION(glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus));
+		LAG_GRAPHICS_CHECK(glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus));
 		if (compileStatus != GL_TRUE)
 		{
 			char shaderInfoLog[512];
-			LAG_GRAPHICS_EXCEPTION(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
+			LAG_GRAPHICS_CHECK(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
 			Logger::Error("Failed to compile shader for {0} shaders: {1}", GetPath().GetString(), shaderInfoLog);
 #ifdef DEBUG
 			Logger::Info("Dumping shader source: \n{0}", shaderSource);
@@ -108,20 +108,20 @@ namespace LAG
 		unsigned int programID = glCreateProgram();
 
 		//The vertex and pixel shaders are always used. Because of that, we don't check the ID. 
-		LAG_GRAPHICS_EXCEPTION(glAttachShader(programID, m_VertexID));
-		LAG_GRAPHICS_EXCEPTION(glAttachShader(programID, m_PixelID));
+		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_VertexID));
+		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_PixelID));
 		if(m_TessellationControlID > 0)
-			LAG_GRAPHICS_EXCEPTION(glAttachShader(programID, m_TessellationControlID));
+			LAG_GRAPHICS_CHECK(glAttachShader(programID, m_TessellationControlID));
 
 
-		LAG_GRAPHICS_EXCEPTION(glLinkProgram(programID));
+		LAG_GRAPHICS_CHECK(glLinkProgram(programID));
 
 		GLint programStatus;
-		LAG_GRAPHICS_EXCEPTION(glGetProgramiv(programID, GL_LINK_STATUS, &programStatus));
+		LAG_GRAPHICS_CHECK(glGetProgramiv(programID, GL_LINK_STATUS, &programStatus));
 		if (programStatus != GL_TRUE)
 		{
 			char programInfoLog[512];
-			LAG_GRAPHICS_EXCEPTION(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
+			LAG_GRAPHICS_CHECK(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
 			Logger::Error("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
 			return 0;
 		}
@@ -132,46 +132,46 @@ namespace LAG
 	void Shader::CleanUpCompiledShaders()
 	{
 		if (m_VertexID != 0)
-			LAG_GRAPHICS_EXCEPTION(glDeleteShader(m_VertexID));
+			LAG_GRAPHICS_CHECK(glDeleteShader(m_VertexID));
 		if (m_PixelID != 0)
-			LAG_GRAPHICS_EXCEPTION(glDeleteShader(m_PixelID));
+			LAG_GRAPHICS_CHECK(glDeleteShader(m_PixelID));
 		if (m_TessellationControlID != 0)
-			LAG_GRAPHICS_EXCEPTION(glDeleteShader(m_TessellationControlID));
+			LAG_GRAPHICS_CHECK(glDeleteShader(m_TessellationControlID));
 	}
 
 	void Shader::Bind()
 	{
-		LAG_GRAPHICS_EXCEPTION(glUseProgram(m_ProgramID));
+		LAG_GRAPHICS_CHECK(glUseProgram(m_ProgramID));
 	}
 
 	void Shader::Unbind()
 	{
-		LAG_GRAPHICS_EXCEPTION(glUseProgram(0));
+		LAG_GRAPHICS_CHECK(glUseProgram(0));
 	}
 
 	void Shader::SetBool(const std::string& location, bool value)
 	{
-		LAG_GRAPHICS_EXCEPTION(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
+		LAG_GRAPHICS_CHECK(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
 	}
 
 	void Shader::SetInt(const std::string& location, int value)
 	{
-		LAG_GRAPHICS_EXCEPTION(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
+		LAG_GRAPHICS_CHECK(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
 	}
 
 	void Shader::SetFloat(const std::string& location, float value)
 	{
-		LAG_GRAPHICS_EXCEPTION(glUniform1f(glGetUniformLocation(m_ProgramID, location.c_str()), value));
+		LAG_GRAPHICS_CHECK(glUniform1f(glGetUniformLocation(m_ProgramID, location.c_str()), value));
 	}
 
 	void Shader::SetVec3(const std::string& location, glm::vec3 value)
 	{
-		LAG_GRAPHICS_EXCEPTION(glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value.x, value.y, value.z));
+		LAG_GRAPHICS_CHECK(glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value.x, value.y, value.z));
 	}
 
 	void Shader::SetMat4(const std::string& location, const glm::mat4& value)
 	{
-		LAG_GRAPHICS_EXCEPTION(glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, location.c_str()), 1, GL_FALSE, glm::value_ptr(value[0])));
+		LAG_GRAPHICS_CHECK(glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, location.c_str()), 1, GL_FALSE, glm::value_ptr(value[0])));
 	}
 
 }

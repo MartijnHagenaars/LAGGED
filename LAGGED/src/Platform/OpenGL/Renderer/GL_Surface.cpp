@@ -12,7 +12,7 @@
 #include "ECS/Systems/CameraSystem.h"
 
 #include "GL/glew.h"
-#include "Exceptions/GL_GraphicsExceptionMacros.h"
+#include "GL_ErrorChecks.h"
 #include <glm/ext/matrix_transform.hpp>
 
 #include "Utility/Noise.h"
@@ -143,7 +143,7 @@ namespace LAG
 		}
 		else shader.SetBool("a_UseLight", false);
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 
 		//TOOD: Should use unsigned short
 		glDrawElements(GL_TRIANGLES, static_cast<int>(m_Indices.size()), GL_UNSIGNED_INT, 0);
@@ -158,23 +158,23 @@ namespace LAG
 		}
 
 		//Now create all GL objects
-		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
+		LAG_GRAPHICS_CHECK(glGenVertexArrays(1, &m_VAO));
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_VBO));
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_EBO));
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, m_VertexData.size() * sizeof(VertexData), &m_VertexData[0], GL_STATIC_DRAW));
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned int), &m_Indices[0], GL_STATIC_DRAW));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
+		LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, m_VertexData.size() * sizeof(VertexData), &m_VertexData[0], GL_STATIC_DRAW));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+		LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned int), &m_Indices[0], GL_STATIC_DRAW));
 
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
+		LAG_GRAPHICS_CHECK(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
+		LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(0));
+		LAG_GRAPHICS_CHECK(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
+		LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(1));
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(0));
 
 		SetLoaded(true);
 		return true;
@@ -185,9 +185,9 @@ namespace LAG
 		if (!IsLoaded())
 			return true;
 
-		LAG_GRAPHICS_EXCEPTION(glDeleteVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glDeleteBuffers(1, &m_EBO));
+		LAG_GRAPHICS_CHECK(glDeleteVertexArrays(1, &m_VAO));
+		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VBO));
+		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_EBO));
 
 		SetLoaded(false);
 		return true;

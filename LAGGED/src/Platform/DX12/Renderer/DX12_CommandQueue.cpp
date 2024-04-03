@@ -14,8 +14,8 @@ namespace LAG::Renderer
 		desc.NodeMask = 0;
 		desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 
-		LAG_GRAPHICS_EXCEPTION(device->CreateCommandQueue(&desc, IID_PPV_ARGS(&m_CommandQueue)));
-		LAG_GRAPHICS_EXCEPTION(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence)));
+		LAG_GRAPHICS_CHECK(device->CreateCommandQueue(&desc, IID_PPV_ARGS(&m_CommandQueue)));
+		LAG_GRAPHICS_CHECK(device->CreateFence(0, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&m_Fence)));
 
 		m_FenceEvent = ::CreateEvent(NULL, FALSE, FALSE, NULL);
 	}
@@ -31,7 +31,7 @@ namespace LAG::Renderer
 		//Get the command allocator
 		ID3D12CommandAllocator* commandAllocator;
 		UINT dataSize = sizeof(commandAllocator);
-		LAG_GRAPHICS_EXCEPTION(commandList->GetPrivateData(__uuidof(ID3D12CommandAllocator), &dataSize, &commandAllocator));
+		LAG_GRAPHICS_CHECK(commandList->GetPrivateData(__uuidof(ID3D12CommandAllocator), &dataSize, &commandAllocator));
 
 		ID3D12CommandList* const ppCommandLists[] = {
 			commandList.Get()
@@ -71,7 +71,7 @@ namespace LAG::Renderer
 			commandAllocator = m_CommandAllocatorQueue.front().commandAllocator;
 			m_CommandAllocatorQueue.pop();
 
-			LAG_GRAPHICS_EXCEPTION(commandAllocator->Reset()); //Re-use memory associated with this command alloc
+			LAG_GRAPHICS_CHECK(commandAllocator->Reset()); //Re-use memory associated with this command alloc
 		}
 		else
 		{
@@ -83,7 +83,7 @@ namespace LAG::Renderer
 		{
 			commandList = m_CommandListQueue.front(); 
 			m_CommandListQueue.pop();
-			LAG_GRAPHICS_EXCEPTION(commandList->Reset(commandAllocator.Get(), nullptr)); //Reset to initial state
+			LAG_GRAPHICS_CHECK(commandList->Reset(commandAllocator.Get(), nullptr)); //Reset to initial state
 		}
 		else
 		{
@@ -91,7 +91,7 @@ namespace LAG::Renderer
 		}
 
 		//Associate the command allocator to the private data interface so that we can retrieve the command allocator when executing the command list. 
-		LAG_GRAPHICS_EXCEPTION(commandList->SetPrivateDataInterface(__uuidof(ID3D12CommandAllocator), commandAllocator.Get()));
+		LAG_GRAPHICS_CHECK(commandList->SetPrivateDataInterface(__uuidof(ID3D12CommandAllocator), commandAllocator.Get()));
 		
 
 
@@ -101,7 +101,7 @@ namespace LAG::Renderer
 	ComPtr<ID3D12CommandAllocator> DX12_CommandQueue::CreateCommandAllocator()
 	{
 		ComPtr<ID3D12CommandAllocator> commandAllocator;
-		LAG_GRAPHICS_EXCEPTION(m_Device->CreateCommandAllocator(m_CommandListType, IID_PPV_ARGS(&commandAllocator)));
+		LAG_GRAPHICS_CHECK(m_Device->CreateCommandAllocator(m_CommandListType, IID_PPV_ARGS(&commandAllocator)));
 
 		return commandAllocator;
 	}
@@ -109,7 +109,7 @@ namespace LAG::Renderer
 	ComPtr<ID3D12GraphicsCommandList2> DX12_CommandQueue::CreateCommandList(ComPtr<ID3D12CommandAllocator> commandAllocator)
 	{
 		ComPtr<ID3D12GraphicsCommandList2> commandList;
-		LAG_GRAPHICS_EXCEPTION(m_Device->CreateCommandList(0, m_CommandListType, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
+		LAG_GRAPHICS_CHECK(m_Device->CreateCommandList(0, m_CommandListType, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
 		return commandList;
 	}
 

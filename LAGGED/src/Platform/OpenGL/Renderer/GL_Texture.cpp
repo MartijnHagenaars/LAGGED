@@ -3,7 +3,7 @@
 
 #include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
-#include "Exceptions/GL_GraphicsExceptionMacros.h"
+#include "GL_ErrorChecks.h"
 
 namespace LAG
 {
@@ -53,22 +53,22 @@ namespace LAG
 			m_Height = data.height;
 
 			//Create GL texture
-			LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ID));
-			LAG_GRAPHICS_EXCEPTION(Bind(0));
+			LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
+			LAG_GRAPHICS_CHECK(Bind(0));
 
 			//Apply image data
-			LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data));
-			LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
+			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, data.data));
+			LAG_GRAPHICS_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 			FileIO::FreeImageData(data);
 		}
 		else if (!m_LoadFromFile && m_TempBuffer)
 		{
 			//Create GL texture
-			LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ID));
-			LAG_GRAPHICS_EXCEPTION(Bind(0));
+			LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
+			LAG_GRAPHICS_CHECK(Bind(0));
 
-			LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_FLOAT, m_TempBuffer));
-			LAG_GRAPHICS_EXCEPTION(glGenerateMipmap(GL_TEXTURE_2D));
+			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_FLOAT, m_TempBuffer));
+			LAG_GRAPHICS_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 		}
 		else 
 		{
@@ -77,12 +77,12 @@ namespace LAG
 		}
 
 		//Apply some texture paramters before finishing loading
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));				//Use nearest texture filtering when texture is minified. 
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));				//Use linear texture filtering when texture is magnified.
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));				//Use nearest texture filtering when texture is minified. 
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));				//Use linear texture filtering when texture is magnified.
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT));
 		
 		//Swizzle the texture if only the red channel is used. This prevents textures from looking red and instead grayscales them
 		if (m_Format == TextureFormat::FORMAT_R)
@@ -120,13 +120,13 @@ namespace LAG
 
 	void Texture::Bind(size_t textureUnit)
 	{
-		LAG_GRAPHICS_EXCEPTION(glActiveTexture(GetTextureUnit(textureUnit));)
-		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ID));
+		LAG_GRAPHICS_CHECK(glActiveTexture(GetTextureUnit(textureUnit));)
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, m_ID));
 	}
 
 	void Texture::Unbind(size_t textureUnit)
 	{
-		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, 0));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, 0));
 	}
 
 	GLenum Texture::ConvertFormatToGLEnum(TextureFormat format)

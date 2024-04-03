@@ -10,8 +10,8 @@
 #include "Core/Resources/Model.h"
 #include "Core/Resources/Shader.h"
 
-#include "Platform/OpenGL/Renderer/GL_FrameBuffer.h"
-#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "GL_FrameBuffer.h"
+#include "GL_ErrorChecks.h"
 
 #include "ECS/Entity.h"
 #include "ECS/Scene.h"
