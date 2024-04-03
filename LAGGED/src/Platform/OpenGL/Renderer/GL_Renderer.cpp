@@ -47,10 +47,14 @@ namespace LAG
 
 	Renderer::Renderer()
 	{
+		if (!Initialize())
+			Logger::Critical("Failed to initialize renderer.");
 	}
 
 	Renderer::~Renderer()
 	{
+		if (!Shutdown())
+			Logger::Critical("Failed to shutdown renderer correctly.");
 	}
 
 	bool Renderer::Initialize()
@@ -77,7 +81,7 @@ namespace LAG
 	{
 		//TODO: Proper cleanup
 
-		return false;
+		return true;
 	}
 
 	void Renderer::OnResize(unsigned int width, unsigned int height)
