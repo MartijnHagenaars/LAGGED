@@ -18,74 +18,52 @@ namespace LAG
 {
 	Engine::~Engine()
 	{
-		Shutdown(); 
+		Shutdown();
 	}
 
 	int Engine::Run(IApplication* applicationPtr)
 	{
-		try
+		if (Initialize(applicationPtr) != true)
 		{
-			if (Initialize(applicationPtr) != true)
-			{
-				Logger::Critical("Failed to initialize.");
-				return -1;
-			}
-
-			LAG::Timer timer;
-			float elapsedTime = 0.f;
-			int frames = 0;
-
-			
-			//Main loop
-			while (GetWindow()->IsOpen())
-			{
-				GetWindow()->Update();
-
-				//Update all basic systems
-				BasicSystems::UpdateBasicSystems();
-
-				m_Application->Update();
-
-				//TODO: Do I move this somewhere else?
-				GetWindow()->PresentFrame();
-
-				//Calculate the framerate
-				m_DeltaTime = timer.MarkSeconds();
-				elapsedTime += m_DeltaTime;
-				if (frames++ >= 64)
-				{
-					m_FPS = static_cast<float>(frames) / (elapsedTime);
-					elapsedTime = 0.f, frames = 0;
-				}
-			}
-
-			return 0;
-		}
-		catch (ExceptionBase& e)
-		{
-			Logger::Critical(e.GetExceptionMessage().c_str());
-			__debugbreak();
-			return -3; 
-		}
-		catch (std::exception& e)
-		{
-			Logger::Critical("Standard exception thrown: {0}", e.what());
-			__debugbreak();
-			return -2; 
-		}
-		catch (...)
-		{
-			Logger::Critical("Unknown exception thrown: no information available.");
-			__debugbreak();
+			Logger::Critical("Failed to initialize.");
 			return -1;
 		}
 
+		LAG::Timer timer;
+		float elapsedTime = 0.f;
+		int frames = 0;
+
+
+		//Main loop
+		while (GetWindow()->IsOpen())
+		{
+			GetWindow()->Update();
+
+			//Update all basic systems
+			BasicSystems::UpdateBasicSystems();
+
+			m_Application->Update();
+
+			//TODO: Do I move this somewhere else?
+			GetWindow()->PresentFrame();
+
+			//Calculate the framerate
+			m_DeltaTime = timer.MarkSeconds();
+			elapsedTime += m_DeltaTime;
+			if (frames++ >= 64)
+			{
+				m_FPS = static_cast<float>(frames) / (elapsedTime);
+				elapsedTime = 0.f, frames = 0;
+			}
+		}
+
+		return 0;
 	}
 
 	bool Engine::Initialize(IApplication* applicationPtr)
 	{
 		Logger::Initialize();
-		
+
 
 
 		//Create the window manager and a primary window
@@ -136,7 +114,7 @@ namespace LAG
 			delete m_ResourceManager;
 		m_ResourceManager = nullptr;
 
-		if(m_ToolsManager != nullptr)
+		if (m_ToolsManager != nullptr)
 			m_ToolsManager->Shutdown();
 		delete m_ToolsManager;
 
