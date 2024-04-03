@@ -1,5 +1,7 @@
 #include "CameraViewport.h"
-#include "Platform/Base/Renderer/RendererBase.h"
+
+#include "Core/Engine.h"
+#include "Platform/Renderer.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Systems/CameraSystem.h"
@@ -35,7 +37,7 @@ namespace LAG
 			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
 			cameraComp->m_Framebuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
 
-			Renderer::OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
+			GetRenderer()->OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
 		}
 
 		ImGui::PopStyleVar();
@@ -47,7 +49,7 @@ namespace LAG
 			isWindowOpen = m_IsOpen;
 			cameraComp->m_Framebuffer->UseWindowSize(!m_IsOpen);
 			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
-			Renderer::OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
+			GetRenderer()->OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
 		}
 	}
 

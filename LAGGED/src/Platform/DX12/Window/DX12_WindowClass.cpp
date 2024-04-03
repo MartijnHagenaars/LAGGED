@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "DX12_WindowClass.h"
 #include "Exceptions/DX12_WindowExceptionMacros.h"
 

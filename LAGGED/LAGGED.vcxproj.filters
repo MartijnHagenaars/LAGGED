@@ -101,7 +101,7 @@
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Core\Resources\Model.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsExceptionMacros.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorChecks.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h" />
@@ -127,7 +127,7 @@
     <ClInclude Include="src\Core\ApplicationInterface.h" />
     <ClInclude Include="src\Core\EntryPoint.h" />
     <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowExceptionMacros.h" />
-    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h" />
+    <ClInclude Include="src\Platform\Renderer.h" />
     <ClInclude Include="src\Platform\Window.h" />
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
     <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h" />

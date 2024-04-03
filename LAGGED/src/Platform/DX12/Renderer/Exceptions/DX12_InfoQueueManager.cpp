@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "DX12_InfoQueueManager.h"
 #include "DX12_RenderExceptionMacros.h"
 
@@ -40,7 +39,7 @@ namespace LAG
 				LAG_GRAPHICS_EXCEPTION_PREV();
 			}
 
-			LAG_GRAPHICS_EXCEPTION(dxgiDebugInterface(__uuidof(IDXGIInfoQueue), &exceptionInfo->infoQueuePtr));
+			LAG_GRAPHICS_CHECK(dxgiDebugInterface(__uuidof(IDXGIInfoQueue), &exceptionInfo->infoQueuePtr));
 		}
 
 		void Shutdown()
@@ -64,14 +63,14 @@ namespace LAG
 			{
 				//Get the size of the message
 				SIZE_T messageLength = 0;
-				LAG_GRAPHICS_EXCEPTION(exceptionInfo->infoQueuePtr->GetMessage(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
+				LAG_GRAPHICS_CHECK(exceptionInfo->infoQueuePtr->GetMessage(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
 
 				//Create a message buffer
 				byte* byteroos = static_cast<byte*>(malloc(messageLength));
 				DXGI_INFO_QUEUE_MESSAGE* pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(byteroos);
 
 				//Get the message. 
-				LAG_GRAPHICS_EXCEPTION(exceptionInfo->infoQueuePtr->GetMessage(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
+				LAG_GRAPHICS_CHECK(exceptionInfo->infoQueuePtr->GetMessage(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
 
 				if (pMessage)
 				{

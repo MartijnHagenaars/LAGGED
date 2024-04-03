@@ -175,13 +175,13 @@ namespace LAG::Renderer
 		dsvHeapDesc.NodeMask = 0; 
 		dsvHeapDesc.NumDescriptors = 1;
 		dsvHeapDesc.Flags = D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
-		LAG_GRAPHICS_EXCEPTION(device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_DSVHeap)));
+		LAG_GRAPHICS_CHECK(device->CreateDescriptorHeap(&dsvHeapDesc, IID_PPV_ARGS(&m_DSVHeap)));
 		
 		ComPtr<ID3DBlob> vertexShaderBlob;
-		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"res/Shaders/VertexShader.cso", &vertexShaderBlob));
+		LAG_GRAPHICS_CHECK(D3DReadFileToBlob(L"res/Shaders/VertexShader.cso", &vertexShaderBlob));
 
 		ComPtr<ID3DBlob> pixelShaderBlob;
-		LAG_GRAPHICS_EXCEPTION(D3DReadFileToBlob(L"res/Shaders/PixelShader.cso", &pixelShaderBlob));
+		LAG_GRAPHICS_CHECK(D3DReadFileToBlob(L"res/Shaders/PixelShader.cso", &pixelShaderBlob));
 
 		//Describe the input layout of the shader
 		D3D12_INPUT_ELEMENT_DESC inputLayout[] =
@@ -232,9 +232,9 @@ namespace LAG::Renderer
 		ComPtr<ID3DBlob> rootSignatureBlob;
 		ComPtr<ID3DBlob> errorBlob; 
 		//First, we need to serialize the root signature. Serializing the root sig description turns it into a binary object that can be used to create the actual signature. 
-		LAG_GRAPHICS_EXCEPTION(D3DX12SerializeVersionedRootSignature(&rootSigDesc, rootSigVersion.HighestVersion, &rootSignatureBlob, &errorBlob));
+		LAG_GRAPHICS_CHECK(D3DX12SerializeVersionedRootSignature(&rootSigDesc, rootSigVersion.HighestVersion, &rootSignatureBlob, &errorBlob));
 		//Next, create the root signature!
-		LAG_GRAPHICS_EXCEPTION(device->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature)));
+		LAG_GRAPHICS_CHECK(device->CreateRootSignature(0, rootSignatureBlob->GetBufferPointer(), rootSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&m_RootSignature)));
 
 
 
@@ -260,7 +260,7 @@ namespace LAG::Renderer
 		pssDesc.SizeInBytes = sizeof(PipelineStateStream);
 		pssDesc.pPipelineStateSubobjectStream = &pipelineStateStream;
 
-		LAG_GRAPHICS_EXCEPTION(device->CreatePipelineState(&pssDesc, IID_PPV_ARGS(&m_PipelineState)));
+		LAG_GRAPHICS_CHECK(device->CreatePipelineState(&pssDesc, IID_PPV_ARGS(&m_PipelineState)));
 
 
 
@@ -323,7 +323,7 @@ namespace LAG::Renderer
 			//Argument 1 and 2 are pretty self explanatory: just provide properties and flags for the heap
 			//Argument 3: 
 			//Argument 4: 
-			LAG_GRAPHICS_EXCEPTION(device->CreateCommittedResource(
+			LAG_GRAPHICS_CHECK(device->CreateCommittedResource(
 				&heapProps,
 				heapFlags,
 				&resDesc,	//Create a structure that describes the buffer resource
@@ -344,7 +344,7 @@ namespace LAG::Renderer
 			const D3D12_HEAP_PROPERTIES heapDesc = CD3DX12_HEAP_PROPERTIES(D3D12_HEAP_TYPE_UPLOAD);
 			const D3D12_RESOURCE_DESC resDesc = CD3DX12_RESOURCE_DESC::Buffer(bufferSize);
 
-			LAG_GRAPHICS_EXCEPTION(device->CreateCommittedResource(
+			LAG_GRAPHICS_CHECK(device->CreateCommittedResource(
 				&heapDesc,
 				D3D12_HEAP_FLAG_NONE, 
 				&resDesc,

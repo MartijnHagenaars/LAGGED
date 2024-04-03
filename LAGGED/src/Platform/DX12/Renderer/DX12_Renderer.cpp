@@ -89,8 +89,8 @@ namespace LAG::Renderer
 		//Create a temporary device to get the maximum feature level.
 		{
 			ComPtr<ID3D12Device> tempDevice;
-			LAG_GRAPHICS_EXCEPTION(D3D12CreateDevice(dxgiAdapter.Get(), renderData->minFeatureLevel, IID_PPV_ARGS(&tempDevice)));
-			LAG_GRAPHICS_EXCEPTION(tempDevice->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS, &featureLevelData, sizeof(featureLevelData)));
+			LAG_GRAPHICS_CHECK(D3D12CreateDevice(dxgiAdapter.Get(), renderData->minFeatureLevel, IID_PPV_ARGS(&tempDevice)));
+			LAG_GRAPHICS_CHECK(tempDevice->CheckFeatureSupport(D3D12_FEATURE_FEATURE_LEVELS, &featureLevelData, sizeof(featureLevelData)));
 			renderData->maxFeatureLevel = featureLevelData.MaxSupportedFeatureLevel;
 
 			//Confirm that the max supported feature level is valid
@@ -107,7 +107,7 @@ namespace LAG::Renderer
 
 		//Once that is done, create the device
 		ComPtr<ID3D12Device5> device = nullptr;
-		LAG_GRAPHICS_EXCEPTION(D3D12CreateDevice(dxgiAdapter.Get(), renderData->maxFeatureLevel, IID_PPV_ARGS(&device)));
+		LAG_GRAPHICS_CHECK(D3D12CreateDevice(dxgiAdapter.Get(), renderData->maxFeatureLevel, IID_PPV_ARGS(&device)));
 		LAG_SET_D3D12_NAME(device, "Core_Device");
 		return device;
 	}
@@ -124,7 +124,7 @@ namespace LAG::Renderer
 		desc.Flags = D3D12_COMMAND_QUEUE_FLAG_NONE;
 		desc.NodeMask = 0; 
 
-		LAG_GRAPHICS_EXCEPTION(device->CreateCommandQueue(&desc, IID_PPV_ARGS(&commandQueue)));
+		LAG_GRAPHICS_CHECK(device->CreateCommandQueue(&desc, IID_PPV_ARGS(&commandQueue)));
 		return commandQueue;
 	}
 
@@ -176,8 +176,8 @@ namespace LAG::Renderer
 		fullScreenDesc.Windowed = true;
 
 		ComPtr<IDXGISwapChain1> swapChainTemp;
-		LAG_GRAPHICS_EXCEPTION(factory->CreateSwapChainForHwnd(directCommandQueue->GetCommandQueue().Get(), static_cast<const LAG::Window::WIN32Data*>(Window::GetWindowData())->hWnd, &swapChainDesc, &fullScreenDesc, nullptr, &swapChainTemp));
-		LAG_GRAPHICS_EXCEPTION(swapChainTemp.As(&swapChain));
+		LAG_GRAPHICS_CHECK(factory->CreateSwapChainForHwnd(directCommandQueue->GetCommandQueue().Get(), static_cast<const LAG::Window::WIN32Data*>(Window::GetWindowData())->hWnd, &swapChainDesc, &fullScreenDesc, nullptr, &swapChainTemp));
+		LAG_GRAPHICS_CHECK(swapChainTemp.As(&swapChain));
 
 		return swapChain;
 	}
@@ -198,7 +198,7 @@ namespace LAG::Renderer
 			shaderVisible = false; 
 		desc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
 
-		LAG_GRAPHICS_EXCEPTION(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&descriptorHeap)));
+		LAG_GRAPHICS_CHECK(device->CreateDescriptorHeap(&desc, IID_PPV_ARGS(&descriptorHeap)));
 
 		return descriptorHeap;
 	}
@@ -212,7 +212,7 @@ namespace LAG::Renderer
 		for (int i = 0; i < totalLoops; i++)
 		{
 			ComPtr<ID3D12Resource2> backBuffer;
-			LAG_GRAPHICS_EXCEPTION(swapChain->GetBuffer(i, IID_PPV_ARGS(&backBuffer))); //Get a pointer to the swapchain's backbuffer
+			LAG_GRAPHICS_CHECK(swapChain->GetBuffer(i, IID_PPV_ARGS(&backBuffer))); //Get a pointer to the swapchain's backbuffer
 
 			//Create the RTV. 
 			//First parameter is the pointer to the resource.
@@ -236,7 +236,7 @@ namespace LAG::Renderer
 	ComPtr<ID3D12CommandAllocator> CreateCommandAllocator(ComPtr<ID3D12Device5> device, D3D12_COMMAND_LIST_TYPE type)
 	{
 		ComPtr<ID3D12CommandAllocator> commandAllocator; 
-		LAG_GRAPHICS_EXCEPTION(device->CreateCommandAllocator(type, IID_PPV_ARGS(&commandAllocator)));
+		LAG_GRAPHICS_CHECK(device->CreateCommandAllocator(type, IID_PPV_ARGS(&commandAllocator)));
 		return commandAllocator;
 	}
 
@@ -244,9 +244,9 @@ namespace LAG::Renderer
 	{
 		ComPtr<ID3D12GraphicsCommandList2> commandList;
 
-		LAG_GRAPHICS_EXCEPTION(device->CreateCommandList(0, type, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
+		LAG_GRAPHICS_CHECK(device->CreateCommandList(0, type, commandAllocator.Get(), nullptr, IID_PPV_ARGS(&commandList)));
 		
-		LAG_GRAPHICS_EXCEPTION(commandList->Close()); //Close the commandList so that it can be reset at the start of the render loop
+		LAG_GRAPHICS_CHECK(commandList->Close()); //Close the commandList so that it can be reset at the start of the render loop
 		return commandList;
 	}
 
@@ -256,7 +256,7 @@ namespace LAG::Renderer
 		D3D12_FENCE_FLAGS flags = {};
 
 		flags |= D3D12_FENCE_FLAG_NONE;
-		LAG_GRAPHICS_EXCEPTION(device->CreateFence(0, flags, IID_PPV_ARGS(&fence)));
+		LAG_GRAPHICS_CHECK(device->CreateFence(0, flags, IID_PPV_ARGS(&fence)));
 
 		return fence;
 	}
@@ -310,7 +310,7 @@ namespace LAG::Renderer
 
 #ifdef DEBUG
 		ComPtr<ID3D12Debug> debugInterface;
-		LAG_GRAPHICS_EXCEPTION(D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface)));
+		LAG_GRAPHICS_CHECK(D3D12GetDebugInterface(IID_PPV_ARGS(&debugInterface)));
 		debugInterface->EnableDebugLayer();
 #endif
 
@@ -323,7 +323,7 @@ namespace LAG::Renderer
 		//Enable debugging data when running in debug
 		dxgiFactoryFlags |= DXGI_CREATE_FACTORY_DEBUG;
 #endif
-		LAG_GRAPHICS_EXCEPTION(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&renderData->factory))); //Same thing as above, just shortened using a macro
+		LAG_GRAPHICS_CHECK(CreateDXGIFactory2(dxgiFactoryFlags, IID_PPV_ARGS(&renderData->factory))); //Same thing as above, just shortened using a macro
 
 		//Create the adapter and device
 		renderData->adapter = CreateDXGIAdapter(renderData->factory);
@@ -402,8 +402,8 @@ namespace LAG::Renderer
 		}
 
 		DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
-		LAG_GRAPHICS_EXCEPTION(renderData->swapChain->GetDesc(&swapChainDesc));
-		LAG_GRAPHICS_EXCEPTION(renderData->swapChain->ResizeBuffers(static_cast<UINT>(renderData->totalSwapChainBackBuffers), Window::GetWidth(), Window::GetHeight(),
+		LAG_GRAPHICS_CHECK(renderData->swapChain->GetDesc(&swapChainDesc));
+		LAG_GRAPHICS_CHECK(renderData->swapChain->ResizeBuffers(static_cast<UINT>(renderData->totalSwapChainBackBuffers), Window::GetWidth(), Window::GetHeight(),
 			swapChainDesc.BufferDesc.Format, swapChainDesc.Flags));
 		LAG_GRAPHICS_EXCEPTION_PREV();
 
@@ -423,7 +423,7 @@ namespace LAG::Renderer
 		
 		UINT syncInterval = renderData->useVSync ? 1 : 0;
 		UINT presentFlags = renderData->isTearingSupported && !renderData->useVSync ? DXGI_PRESENT_ALLOW_TEARING : 0;
-		LAG_GRAPHICS_EXCEPTION(renderData->swapChain->Present(syncInterval, presentFlags));
+		LAG_GRAPHICS_CHECK(renderData->swapChain->Present(syncInterval, presentFlags));
 		renderData->currentBackBufferIndex = renderData->swapChain->GetCurrentBackBufferIndex();
 
 		return renderData->currentBackBufferIndex;

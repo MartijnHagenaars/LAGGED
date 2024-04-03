@@ -1,5 +1,5 @@
 #include "GL_Model.h"
-#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "GL_ErrorChecks.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
 
 #include "Core/Engine.h"
@@ -193,9 +193,9 @@ namespace LAG
 	void Model::LoadModel(tinygltf::Model& modelData)
 	{
 		//Create buffer objects and such
-		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
+		LAG_GRAPHICS_CHECK(glGenVertexArrays(1, &m_VAO));
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_VBO));
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_EBO));
 
 		//For now, I'm only looking at the first mesh. In the future, this should loop and create mesh objects. TODO!
 		auto& primitive = modelData.meshes[0].primitives[0];
@@ -204,24 +204,24 @@ namespace LAG
 		m_Textures = LoadTexture(modelData, GetPath().GetString());
 		m_TotalIndices = static_cast<unsigned int>(indices.size());
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 		
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, sizeof(MeshData) * meshData.size(), &meshData.data()[0], GL_STATIC_DRAW));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
+		LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, sizeof(MeshData) * meshData.size(), &meshData.data()[0], GL_STATIC_DRAW));
 		
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indices.size(), &indices.data()[0], GL_STATIC_DRAW));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+		LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indices.size(), &indices.data()[0], GL_STATIC_DRAW));
 		
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
+		LAG_GRAPHICS_CHECK(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
+		LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(0));
 
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
+		LAG_GRAPHICS_CHECK(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
+		LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(1));
 
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(2));
+		LAG_GRAPHICS_CHECK(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
+		LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(2));
 		
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(0));
 	}
 
 	void LAG::Model::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
@@ -253,7 +253,7 @@ namespace LAG
 		for (size_t i = 0; i < m_Textures.size(); i++)
 			GetResourceManager()->GetResource<Texture>(m_Textures.at(i))->Bind(i);
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, m_TotalIndices, GL_UNSIGNED_SHORT, 0));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_CHECK(glDrawElements(GL_TRIANGLES, m_TotalIndices, GL_UNSIGNED_SHORT, 0));
 	}
 }
