@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Defines.h"
+#include "Utility/Timer.h"
 #include "glm/vec3.hpp"
 
 namespace LAG
@@ -43,6 +44,17 @@ namespace LAG
 		/// End of the ImGui frame
 		/// </summary>
 		void ImGuiFrameEnd();
+
+		//TODO: THIS SHOULD BE TURNED INTO A TOOL.
+		void DrawOptionsWindow();
+
+		//Options used by the renderer
+		bool m_ShowWireframe = false;
+		bool m_UseLighting = true;
+
+		//Variables for calculating the time it takes to render
+		LAG::Timer m_RenderTimer;
+		float m_RenderTime = 0.f;
 	};
 
 }

@@ -35,16 +35,6 @@
 
 namespace LAG
 {
-	struct RendererData
-	{
-		bool m_ShowWireframe = false;
-		bool m_UseLighting = true;
-
-		LAG::Timer m_RenderTimer;
-		float m_RenderTime = 0.f;
-	};
-	RendererData* renderData = nullptr;
-
 	Renderer::Renderer()
 	{
 	}
@@ -55,13 +45,7 @@ namespace LAG
 
 	bool Renderer::Initialize()
 	{
-		if (renderData != nullptr)
-		{
-			Logger::Error("Renderer already initialized.");
-			return false;
-		}
-		renderData = new RendererData();
-
+		//Create some essential shaders.
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 
@@ -108,18 +92,18 @@ namespace LAG
 	}
 
 	//TODO: NEEDS TO BE MOVED!
-	void DrawOptionsWindow()
+	void Renderer::DrawOptionsWindow()
 	{
 		ImGui::Begin("Render options");
 
 		ImGui::Text("LAGGED Renderer");
 		ImGui::Text(std::string("FPS: " + std::to_string(GetEngine().GetFPS())).c_str());
-		ImGui::Text(std::string("Render time: " + std::to_string(renderData->m_RenderTime) + "ms").c_str());
+		ImGui::Text(std::string("Render time: " + std::to_string(m_RenderTime) + "ms").c_str());
 		ImGui::Separator();
 
-		ImGui::Checkbox("Enable wireframe", &renderData->m_ShowWireframe);
+		ImGui::Checkbox("Enable wireframe", &m_ShowWireframe);
 
-		ImGui::Checkbox("Enable lighting", &renderData->m_UseLighting);
+		ImGui::Checkbox("Enable lighting", &m_UseLighting);
 
 		ImGui::End();
 	}
@@ -127,7 +111,7 @@ namespace LAG
 	void Renderer::Render()
 	{
 		//Start timer for measuring render time
-		renderData->m_RenderTimer.ResetTimer();
+		m_RenderTimer.ResetTimer();
 
 		// Begin of ImGui rendering
 		ImGuiFrameStart();
@@ -138,7 +122,7 @@ namespace LAG
 		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
-		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->m_ShowWireframe);
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(m_ShowWireframe);
 
 
 		//Get an active camera
@@ -161,7 +145,7 @@ namespace LAG
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
 		std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
-		if (renderData->m_UseLighting)
+		if (m_UseLighting)
 		{
 			lights.reserve(3);
 			GetScene()->Loop<LightComponent, TransformComponent>([&lights](Entity entity, LightComponent& lightComp, TransformComponent& lightTransformComp)
@@ -193,6 +177,6 @@ namespace LAG
 		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
 
 		ImGuiFrameEnd();
-		renderData->m_RenderTime = renderData->m_RenderTimer.GetMilliseconds();
+		m_RenderTime = m_RenderTimer.GetMilliseconds();
 	}
 }
