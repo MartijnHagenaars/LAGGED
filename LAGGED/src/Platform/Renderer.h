@@ -12,6 +12,18 @@ namespace LAG
 		Renderer(const Renderer& other) = delete;
 		Renderer& operator=(const Renderer& other) = delete;
 
+		/// <summary>
+		/// Initialize the renderer. Should only be called once.
+		/// </summary>
+		/// <returns>Returns true if the renderer initialized correctly.</returns>
+		bool Initialize();
+
+		/// <summary>
+		/// Shuts down the renderer. Should only be called once.
+		/// </summary>
+		/// <returns>Returns true if the renderer has shut down correctly.</returns>
+		bool Shutdown();
+
 		void Render();
 
 		//TODO: IMPLEMENT!
@@ -22,9 +34,6 @@ namespace LAG
 		void SetPipelineState(int pipelineID);
 
 	private:
-		bool Initialize();
-		bool Shutdown();
-
 		/// <summary>
 		/// Start of the ImGui frame
 		/// </summary>

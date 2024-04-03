@@ -5,7 +5,7 @@
 #include "Platform/Window.h"
 #include "Resources/ResourceManager.h"
 #include "Editor/ToolsManager.h"
-#include "Platform/Base/Renderer/RendererBase.h"
+#include "Platform/Renderer.h"
 
 #include "Core/Resources/Model.h"
 
@@ -85,19 +85,21 @@ namespace LAG
 	bool Engine::Initialize(IApplication* applicationPtr)
 	{
 		Logger::Initialize();
+		
+
 
 		//Create the window manager and a primary window
 		m_Window = new Window(1920, 1280, "Main window!", false);
 
+		//Create the resource manager
 		m_ResourceManager = new ResourceManager();
-		m_Scene = new Scene();
 
-		//Setup renderer
-		if (!Renderer::Initialize())
-		{
-			LAG::Logger::Critical("Failed to initialize renderer.");
-			return false;
-		}
+		//Create the renderer
+		m_Renderer = new Renderer();
+		m_Renderer->Initialize();
+
+		//Create the scene
+		m_Scene = new Scene();
 
 		m_ToolsManager = new ToolsManager();
 		m_ToolsManager->Initialize();
@@ -138,9 +140,10 @@ namespace LAG
 			m_ToolsManager->Shutdown();
 		delete m_ToolsManager;
 
-		Renderer::Shutdown();
+		m_Renderer->Shutdown();
+		delete m_Renderer;
 
-		GetWindow()->Shutdown();
+		m_Window->Shutdown();
 		delete m_Window;
 		m_Window = nullptr;
 

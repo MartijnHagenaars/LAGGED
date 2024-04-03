@@ -47,14 +47,10 @@ namespace LAG
 
 	Renderer::Renderer()
 	{
-		if (!Initialize())
-			Logger::Critical("Failed to initialize renderer.");
 	}
 
 	Renderer::~Renderer()
 	{
-		if (!Shutdown())
-			Logger::Critical("Failed to shutdown renderer correctly.");
 	}
 
 	bool Renderer::Initialize()
@@ -72,7 +68,7 @@ namespace LAG
 		glEnable(GL_DEPTH_TEST);
 
 		//Setup resize callback
-		GetWindow()->SetResizeCallBack(&Renderer::OnResize);
+		GetWindow()->SetResizeCallBack(std::bind(&Renderer::OnResize, this, std::placeholders::_1, std::placeholders::_2));
 
 		return true;
 	}
