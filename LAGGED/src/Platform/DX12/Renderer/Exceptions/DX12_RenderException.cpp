@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "DX12_RenderException.h"
 #include "DX12_InfoQueueManager.h"
 
