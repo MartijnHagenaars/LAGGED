@@ -64,6 +64,10 @@ namespace LAG
 		return true;
 	}
 
+	void Renderer::DrawLine(const glm::vec3& p1, const glm::vec3& p2)
+	{
+	}
+
 	void Renderer::OnResize(unsigned int width, unsigned int height)
 	{
 		Logger::Info("Window resize: {0}, {1}", width, height);

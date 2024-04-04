@@ -27,7 +27,6 @@ namespace LAG
 
 		void Render();
 
-		//TODO: IMPLEMENT!
 		void DrawLine(const glm::vec3& p1, const glm::vec3& p2);
 
 		void OnResize(unsigned int width, unsigned int height);

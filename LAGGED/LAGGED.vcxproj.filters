@@ -61,6 +61,7 @@
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Base\Window.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
+    <ClCompile Include="src\Platform\Base\Renderer\GL_LineTool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FileIO\FileIO.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\GL_LineTool.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />
@@ -154,5 +156,7 @@
     <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
   </ItemGroup>
 </Project>
