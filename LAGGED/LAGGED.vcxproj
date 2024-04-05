@@ -231,7 +231,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\Base\Renderer\GL_LineTool.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
@@ -377,7 +377,7 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\Base\Renderer\GL_LineTool.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Core\Resources\Texture.cpp" />

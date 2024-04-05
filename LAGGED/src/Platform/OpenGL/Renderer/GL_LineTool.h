@@ -13,17 +13,21 @@ namespace LAG
 	class LineTool
 	{
 	public:
-		void DrawLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color);
+		static void DrawLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color);
 
+		static void Initialize();
+		static void Shutdown();
+		
 	private:
 		LineTool();
 		~LineTool();
 		LineTool(const LineTool& other) = delete;
 		LineTool& operator=(LineTool& other) = delete;
 
-		unsigned int m_VBO, m_VAO;
-		Shader* m_LineShader;
-		LinePositions m_LinePositions;
+		inline static unsigned int m_VBO;
+		inline static unsigned int m_VAO;
+		inline static Shader* m_LineShader;
+		inline static LinePositions m_LinePositions;
 	};
 }
 
