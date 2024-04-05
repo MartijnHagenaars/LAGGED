@@ -6,6 +6,7 @@
 #include "Core/Engine.h"
 #include "Platform/Window.h"
 #include "ECS/Scene.h"
+#include "ECS/Systems/CameraSystem.h"
 
 #include "Tools/Gizmo.h"
 #include "Tools/EntityViewer.h"
@@ -90,19 +91,12 @@ namespace LAG
 
 		EndDockSpace();
 
-
-		Entity cameraEntity;
-		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera) 
-			{
-				if (camera.isActive) 
-					cameraEntity = entity; 
-			});
-
 		for (int i = 0; i < m_Tools.size(); i++)
 			if (m_Tools[i]->IsOpen())
 				m_Tools[i]->Render();
 
 		//TODO: This has to be fully reworked. This is not good. 
+		Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
 		if (cameraEntity.IsValid() && m_TempEntViewerPtr->GetSelectedEntityID()->IsValid())
 		{
 			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID(), &cameraEntity);
