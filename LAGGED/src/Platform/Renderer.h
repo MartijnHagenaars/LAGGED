@@ -2,6 +2,7 @@
 #include "Core/Defines.h"
 #include "Utility/Timer.h"
 #include "glm/vec3.hpp"
+#include <vector>
 
 namespace LAG
 {
@@ -54,6 +55,12 @@ namespace LAG
 		//Variables for calculating the time it takes to render
 		LAG::Timer m_RenderTimer;
 		float m_RenderTime = 0.f;
+
+		struct LineData
+		{
+			glm::vec3 pos1, pos2, color;
+		};
+		std::vector<LineData> m_LineRenderList;
 	};
 
 }

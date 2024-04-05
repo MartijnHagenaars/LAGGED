@@ -72,7 +72,7 @@ namespace LAG
 
 	void Renderer::DrawLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
 	{
-		LineTool::DrawLine(p1, p2, color);
+		m_LineRenderList.emplace_back(LineData{p1, p2, color});
 	}
 
 	void Renderer::OnResize(unsigned int width, unsigned int height)
@@ -185,7 +185,15 @@ namespace LAG
 				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
-		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
+		//Render all lines in the line render list
+		if (!m_LineRenderList.empty())
+		{
+			for (const auto& it : m_LineRenderList)
+				LineTool::DrawLine(it.pos1, it.pos2, it.color);
+			m_LineRenderList.clear();
+		}
+
+		CameraSystem::GetActiveCameraComponent()->m_Framebuffer->FrameEnd();
 
 		ImGuiFrameEnd();
 		m_RenderTime = m_RenderTimer.GetMilliseconds();
