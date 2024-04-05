@@ -110,16 +110,17 @@ namespace LAG
 		}
 		m_Application = nullptr;
 
-		if (m_ResourceManager != nullptr)
-			delete m_ResourceManager;
-		m_ResourceManager = nullptr;
-
 		if (m_ToolsManager != nullptr)
 			m_ToolsManager->Shutdown();
 		delete m_ToolsManager;
 
 		m_Renderer->Shutdown();
 		delete m_Renderer;
+
+		if (m_ResourceManager != nullptr)
+			m_ResourceManager->Clear();
+		delete m_ResourceManager;
+		m_ResourceManager = nullptr;
 
 		m_Window->Shutdown();
 		delete m_Window;

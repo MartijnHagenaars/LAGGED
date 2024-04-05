@@ -63,9 +63,7 @@ namespace LAG
 
 	bool Renderer::Shutdown()
 	{
-		//TODO: Proper cleanup
 		LineTool::Shutdown();
-		GetResourceManager()->Clear();
 
 		return true;
 	}
