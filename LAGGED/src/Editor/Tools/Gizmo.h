@@ -14,7 +14,7 @@ namespace LAG
 		void EndWindow();
 
 		void RenderGizmo(Entity* targetEntity);
-		void RenderViewManipulator(uint32_t cameraEntityID);
+		void RenderViewManipulator();
 
 		void Render() override;
 

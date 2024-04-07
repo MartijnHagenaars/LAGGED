@@ -105,6 +105,7 @@ namespace LAG
 			m_TempGizmoPtr->BeginWindow();
 			m_TempGizmoPtr->SetCameraEntity(&cameraEntity);
 			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID());
+			m_TempGizmoPtr->RenderViewManipulator();
 			m_TempGizmoPtr->EndWindow();
 		}
 
