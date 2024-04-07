@@ -15,10 +15,31 @@ namespace LAG
 	{
 	}
 
-	void Gizmo::RenderGizmo(Entity* targetEntity, Entity* cameraEntity)
+	void Gizmo::BeginWindow()
+	{
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->Pos);
+		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
+		ImGui::Begin("GizmoView", 0, ImGuiWindowFlags_NoBackground |
+			ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs |
+			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking
+		);
+	}
+
+	void Gizmo::EndWindow()
+	{
+		ImGui::End();
+	}
+
+	void Gizmo::SetCameraEntity(Entity* cameraEntity)
+	{
+	}
+
+	void Gizmo::RenderGizmo(Entity* targetEntity)
 	{
 		TransformComponent* targetTransform = targetEntity->GetComponent<TransformComponent>();
-		CameraComponent* camera = cameraEntity->GetComponent<CameraComponent>();
+		CameraComponent* camera = m_CameraEntity->GetComponent<CameraComponent>();
 		if (targetTransform == nullptr || camera == nullptr)
 		{
 			ImGuizmo::Enable(false);
@@ -27,16 +48,8 @@ namespace LAG
 
 		ImGuizmo::Enable(true);
 
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
-		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
-		ImGui::Begin("GizmoView", 0, ImGuiWindowFlags_NoBackground | 
-			ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs | 
-			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking
-		);
-
 		ImGuizmo::SetDrawlist();
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
 		ImGuizmo::SetRect(viewport->Pos.x, viewport->Pos.y, viewport->Size.x, viewport->Size.y);
 
 		glm::mat4 targetEntityMatrix = targetTransform->GetTransformMatrix();
@@ -48,8 +61,6 @@ namespace LAG
 		{
 			targetTransform->SetTransformMatrix(targetEntityMatrix);
 		}
-
-		ImGui::End();
 	}
 
 	void Gizmo::RenderViewManipulator(uint32_t cameraEntityID)
@@ -60,8 +71,6 @@ namespace LAG
 		float viewManipulateRight = ImGui::GetWindowPos().x + (float)ImGui::GetWindowWidth();
 		float viewManipulateTop = ImGui::GetWindowPos().y;
 
-		//TODO: To fix crash, first create an actual ImGui window that gizmo shit needs to go onto
-		// then set the drawlist
 		glm::mat4 viewMat = transform->GetTransformMatrix();
 		ImGuizmo::ViewManipulate(&viewMat[0][0], 8.f, ImVec2(0, 0), ImVec2(128, 128), 0x10101010);
 	}

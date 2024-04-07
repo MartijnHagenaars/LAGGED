@@ -9,11 +9,16 @@ namespace LAG
 	{
 	public: 
 		Gizmo();
-		void RenderGizmo(Entity* targetEntity, Entity* cameraEntity);
+
+		void BeginWindow();
+		void EndWindow();
+
+		void RenderGizmo(Entity* targetEntity);
 		void RenderViewManipulator(uint32_t cameraEntityID);
 
 		void Render() override;
 
+		void SetCameraEntity(Entity* cameraEntity) {m_CameraEntity = cameraEntity};
 	private:
 		int m_GizmoOperation;
 		int m_GizmoMode;
@@ -21,6 +26,8 @@ namespace LAG
 		bool m_UseSnap = false;
 		bool m_SplitSnapAxis = false;
 		glm::vec3 m_SnapScale = glm::vec3(1.f);
+
+		Entity* m_CameraEntity = nullptr;
 
 		bool m_UseGizmo = true;
 	};
