@@ -88,14 +88,11 @@ namespace LAG
 			ImGui::EndMenuBar();
         }
 
-		EndDockSpace();
-
-
 		Entity cameraEntity;
-		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera) 
+		GetScene()->Loop<CameraComponent>([&cameraEntity](Entity entity, CameraComponent& camera)
 			{
-				if (camera.isActive) 
-					cameraEntity = entity; 
+				if (camera.isActive)
+					cameraEntity = entity;
 			});
 
 		for (int i = 0; i < m_Tools.size(); i++)
@@ -105,8 +102,13 @@ namespace LAG
 		//TODO: This has to be fully reworked. This is not good. 
 		if (cameraEntity.IsValid() && m_TempEntViewerPtr->GetSelectedEntityID()->IsValid())
 		{
-			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID(), &cameraEntity);
+			m_TempGizmoPtr->BeginWindow();
+			m_TempGizmoPtr->SetCameraEntity(&cameraEntity);
+			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID());
+			m_TempGizmoPtr->EndWindow();
 		}
+
+		EndDockSpace();
 
 	}
 

@@ -1,5 +1,8 @@
 #include "Gizmo.h"
 
+#include "Core/Engine.h"
+#include "Editor/ToolsManager.h"
+
 #include "ImGui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
 
@@ -7,6 +10,8 @@
 #include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "Core/Engine.h"
+
+#include "ImGui/imgui_internal.h"
 
 namespace LAG
 {
@@ -17,9 +22,39 @@ namespace LAG
 
 	void Gizmo::BeginWindow()
 	{
+		//Get the position of the viewport
+		ImVec2 viewportPos;
+		ImVec2 viewportSize;
+
+		if (GetToolsManager()->IsToolOpen("CamView"))
+		{
+			//Not a fan of this, but cannot come up with another approach.
+			ImGuiContext* currentContext = ImGui::GetCurrentContext();
+			for (const auto& it : currentContext->WindowsFocusOrder)
+			{
+				if (strcmp(it->Name, "CamView") == 0)
+				{
+					ImGui::SetNextWindowViewport(it->ID);
+					ImGuizmo::SetRect(it->Pos.x, it->Pos.y, it->Size.x, it->Size.y);
+					viewportSize = it->Size;
+					viewportPos = it->Pos;
+					break;
+				}
+			}
+		}
+		else
+		{
+			const ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
+			ImGuizmo::SetRect(viewport->Pos.x, viewport->Pos.y, viewport->Size.x, viewport->Size.y);
+			viewportSize = viewport->Size;
+			viewportPos = viewport->Pos;
+		}
+
+
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->Pos);
-		ImGui::SetNextWindowSize(viewport->Size);
+		ImGui::SetNextWindowPos(viewportPos);
+		ImGui::SetNextWindowSize(viewportSize);
 		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
 		ImGui::Begin("GizmoView", 0, ImGuiWindowFlags_NoBackground |
 			ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs |
@@ -30,10 +65,6 @@ namespace LAG
 	void Gizmo::EndWindow()
 	{
 		ImGui::End();
-	}
-
-	void Gizmo::SetCameraEntity(Entity* cameraEntity)
-	{
 	}
 
 	void Gizmo::RenderGizmo(Entity* targetEntity)
@@ -47,16 +78,13 @@ namespace LAG
 		}
 
 		ImGuizmo::Enable(true);
-
 		ImGuizmo::SetDrawlist();
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGuizmo::SetRect(viewport->Pos.x, viewport->Pos.y, viewport->Size.x, viewport->Size.y);
 
 		glm::mat4 targetEntityMatrix = targetTransform->GetTransformMatrix();
-		if (ImGuizmo::Manipulate(&camera->viewMat[0][0], &camera->projMat[0][0], 
-			static_cast<ImGuizmo::OPERATION>(m_GizmoOperation), 
-			static_cast<ImGuizmo::MODE>(m_GizmoMode), 
-			&targetEntityMatrix[0][0], NULL, 
+		if (ImGuizmo::Manipulate(&camera->viewMat[0][0], &camera->projMat[0][0],
+			static_cast<ImGuizmo::OPERATION>(m_GizmoOperation),
+			static_cast<ImGuizmo::MODE>(m_GizmoMode),
+			&targetEntityMatrix[0][0], NULL,
 			m_UseSnap ? &m_SnapScale[0] : NULL))
 		{
 			targetTransform->SetTransformMatrix(targetEntityMatrix);

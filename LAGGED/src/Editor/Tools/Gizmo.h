@@ -18,7 +18,7 @@ namespace LAG
 
 		void Render() override;
 
-		void SetCameraEntity(Entity* cameraEntity) {m_CameraEntity = cameraEntity};
+		void SetCameraEntity(Entity* cameraEntity) { m_CameraEntity = cameraEntity; }
 	private:
 		int m_GizmoOperation;
 		int m_GizmoMode;
