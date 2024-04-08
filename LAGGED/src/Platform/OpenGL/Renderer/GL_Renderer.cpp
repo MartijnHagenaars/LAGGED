@@ -70,7 +70,7 @@ namespace LAG
 
 	void Renderer::DrawLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
 	{
-		m_LineRenderList.emplace_back(LineData{p1, p2, color});
+		m_LineRenderList.emplace_back(LineData{ p1, p2, color });
 	}
 
 	void Renderer::OnResize(unsigned int width, unsigned int height)
@@ -136,19 +136,7 @@ namespace LAG
 
 		//Get an active camera
 		//TODO: This should be done in some sort of camera system. We shouldn't have to loop through the entire scene every single time to find a camera
-		bool doesCameraExist;
-		Entity selectedCamera;
-		doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCamera](Entity entity, CameraComponent& camera, TransformComponent& transform)
-			{
-				if (camera.isActive)
-				{
-					selectedCamera = entity;
-				}
-			});
-
-		//Don't render anything if there isn't a valid camera.
-		if (!doesCameraExist)
-			return;
+		Entity selectedCamera = CameraSystem::GetActiveCameraEntity();
 		CameraSystem::Update(&selectedCamera);
 
 		//Get some lights
@@ -167,20 +155,25 @@ namespace LAG
 		//Render all meshes
 		GetScene()->Loop<MeshComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, MeshComponent& meshComp, TransformComponent& transformComp)
 			{
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
-					transformComp, &selectedCamera,
-					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
-					lights);
+				if (entity.GetComponent<DefaultComponent>()->visible)
+				{
+					GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
+						transformComp, &selectedCamera,
+						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
+						lights);
+				}
 			});
 
 		//Render all surfaces
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				if (entity.GetComponent<DefaultComponent>()->visible)
+					surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				if (entity.GetComponent<DefaultComponent>()->visible)
+					surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
 		//Render all lines in the line render list
