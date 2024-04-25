@@ -144,6 +144,7 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />
