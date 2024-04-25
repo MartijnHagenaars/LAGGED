@@ -78,7 +78,7 @@ void World::Update()
 			glm::vec2 chunkPos = glm::vec2(it->first.m_X, it->first.m_Y);
 			glm::vec2 camPos = glm::vec2(-xCamGridPos, -zCamGridPos);
 			float length = glm::length(chunkPos - camPos);
-			if (length > m_LoadDistance * 0.5f)
+			if (static_cast<int>(length) > static_cast<int>(m_LoadDistance * 0.5f))
 			{
 				it->second.Unload();
 				m_ChunkMap.erase(it++);
