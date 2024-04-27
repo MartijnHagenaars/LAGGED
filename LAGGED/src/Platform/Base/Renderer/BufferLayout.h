@@ -27,9 +27,10 @@ namespace LAG
 		BufferLayout(const std::vector<BufferLayoutElement>& layout) :
 			m_BufferLayout(layout), m_Stride(0)
 		{
-			for (const auto& it : m_BufferLayout)
+			for (auto& it : m_BufferLayout)
 			{
 				m_Stride += GetBufferVariableTypeSize(it.type);
+				it.offset = m_Stride;
 			}
 		}
 
