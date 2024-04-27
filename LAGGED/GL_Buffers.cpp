@@ -86,6 +86,20 @@ namespace LAG
 		glBindBuffer(GL_ARRAY_BUFFER, m_IndexBuffer->m_EBO);
 		glBufferData(GL_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), m_IndexBuffer->m_IndexData.data(), GL_STATIC_DRAW);
 
+		m_Initialized = true;
+	}
+
+	void ArrayBuffer::Render()
+	{
+		//Check if buffer is initialized
+		if (!m_Initialized)
+		{
+			Logger::Error("Cannot rendert buffer: not initialized.");
+			return;
+		}
+
+		glBindVertexArray(m_VAO);
+		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
 
 	}
 

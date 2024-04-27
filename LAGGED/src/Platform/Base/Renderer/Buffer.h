@@ -32,6 +32,7 @@ namespace LAG
 		virtual ~IndexBufferBase() = default;
 
 		virtual void SetIndexData(const std::vector<uint32_t>& data) = 0;
+		size_t GetCount() const { return m_IndexData.size(); }
 
 	protected:
 		std::vector<uint32_t> m_IndexData;
@@ -44,11 +45,13 @@ namespace LAG
 		~ArrayBufferBase() = default;
 
 		virtual void Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer) = 0;
+		virtual void Render() = 0;
 
 		const VertexBuffer* GetVertexBuffer() const { return m_VertexBuffer; }
 		const IndexBuffer* GetIndexBuffer() const { return m_IndexBuffer; }
 
 	protected:
+		bool m_Initialized = false;
 		VertexBuffer* m_VertexBuffer;
 		IndexBuffer* m_IndexBuffer;
 	};

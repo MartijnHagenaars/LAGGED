@@ -39,6 +39,7 @@ namespace LAG
 		~ArrayBuffer();
 
 		void Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer) override;
+		void Render() override;
 
 	private:
 		int ConvertBufferVarTypeToGLType(BufferVariableType type);
