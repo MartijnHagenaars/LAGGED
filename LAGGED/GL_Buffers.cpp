@@ -6,7 +6,7 @@
 namespace LAG
 {
 	//Vertex buffer
-	
+
 	VertexBuffer::~VertexBuffer()
 	{
 	}
@@ -24,6 +24,16 @@ namespace LAG
 	}
 
 
+	//Index buffer
+
+	IndexBuffer::~IndexBuffer()
+	{
+	}
+
+	void IndexBuffer::SetIndexData(const std::vector<uint32_t>& data)
+	{
+	}
+
 
 	//Array buffer
 
@@ -36,8 +46,59 @@ namespace LAG
 	{
 	}
 
-	void ArrayBuffer::Initialize(const VertexBufferBase& vertexBuffer, const IndexBufferBase& indexBuffer)
+	//TODO: Passing by reference might be bad since we're moving ownership.... Need to test this.
+	void ArrayBuffer::Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer)
 	{
+		if (vertexBuffer.m_VertexDataSize <= 0 || indexBuffer.m_IndexData.empty())
+		{
+			Logger::Critical("Vertex/index buffer is empty.");
+			return;
+		}
+
+		m_VertexBuffer = std::move(&vertexBuffer);
+		m_IndexBuffer = std::move(&indexBuffer);
+
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
+
+		//Setup vertex buffer
+		for (int i = 0; i < m_VertexBuffer->m_BufferLayout.GetBufferLayout().size(); i++)
+		{
+			BufferLayoutElement bufferElement = m_VertexBuffer->m_BufferLayout.GetBufferLayout()[i];
+			if (bufferElement.type >= BufferVariableType::Float1 && bufferElement.type <= BufferVariableType::Float4)
+			{
+				//TODO: Calculate offset
+				glVertexAttribPointer(i, GetBufferVariableTypeSize(bufferElement.type), ConvertBufferVarTypeToGLType(bufferElement.type), bufferElement.isNormalized, m_VertexBuffer->m_BufferLayout.GetStride(), (void*)bufferElement.offset);
+				glEnableVertexAttribArray(i);
+				continue;
+			}
+		}
+
+		//Setup index buffer
+
+		glCreateBuffers(1, &m_IndexBuffer->m_EBO);
+		glBindBuffer(GL_ARRAY_BUFFER, m_IndexBuffer->m_EBO);
+		glBufferData(GL_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), m_IndexBuffer->m_IndexData.data(), GL_STATIC_DRAW);
+
 
 	}
-}
+
+	int ArrayBuffer::ConvertBufferVarTypeToGLType(BufferVariableType type)
+	{
+		switch (type)
+		{
+		case BufferVariableType::Float1: return GL_FLOAT;
+		case BufferVariableType::Float2: return GL_FLOAT;
+		case BufferVariableType::Float3: return GL_FLOAT;
+		case BufferVariableType::Float4: return GL_FLOAT;
+		case BufferVariableType::Int1: return GL_INT;
+		case BufferVariableType::Int2: return GL_INT;
+		case BufferVariableType::Int3: return GL_INT;
+		case BufferVariableType::Int4: return GL_INT;
+		case BufferVariableType::Mat2: return GL_FLOAT;
+		case BufferVariableType::Mat3: return GL_FLOAT;
+		case BufferVariableType::Mat4: return GL_FLOAT;
+		case BufferVariableType::Bool: return GL_BOOL;
+		default: return 0;
+		}
+	}
+};

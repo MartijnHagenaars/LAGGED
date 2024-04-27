@@ -15,6 +15,7 @@ namespace LAG
 		std::string name;
 		BufferVariableType type;
 		bool isNormalized;
+		uint32_t offset;
 	};
 
 	static uint32_t GetBufferVariableTypeSize(BufferVariableType type);
@@ -32,8 +33,8 @@ namespace LAG
 			}
 		}
 
-		const std::vector<BufferLayoutElement>::iterator& GetBufferLayout() { return m_BufferLayout.begin(); }
-		const std::vector<BufferLayoutElement>::const_iterator& GetBufferLayout() const { return m_BufferLayout.begin(); }
+		int GetStride() const { return m_Stride; }
+		const std::vector<BufferLayoutElement>& GetBufferLayout() const { return m_BufferLayout; }
 
 	private:
 		int m_Stride;

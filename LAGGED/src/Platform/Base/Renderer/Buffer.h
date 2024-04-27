@@ -5,7 +5,8 @@
 
 namespace LAG
 {
-
+	class IndexBuffer;
+	class VertexBuffer;
 	class VertexBufferBase
 	{
 	public:
@@ -30,7 +31,7 @@ namespace LAG
 		IndexBufferBase() = default;
 		virtual ~IndexBufferBase() = default;
 
-		virtual void SetIndexData(const std::vector<uint32_t>& data) {};
+		virtual void SetIndexData(const std::vector<uint32_t>& data) = 0;
 
 	protected:
 		std::vector<uint32_t> m_IndexData;
@@ -42,13 +43,13 @@ namespace LAG
 		ArrayBufferBase() = default;
 		~ArrayBufferBase() = default;
 
-		virtual void Initialize(const VertexBufferBase& vertexBuffer, const IndexBufferBase& indexBuffer) = 0;
+		virtual void Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer) = 0;
 
-		const VertexBufferBase* GetVertexBuffer() const { return m_VertexBuffer; }
-		const IndexBufferBase* GetIndexBuffer() const { return m_IndexBuffer; }
+		const VertexBuffer* GetVertexBuffer() const { return m_VertexBuffer; }
+		const IndexBuffer* GetIndexBuffer() const { return m_IndexBuffer; }
 
-	private:
-		VertexBufferBase* m_VertexBuffer;
-		IndexBufferBase* m_IndexBuffer;
+	protected:
+		VertexBuffer* m_VertexBuffer;
+		IndexBuffer* m_IndexBuffer;
 	};
 }
