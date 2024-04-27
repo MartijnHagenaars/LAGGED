@@ -7,7 +7,7 @@ namespace LAG
 	{
 		friend class ArrayBuffer;
 	public: 
-		VertexBuffer() = delete;
+		VertexBuffer() = default;
 		~VertexBuffer();
 
 		void SetVertexData(const void* data, uint32_t size) override;

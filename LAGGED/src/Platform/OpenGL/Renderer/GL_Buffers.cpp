@@ -9,6 +9,7 @@ namespace LAG
 
 	VertexBuffer::~VertexBuffer()
 	{
+		//TODO: Remove vertex buffer
 	}
 
 	void VertexBuffer::SetVertexData(const void* data, uint32_t size)
@@ -21,6 +22,7 @@ namespace LAG
 
 	void VertexBuffer::Unbind()
 	{
+		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VBO));
 	}
 
 
@@ -28,6 +30,7 @@ namespace LAG
 
 	IndexBuffer::~IndexBuffer()
 	{
+		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_EBO));
 	}
 
 	void IndexBuffer::SetIndexData(const std::vector<uint32_t>& data)
@@ -44,6 +47,7 @@ namespace LAG
 
 	ArrayBuffer::~ArrayBuffer()
 	{
+		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VAO));
 	}
 
 	//TODO: Passing by reference might be bad since we're moving ownership.... Need to test this.
@@ -100,7 +104,6 @@ namespace LAG
 
 		glBindVertexArray(m_VAO);
 		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
-
 	}
 
 	int ArrayBuffer::ConvertBufferVarTypeToGLType(BufferVariableType type)
