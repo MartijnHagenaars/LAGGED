@@ -45,10 +45,9 @@ namespace LAG
 
 	enum class BufferVariableType
 	{
-		Int1, Int2, Int3, Int4,
+		Int1, Int2, Int3, Int4, Bool,
 		Float1, Float2, Float3, Float4,
 		Mat2, Mat3, Mat4,
-		Bool
 	};
 
 	inline uint32_t GetBufferVariableTypeSize(BufferVariableType type)

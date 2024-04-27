@@ -71,6 +71,13 @@ namespace LAG
 				glEnableVertexAttribArray(i);
 				continue;
 			}
+			else if (bufferElement.type >= BufferVariableType::Int1 && bufferElement.type <= BufferVariableType::Bool)
+			{
+				glVertexAttribIPointer(i, GetBufferVariableTypeSize(bufferElement.type), ConvertBufferVarTypeToGLType(bufferElement.type), m_VertexBuffer->m_BufferLayout.GetStride(), (void*)bufferElement.offset);
+				glEnableVertexAttribArray(i);
+				continue;
+			}
+			else Logger::Critical("Undefined buffer element type.");
 		}
 
 		//Setup index buffer
