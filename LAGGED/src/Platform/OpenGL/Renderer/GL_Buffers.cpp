@@ -7,16 +7,6 @@ namespace LAG
 {
 	//Vertex buffer
 
-	VertexBuffer::VertexBuffer()
-	{
-		//LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_VBO));
-	}
-
-	VertexBuffer::~VertexBuffer()
-	{
-		//LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VBO));
-	}
-
 	void VertexBuffer::SetVertexData(const void* data, uint32_t size)
 	{
 		m_VertexData = data;
@@ -37,16 +27,6 @@ namespace LAG
 
 
 	//Index buffer
-
-	IndexBuffer::IndexBuffer()
-	{
-		//LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_EBO));
-	}
-
-	IndexBuffer::~IndexBuffer()
-	{
-		//LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_EBO));
-	}
 
 	void IndexBuffer::SetIndexData(const std::vector<uint32_t>& data)
 	{

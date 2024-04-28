@@ -7,9 +7,6 @@ namespace LAG
 	{
 		friend class ArrayBuffer;
 	public: 
-		VertexBuffer();
-		~VertexBuffer();
-
 		void SetVertexData(const void* data, uint32_t size) override;
 
 		void Bind() override;
@@ -23,9 +20,6 @@ namespace LAG
 	{
 		friend class ArrayBuffer;
 	public:
-		IndexBuffer();
-		~IndexBuffer();
-
 		void SetIndexData(const std::vector<uint32_t>& data) override;
 
 		void Bind() override;
