@@ -20,7 +20,7 @@ namespace LAG
 		virtual void Unbind() = 0;
 
 	protected:
-		//void* m_VertexData = nullptr;
+		const void* m_VertexData = nullptr;
 		uint32_t m_VertexDataSize = 0;
 		BufferLayout m_BufferLayout;
 	};
