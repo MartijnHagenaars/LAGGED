@@ -7,26 +7,39 @@ namespace LAG
 {
 	//Vertex buffer
 
+	VertexBuffer::VertexBuffer()
+	{
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_VBO));
+	}
+
 	VertexBuffer::~VertexBuffer()
-	{
-		//TODO: Remove vertex buffer
-	}
-
-	void VertexBuffer::SetVertexData(const void* data, uint32_t size)
-	{
-	}
-
-	void VertexBuffer::Bind()
-	{
-	}
-
-	void VertexBuffer::Unbind()
 	{
 		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VBO));
 	}
 
+	void VertexBuffer::SetVertexData(const void* data, uint32_t size)
+	{
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
+		LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
+	}
+
+	void VertexBuffer::Bind()
+	{
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
+	}
+
+	void VertexBuffer::Unbind()
+	{
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
+	}
+
 
 	//Index buffer
+
+	IndexBuffer::IndexBuffer()
+	{
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_EBO));
+	}
 
 	IndexBuffer::~IndexBuffer()
 	{
@@ -35,6 +48,24 @@ namespace LAG
 
 	void IndexBuffer::SetIndexData(const std::vector<uint32_t>& data)
 	{
+		if (data.size() > 0)
+		{
+			m_IndexData = data;
+
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
+			LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(uint32_t), &data.data()[0], GL_STATIC_DRAW));
+		}
+		else Logger::Warning("Index data does not contain any data.");
+	}
+
+	void IndexBuffer::Bind()
+	{
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+	}
+
+	void IndexBuffer::Unbind()
+	{
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	}
 
 
@@ -53,16 +84,25 @@ namespace LAG
 	//TODO: Passing by reference might be bad since we're moving ownership.... Need to test this.
 	void ArrayBuffer::Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer)
 	{
-		if (vertexBuffer.m_VertexDataSize <= 0 || indexBuffer.m_IndexData.empty())
-		{
-			Logger::Critical("Vertex/index buffer is empty.");
-			return;
-		}
+		//if (vertexBuffer.m_VertexDataSize <= 0 || indexBuffer.m_IndexData.empty())
+		//{
+		//	Logger::Critical("Vertex/index buffer is empty.");
+		//	return;
+		//}
 
-		m_VertexBuffer = std::move(&vertexBuffer);
-		m_IndexBuffer = std::move(&indexBuffer);
+		m_VertexBuffer = new VertexBuffer(vertexBuffer);
+		m_IndexBuffer = new IndexBuffer(indexBuffer);
+		
+
+		//m_VertexBuffer = std::move(&vertexBuffer);
+		//m_IndexBuffer = std::move(&indexBuffer);
 
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
+		m_VertexBuffer->Bind();
+		m_IndexBuffer->Bind();
+
+		//TODO: glBufferData needs to be done here for both VBO and EBO
+		// or not... 
 
 		//Setup vertex buffer
 		for (int i = 0; i < m_VertexBuffer->m_BufferLayout.GetBufferLayout().size(); i++)
@@ -70,15 +110,17 @@ namespace LAG
 			BufferLayoutElement bufferElement = m_VertexBuffer->m_BufferLayout.GetBufferLayout()[i];
 			if (bufferElement.type >= BufferVariableType::Float1 && bufferElement.type <= BufferVariableType::Float4)
 			{
-				//TODO: Calculate offset
-				glVertexAttribPointer(i, GetBufferVariableTypeSize(bufferElement.type), ConvertBufferVarTypeToGLType(bufferElement.type), bufferElement.isNormalized, m_VertexBuffer->m_BufferLayout.GetStride(), (void*)bufferElement.offset);
-				glEnableVertexAttribArray(i);
+				uint32_t size = GetBufferVariableTypeCount(bufferElement.type);
+				int stride = m_VertexBuffer->m_BufferLayout.GetStride();
+				int offset = bufferElement.offset * GetBufferVariableTypeSize(bufferElement.type);
+				(glVertexAttribPointer(i, size, ConvertBufferVarTypeToGLType(bufferElement.type), bufferElement.isNormalized, stride, (void*)(offset)));
+				LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(i));
 				continue;
 			}
 			else if (bufferElement.type >= BufferVariableType::Int1 && bufferElement.type <= BufferVariableType::Bool)
 			{
-				glVertexAttribIPointer(i, GetBufferVariableTypeSize(bufferElement.type), ConvertBufferVarTypeToGLType(bufferElement.type), m_VertexBuffer->m_BufferLayout.GetStride(), (void*)bufferElement.offset);
-				glEnableVertexAttribArray(i);
+				LAG_GRAPHICS_CHECK(glVertexAttribIPointer(i, GetBufferVariableTypeCount(bufferElement.type), ConvertBufferVarTypeToGLType(bufferElement.type), m_VertexBuffer->m_BufferLayout.GetStride(), (void*)bufferElement.offset));
+				LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(i));
 				continue;
 			}
 			else Logger::Critical("Undefined buffer element type.");
@@ -86,9 +128,9 @@ namespace LAG
 
 		//Setup index buffer
 
-		glCreateBuffers(1, &m_IndexBuffer->m_EBO);
-		glBindBuffer(GL_ARRAY_BUFFER, m_IndexBuffer->m_EBO);
-		glBufferData(GL_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), m_IndexBuffer->m_IndexData.data(), GL_STATIC_DRAW);
+		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &m_IndexBuffer->m_EBO));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_IndexBuffer->m_EBO));
+		LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), m_IndexBuffer->m_IndexData.data(), GL_STATIC_DRAW));
 
 		m_Initialized = true;
 	}
@@ -102,8 +144,13 @@ namespace LAG
 			return;
 		}
 
-		glBindVertexArray(m_VAO);
-		glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr);
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_CHECK(glDrawElements(GL_TRIANGLES, m_IndexBuffer->GetCount(), GL_UNSIGNED_INT, nullptr));
+	}
+
+	void ArrayBuffer::Bind()
+	{
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 	}
 
 	int ArrayBuffer::ConvertBufferVarTypeToGLType(BufferVariableType type)

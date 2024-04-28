@@ -7,7 +7,7 @@ namespace LAG
 	{
 		friend class ArrayBuffer;
 	public: 
-		VertexBuffer() = default;
+		VertexBuffer();
 		~VertexBuffer();
 
 		void SetVertexData(const void* data, uint32_t size) override;
@@ -23,10 +23,13 @@ namespace LAG
 	{
 		friend class ArrayBuffer;
 	public:
-		IndexBuffer() = delete;
+		IndexBuffer();
 		~IndexBuffer();
 
 		void SetIndexData(const std::vector<uint32_t>& data) override;
+
+		void Bind() override;
+		void Unbind() override;
 
 	private:
 		unsigned int m_EBO = 0;

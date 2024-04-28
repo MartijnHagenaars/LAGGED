@@ -1,6 +1,9 @@
 #pragma once
 #include "Core/Resources/Model.h"
-#include "glm/glm.hpp" //TODO: Remove glm here
+#include "Platform/Base/Renderer/Buffer.h"
+
+#include "glm/vec2.hpp"
+#include "glm/vec3.hpp"
 
 #include <map>
 #include <utility>
@@ -41,11 +44,9 @@ namespace LAG
 
 		void LoadModel(tinygltf::Model& modelData) override;
 		
-		std::vector<size_t> m_Textures;
+		ArrayBuffer m_Buffer;
 
-		unsigned int m_VBO = 0;
-		unsigned int m_EBO = 0;
-		unsigned int m_VAO = 0;
+		std::vector<size_t> m_Textures;
 
 		unsigned int m_TotalIndices = 0;
 	};

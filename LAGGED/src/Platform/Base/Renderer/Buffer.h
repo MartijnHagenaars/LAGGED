@@ -20,7 +20,7 @@ namespace LAG
 		virtual void Unbind() = 0;
 
 	protected:
-		void* m_VertexData = nullptr;
+		//void* m_VertexData = nullptr;
 		uint32_t m_VertexDataSize = 0;
 		BufferLayout m_BufferLayout;
 	};
@@ -32,12 +32,17 @@ namespace LAG
 		virtual ~IndexBufferBase() = default;
 
 		virtual void SetIndexData(const std::vector<uint32_t>& data) = 0;
+
+		virtual void Bind() = 0;
+		virtual void Unbind() = 0;
+
 		size_t GetCount() const { return m_IndexData.size(); }
 
 	protected:
 		std::vector<uint32_t> m_IndexData;
 	};
 
+	//TODO: Maybe move this buffer to another file? This one is more important
 	class ArrayBufferBase
 	{
 	public: 
