@@ -76,29 +76,19 @@ namespace LAG
 		m_IndexBuffer = new IndexBuffer(indexBuffer);
 		
 
-		//m_VertexBuffer = std::move(&vertexBuffer);
-		//m_IndexBuffer = std::move(&indexBuffer);
-
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 
-		//m_VertexBuffer->Bind();
+		//Setup vertex buffer
 		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &m_VertexBuffer->m_VBO));
 		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer->m_VBO));
 		LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, m_VertexBuffer->m_VertexDataSize, m_VertexBuffer->m_VertexData, GL_STATIC_DRAW));
 
-		//m_IndexBuffer->Bind();
-		//LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), &m_IndexBuffer->m_IndexData.data()[0], GL_STATIC_DRAW));
-
 		//Setup index buffer
-
 		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &m_IndexBuffer->m_EBO));
 		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer->m_EBO));
 		LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), m_IndexBuffer->m_IndexData.data(), GL_STATIC_DRAW));
 
-		//TODO: glBufferData needs to be done here for both VBO and EBO
-		// or not... 
-
-		//Setup vertex buffer
+		//Setup buffer layout
 		for (int i = 0; i < m_VertexBuffer->m_BufferLayout.GetBufferLayout().size(); i++)
 		{
 			BufferLayoutElement bufferElement = m_VertexBuffer->m_BufferLayout.GetBufferLayout()[i];
@@ -121,6 +111,13 @@ namespace LAG
 		}
 
 		m_Initialized = true;
+	}
+
+	void ArrayBuffer::Shutdown()
+	{
+		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VertexBuffer->m_VBO));
+		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_IndexBuffer->m_EBO));
+		LAG_GRAPHICS_CHECK(glDeleteVertexArrays(1, &m_VAO));
 	}
 
 	void ArrayBuffer::Render()

@@ -36,6 +36,8 @@ namespace LAG
 		~ArrayBuffer();
 
 		void Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer) override;
+		void Shutdown() override;
+
 		void Render() override;
 
 	private:

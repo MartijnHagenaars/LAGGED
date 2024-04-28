@@ -50,6 +50,8 @@ namespace LAG
 		~ArrayBufferBase() = default;
 
 		virtual void Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer) = 0;
+		virtual void Shutdown() = 0;
+
 		virtual void Render() = 0;
 
 		const VertexBuffer* GetVertexBuffer() const { return m_VertexBuffer; }
