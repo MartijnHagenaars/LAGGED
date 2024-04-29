@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Resources/Resource.h"
+#include "Platform/Base/Renderer/Buffer.h"
 #include <vector>
 
 namespace LAG
@@ -13,7 +14,6 @@ namespace LAG
 	{
 	public:
 		SurfaceBase() : Resource(HashedString("")) {};
-		virtual ~SurfaceBase() {};
 
 		virtual void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
@@ -22,8 +22,8 @@ namespace LAG
 
 		//TODO: Pure virtual functions for generation surface, applying height map/noise map need to be added here
 
-	private:
-		//TODO: Add booleans for checking whether everything has been loaded in order. Maybe an enum describing the different states?
+	protected:
+		ArrayBuffer m_Buffer;
 	};
 }
 

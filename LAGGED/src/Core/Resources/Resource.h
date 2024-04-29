@@ -9,7 +9,6 @@ namespace LAG
 	public: 
 		Resource() = delete;
 		explicit Resource(const HashedString& path);
-		virtual ~Resource() {};
 
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
