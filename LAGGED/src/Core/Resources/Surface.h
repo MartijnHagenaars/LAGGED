@@ -1,5 +1,6 @@
 #pragma once
 #include "Core/Resources/Resource.h"
+#include "Platform/Base/Renderer/Buffer.h"
 #include <vector>
 
 namespace LAG
@@ -22,8 +23,8 @@ namespace LAG
 
 		//TODO: Pure virtual functions for generation surface, applying height map/noise map need to be added here
 
-	private:
-		//TODO: Add booleans for checking whether everything has been loaded in order. Maybe an enum describing the different states?
+	protected:
+		ArrayBuffer m_Buffer;
 	};
 }
 

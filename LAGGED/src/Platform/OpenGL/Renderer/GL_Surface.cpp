@@ -33,34 +33,6 @@ namespace LAG
 		Logger::Error("Constructor for loading height map from texture has not been implemented.");
 	}
 
-	Surface::Surface(const Surface& other) : m_VAO(other.m_VAO), m_VBO(other.m_VBO), m_EBO(other.m_EBO),
-		m_Width(other.m_Width), m_Height(other.m_Height), m_Subdivisions(other.m_Subdivisions),
-		m_HeightMapData(other.m_HeightMapData), m_HeightMapWidth(other.m_HeightMapWidth), m_HeightMapHeight(other.m_HeightMapHeight)
-	{ }
-
-	Surface& Surface::operator=(Surface& other)
-	{
-		if (this != &other)
-		{
-			m_VAO = other.m_VAO;
-			m_VBO = other.m_VBO;
-			m_EBO = other.m_EBO;
-
-			m_Width = other.m_Width;
-			m_Height = other.m_Height;
-			m_Subdivisions = other.m_Height;
-
-			m_HeightMapData = other.m_HeightMapData;
-			m_HeightMapWidth = other.m_HeightMapWidth;
-			m_HeightMapHeight = other.m_HeightMapHeight;
-		}
-		return *this;
-	}
-
-	Surface::~Surface()
-	{
-	}
-
 	void Surface::GenerateSurface(int width, int height)
 	{
 		//Check if sizes are valid
@@ -143,10 +115,7 @@ namespace LAG
 		}
 		else shader.SetBool("a_UseLight", false);
 
-		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
-
-		//TOOD: Should use unsigned short
-		glDrawElements(GL_TRIANGLES, static_cast<int>(m_Indices.size()), GL_UNSIGNED_INT, 0);
+		m_Buffer.Render();
 	}
 
 	bool Surface::Load()
@@ -157,24 +126,17 @@ namespace LAG
 			return false;
 		}
 
-		//Now create all GL objects
-		LAG_GRAPHICS_CHECK(glGenVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_VBO));
-		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_EBO));
+		VertexBuffer vertexBuffer;
+		vertexBuffer.SetVertexData(&m_VertexData.data()[0], m_VertexData.size() * sizeof(VertexData));
+		vertexBuffer.SetLayout(std::vector<BufferLayoutElement>{
+			BufferLayoutElement("a_Position", BufferVariableType::Float3, false),
+			BufferLayoutElement("a_Normal", BufferVariableType::Float3, false)
+		});
 
-		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
+		IndexBuffer indexBuffer;
+		indexBuffer.SetIndexData(m_Indices);
 
-		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, m_VertexData.size() * sizeof(VertexData), &m_VertexData[0], GL_STATIC_DRAW));
-		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-		LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_Indices.size() * sizeof(unsigned int), &m_Indices[0], GL_STATIC_DRAW));
-
-		LAG_GRAPHICS_CHECK(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0));
-		LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(0));
-		LAG_GRAPHICS_CHECK(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float))));
-		LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(1));
-
-		LAG_GRAPHICS_CHECK(glBindVertexArray(0));
+		m_Buffer.Initialize(vertexBuffer, indexBuffer);
 
 		SetLoaded(true);
 		return true;
@@ -185,9 +147,7 @@ namespace LAG
 		if (!IsLoaded())
 			return true;
 
-		LAG_GRAPHICS_CHECK(glDeleteVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VBO));
-		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_EBO));
+		m_Buffer.Shutdown();
 
 		SetLoaded(false);
 		return true;

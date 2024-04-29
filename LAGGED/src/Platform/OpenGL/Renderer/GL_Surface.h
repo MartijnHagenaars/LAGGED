@@ -18,9 +18,6 @@ namespace LAG
 	public:
 		Surface();
 		Surface(const std::string& heightTexturePath);
-		Surface(const Surface& other);
-		Surface& operator=(Surface& other);
-		~Surface() override;
 		
 		//Load a height map from a texture
 		//TODO: Needs to be reworked
@@ -52,10 +49,6 @@ namespace LAG
 
 		std::vector<VertexData> m_VertexData;
 		std::vector<unsigned int> m_Indices;
-
-		unsigned int m_VBO = 0;
-		unsigned int m_EBO = 0;
-		unsigned int m_VAO = 0;
 
 		int m_Width = 0;
 		int m_Height = 0;

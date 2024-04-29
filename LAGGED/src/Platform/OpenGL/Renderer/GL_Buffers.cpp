@@ -11,8 +11,6 @@ namespace LAG
 	{
 		m_VertexData = data;
 		m_VertexDataSize = size;
-		//LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		//LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW));
 	}
 
 	void VertexBuffer::Bind()
@@ -33,9 +31,6 @@ namespace LAG
 		if (data.size() > 0)
 		{
 			m_IndexData = data;
-
-			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-			//LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.size() * sizeof(uint32_t), &data.data()[0], GL_STATIC_DRAW));
 		}
 		else Logger::Warning("Index data does not contain any data.");
 	}
