@@ -60,16 +60,8 @@ namespace LAG
 
 	void ArrayBuffer::Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer)
 	{
-		//if (vertexBuffer.m_VertexDataSize <= 0 || indexBuffer.m_IndexData.empty())
-		//{
-		//	Logger::Critical("Vertex/index buffer is empty.");
-		//	return;
-		//}
-
 		m_VertexBuffer = new VertexBuffer(vertexBuffer);
 		m_IndexBuffer = new IndexBuffer(indexBuffer);
-		
-
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 
 		//Setup vertex buffer

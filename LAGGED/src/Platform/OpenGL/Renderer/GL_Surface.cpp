@@ -11,14 +11,7 @@
 
 #include "ECS/Systems/CameraSystem.h"
 
-#include "GL/glew.h"
-#include "GL_ErrorChecks.h"
-#include <glm/ext/matrix_transform.hpp>
-
 #include "Utility/Noise.h"
-
-//For debugging only. 
-#include "ImGui/imgui.h"
 
 namespace LAG
 {
