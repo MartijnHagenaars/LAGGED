@@ -64,7 +64,7 @@ namespace LAG
 			memset(reflectionWidgetTextBuffer, 0, REFLECTION_CHAR_ARRAY_SIZE);
 			value.copy(reflectionWidgetTextBuffer, REFLECTION_CHAR_ARRAY_SIZE);
 
-			if(ImGui::InputText(name.c_str(), reflectionWidgetTextBuffer, REFLECTION_CHAR_ARRAY_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
+			if (ImGui::InputText(name.c_str(), reflectionWidgetTextBuffer, REFLECTION_CHAR_ARRAY_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
 				value = reflectionWidgetTextBuffer;
 			}
@@ -79,20 +79,7 @@ namespace LAG
 		template <>
 		static void DrawWidgetType<TextureHandle>(LAG::Entity* entity, TextureHandle& value, const std::string& name)
 		{
-			Texture* texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureLookup.GetValue());
-			if (texture != nullptr)
-			{
-				//Draw texture in ImGui window
-				ImGui::Image(texture->GetEditorHandle(), ImVec2(
-					std::clamp<float>(ImGui::GetWindowSize().x, 0.f, IMAGE_MAX_SIZE),
-					std::clamp<float>((ImGui::GetWindowSize().x / texture->GetHeight()) * texture->GetHeight(), 0.f, IMAGE_MAX_SIZE)
-				));
-			}
-			else
-			{
-				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No texture assigned.");
-			}
-
+			Texture* texture = nullptr;
 			if (ImGui::BeginCombo("Textures", value.m_TextureLookup.GetValue() != 0 ? value.m_TextureLookup.GetString().c_str() : "No texture selected..."))
 			{
 				std::vector<HashedString> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
@@ -105,6 +92,21 @@ namespace LAG
 					}
 				}
 				ImGui::EndCombo();
+			}
+
+			if (!value.m_TextureLookup.GetString().empty())
+				texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureLookup.GetValue());
+			if (texture != nullptr)
+			{
+				//Draw texture in ImGui window
+				ImGui::Image(texture->GetEditorHandle(), ImVec2(
+					std::clamp<float>(ImGui::GetWindowSize().x, 0.f, IMAGE_MAX_SIZE),
+					std::clamp<float>((ImGui::GetWindowSize().x / texture->GetHeight()) * texture->GetHeight(), 0.f, IMAGE_MAX_SIZE)
+				));
+			}
+			else
+			{
+				ImGui::TextColored(ImVec4(1.f, 0.f, 0.f, 1.f), "No texture assigned.");
 			}
 		}
 
