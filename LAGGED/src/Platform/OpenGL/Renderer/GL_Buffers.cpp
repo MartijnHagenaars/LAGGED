@@ -95,15 +95,12 @@ namespace LAG
 	{
 		if (m_Initialized)
 		{
-			Logger::Info("Shutting down VAO with ID {0}", m_VAO);
 			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VertexBuffer->m_VBO));
 			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_IndexBuffer->m_EBO));
 			LAG_GRAPHICS_CHECK(glDeleteVertexArrays(1, &m_VAO));
 
 			m_Initialized = false;
 		}
-
-
 	}
 
 	void ArrayBuffer::Render()
@@ -111,12 +108,11 @@ namespace LAG
 		//Check if buffer is initialized
 		if (!m_Initialized)
 		{
-			Logger::Critical("Cannot rendert buffer: not initialized.");
+			Logger::Critical("Cannot render buffer: not initialized.");
 			return;
 		}
 
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
-		Logger::Info("Rendering VAO with ID {0}", m_VAO);
 		LAG_GRAPHICS_CHECK(glDrawElements(GL_TRIANGLES, static_cast<int>(m_IndexBuffer->GetCount()), GL_UNSIGNED_INT, 0));
 	}
 
