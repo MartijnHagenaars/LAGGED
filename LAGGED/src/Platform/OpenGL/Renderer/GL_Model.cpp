@@ -81,12 +81,7 @@ namespace LAG
 
 	bool Model::Unload()
 	{
-		//TODO: Unload the model
-		// 
-		//glDeleteBuffers(1, &m_VBO);
-		//glDeleteBuffers(1, &m_EBO);
-		//glDeleteBuffers(1, &m_VAO);
-
+		m_Buffer.Shutdown();
 		return true;
 	}
 
@@ -230,7 +225,6 @@ namespace LAG
 					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", lights[i].second->lightAttenuation);
 				}
 			}
-
 		}
 		else shader.SetBool("a_UseLight", false);
 
@@ -240,8 +234,5 @@ namespace LAG
 			GetResourceManager()->GetResource<Texture>(m_Textures.at(i))->Bind(i);
 
 		m_Buffer.Render();
-
-		//LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
-		//LAG_GRAPHICS_CHECK(glDrawElements(GL_TRIANGLES, m_TotalIndices, GL_UNSIGNED_SHORT, 0));
 	}
 }
