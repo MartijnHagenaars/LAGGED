@@ -63,7 +63,6 @@ namespace LAG
 		LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &m_VAO));
 	}
 
-	//TODO: Passing by reference might be bad since we're moving ownership.... Need to test this.
 	void ArrayBuffer::Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer)
 	{
 		//if (vertexBuffer.m_VertexDataSize <= 0 || indexBuffer.m_IndexData.empty())
@@ -86,7 +85,7 @@ namespace LAG
 		//Setup index buffer
 		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &m_IndexBuffer->m_EBO));
 		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer->m_EBO));
-		LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), m_IndexBuffer->m_IndexData.data(), GL_STATIC_DRAW));
+		LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), &m_IndexBuffer->m_IndexData.data()[0], GL_STATIC_DRAW));
 
 		//Setup buffer layout
 		for (int i = 0; i < m_VertexBuffer->m_BufferLayout.GetBufferLayout().size(); i++)
