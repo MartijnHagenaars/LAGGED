@@ -8,7 +8,7 @@
 #include "Core/Resources/ResourceManager.h"
 
 #include "GL/glew.h"
-#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "GL_ErrorChecks.h"
 
 #include "ImGui/imgui.h"
 
@@ -41,15 +41,15 @@ namespace LAG
 
 		unsigned short indices[] = { 0, 1, 2, 1, 3, 2 };
 
-		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
+		LAG_GRAPHICS_CHECK(glGenVertexArrays(1, &m_VAO));
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_VBO));
+		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_EBO));
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 
 		//Setup the VBO
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 		glEnableVertexAttribArray(0);
@@ -57,24 +57,24 @@ namespace LAG
 		glEnableVertexAttribArray(1);
 
 		//Setup the EBO
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), &indices, GL_STATIC_DRAW);
 
 		//Create the frame buffer
-		LAG_GRAPHICS_EXCEPTION(glGenFramebuffers(1, &m_FrameBuffer));
-		LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
+		LAG_GRAPHICS_CHECK(glGenFramebuffers(1, &m_FrameBuffer));
+		LAG_GRAPHICS_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
 
 		//Create a render buffer object for the depth stencil
-		LAG_GRAPHICS_EXCEPTION(glGenRenderbuffers(1, &m_DepthStencilBuffer));
-		LAG_GRAPHICS_EXCEPTION(glBindRenderbuffer(GL_RENDERBUFFER, m_DepthStencilBuffer));
-		LAG_GRAPHICS_EXCEPTION(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetSize().x, GetSize().y));
-		LAG_GRAPHICS_EXCEPTION(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_DepthStencilBuffer));
+		LAG_GRAPHICS_CHECK(glGenRenderbuffers(1, &m_DepthStencilBuffer));
+		LAG_GRAPHICS_CHECK(glBindRenderbuffer(GL_RENDERBUFFER, m_DepthStencilBuffer));
+		LAG_GRAPHICS_CHECK(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetSize().x, GetSize().y));
+		LAG_GRAPHICS_CHECK(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_DepthStencilBuffer));
 
-		LAG_GRAPHICS_EXCEPTION(glGenTextures(1, &m_ColorBuffer));
-		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
-		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetSize().x, GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-		LAG_GRAPHICS_EXCEPTION(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
+		LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ColorBuffer));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
+		LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetSize().x, GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBuffer, 0);
 
 		bool bufferStatusSucceeded = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
@@ -99,15 +99,15 @@ namespace LAG
 
 	void FrameBuffer::FrameStart(bool showWireframe)
 	{
-		LAG_GRAPHICS_EXCEPTION(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
+		LAG_GRAPHICS_CHECK(glBindFramebuffer(GL_FRAMEBUFFER, m_FrameBuffer));
 
 		if (showWireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		else glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 		glEnable(GL_DEPTH_TEST);
-		LAG_GRAPHICS_EXCEPTION(glClearColor(0.2f, 0.2f, 0.6f, 1.0f));
-		LAG_GRAPHICS_EXCEPTION(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+		LAG_GRAPHICS_CHECK(glClearColor(0.2f, 0.2f, 0.6f, 1.0f));
+		LAG_GRAPHICS_CHECK(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	}
 
 	void FrameBuffer::FrameEnd()
@@ -124,7 +124,7 @@ namespace LAG
 			return;
 
 		//Bind VAO and Shader
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 		Shader* shader = GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/FrameBuffer"));
 		shader->Bind();
 
@@ -132,8 +132,8 @@ namespace LAG
 		shader->SetFloat("a_InversionAmount", m_PostProcessingProperties.m_InversionAmount);
 		shader->SetFloat("a_GrayScaleAmount", m_PostProcessingProperties.m_GrayScaleAmount);
 
-		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
-		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
+		LAG_GRAPHICS_CHECK(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0));
 	}
 
 	void FrameBuffer::Resize(const glm::uvec2& size)
@@ -141,12 +141,12 @@ namespace LAG
 		m_FrameBufferSize = size;
 
 		//Resize frame buffer
-		LAG_GRAPHICS_EXCEPTION(glBindRenderbuffer(GL_RENDERBUFFER, m_DepthStencilBuffer));
-		LAG_GRAPHICS_EXCEPTION(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetSize().x, GetSize().y));
+		LAG_GRAPHICS_CHECK(glBindRenderbuffer(GL_RENDERBUFFER, m_DepthStencilBuffer));
+		LAG_GRAPHICS_CHECK(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetSize().x, GetSize().y));
 
 		//Resize texture
-		LAG_GRAPHICS_EXCEPTION(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
-		LAG_GRAPHICS_EXCEPTION(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetSize().x, GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
+		LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetSize().x, GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
 	}
 
 	void* FrameBuffer::GetEditorHandle()

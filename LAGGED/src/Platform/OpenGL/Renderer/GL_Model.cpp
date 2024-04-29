@@ -1,5 +1,5 @@
 #include "GL_Model.h"
-#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "GL_ErrorChecks.h"
 #include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
 
 #include "Core/Engine.h"
@@ -35,11 +35,6 @@ namespace LAG
 	Model::Model(const HashedString& path) :
 		ModelBase(path)
 	{
-	}
-
-	Model::~Model()
-	{
-
 	}
 
 	bool Model::Load()
@@ -86,10 +81,7 @@ namespace LAG
 
 	bool Model::Unload()
 	{
-		glDeleteBuffers(1, &m_VBO);
-		glDeleteBuffers(1, &m_EBO);
-		glDeleteBuffers(1, &m_VAO);
-
+		m_Buffer.Shutdown();
 		return true;
 	}
 
@@ -148,9 +140,9 @@ namespace LAG
 		return meshData;
 	}
 
-	std::vector<unsigned short> LoadIndices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
+	std::vector<unsigned int> LoadIndices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
 	{
-		std::vector<unsigned short> indices;
+		std::vector<unsigned int> indices;
 
 		const auto& accessors = modelData.accessors[primitive.indices];
 		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
@@ -192,36 +184,25 @@ namespace LAG
 
 	void Model::LoadModel(tinygltf::Model& modelData)
 	{
-		//Create buffer objects and such
-		LAG_GRAPHICS_EXCEPTION(glGenVertexArrays(1, &m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glGenBuffers(1, &m_EBO));
-
 		//For now, I'm only looking at the first mesh. In the future, this should loop and create mesh objects. TODO!
 		auto& primitive = modelData.meshes[0].primitives[0];
 		std::vector<MeshData> meshData = LoadVertices(modelData, primitive);
-		std::vector<unsigned short> indices = LoadIndices(modelData, primitive);
+		std::vector<unsigned int> indices = LoadIndices(modelData, primitive);
 		m_Textures = LoadTexture(modelData, GetPath().GetString());
 		m_TotalIndices = static_cast<unsigned int>(indices.size());
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-		
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ARRAY_BUFFER, m_VBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ARRAY_BUFFER, sizeof(MeshData) * meshData.size(), &meshData.data()[0], GL_STATIC_DRAW));
-		
-		LAG_GRAPHICS_EXCEPTION(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-		LAG_GRAPHICS_EXCEPTION(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(unsigned short) * indices.size(), &indices.data()[0], GL_STATIC_DRAW));
-		
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(0));
+		VertexBuffer vertexBuffer;
+		vertexBuffer.SetLayout(
+			std::vector<BufferLayoutElement>{
+			BufferLayoutElement("a_Position", BufferVariableType::Float3, false), 
+			BufferLayoutElement("a_Normal", BufferVariableType::Float3, false),
+			BufferLayoutElement("a_TextureCoords", BufferVariableType::Float2, false) 
+			});
+		vertexBuffer.SetVertexData(meshData.data(), meshData.size() * sizeof(MeshData));
 
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float))));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(1));
-
-		LAG_GRAPHICS_EXCEPTION(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float))));
-		LAG_GRAPHICS_EXCEPTION(glEnableVertexAttribArray(2));
-		
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(0));
+		IndexBuffer indexBuffer;
+		indexBuffer.SetIndexData(indices);
+		m_Buffer.Initialize(vertexBuffer, indexBuffer);
 	}
 
 	void LAG::Model::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
@@ -244,7 +225,6 @@ namespace LAG
 					shader.SetFloat("a_PointLightData[" + std::to_string(i) + "].a_LightAttenuation", lights[i].second->lightAttenuation);
 				}
 			}
-
 		}
 		else shader.SetBool("a_UseLight", false);
 
@@ -253,7 +233,6 @@ namespace LAG
 		for (size_t i = 0; i < m_Textures.size(); i++)
 			GetResourceManager()->GetResource<Texture>(m_Textures.at(i))->Bind(i);
 
-		LAG_GRAPHICS_EXCEPTION(glBindVertexArray(m_VAO));
-		LAG_GRAPHICS_EXCEPTION(glDrawElements(GL_TRIANGLES, m_TotalIndices, GL_UNSIGNED_SHORT, 0));
+		m_Buffer.Render();
 	}
 }

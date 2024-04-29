@@ -8,7 +8,7 @@
 #include "GL_InputEnumConversion.h"
 #include "Platform/OpenGL/Renderer/GL_ErrorCodeLookup.h"
 
-#include "Platform/Base/Renderer/RendererBase.h"
+#include "Platform/Renderer.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_glfw.h"
@@ -63,8 +63,7 @@ namespace LAG
 	void Window::PresentFrame()
 	{
 		glfwMakeContextCurrent(m_Window);
-
-		LAG::Renderer::Render();
+		GetRenderer()->Render();
 		glfwSwapBuffers(m_Window);
 	}
 

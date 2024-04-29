@@ -1,4 +1,4 @@
-#include "Platform/Base/Renderer/RendererBase.h"
+#include "Platform/Renderer.h"
 
 #include "Core/Engine.h"
 #include "Platform/Window.h"
@@ -10,8 +10,10 @@
 #include "Core/Resources/Model.h"
 #include "Core/Resources/Shader.h"
 
-#include "Platform/OpenGL/Renderer/GL_FrameBuffer.h"
-#include "Platform/OpenGL/Renderer/Exceptions/GL_GraphicsExceptionMacros.h"
+#include "Platform/OpenGL/Renderer/GL_LineTool.h"
+
+#include "GL_FrameBuffer.h"
+#include "GL_ErrorChecks.h"
 
 #include "ECS/Entity.h"
 #include "ECS/Scene.h"
@@ -33,46 +35,45 @@
 #include "Utility/Timer.h"
 #include "Editor/ToolsManager.h"
 
-namespace LAG::Renderer
+namespace LAG
 {
-	struct RendererData
+	Renderer::Renderer()
 	{
-		bool m_ShowWireframe = false;
-		bool m_UseLighting = true;
+	}
 
-		LAG::Timer m_RenderTimer;
-		float m_RenderTime = 0.f;
-	};
-	RendererData* renderData = nullptr;
-
-	bool Initialize()
+	Renderer::~Renderer()
 	{
-		if (renderData != nullptr)
-		{
-			Logger::Error("Renderer already initialized.");
-			return false;
-		}
-		renderData = new RendererData();
+	}
 
+	bool Renderer::Initialize()
+	{
+		//Create some essential shaders.
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 
 		glEnable(GL_DEPTH_TEST);
 
+		LineTool::Initialize();
+
 		//Setup resize callback
-		GetWindow()->SetResizeCallBack(&OnResize);
+		GetWindow()->SetResizeCallBack(std::bind(&Renderer::OnResize, this, std::placeholders::_1, std::placeholders::_2));
 
 		return true;
 	}
 
-	bool Shutdown()
+	bool Renderer::Shutdown()
 	{
-		//TODO: Proper cleanup
+		LineTool::Shutdown();
 
-		return false;
+		return true;
 	}
 
-	void OnResize(unsigned int width, unsigned int height)
+	void Renderer::DrawLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
+	{
+		m_LineRenderList.emplace_back(LineData{ p1, p2, color });
+	}
+
+	void Renderer::OnResize(unsigned int width, unsigned int height)
 	{
 		Logger::Info("Window resize: {0}, {1}", width, height);
 
@@ -80,7 +81,7 @@ namespace LAG::Renderer
 		CameraSystem::ResizeCameraBuffers();
 	}
 
-	void ImGuiFrameStart()
+	void Renderer::ImGuiFrameStart()
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
@@ -88,7 +89,7 @@ namespace LAG::Renderer
 		ImGuizmo::BeginFrame();
 	}
 
-	void ImGuiFrameEnd()
+	void Renderer::ImGuiFrameEnd()
 	{
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -99,26 +100,27 @@ namespace LAG::Renderer
 		glfwMakeContextCurrent(prePlatformUpdateContext);
 	}
 
-	void DrawOptionsWindow()
+	//TODO: NEEDS TO BE MOVED!
+	void Renderer::DrawOptionsWindow()
 	{
 		ImGui::Begin("Render options");
 
 		ImGui::Text("LAGGED Renderer");
 		ImGui::Text(std::string("FPS: " + std::to_string(GetEngine().GetFPS())).c_str());
-		ImGui::Text(std::string("Render time: " + std::to_string(renderData->m_RenderTime) + "ms").c_str());
+		ImGui::Text(std::string("Render time: " + std::to_string(m_RenderTime) + "ms").c_str());
 		ImGui::Separator();
 
-		ImGui::Checkbox("Enable wireframe", &renderData->m_ShowWireframe);
+		ImGui::Checkbox("Enable wireframe", &m_ShowWireframe);
 
-		ImGui::Checkbox("Enable lighting", &renderData->m_UseLighting);
+		ImGui::Checkbox("Enable lighting", &m_UseLighting);
 
 		ImGui::End();
 	}
 
-	void Render()
+	void Renderer::Render()
 	{
 		//Start timer for measuring render time
-		renderData->m_RenderTimer.ResetTimer();
+		m_RenderTimer.ResetTimer();
 
 		// Begin of ImGui rendering
 		ImGuiFrameStart();
@@ -129,30 +131,18 @@ namespace LAG::Renderer
 		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
-		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(renderData->m_ShowWireframe);
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(m_ShowWireframe);
 
 
 		//Get an active camera
 		//TODO: This should be done in some sort of camera system. We shouldn't have to loop through the entire scene every single time to find a camera
-		bool doesCameraExist;
-		Entity selectedCamera;
-		doesCameraExist = GetScene()->Loop<CameraComponent, TransformComponent>([&selectedCamera](Entity entity, CameraComponent& camera, TransformComponent& transform)
-			{
-				if (camera.isActive)
-				{
-					selectedCamera = entity;
-				}
-			});
-
-		//Don't render anything if there isn't a valid camera.
-		if (!doesCameraExist)
-			return;
+		Entity selectedCamera = CameraSystem::GetActiveCameraEntity();
 		CameraSystem::Update(&selectedCamera);
 
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
 		std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
-		if (renderData->m_UseLighting)
+		if (m_UseLighting)
 		{
 			lights.reserve(3);
 			GetScene()->Loop<LightComponent, TransformComponent>([&lights](Entity entity, LightComponent& lightComp, TransformComponent& lightTransformComp)
@@ -165,30 +155,38 @@ namespace LAG::Renderer
 		//Render all meshes
 		GetScene()->Loop<MeshComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, MeshComponent& meshComp, TransformComponent& transformComp)
 			{
-				GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
-					transformComp, &selectedCamera,
-					*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
-					lights);
+				if (entity.GetComponent<DefaultComponent>()->visible)
+				{
+					GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
+						transformComp, &selectedCamera,
+						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
+						lights);
+				}
 			});
 
 		//Render all surfaces
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				if (entity.GetComponent<DefaultComponent>()->visible)
+					surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
-				surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				if (entity.GetComponent<DefaultComponent>()->visible)
+					surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
-		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameEnd();
+		//Render all lines in the line render list
+		if (!m_LineRenderList.empty())
+		{
+			for (const auto& it : m_LineRenderList)
+				LineTool::DrawLine(it.pos1, it.pos2, it.color);
+			m_LineRenderList.clear();
+		}
+
+		CameraSystem::GetActiveCameraComponent()->m_Framebuffer->FrameEnd();
 
 		ImGuiFrameEnd();
-		renderData->m_RenderTime = renderData->m_RenderTimer.GetMilliseconds();
-	}
-
-	void Clear()
-	{
-
+		m_RenderTime = m_RenderTimer.GetMilliseconds();
 	}
 }

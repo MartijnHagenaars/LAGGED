@@ -61,6 +61,8 @@
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Base\Window.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FileIO\FileIO.h" />
@@ -101,7 +103,7 @@
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Core\Resources\Model.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\Exceptions\GL_GraphicsExceptionMacros.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorChecks.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h" />
@@ -127,7 +129,7 @@
     <ClInclude Include="src\Core\ApplicationInterface.h" />
     <ClInclude Include="src\Core\EntryPoint.h" />
     <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowExceptionMacros.h" />
-    <ClInclude Include="src\Platform\Base\Renderer\RendererBase.h" />
+    <ClInclude Include="src\Platform\Renderer.h" />
     <ClInclude Include="src\Platform\Window.h" />
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
     <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h" />
@@ -142,6 +144,10 @@
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
+    <ClInclude Include="src\Platform\Base\Renderer\BufferLayout.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />
@@ -154,5 +160,7 @@
     <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
   </ItemGroup>
 </Project>

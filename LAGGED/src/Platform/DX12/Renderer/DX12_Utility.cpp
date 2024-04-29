@@ -1,4 +1,3 @@
-#include "Precomp.h"
 #include "DX12_Utility.h"
 
 LPCWSTR LAG::Renderer::ConvertStringToLPCWSTR(std::string input)

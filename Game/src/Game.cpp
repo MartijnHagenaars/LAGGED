@@ -4,7 +4,7 @@
 #include "Core/Input/Input.h"
 
 #include "Core/Engine.h"
-#include "Platform/Base/Renderer/RendererBase.h"
+#include "Platform/Renderer.h"
 
 #include "Core/Memory/ResourcePtr.h"
 #include "Core/Resources/ResourceManager.h"
@@ -42,14 +42,10 @@ void Game::Initialize()
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::HashedString("LMB"));
 
 	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
-	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Avocado/Avocado.gltf"));
-	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/BoomBox/BoomBox.gltf"));
 
 	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
 	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));
-	//ent1.GetComponent<LAG::TransformComponent>()->scale = glm::vec3(75.f);
-	//ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/BoomBox/BoomBox.gltf");
 	ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
 
@@ -95,4 +91,6 @@ void Game::Shutdown()
 void Game::Update()
 {
 	m_World->Update();
+
+	LAG::GetRenderer()->DrawLine(glm::vec3(0.f), glm::vec3(10.f), glm::vec3(1.f, 0.f, 0.f));
 }

@@ -3,6 +3,8 @@
 #include "glm/vec3.hpp"
 #include <vector>
 
+#include "Platform/Base/Renderer/Buffer.h"
+
 namespace tinygltf
 {
 	class Model;
