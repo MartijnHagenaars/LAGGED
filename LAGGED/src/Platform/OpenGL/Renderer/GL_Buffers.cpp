@@ -48,16 +48,12 @@ namespace LAG
 
 	//Array buffer
 
-	ArrayBuffer::ArrayBuffer()
-	{
-		LAG_GRAPHICS_CHECK(glCreateVertexArrays(1, &m_VAO));
-		Logger::Info("Constructing VAO with ID {0}", m_VAO);
-	}
-
 	void ArrayBuffer::Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer)
 	{
 		m_VertexBuffer = new VertexBuffer(vertexBuffer);
 		m_IndexBuffer = new IndexBuffer(indexBuffer);
+
+		LAG_GRAPHICS_CHECK(glCreateVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
 
 		//Setup vertex buffer

@@ -32,8 +32,7 @@ namespace LAG
 	class ArrayBuffer final : public ArrayBufferBase
 	{
 	public: 
-		ArrayBuffer();
-
+		ArrayBuffer() = default;
 
 		void Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer) override;
 		void Shutdown() override;
