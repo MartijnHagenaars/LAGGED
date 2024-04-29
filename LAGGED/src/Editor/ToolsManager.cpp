@@ -89,7 +89,6 @@ namespace LAG
 			ImGui::EndMenuBar();
         }
 
-		EndDockSpace();
 
 		for (int i = 0; i < m_Tools.size(); i++)
 			if (m_Tools[i]->IsOpen())
@@ -99,8 +98,14 @@ namespace LAG
 		Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
 		if (cameraEntity.IsValid() && m_TempEntViewerPtr->GetSelectedEntityID()->IsValid())
 		{
-			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID(), &cameraEntity);
+			m_TempGizmoPtr->BeginWindow();
+			m_TempGizmoPtr->SetCameraEntity(&cameraEntity);
+			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID());
+			m_TempGizmoPtr->RenderViewManipulator();
+			m_TempGizmoPtr->EndWindow();
 		}
+
+		EndDockSpace();
 
 	}
 

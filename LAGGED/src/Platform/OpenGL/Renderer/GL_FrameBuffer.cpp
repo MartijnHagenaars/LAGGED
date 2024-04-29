@@ -120,7 +120,7 @@ namespace LAG
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
-		if (GetToolsManager()->IsToolOpen("Viewport"))
+		if (GetToolsManager()->IsToolOpen("CamView"))
 			return;
 
 		//Bind VAO and Shader
