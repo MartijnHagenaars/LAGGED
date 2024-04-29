@@ -95,7 +95,7 @@ namespace LAG
 			{
 				uint32_t size = GetBufferVariableTypeCount(bufferElement.type);
 				int stride = m_VertexBuffer->m_BufferLayout.GetStride();
-				int offset = bufferElement.offset * GetBufferVariableTypeSize(bufferElement.type);
+				int offset = bufferElement.offset;
 				(glVertexAttribPointer(i, size, ConvertBufferVarTypeToGLType(bufferElement.type), bufferElement.isNormalized, stride, (void*)(offset)));
 				LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(i));
 				continue;
