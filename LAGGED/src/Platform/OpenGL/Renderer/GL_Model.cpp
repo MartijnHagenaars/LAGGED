@@ -37,11 +37,6 @@ namespace LAG
 	{
 	}
 
-	Model::~Model()
-	{
-
-	}
-
 	bool Model::Load()
 	{
 		if (m_Model == nullptr)

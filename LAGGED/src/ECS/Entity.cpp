@@ -8,10 +8,6 @@ namespace LAG
 
 	}
 
-	Entity::~Entity()
-	{
-	}
-
 	Entity::Entity(const Entity& entity) : 
 		m_EntityID(entity.m_EntityID), m_RegistryPtr(entity.m_RegistryPtr)
 	{

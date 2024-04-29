@@ -33,7 +33,7 @@ namespace LAG
 	{
 	public: 
 		ArrayBuffer();
-		~ArrayBuffer();
+
 
 		void Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer) override;
 		void Shutdown() override;

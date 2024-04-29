@@ -8,7 +8,6 @@ namespace LAG
 	{
 	public:
 		Entity() = default;
-		~Entity();
 		Entity(const Entity& entity);
 
 		bool IsValid();

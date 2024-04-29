@@ -21,9 +21,6 @@ namespace LAG
 
 	struct ProceduralSurfaceComponent
 	{
-		ProceduralSurfaceComponent();
-		~ProceduralSurfaceComponent();
-
 		Surface m_Surface = {};
 		int m_SurfaceSubdivisions = 16;
 		glm::vec2 m_SurfaceScale = glm::vec2(1.f);

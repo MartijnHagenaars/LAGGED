@@ -26,15 +26,6 @@ namespace LAG
         return false;
 	}
 
-
-    ProceduralSurfaceComponent::ProceduralSurfaceComponent()
-    {
-    }
-
-    ProceduralSurfaceComponent::~ProceduralSurfaceComponent()
-    {
-    }
-
     bool ProceduralSurfaceComponent::InitializeReflection()
     {
         auto factory = entt::meta<ProceduralSurfaceComponent>();

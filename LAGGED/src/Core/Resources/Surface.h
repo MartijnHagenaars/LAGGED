@@ -14,7 +14,6 @@ namespace LAG
 	{
 	public:
 		SurfaceBase() : Resource(HashedString("")) {};
-		virtual ~SurfaceBase() {};
 
 		virtual void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
