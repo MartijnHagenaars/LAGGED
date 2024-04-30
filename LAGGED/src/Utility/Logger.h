@@ -28,7 +28,7 @@ namespace LAG::Logger
 	void Critical(const Msg& fmt, const Args&... args)
 	{
 		spdlog::critical(fmt, args...);
-		__debugbreak;
+		__debugbreak();
 	}
 }
 
