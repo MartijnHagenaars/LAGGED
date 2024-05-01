@@ -61,7 +61,7 @@ const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
 bool LAG::TransformComponent::InitializeReflection()
 {
     auto factory = entt::meta<TransformComponent>();
-    factory.type(entt::type_hash<TransformComponent>::value());
+    factory.type(entt::type_hash<TransformComponent>::value()).prop(Reflection::DISPLAY_NAME, std::string("Transform Component"));;
 
     factory.data<&TransformComponent::m_Translation>(entt::hashed_string("translation")).prop(Reflection::DISPLAY_NAME, std::string("Position"));
     factory.data<&TransformComponent::m_Rotation>(entt::hashed_string("rotation")).prop(Reflection::DISPLAY_NAME, std::string("Rotation"));

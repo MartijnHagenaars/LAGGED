@@ -133,4 +133,16 @@ namespace LAG
 		else
 			ImGui::Text(std::string("No meta inspect function detected for " + propName).c_str());
 	}
+
+	void Scene::LoopOverAllThings()
+	{
+		for (auto&& [id, type] : entt::resolve())
+		{
+			if (type.prop(Reflection::DISPLAY_NAME))
+			{
+				Logger::Info("This is {0}", type.prop(Reflection::DISPLAY_NAME).value().cast<std::string>());
+			}
+
+		}
+	}
 }

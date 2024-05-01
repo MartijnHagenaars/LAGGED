@@ -43,6 +43,8 @@ namespace LAG
 			return true;
 		}
 
+		void LoopOverAllThings();
+
 		void HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode);
 
 

@@ -7,7 +7,7 @@
 bool LAG::CameraComponent::InitializeReflection()
 {
     auto factory = entt::meta<CameraComponent>();
-    factory.type(entt::type_hash<CameraComponent>::value());
+    factory.type(entt::type_hash<CameraComponent>::value()).prop(Reflection::DISPLAY_NAME, std::string("Camera Component"));;
 
     factory.data<&CameraComponent::isActive>(entt::hashed_string("isActive")).prop(Reflection::DISPLAY_NAME, std::string("Active"));
     factory.data<&CameraComponent::fov>(entt::hashed_string("fov")).prop(Reflection::DISPLAY_NAME, std::string("FOV"));

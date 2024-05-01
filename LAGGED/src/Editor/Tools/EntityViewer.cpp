@@ -8,8 +8,7 @@
 #include "Core/Engine.h"
 #include "ImGui/imgui.h"
 
-//For testing
-#include "ECS/Components/CameraComponent.h"
+#include "ECS/Components/BasicComponents.h"
 
 namespace LAG
 {
@@ -30,6 +29,17 @@ namespace LAG
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 		ImGui::SeparatorText("Entity Editor");
+
+		if (ImGui::Button("Add object"))
+		{
+			GetEngine().GetScene()->LoopOverAllThings();
+		}
+		ImGui::SameLine();
+		char newEntityNameText[DefaultComponent::GetMaxNameLength()];
+		if (ImGui::InputText("##InputText", newEntityNameText, DefaultComponent::GetMaxNameLength(), ImGuiInputTextFlags_EnterReturnsTrue))
+		{
+
+		}
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());
