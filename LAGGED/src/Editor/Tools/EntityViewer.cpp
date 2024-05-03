@@ -31,28 +31,9 @@ namespace LAG
 		ImGui::SeparatorText("Entity Editor");
 
 		if (ImGui::Button("Add object"))
-		{
-
-		}
+			GetScene()->AddEntity(std::string(m_NewEntityName));
 		ImGui::SameLine();
-		char newEntityNameText[DefaultComponent::GetMaxNameLength()];
-		if (ImGui::InputText("##InputText", newEntityNameText, DefaultComponent::GetMaxNameLength(), ImGuiInputTextFlags_EnterReturnsTrue))
-		{
-
-		}
-
-		if (ImGui::BeginListBox("Registered components"))
-		{
-			GetEngine().GetScene()->ComponentLoop([&](ComponentData& data)
-				{
-					if (ImGui::Selectable(data.displayName.empty() ? "No display name" : data.displayName.c_str(), false))
-					{
-						Logger::Info("Adding component with ID {0}", data.ID);
-					}
-				});
-
-			ImGui::EndListBox();
-		}
+		ImGui::InputText("##InputText", m_NewEntityName, s_MaxNameLength);
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());
@@ -96,6 +77,25 @@ namespace LAG
 		{
 			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity.GetEntityID());
 			ImGui::Text(selectedEntityDisplay.c_str());
+
+			ImGui::Text("Add new component by picking one from the list below.");
+			if (ImGui::BeginListBox("Registered components"))
+			{
+				GetEngine().GetScene()->ComponentLoop([&](ComponentData& data)
+					{
+						if (!data.displayName.empty())
+						{
+							if (ImGui::Selectable(data.displayName.empty() ? "No display name" : data.displayName.c_str(), false))
+							{
+								Logger::Info("Adding component with ID {0}", data.ID);
+							}
+						}
+
+					});
+
+				ImGui::EndListBox();
+			}
+
 
 			//Draw all component widgets
 			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);

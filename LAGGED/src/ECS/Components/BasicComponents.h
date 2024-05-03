@@ -17,8 +17,6 @@ namespace LAG
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();
-
-		static constexpr int GetMaxNameLength() { return 128; }
 	};
 
 
