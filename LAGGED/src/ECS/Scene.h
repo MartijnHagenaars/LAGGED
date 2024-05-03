@@ -9,6 +9,13 @@ namespace LAG
 		enum class WidgetModes;
 	}
 
+
+	struct ComponentData
+	{
+		uint32_t ID;
+		std::string displayName;
+	};
+
 	class Scene
 	{
 	public: 
@@ -43,7 +50,9 @@ namespace LAG
 			return true;
 		}
 
-		void LoopOverAllThings();
+		//Loops over all components. When looping, the function pointer is called for every registered component type.
+		//When calling the function pointer, an object of type ComponentData is passed in. This object contains info about the component like name and ID. 
+		void ComponentLoop(std::function<void(ComponentData& compData)> func);
 
 		void HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode);
 

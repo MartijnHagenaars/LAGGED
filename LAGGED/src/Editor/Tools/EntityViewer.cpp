@@ -32,13 +32,26 @@ namespace LAG
 
 		if (ImGui::Button("Add object"))
 		{
-			GetEngine().GetScene()->LoopOverAllThings();
+
 		}
 		ImGui::SameLine();
 		char newEntityNameText[DefaultComponent::GetMaxNameLength()];
 		if (ImGui::InputText("##InputText", newEntityNameText, DefaultComponent::GetMaxNameLength(), ImGuiInputTextFlags_EnterReturnsTrue))
 		{
 
+		}
+
+		if (ImGui::BeginListBox("Registered components"))
+		{
+			GetEngine().GetScene()->ComponentLoop([&](ComponentData& data)
+				{
+					if (ImGui::Selectable(data.displayName.empty() ? "No display name" : data.displayName.c_str(), false))
+					{
+						Logger::Info("Adding component with ID {0}", data.ID);
+					}
+				});
+
+			ImGui::EndListBox();
 		}
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
