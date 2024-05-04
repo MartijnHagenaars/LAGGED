@@ -2,7 +2,7 @@
 
 #include "ECS/Entity.h"
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionDefines.h"
+#include "ECS/Meta/ReflectionComponentSetup.h"
 #include "ECS/Components/BasicComponents.h"
 
 #include "Core/Engine.h"

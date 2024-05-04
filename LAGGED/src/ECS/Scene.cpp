@@ -3,7 +3,7 @@
 #include "Components/BasicComponents.h"
 
 #include "ImGui/imgui.h"
-#include "Meta/ReflectionDefines.h"
+#include "Meta/ReflectionComponentSetup.h"
 
 namespace LAG
 {
@@ -77,7 +77,11 @@ namespace LAG
 					continue;
 
 				std::string compName = std::string(componentMeta.info().name());
-				ImGui::Text(compName.c_str());
+
+				//entt::entity ent;
+				//m_Registry.emplace(ent, componentMeta)
+
+				//ImGui::Text(compName.c_str());
 
 				if (!ReflectComponent(componentMeta, storageSet, entity, mode))
 					ImGui::Text("Failed to load reflection data for component.");
@@ -123,10 +127,9 @@ namespace LAG
 
 	void Scene::ReflectType(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode)
 	{
-		if (typeValues.type().func(Reflection::EDITOR_WIDGET_DRAW))
+		if (typeValues.type().func(Reflection::HANDLE_WIDGET_TYPE_FUNC))
 		{
-			//Entity* entity, entt::meta_any& value, const char* name, Reflection::WidgetModes mode
-			typeValues.type().func(Reflection::EDITOR_WIDGET_DRAW).invoke<LAG::Entity&, entt::meta_any, const char*, const Reflection::WidgetModes&>(
+			typeValues.type().func(Reflection::HANDLE_WIDGET_TYPE_FUNC).invoke<LAG::Entity&, entt::meta_any, const char*, const Reflection::WidgetModes&>(
 				entt::meta_handle(), *entity, entt::forward_as_meta(typeValues), propName.c_str(), mode
 			);
 		}

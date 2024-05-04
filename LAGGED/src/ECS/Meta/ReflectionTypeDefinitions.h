@@ -1,6 +1,6 @@
 #pragma once
 #include "entt/entt.hpp"
-#include "ReflectionDefines.h"
+#include "ReflectionComponentSetup.h"
 #include "ReflectionTypeWidgets.h"
 
 #include "ECS/Entity.h"
@@ -9,6 +9,15 @@ namespace LAG
 {
 	namespace Reflection
 	{
+		constexpr entt::hashed_string HANDLE_WIDGET_TYPE_FUNC = entt::hashed_string("HANDLE_WIDGET_TYPE");
+
+		enum class WidgetModes
+		{
+			DRAW = 0,
+			LOAD,
+			UNLOAD
+		};
+
 		template <typename T>
 		static void TypeAdapter(Entity& entity, entt::meta_any& value, const char* name, const Reflection::WidgetModes& mode)
 		{
@@ -30,7 +39,7 @@ namespace LAG
 		static entt::meta_factory<T> SetupReflectionType()
 		{
 			auto type = entt::meta<T>();
-			type.func<&Reflection::TypeAdapter<T>>(entt::hashed_string("EDITOR_WIDGET_DRAW"));
+			type.func<&Reflection::TypeAdapter<T>>(Reflection::HANDLE_WIDGET_TYPE_FUNC);
 			return type;
 		}
 

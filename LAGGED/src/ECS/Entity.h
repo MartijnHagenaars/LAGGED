@@ -34,6 +34,8 @@ namespace LAG
 			return &m_RegistryPtr->get<T>(m_EntityID);
 		}
 
+		void AddComponent(uint32_t componentID);
+
 		template<typename T>
 		void RemoveComponent()
 		{

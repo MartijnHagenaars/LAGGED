@@ -1,7 +1,7 @@
 #include "LightComponent.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionDefines.h"
+#include "ECS/Meta/ReflectionComponentSetup.h"
 
 bool LAG::LightComponent::InitializeReflection()
 {

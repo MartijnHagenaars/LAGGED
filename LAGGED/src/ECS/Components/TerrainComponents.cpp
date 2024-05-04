@@ -1,7 +1,7 @@
 #include "TerrainComponents.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionDefines.h"
+#include "ECS/Meta/ReflectionComponentSetup.h"
 
 namespace LAG
 {

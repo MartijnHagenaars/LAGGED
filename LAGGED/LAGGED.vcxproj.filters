@@ -68,7 +68,7 @@
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
-    <ClInclude Include="src\ECS\Meta\ReflectionDefines.h" />
+    <ClInclude Include="src\ECS\Meta\ReflectionComponentSetup.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
