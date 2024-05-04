@@ -52,8 +52,6 @@ namespace LAG
 			{
 				if (HasComponent<T>())
 					return &m_RegistryPtr->get<T>(m_EntityID);
-				else 
-					Logger::Error("Tried to get missing component.");
 			}
 			else Logger::Error("Tried to get an invalid entity.");
 
