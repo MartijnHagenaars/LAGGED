@@ -8,18 +8,27 @@
 #include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtc/quaternion.hpp"
 
-LAG_REGISTER_COMPONENT(DefaultComponent);
-LAG_REGISTER_COMPONENT(TransformComponent);
-
-
 bool LAG::DefaultComponent::InitializeReflection()
 {
-	auto factory = entt::meta<DefaultComponent>();
-	factory.type(entt::type_hash<DefaultComponent>::value());
+
+
+
+	//Reflection::ReflectionSystem setup;
+	//setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default").SetVisibleInEditor(true);
+	
+	//setup.RegisterVariable<&DefaultComponent::name>();
+
+	//setup.RegisterVariable<decltype(&DefaultComponent::name)>().SetDisplayName("Name");
+	//setup.RegisterVariable<decltype(name)>().SetDisplayName("Name");
+
 
 	//TODO: A thing needs to be added for automatially assigning
 
-	factory.data<&DefaultComponent::name>(entt::hashed_string("name")).prop(Reflection::DISPLAY_NAME, std::string("Name"));
+	//.ReflectVariable(VARIABLE_REFLECT(DefaultComponent::name)).SetDisplayName("Name").SetCallback(...);
+	
+	//auto factory = entt::meta<DefaultComponent>();
+	//factory.type(entt::type_hash<DefaultComponent>::value());
+	//factory.data<&DefaultComponent::name>(entt::hashed_string("name")).prop(Reflection::DISPLAY_NAME, std::string("Name"));
 
 	return false;
 }
