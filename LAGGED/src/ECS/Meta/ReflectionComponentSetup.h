@@ -26,24 +26,15 @@ namespace LAG
 			friend class ReflectionSystem;
 		public:
 			// Copy constructor
-			ComponentReflectionSetup(const ComponentReflectionSetup& other) :
-				m_Factory(other.m_Factory)
-			{}
+			ComponentReflectionSetup(const ComponentReflectionSetup& other);
 
 			// Copy assignment operator
-			ComponentReflectionSetup& operator=(const ComponentReflectionSetup& other)
-			{
-				return *this = ComponentReflectionSetup(other);
-			}
+			ComponentReflectionSetup& operator=(const ComponentReflectionSetup& other);
 
-			~ComponentReflectionSetup()
-			{
-				delete m_Factory;
-				m_Factory = nullptr;
-			}
+			~ComponentReflectionSetup();
 
-			ComponentReflectionSetup& SetDisplayName(const std::string& displayName) { m_Factory->prop(ComponentProperties::DISPLAY_NAME, displayName); return *this; }
-			ComponentReflectionSetup& SetVisibleInEditor(bool isVisible) { m_Factory->prop(ComponentProperties::VISIBLE_IN_EDITOR, false); return *this; }
+			ComponentReflectionSetup& SetDisplayName(const std::string& displayName);
+			ComponentReflectionSetup& SetVisibleInEditor(bool isVisible);
 
 		private:
 			ComponentReflectionSetup()
@@ -103,6 +94,38 @@ namespace LAG
 		//#define LAG_REGISTER_VARIABLE(variable)*/
 		//
 
+
+		template<typename ClassType>
+		inline ComponentReflectionSetup<ClassType>::ComponentReflectionSetup(const ComponentReflectionSetup& other) :
+			m_Factory(other.m_Factory)
+		{}
+
+		template<typename ClassType>
+		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::operator=(const ComponentReflectionSetup<ClassType>& other)
+		{
+			return *this = ComponentReflectionSetup(other);
+		}
+
+		template<typename ClassType>
+		inline ComponentReflectionSetup<ClassType>::~ComponentReflectionSetup()
+		{
+			delete m_Factory;
+			m_Factory = nullptr;
+		}
+
+		template<typename ClassType>
+		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::SetDisplayName(const std::string& displayName)
+		{
+			m_Factory->prop(ComponentProperties::DISPLAY_NAME, displayName); 
+			return *this;
+		}
+
+		template<typename ClassType>
+		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::SetVisibleInEditor(bool isVisible)
+		{
+			m_Factory->prop(ComponentProperties::VISIBLE_IN_EDITOR, false); 
+			return *this;
+		}
 
 	};
 }
