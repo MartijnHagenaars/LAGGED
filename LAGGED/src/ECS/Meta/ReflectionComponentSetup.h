@@ -25,12 +25,8 @@ namespace LAG
 		{
 			friend class ReflectionSystem;
 		public:
-			// Copy constructor
-			ComponentReflectionSetup(const ComponentReflectionSetup& other);
-
-			// Copy assignment operator
-			ComponentReflectionSetup& operator=(const ComponentReflectionSetup& other);
-
+			ComponentReflectionSetup(const ComponentReflectionSetup& other); //Copy constructor
+			ComponentReflectionSetup& operator=(const ComponentReflectionSetup& other); //Copy assignment operator
 			~ComponentReflectionSetup();
 
 			ComponentReflectionSetup& SetDisplayName(const std::string& displayName);
@@ -81,19 +77,6 @@ namespace LAG
 			template<auto T>
 			VariableReflectionSetup<T> RegisterVariable() { return VariableReflectionSetup<T>(); };
 		};
-
-
-		//#define LAG_REGISTER_COMPONENT(componentType)									\
-		//		bool Setup##componentType()												\
-		//	{																			\
-		//		printf("Hello from %s function!\n", #componentType);					\
-		//		return true;															\
-		//	}																			\
-		//		bool Setup##componentType##Success = Setup##componentType();			\
-		//
-		//#define LAG_REGISTER_VARIABLE(variable)*/
-		//
-
 
 		template<typename ClassType>
 		inline ComponentReflectionSetup<ClassType>::ComponentReflectionSetup(const ComponentReflectionSetup& other) :
