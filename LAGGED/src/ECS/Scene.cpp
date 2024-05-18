@@ -113,7 +113,7 @@ namespace LAG
 	void Scene::ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode)
 	{
 		std::string propDisplayName;
-		entt::meta_prop displayNameProp = propData.prop(Reflection::DISPLAY_NAME);
+		entt::meta_prop displayNameProp = propData.prop(Reflection::VariableProperties::DISPLAY_NAME);
 		if (displayNameProp.value() != nullptr)
 		{
 			propDisplayName = displayNameProp.value().cast<std::string>();
@@ -143,8 +143,8 @@ namespace LAG
 		{
 			ComponentData data;
 			data.ID = type.id();
-			if (type.prop(Reflection::DISPLAY_NAME))
-				data.displayName = type.prop(Reflection::DISPLAY_NAME).value().cast<std::string>();
+			if (type.prop(Reflection::VariableProperties::DISPLAY_NAME))
+				data.displayName = type.prop(Reflection::VariableProperties::DISPLAY_NAME).value().cast<std::string>();
 
 			func(data);
 		}

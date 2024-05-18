@@ -10,12 +10,10 @@
 
 bool LAG::DefaultComponent::InitializeReflection()
 {
+	Reflection::ReflectionSystem setup;
+	setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default Component").SetVisibleInEditor(false);
 
 
-
-	//Reflection::ReflectionSystem setup;
-	//setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default").SetVisibleInEditor(true);
-	
 	//setup.RegisterVariable<&DefaultComponent::name>();
 
 	//setup.RegisterVariable<decltype(&DefaultComponent::name)>().SetDisplayName("Name");
@@ -28,7 +26,7 @@ bool LAG::DefaultComponent::InitializeReflection()
 	
 	//auto factory = entt::meta<DefaultComponent>();
 	//factory.type(entt::type_hash<DefaultComponent>::value());
-	//factory.data<&DefaultComponent::name>(entt::hashed_string("name")).prop(Reflection::DISPLAY_NAME, std::string("Name"));
+	//factory.data<&DefaultComponent::name>(entt::hashed_string("name")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Name"));
 
 	return false;
 }
@@ -76,11 +74,11 @@ const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
 bool LAG::TransformComponent::InitializeReflection()
 {
 	auto factory = entt::meta<TransformComponent>();
-	factory.type(entt::type_hash<TransformComponent>::value()).prop(Reflection::DISPLAY_NAME, std::string("Transform Component"));;
+	factory.type(entt::type_hash<TransformComponent>::value()).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Transform Component"));;
 
-	factory.data<&TransformComponent::m_Translation>(entt::hashed_string("translation")).prop(Reflection::DISPLAY_NAME, std::string("Position"));
-	factory.data<&TransformComponent::m_Rotation>(entt::hashed_string("rotation")).prop(Reflection::DISPLAY_NAME, std::string("Rotation"));
-	factory.data<&TransformComponent::m_Scale>(entt::hashed_string("scale")).prop(Reflection::DISPLAY_NAME, std::string("Scale"));
+	factory.data<&TransformComponent::m_Translation>(entt::hashed_string("translation")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Position"));
+	factory.data<&TransformComponent::m_Rotation>(entt::hashed_string("rotation")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Rotation"));
+	factory.data<&TransformComponent::m_Scale>(entt::hashed_string("scale")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Scale"));
 
 	return false;
 }
