@@ -18,6 +18,7 @@ namespace LAG
 		{
 			constexpr entt::hashed_string DISPLAY_NAME = entt::hashed_string("DISPLAY_NAME");
 			constexpr entt::hashed_string VISIBLE_IN_EDITOR = entt::hashed_string("VISIBLE_IN_EDITOR");
+			constexpr entt::hashed_string READ_ONLY = entt::hashed_string("READ_ONLY");
 		}
 
 		template<typename ClassType>
@@ -45,27 +46,36 @@ namespace LAG
 			entt::meta_factory<ClassType>* m_Factory = nullptr;
 		};
 
-		template<auto T>
+		template<typename ClassType, auto Variable>
 		class VariableReflectionSetup
 		{
 			friend class ReflectionSystem;
 		public:
-			VariableReflectionSetup& SetDisplayName(const std::string& displayName) { LAG_ASSERT("TODO: Implement"); return *this; }
+			VariableReflectionSetup& SetDisplayName(const std::string& displayName) 
+			{
+				m_Factory->prop(VariableProperties::DISPLAY_NAME, displayName);
+				return *this;
+			}
 			VariableReflectionSetup& SetCallbackFunction() { LAG_ASSERT("TODO: Implement"); return *this; }
+			VariableReflectionSetup& SetReadOnly(bool isReadOnly)
+			{
+				m_Factory->prop(VariableProperties::READ_ONLY, isReadOnly);
+				return *this;
+			}
 
 		private:
 			VariableReflectionSetup()
 			{
-				static_assert(std::is_member_object_pointer<decltype(T)>::value, "Type needs to be a non-static member object pointer.");
+				static_assert(std::is_member_object_pointer<decltype(Variable)>::value, "Type needs to be a non-static member object pointer.");
 
-				// Extract ClassType from the member pointer T
-				using MemberPointerType = decltype(T);
-				using ClassType = typename std::remove_pointer_t<MemberPointerType>::class_type;
+				printf("Class type: %s\n", typeid(ClassType).name());
+				printf("Variable type: %s\n", typeid(Variable).name());
 
-				// Register the member variable using entt::meta
-				auto factory = entt::meta<ClassType>();
-				factory.template data<T>("name");
+				m_Factory = new entt::meta_factory<ClassType>(entt::meta<ClassType>());
+				m_Factory->data<Variable>(entt::hashed_string(typeid(Variable).name()));
 			}
+
+			entt::meta_factory<ClassType>* m_Factory = nullptr;
 		};
 
 		class ReflectionSystem
@@ -74,8 +84,8 @@ namespace LAG
 			template<typename T>
 			ComponentReflectionSetup<T> RegisterComponent() { return ComponentReflectionSetup<T>(); };
 
-			template<auto T>
-			VariableReflectionSetup<T> RegisterVariable() { return VariableReflectionSetup<T>(); };
+			template<typename ClassType, auto Variable>
+			VariableReflectionSetup<ClassType, Variable> RegisterVariable() { return VariableReflectionSetup<ClassType, Variable>(); };
 		};
 
 		template<typename ClassType>

@@ -12,6 +12,7 @@ bool LAG::DefaultComponent::InitializeReflection()
 {
 	Reflection::ReflectionSystem setup;
 	setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default Component").SetVisibleInEditor(false);
+	setup.RegisterVariable<DefaultComponent, &DefaultComponent::name>().SetDisplayName("Cool name");
 
 
 	//setup.RegisterVariable<&DefaultComponent::name>();
