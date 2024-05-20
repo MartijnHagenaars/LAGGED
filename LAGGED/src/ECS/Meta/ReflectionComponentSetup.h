@@ -45,16 +45,16 @@ namespace LAG
 			ComponentReflectionSetup& SetVisibleInEditor(bool isVisible);
 
 		private:
-			ComponentReflectionSetup(entt::meta_factory<ClassType>* factory) : 
+			ComponentReflectionSetup(entt::meta_factory<ClassType>& factory) : 
 				m_Factory(factory)
 			{
 				static_assert(!std::is_fundamental<ClassType>::value, "Type cannot be a fundamental type.");
 
 				std::string displayName = typeid(ClassType).name();
-				m_Factory->type(entt::hashed_string(displayName.c_str()));
+				m_Factory.type(entt::hashed_string(displayName.c_str()));
 			}
 
-			entt::meta_factory<ClassType>* m_Factory = nullptr;
+			entt::meta_factory<ClassType>& m_Factory;
 		};
 
 		//TODO: Figure out a way of doing this without having to pass in the ClassType. Should make the syntax a bit nicer to look at.
@@ -81,15 +81,28 @@ namespace LAG
 			VariableReflectionSetup& SetReadOnly(bool isReadOnly);
 
 		private:
-			VariableReflectionSetup(entt::meta_factory<ClassType>* factory) :
+			VariableReflectionSetup(entt::meta_factory<ClassType>& factory) :
 				m_Factory(factory)
 			{
 				static_assert(std::is_member_object_pointer<decltype(Variable)>::value, "Type needs to be a non-static member object pointer.");
 
-				m_Factory->data<Variable>(entt::hashed_string(typeid(ClassType).name()));
+				//Get a count of how many variables are attached to a component
+
+				entt::meta_type type = entt::resolve<ClassType>();
+				if (type)
+				{
+					std::size_t variableCount = 0;
+					for (const auto& it : type.data())
+						++variableCount;
+
+					//Here, we create a unique string and register the variable.
+					std::string typeName = std::string(typeid(Variable).name()) + "_" + std::to_string(variableCount);
+					m_Factory.data<Variable>(entt::hashed_string(typeName.c_str()));
+				}
+				else Logger::Critical("Tried to setup a variable for a component that hasn't been registered.");
 			}
 
-			entt::meta_factory<ClassType>* m_Factory = nullptr;
+			entt::meta_factory<ClassType>& m_Factory;
 		};
 
 		template<typename ClassType>
@@ -98,13 +111,10 @@ namespace LAG
 		public:
 			ReflectionSystem()
 			{
-				m_Factory = new entt::meta_factory<ClassType>(entt::meta<ClassType>());
 			}
 
 			~ReflectionSystem()
 			{
-				delete m_Factory;
-				m_Factory = nullptr;
 			}
 
 			//TODO: Rule of three
@@ -126,7 +136,7 @@ namespace LAG
 			VariableReflectionSetup<ClassType, Variable> RegisterVariable() { return VariableReflectionSetup<ClassType, Variable>(m_Factory); };
 
 		private:
-			entt::meta_factory<ClassType>* m_Factory = nullptr;
+			entt::meta_factory<ClassType> m_Factory = entt::meta<ClassType>();
 		};
 
 
@@ -138,14 +148,14 @@ namespace LAG
 		template<typename ClassType>
 		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::SetDisplayName(const std::string& displayName)
 		{
-			m_Factory->prop(ComponentProperties::DISPLAY_NAME, displayName);
+			m_Factory.prop(ComponentProperties::DISPLAY_NAME, displayName);
 			return *this;
 		}
 
 		template<typename ClassType>
 		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::SetVisibleInEditor(bool isVisible)
 		{
-			m_Factory->prop(ComponentProperties::VISIBLE_IN_EDITOR, false);
+			m_Factory.prop(ComponentProperties::VISIBLE_IN_EDITOR, false);
 			return *this;
 		}
 
@@ -158,7 +168,7 @@ namespace LAG
 		template<typename ClassType, auto Variable>
 		inline VariableReflectionSetup<ClassType, Variable>& VariableReflectionSetup<ClassType, Variable>::SetDisplayName(const std::string& displayName)
 		{
-			m_Factory->prop(VariableProperties::DISPLAY_NAME, displayName);
+			m_Factory.prop(VariableProperties::DISPLAY_NAME, displayName);
 			return *this;
 		}
 

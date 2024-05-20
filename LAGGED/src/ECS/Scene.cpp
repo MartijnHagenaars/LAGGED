@@ -95,7 +95,6 @@ namespace LAG
 		entt::meta_any compElement = compMeta.from_void(storageSet.value(entt::entity(entity->GetEntityID())));
 		if (compElement == nullptr)
 			return false;
-
 		for (auto&& [idType, propMetaData] : compMeta.data())
 		{
 			entt::meta_any propInstance, propInstanceCompare;

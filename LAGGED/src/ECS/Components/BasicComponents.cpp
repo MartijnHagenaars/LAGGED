@@ -13,6 +13,7 @@ bool LAG::DefaultComponent::InitializeReflection()
 	Reflection::ReflectionSystem<DefaultComponent> setup;
 	setup.RegisterComponent().SetDisplayName("Default Component").SetVisibleInEditor(true);
 	setup.RegisterVariable<&DefaultComponent::name>().SetDisplayName("Name");
+	setup.RegisterVariable<&DefaultComponent::visible>().SetDisplayName("Is Visible");
 	return true;
 }
 
