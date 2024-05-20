@@ -8,12 +8,6 @@
 #include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtc/quaternion.hpp"
 
-template <typename ClassType, auto Variable>
-void ReflectVar(entt::meta_factory<ClassType>& factory)
-{
-	factory.data<Variable>(entt::hashed_string("name"));
-}
-
 bool LAG::DefaultComponent::InitializeReflection()
 {
 	Reflection::ReflectionSystem setup;
