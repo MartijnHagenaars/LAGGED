@@ -30,10 +30,6 @@ namespace LAG
 		{
 			friend class ReflectionSystem<ClassType>;
 		public:
-			ComponentReflectionSetup(const ComponentReflectionSetup& other); //Copy constructor
-			ComponentReflectionSetup& operator=(const ComponentReflectionSetup& other); //Copy assignment operator
-			~ComponentReflectionSetup();
-
 			/// <summary>
 			/// Set the display name of the component in the editor.
 			/// </summary>
@@ -49,11 +45,11 @@ namespace LAG
 			ComponentReflectionSetup& SetVisibleInEditor(bool isVisible);
 
 		private:
-			ComponentReflectionSetup()
+			ComponentReflectionSetup(entt::meta_factory<ClassType>* factory) : 
+				m_Factory(factory)
 			{
 				static_assert(!std::is_fundamental<ClassType>::value, "Type cannot be a fundamental type.");
 
-				m_Factory = new entt::meta_factory<ClassType>(entt::meta<ClassType>());
 				std::string displayName = typeid(ClassType).name();
 				m_Factory->type(entt::hashed_string(displayName.c_str()));
 			}
@@ -67,10 +63,6 @@ namespace LAG
 		{
 			friend class ReflectionSystem<ClassType>;
 		public:
-			VariableReflectionSetup(const VariableReflectionSetup& other); //Copy constructor
-			VariableReflectionSetup& operator=(const VariableReflectionSetup& other); //Copy assignment operator
-			~VariableReflectionSetup();
-
 			/// <summary>
 			/// Set the display name of the variable in the editor.
 			/// </summary>
@@ -89,11 +81,11 @@ namespace LAG
 			VariableReflectionSetup& SetReadOnly(bool isReadOnly);
 
 		private:
-			VariableReflectionSetup()
+			VariableReflectionSetup(entt::meta_factory<ClassType>* factory) :
+				m_Factory(factory)
 			{
 				static_assert(std::is_member_object_pointer<decltype(Variable)>::value, "Type needs to be a non-static member object pointer.");
 
-				m_Factory = new entt::meta_factory<ClassType>(entt::meta<ClassType>());
 				m_Factory->data<Variable>(entt::hashed_string(typeid(ClassType).name()));
 			}
 
@@ -104,12 +96,25 @@ namespace LAG
 		class ReflectionSystem
 		{
 		public:
+			ReflectionSystem()
+			{
+				m_Factory = new entt::meta_factory<ClassType>(entt::meta<ClassType>());
+			}
+
+			~ReflectionSystem()
+			{
+				delete m_Factory;
+				m_Factory = nullptr;
+			}
+
+			//TODO: Rule of three
+
 			/// <summary>
 			/// Registers a component for use in the editor.
 			/// </summary>
 			/// <typeparam name="T">The component type</typeparam>
 			/// <returns>The class for configuring the reflection of the component. Uses the builder pattern.</returns>
-			ComponentReflectionSetup<ClassType> RegisterComponent() { return ComponentReflectionSetup<ClassType>(); };
+			ComponentReflectionSetup<ClassType> RegisterComponent() { return ComponentReflectionSetup<ClassType>(m_Factory); }
 
 			/// <summary>
 			/// Registers a variable from a specific component. Registering the variable allows it to be used in the editor.
@@ -117,9 +122,11 @@ namespace LAG
 			/// <typeparam name="ClassType">The component type.</typeparam>
 			/// <typeparam name="Variable">The variable / member function pointer.</typeparam>
 			/// <returns>The class for configuring the reflection of the variable. Uses the builder pattern.</returns>
-			
 			template<auto Variable>
-			VariableReflectionSetup<ClassType, Variable> RegisterVariable() { return VariableReflectionSetup<ClassType, Variable>(); };
+			VariableReflectionSetup<ClassType, Variable> RegisterVariable() { return VariableReflectionSetup<ClassType, Variable>(m_Factory); };
+
+		private:
+			entt::meta_factory<ClassType>* m_Factory = nullptr;
 		};
 
 
@@ -127,24 +134,6 @@ namespace LAG
 		//////////////////////////////////////////////////////////////////
 		// Function implementations for the component reflection system //
 		//////////////////////////////////////////////////////////////////
-
-		template<typename ClassType>
-		inline ComponentReflectionSetup<ClassType>::ComponentReflectionSetup(const ComponentReflectionSetup& other) :
-			m_Factory(other.m_Factory)
-		{}
-
-		template<typename ClassType>
-		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::operator=(const ComponentReflectionSetup<ClassType>& other)
-		{
-			return *this = ComponentReflectionSetup(other);
-		}
-
-		template<typename ClassType>
-		inline ComponentReflectionSetup<ClassType>::~ComponentReflectionSetup()
-		{
-			delete m_Factory;
-			m_Factory = nullptr;
-		}
 
 		template<typename ClassType>
 		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::SetDisplayName(const std::string& displayName)
@@ -165,29 +154,6 @@ namespace LAG
 		/////////////////////////////////////////////////////////////////
 		// Function implementations for the variable reflection system //
 		/////////////////////////////////////////////////////////////////
-
-		//template<typename ClassType, auto Variable>
-		//inline VariableReflectionSetup<ClassType, Variable>::VariableReflectionSetup(const VariableReflectionSetup& other) :
-		//	m_Factory(other.m_Factory)
-		//{}
-
-		template<typename ClassType, auto Variable>
-		inline VariableReflectionSetup<ClassType, Variable>::VariableReflectionSetup(const VariableReflectionSetup& other) :
-			m_Factory(other.m_Factory)
-		{}
-
-		template<typename ClassType, auto Variable>
-		inline VariableReflectionSetup<ClassType, Variable>& VariableReflectionSetup<ClassType, Variable>::operator=(const VariableReflectionSetup& other)
-		{
-			return *this = VariableReflectionSetup(other);
-		}
-
-		template<typename ClassType, auto Variable>
-		inline VariableReflectionSetup<ClassType, Variable>::~VariableReflectionSetup()
-		{
-			delete m_Factory;
-			m_Factory = nullptr;
-		}
 
 		template<typename ClassType, auto Variable>
 		inline VariableReflectionSetup<ClassType, Variable>& VariableReflectionSetup<ClassType, Variable>::SetDisplayName(const std::string& displayName)
