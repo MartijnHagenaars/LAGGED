@@ -46,6 +46,7 @@ namespace LAG
 			entt::meta_factory<ClassType>* m_Factory = nullptr;
 		};
 
+		//TODO: Figure out a way of doing this without having to pass in the ClassType. Should make the syntax a bit nicer to look at.
 		template<typename ClassType, auto Variable>
 		class VariableReflectionSetup
 		{
@@ -57,22 +58,15 @@ namespace LAG
 				return *this;
 			}
 			VariableReflectionSetup& SetCallbackFunction() { LAG_ASSERT("TODO: Implement"); return *this; }
-			VariableReflectionSetup& SetReadOnly(bool isReadOnly)
-			{
-				m_Factory->prop(VariableProperties::READ_ONLY, isReadOnly);
-				return *this;
-			}
+			VariableReflectionSetup& SetReadOnly(bool isReadOnly) { LAG_ASSERT("TODO: Implement"); return *this; }
 
 		private:
 			VariableReflectionSetup()
 			{
 				static_assert(std::is_member_object_pointer<decltype(Variable)>::value, "Type needs to be a non-static member object pointer.");
 
-				printf("Class type: %s\n", typeid(ClassType).name());
-				printf("Variable type: %s\n", typeid(Variable).name());
-
 				m_Factory = new entt::meta_factory<ClassType>(entt::meta<ClassType>());
-				m_Factory->data<Variable>(entt::hashed_string(typeid(Variable).name()));
+				m_Factory->data<Variable>(entt::hashed_string(typeid(ClassType).name()));
 			}
 
 			entt::meta_factory<ClassType>* m_Factory = nullptr;

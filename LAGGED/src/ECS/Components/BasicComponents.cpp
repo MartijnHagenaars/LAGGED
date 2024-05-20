@@ -8,27 +8,17 @@
 #include "glm/gtx/matrix_decompose.hpp"
 #include "glm/gtc/quaternion.hpp"
 
+template <typename ClassType, auto Variable>
+void ReflectVar(entt::meta_factory<ClassType>& factory)
+{
+	factory.data<Variable>(entt::hashed_string("name"));
+}
+
 bool LAG::DefaultComponent::InitializeReflection()
 {
 	Reflection::ReflectionSystem setup;
 	setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default Component").SetVisibleInEditor(false);
-	setup.RegisterVariable<DefaultComponent, &DefaultComponent::name>().SetDisplayName("Cool name");
-
-
-	//setup.RegisterVariable<&DefaultComponent::name>();
-
-	//setup.RegisterVariable<decltype(&DefaultComponent::name)>().SetDisplayName("Name");
-	//setup.RegisterVariable<decltype(name)>().SetDisplayName("Name");
-
-
-	//TODO: A thing needs to be added for automatially assigning
-
-	//.ReflectVariable(VARIABLE_REFLECT(DefaultComponent::name)).SetDisplayName("Name").SetCallback(...);
-	
-	//auto factory = entt::meta<DefaultComponent>();
-	//factory.type(entt::type_hash<DefaultComponent>::value());
-	//factory.data<&DefaultComponent::name>(entt::hashed_string("name")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Name"));
-
+	setup.RegisterVariable<DefaultComponent, &DefaultComponent::name>().SetDisplayName("Name");
 	return false;
 }
 
