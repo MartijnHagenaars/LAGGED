@@ -112,7 +112,7 @@ namespace LAG
 			const entt::meta_data& propData = it.second;
 			entt::meta_any propInstance, propInstanceCompare;
 			propInstanceCompare = propInstance = propData.get(compInstance);
-			ReflectProperty(propData, propInstance, entity, mode);
+			ReflectMember(propData, propInstance, entity, mode);
 
 			//Check if the component has been modified. If so, (re)set the values
 			if (propInstance != propInstanceCompare)
@@ -122,21 +122,27 @@ namespace LAG
 		return true;
 	}
 
-	void Scene::ReflectProperty(const entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode)
+	void Scene::ReflectMember(const entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode)
 	{
-		//Get the (display) name of the component
-		std::string propDisplayName;
-		entt::meta_prop compDisplayNameProp = propData.prop(Reflection::ComponentProperties::DISPLAY_NAME);
-		if (compDisplayNameProp)
-			propDisplayName = compDisplayNameProp.value() != nullptr ? compDisplayNameProp.value().cast<std::string>() : std::string(propData.type().info().name());
-		else propDisplayName = "Undefined display name (" + std::string(propData.type().info().name()) + ")";
+		//Check if the member needs to be hidden. If that's the case, we can return early.
+		entt::meta_prop hideMember = propData.prop(Reflection::VariableProperties::HIDE_IN_EDITOR);
+		if (hideMember && hideMember.value().cast<bool>() == true)
+			return;
 
-		ImGui::PushID(std::string(std::to_string(propValues.type().id()) + propDisplayName).c_str());
-		ReflectType(propValues, entity, propDisplayName, mode);
+		//Get the (display) name of the member. If the member doesn't have a display name, use whatever is generated.
+		std::string memberDisplayName;
+		entt::meta_prop memberDisplayNameProp = propData.prop(Reflection::ComponentProperties::DISPLAY_NAME);
+		if (memberDisplayNameProp)
+			memberDisplayName = memberDisplayNameProp.value() != nullptr ? memberDisplayNameProp.value().cast<std::string>() : std::string(propData.type().info().name());
+		else memberDisplayName = "Undefined display name (" + std::string(propData.type().info().name()) + ")";
+
+		//Now create the widget
+		ImGui::PushID(std::string(std::to_string(propValues.type().id()) + memberDisplayName).c_str());
+		RenderMemberWidget(propValues, entity, memberDisplayName, mode);
 		ImGui::PopID();
 	}
 
-	void Scene::ReflectType(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode)
+	void Scene::RenderMemberWidget(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode)
 	{
 		if (typeValues.type().func(Reflection::HANDLE_WIDGET_TYPE_FUNC))
 		{

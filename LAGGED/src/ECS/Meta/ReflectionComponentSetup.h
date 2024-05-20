@@ -11,13 +11,17 @@ namespace LAG
 		namespace ComponentProperties
 		{
 			constexpr entt::hashed_string DISPLAY_NAME = entt::hashed_string("DISPLAY_NAME");
-			constexpr entt::hashed_string VISIBLE_IN_EDITOR = entt::hashed_string("VISIBLE_IN_EDITOR");
+
+			//TODO: Implement this one!
+			constexpr entt::hashed_string HIDE_IN_EDITOR = entt::hashed_string("HIDE_IN_EDITOR");
 		}
 
 		namespace VariableProperties
 		{
 			constexpr entt::hashed_string DISPLAY_NAME = entt::hashed_string("DISPLAY_NAME");
-			constexpr entt::hashed_string VISIBLE_IN_EDITOR = entt::hashed_string("VISIBLE_IN_EDITOR");
+			constexpr entt::hashed_string HIDE_IN_EDITOR = entt::hashed_string("HIDE_IN_EDITOR");
+
+			//TODO: Implement this one!
 			constexpr entt::hashed_string READ_ONLY = entt::hashed_string("READ_ONLY");
 		}
 
@@ -69,6 +73,13 @@ namespace LAG
 			/// <param name="displayName">Name that is displayed in the editor.</param>
 			/// <returns>The current instance for chaining further configuration.</returns>
 			VariableReflectionSetup& SetDisplayName(const std::string& displayName);
+
+			/// <summary>
+			/// Determines whether the variable should be displayed in the editor.
+			/// </summary>
+			/// <param name="displayName">When set to true, the variable is hidden in the editor.</param>
+			/// <returns>The current instance for chaining further configuration.</returns>
+			VariableReflectionSetup& SetHidden(bool isHidden);
 
 			//TODO: Needs to be implemented.
 			VariableReflectionSetup& SetCallbackFunction();
@@ -155,7 +166,7 @@ namespace LAG
 		template<typename ClassType>
 		inline ComponentReflectionSetup<ClassType>& ComponentReflectionSetup<ClassType>::SetVisibleInEditor(bool isVisible)
 		{
-			m_Factory.prop(ComponentProperties::VISIBLE_IN_EDITOR, false);
+			m_Factory.prop(ComponentProperties::HIDE_IN_EDITOR, false);
 			return *this;
 		}
 
@@ -169,6 +180,13 @@ namespace LAG
 		inline VariableReflectionSetup<ClassType, Variable>& VariableReflectionSetup<ClassType, Variable>::SetDisplayName(const std::string& displayName)
 		{
 			m_Factory.prop(VariableProperties::DISPLAY_NAME, displayName);
+			return *this;
+		}
+
+		template<typename ClassType, auto Variable>
+		inline VariableReflectionSetup<ClassType, Variable>& VariableReflectionSetup<ClassType, Variable>::SetHidden(bool isHidden)
+		{
+			m_Factory.prop(VariableProperties::HIDE_IN_EDITOR, isHidden);
 			return *this;
 		}
 
