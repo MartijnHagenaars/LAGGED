@@ -16,8 +16,12 @@ namespace LAG
 		Entity* GetSelectedEntityID() { return &m_SelectedEntity; }
 
 	private:
+		static constexpr int s_MaxNameLength = 128;
+
 		Entity m_SelectedEntity;
 		float m_BrowserHeight = 0;
+
+		char m_NewEntityName[s_MaxNameLength];
 	};
 }
 

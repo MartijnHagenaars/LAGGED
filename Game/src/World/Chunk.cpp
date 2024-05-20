@@ -11,7 +11,8 @@ void Chunk::Load(const glm::vec2& position)
 {
 	if (!m_Entity.IsValid())
 	{
-		m_Entity = LAG::GetScene()->AddEntity();
+		std::string entityName = "Terrain (" + std::to_string(static_cast<int>(position.x)) + ", " + std::to_string(static_cast<int>(position.y)) + ")";
+		m_Entity = LAG::GetScene()->AddEntity(entityName);
 
 		//TODO: The 64 multiplications and surfaceSubdivisions should be adjustable. Terrain gen currently breaks when surfaceSubdivisions are not equal to the position/scale multiplication
 

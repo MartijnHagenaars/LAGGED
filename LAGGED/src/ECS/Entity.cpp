@@ -18,6 +18,12 @@ namespace LAG
 		return m_EntityID != entt::tombstone;
 	}
 
+	void Entity::AddComponent(uint32_t componentID)
+	{
+		//m_RegistryPtr->assign(componentID, m_EntityID);
+		//m_RegistryPtr->emplace(m_EntityID, componentID);
+	}
+
 	uint32_t Entity::GetEntityID() const
 	{
 		return static_cast<uint32_t>(m_EntityID);

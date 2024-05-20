@@ -2,17 +2,17 @@
 
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionDefines.h"
+#include "ECS/Meta/ReflectionComponentSetup.h"
 
 bool LAG::CameraComponent::InitializeReflection()
 {
-    auto factory = entt::meta<CameraComponent>();
-    factory.type(entt::type_hash<CameraComponent>::value());
+    Reflection::ReflectionSystem<CameraComponent> setup;
+    setup.RegisterComponent().SetDisplayName("Camera Component").SetVisibleInEditor(true);
 
-    factory.data<&CameraComponent::isActive>(entt::hashed_string("isActive")).prop(Reflection::DISPLAY_NAME, std::string("Active"));
-    factory.data<&CameraComponent::fov>(entt::hashed_string("fov")).prop(Reflection::DISPLAY_NAME, std::string("FOV"));
-    factory.data<&CameraComponent::movementSpeed>(entt::hashed_string("movementSpeed")).prop(Reflection::DISPLAY_NAME, std::string("Movement speed"));
-    factory.data<&CameraComponent::rotationSpeed>(entt::hashed_string("rotationSpeed")).prop(Reflection::DISPLAY_NAME, std::string("Rotation speed"));
+    setup.RegisterVariable<&CameraComponent::isActive>().SetDisplayName("Is active?");
+    setup.RegisterVariable<&CameraComponent::fov>().SetDisplayName("FOV");
+    setup.RegisterVariable<&CameraComponent::movementSpeed>().SetDisplayName("Movement speed");
+    setup.RegisterVariable<&CameraComponent::rotationSpeed>().SetDisplayName("Rotation speed");
 
-    return 0;
+    return true;
 }

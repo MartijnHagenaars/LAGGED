@@ -1,4 +1,5 @@
 #pragma once
+#include "Utility/Logger.h"
 
 //Renderer defines
 #define TOTAL_POINT_LIGHTS 3

@@ -34,6 +34,8 @@ namespace LAG
 			return &m_RegistryPtr->get<T>(m_EntityID);
 		}
 
+		void AddComponent(uint32_t componentID);
+
 		template<typename T>
 		void RemoveComponent()
 		{
@@ -50,8 +52,6 @@ namespace LAG
 			{
 				if (HasComponent<T>())
 					return &m_RegistryPtr->get<T>(m_EntityID);
-				else 
-					Logger::Error("Tried to get missing component.");
 			}
 			else Logger::Error("Tried to get an invalid entity.");
 

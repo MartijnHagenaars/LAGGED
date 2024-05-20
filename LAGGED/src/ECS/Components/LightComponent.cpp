@@ -1,16 +1,16 @@
 #include "LightComponent.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionDefines.h"
+#include "ECS/Meta/ReflectionComponentSetup.h"
 
 bool LAG::LightComponent::InitializeReflection()
 {
-    auto factory = entt::meta<LightComponent>();
-    factory.type(entt::type_hash<LightComponent>::value());
+    Reflection::ReflectionSystem<LightComponent> setup;
+    setup.RegisterComponent().SetDisplayName("Light Component").SetVisibleInEditor(true);
 
-    factory.data<&LightComponent::lightColor>(entt::hashed_string("lightColor")).prop(Reflection::DISPLAY_NAME, std::string("Color"));
-    factory.data<&LightComponent::lightIntensity>(entt::hashed_string("lightIntensity")).prop(Reflection::DISPLAY_NAME, std::string("Intensity"));
-    factory.data<&LightComponent::lightAttenuation>(entt::hashed_string("lightAttenuation")).prop(Reflection::DISPLAY_NAME, std::string("Attenuation"));
+    setup.RegisterVariable<&LightComponent::lightColor>().SetDisplayName("Color");
+    setup.RegisterVariable<&LightComponent::lightIntensity>().SetDisplayName("Intensity");
+    setup.RegisterVariable<&LightComponent::lightAttenuation>().SetDisplayName("Attenuation");
 
-    return false;
+    return true;
 }

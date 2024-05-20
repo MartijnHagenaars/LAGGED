@@ -2,20 +2,24 @@
 
 #include "ECS/Entity.h"
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionDefines.h"
+#include "ECS/Meta/ReflectionComponentSetup.h"
 #include "ECS/Components/BasicComponents.h"
 
 #include "Core/Engine.h"
 #include "ImGui/imgui.h"
 
-//For testing
-#include "ECS/Components/CameraComponent.h"
+#include "ECS/Components/BasicComponents.h"
 
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
 		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
 	{
+		std::string defaultNewEntityName = std::string("New entity name...");
+		for (int i = 0; i < defaultNewEntityName.size() && defaultNewEntityName.size() < s_MaxNameLength; i++)
+		{
+			m_NewEntityName[i] = defaultNewEntityName[i];
+		}
 	}
 
 	EntityViewer::~EntityViewer()
@@ -30,6 +34,11 @@ namespace LAG
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 		ImGui::SeparatorText("Entity Editor");
+
+		if (ImGui::Button("Add object"))
+			GetScene()->AddEntity(std::string(m_NewEntityName));
+		ImGui::SameLine();
+		ImGui::InputText("##InputText", m_NewEntityName, s_MaxNameLength);
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());
@@ -73,6 +82,25 @@ namespace LAG
 		{
 			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity.GetEntityID());
 			ImGui::Text(selectedEntityDisplay.c_str());
+
+			ImGui::Text("Add new component by picking one from the list below.");
+			if (ImGui::BeginListBox("Registered components"))
+			{
+				GetEngine().GetScene()->ComponentLoop([&](ComponentData& data)
+					{
+						if (!data.displayName.empty())
+						{
+							if (ImGui::Selectable(data.displayName.empty() ? "No display name" : data.displayName.c_str(), false))
+							{
+								Logger::Info("Adding component with ID {0}", data.ID);
+							}
+						}
+
+					});
+
+				ImGui::EndListBox();
+			}
+
 
 			//Draw all component widgets
 			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);

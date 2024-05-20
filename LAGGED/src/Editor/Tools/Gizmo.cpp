@@ -70,6 +70,9 @@ namespace LAG
 	void Gizmo::RenderGizmo(Entity* targetEntity)
 	{
 		TransformComponent* targetTransform = targetEntity->GetComponent<TransformComponent>();
+		if (targetTransform == nullptr)
+			return;
+
 		CameraComponent* camera = m_CameraEntity->GetComponent<CameraComponent>();
 		if (targetTransform == nullptr || camera == nullptr)
 		{
