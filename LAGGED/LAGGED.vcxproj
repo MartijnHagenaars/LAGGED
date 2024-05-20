@@ -191,77 +191,21 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h" />
     <ClInclude Include="src\Core\Input\Input.h" />
     <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
-    <ClInclude Include="src\Platform\DX12\Window\DX12_InputEnumConversion.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Mesh.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_CommandQueue.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Common.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Renderer.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="External\DirectX\d3dx12.h" />
     <ClInclude Include="src\Core\Engine.h" />
-    <ClInclude Include="src\Platform\DX12\Renderer\d3dx12.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderExceptionMacros.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Renderer\DX12_Utility.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\Platform\Base\ExceptionBase.h" />
     <ClInclude Include="src\Core\Defines.h" />
     <ClInclude Include="src\Core\ApplicationInterface.h" />
     <ClInclude Include="src\Core\EntryPoint.h" />
-    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowExceptionMacros.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\Platform\Renderer.h" />
     <ClInclude Include="src\Platform\Window.h" />
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
-    <ClInclude Include="src\Platform\DX12\Window\DX12_Window.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Window\DX12_WindowClass.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="src\Utility\HashedString.h" />
     <ClInclude Include="src\Utility\Noise.h" />
     <ClInclude Include="src\Utility\Timer.h" />
@@ -350,45 +294,9 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClCompile Include="src\Core\Input\Input.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Renderer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Window\GL_Window.cpp" />
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_CommandQueue.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Mesh.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\Utility\Logger.cpp" />
     <ClCompile Include="src\Core\Engine.cpp" />
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Renderer.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_RenderException.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\Exceptions\DX12_InfoQueueManager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Renderer\DX12_Utility.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\Platform\Base\ExceptionBase.cpp" />
-    <ClCompile Include="src\Platform\DX12\Window\Exceptions\DX12_WindowException.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Window\DX12_Window.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="src\Platform\DX12\Window\DX12_WindowClass.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="src\Utility\Noise.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Utility\UniqueID.cpp" />

@@ -48,5 +48,5 @@ namespace LAG
 #ifdef PLATFORM_OPENGL
 #include "Platform/OpenGL/Renderer/GL_Texture.h"
 #elif PLATFORM_DIRECTX
-#include "Platform/DX12/Renderer/DX12_Texture.h"
+
 #endif

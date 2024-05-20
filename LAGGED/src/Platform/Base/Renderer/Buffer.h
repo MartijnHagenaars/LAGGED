@@ -69,5 +69,5 @@ namespace LAG
 #ifdef PLATFORM_OPENGL
 #include "Platform/OpenGL/Renderer/GL_Buffers.h"
 #elif PLATFORM_DIRECTX
-#include "Platform/DX12/Renderer/DX12_Buffers.h"
+
 #endif
