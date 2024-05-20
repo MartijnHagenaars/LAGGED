@@ -52,13 +52,13 @@ namespace LAG
 		{
 			friend class ReflectionSystem;
 		public:
-			VariableReflectionSetup& SetDisplayName(const std::string& displayName) 
-			{
-				m_Factory->prop(VariableProperties::DISPLAY_NAME, displayName);
-				return *this;
-			}
-			VariableReflectionSetup& SetCallbackFunction() { LAG_ASSERT("TODO: Implement"); return *this; }
-			VariableReflectionSetup& SetReadOnly(bool isReadOnly) { LAG_ASSERT("TODO: Implement"); return *this; }
+			VariableReflectionSetup(const VariableReflectionSetup& other); //Copy constructor
+			VariableReflectionSetup& operator=(const VariableReflectionSetup& other); //Copy assignment operator
+			~VariableReflectionSetup();
+
+			VariableReflectionSetup& SetDisplayName(const std::string& displayName);
+			VariableReflectionSetup& SetCallbackFunction();
+			VariableReflectionSetup& SetReadOnly(bool isReadOnly);
 
 		private:
 			VariableReflectionSetup()
@@ -81,6 +81,12 @@ namespace LAG
 			template<typename ClassType, auto Variable>
 			VariableReflectionSetup<ClassType, Variable> RegisterVariable() { return VariableReflectionSetup<ClassType, Variable>(); };
 		};
+
+
+
+		//////////////////////////////////////////////////////////////////
+		// Function implementations for the component reflection system //
+		//////////////////////////////////////////////////////////////////
 
 		template<typename ClassType>
 		inline ComponentReflectionSetup<ClassType>::ComponentReflectionSetup(const ComponentReflectionSetup& other) :
@@ -114,5 +120,53 @@ namespace LAG
 			return *this;
 		}
 
-	};
+
+
+		/////////////////////////////////////////////////////////////////
+		// Function implementations for the variable reflection system //
+		/////////////////////////////////////////////////////////////////
+
+		//template<typename ClassType, auto Variable>
+		//inline VariableReflectionSetup<ClassType, Variable>::VariableReflectionSetup(const VariableReflectionSetup& other) :
+		//	m_Factory(other.m_Factory)
+		//{}
+
+		template<typename ClassType, auto Variable>
+		inline VariableReflectionSetup<ClassType, Variable>::VariableReflectionSetup(const VariableReflectionSetup& other) :
+			m_Factory(other.m_Factory)
+		{}
+
+		template<typename ClassType, auto Variable>
+		inline VariableReflectionSetup<ClassType, Variable>& VariableReflectionSetup<ClassType, Variable>::operator=(const VariableReflectionSetup& other)
+		{
+			return *this = VariableReflectionSetup(other);
+		}
+
+		template<typename ClassType, auto Variable>
+		inline VariableReflectionSetup<ClassType, Variable>::~VariableReflectionSetup()
+		{
+			delete m_Factory;
+			m_Factory = nullptr;
+		}
+
+		template<typename ClassType, auto Variable>
+		inline VariableReflectionSetup<ClassType, Variable>& VariableReflectionSetup<ClassType, Variable>::SetDisplayName(const std::string& displayName)
+		{
+			m_Factory->prop(VariableProperties::DISPLAY_NAME, displayName);
+			return *this;
+		}
+
+		template<typename ClassType, auto Variable>
+		inline VariableReflectionSetup<ClassType, Variable> & VariableReflectionSetup<ClassType, Variable>::SetCallbackFunction()
+		{
+			LAG_ASSERT("TODO: Implement"); return *this;
+		}
+
+		template<typename ClassType, auto Variable>
+		inline VariableReflectionSetup<ClassType, Variable> & VariableReflectionSetup<ClassType, Variable>::SetReadOnly(bool isReadOnly)
+		{
+			LAG_ASSERT("TODO: Implement"); return *this;
+		}
+
+};
 }
