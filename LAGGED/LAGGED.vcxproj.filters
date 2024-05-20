@@ -150,10 +150,6 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll" />
-    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoiseD.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />

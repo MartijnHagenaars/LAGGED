@@ -155,6 +155,9 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
       <AdditionalDependencies>FastNoise.lib;glfw3_mt.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)External\OpenGL\GLEW\lib</AdditionalLibraryDirectories>
     </Lib>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoise.dll" "$(SolutionDir)\Build\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">
     <ClCompile>
@@ -191,6 +194,9 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
       <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)External\OpenGL\GLEW\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>FastNoiseD.lib;glfw3_mt.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoiseD.dll" "$(SolutionDir)\Build\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">
     <ClCompile>
@@ -578,20 +584,6 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoise.dll">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="..\External\FastNoise2\bin\FastNoiseD.dll">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='DirectX_Release|x64'">true</ExcludedFromBuild>
-    </CopyFileToFolders>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\FrameBuffer.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
