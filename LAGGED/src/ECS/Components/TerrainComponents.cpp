@@ -7,20 +7,21 @@ namespace LAG
 {
 	bool SurfaceComponent::InitializeReflection()
 	{
-        Reflection::ReflectionSystem setup;
-        setup.RegisterComponent<SurfaceComponent>().SetDisplayName("Surface Component").SetVisibleInEditor(true);
-        setup.RegisterVariable<SurfaceComponent, &SurfaceComponent::m_SurfaceTexture>().SetDisplayName("Texture");
+        Reflection::ReflectionSystem<SurfaceComponent> setup;
+        setup.RegisterComponent().SetDisplayName("Surface Component").SetVisibleInEditor(true);
+        setup.RegisterVariable<&SurfaceComponent::m_SurfaceTexture>().SetDisplayName("Texture");
 
         return true;
 	}
 
     bool ProceduralSurfaceComponent::InitializeReflection()
     {
-        Reflection::ReflectionSystem setup;
-        setup.RegisterComponent<ProceduralSurfaceComponent>().SetDisplayName("Procedural Surface Component").SetVisibleInEditor(true);
-        setup.RegisterVariable<ProceduralSurfaceComponent, &ProceduralSurfaceComponent::m_SurfaceSubdivisions>().SetDisplayName("Subdivision");
-        setup.RegisterVariable<ProceduralSurfaceComponent, &ProceduralSurfaceComponent::m_NoiseProperties>().SetDisplayName("Noise properties");
-        setup.RegisterVariable<ProceduralSurfaceComponent, &ProceduralSurfaceComponent::m_SurfaceTexture>().SetDisplayName("Texture");
+        Reflection::ReflectionSystem<ProceduralSurfaceComponent> setup;
+        setup.RegisterComponent().SetDisplayName("Procedural Surface Component").SetVisibleInEditor(true);
+
+        setup.RegisterVariable<&ProceduralSurfaceComponent::m_SurfaceSubdivisions>().SetDisplayName("Subdivision");
+        setup.RegisterVariable<&ProceduralSurfaceComponent::m_NoiseProperties>().SetDisplayName("Noise properties");
+        setup.RegisterVariable<&ProceduralSurfaceComponent::m_SurfaceTexture>().SetDisplayName("Texture");
 
         return true;
     }

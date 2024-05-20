@@ -5,11 +5,12 @@
 
 bool LAG::LightComponent::InitializeReflection()
 {
-    Reflection::ReflectionSystem setup;
-    setup.RegisterComponent<LightComponent>().SetDisplayName("Light Component").SetVisibleInEditor(true);
-    setup.RegisterVariable<LightComponent, &LightComponent::lightColor>().SetDisplayName("Color");
-    setup.RegisterVariable<LightComponent, &LightComponent::lightIntensity>().SetDisplayName("Intensity");
-    setup.RegisterVariable<LightComponent, &LightComponent::lightAttenuation>().SetDisplayName("Attenuation");
+    Reflection::ReflectionSystem<LightComponent> setup;
+    setup.RegisterComponent().SetDisplayName("Light Component").SetVisibleInEditor(true);
+
+    setup.RegisterVariable<&LightComponent::lightColor>().SetDisplayName("Color");
+    setup.RegisterVariable<&LightComponent::lightIntensity>().SetDisplayName("Intensity");
+    setup.RegisterVariable<&LightComponent::lightAttenuation>().SetDisplayName("Attenuation");
 
     return true;
 }

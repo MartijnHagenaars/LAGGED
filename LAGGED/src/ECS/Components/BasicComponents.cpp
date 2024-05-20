@@ -10,9 +10,9 @@
 
 bool LAG::DefaultComponent::InitializeReflection()
 {
-	Reflection::ReflectionSystem setup;
-	setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default Component").SetVisibleInEditor(true);
-	setup.RegisterVariable<DefaultComponent, &DefaultComponent::name>().SetDisplayName("Name");
+	Reflection::ReflectionSystem<DefaultComponent> setup;
+	setup.RegisterComponent().SetDisplayName("Default Component").SetVisibleInEditor(true);
+	setup.RegisterVariable<&DefaultComponent::name>().SetDisplayName("Name");
 	return true;
 }
 
@@ -58,11 +58,12 @@ const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
 
 bool LAG::TransformComponent::InitializeReflection()
 {
-	Reflection::ReflectionSystem setup;
-	setup.RegisterComponent<TransformComponent>().SetDisplayName("Transform Component").SetVisibleInEditor(true);
-	setup.RegisterVariable<TransformComponent, &TransformComponent::m_Translation>().SetDisplayName("Translation");
-	setup.RegisterVariable<TransformComponent, &TransformComponent::m_Rotation>().SetDisplayName("Rotation");
-	setup.RegisterVariable<TransformComponent, &TransformComponent::m_Scale>().SetDisplayName("Scale");
+	Reflection::ReflectionSystem<TransformComponent> setup;
+	setup.RegisterComponent().SetDisplayName("Transform Component").SetVisibleInEditor(true);
+
+	setup.RegisterVariable<&TransformComponent::m_Translation>().SetDisplayName("Translation");
+	setup.RegisterVariable<&TransformComponent::m_Rotation>().SetDisplayName("Rotation");
+	setup.RegisterVariable<&TransformComponent::m_Scale>().SetDisplayName("Scale");
 
 	return true;
 }

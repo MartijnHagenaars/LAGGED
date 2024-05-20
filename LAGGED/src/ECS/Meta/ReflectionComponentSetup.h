@@ -21,10 +21,14 @@ namespace LAG
 			constexpr entt::hashed_string READ_ONLY = entt::hashed_string("READ_ONLY");
 		}
 
+		//Forward declaring reflection system class
+		template<typename ClassType>
+		class ReflectionSystem; 
+
 		template<typename ClassType>
 		class ComponentReflectionSetup
 		{
-			friend class ReflectionSystem;
+			friend class ReflectionSystem<ClassType>;
 		public:
 			ComponentReflectionSetup(const ComponentReflectionSetup& other); //Copy constructor
 			ComponentReflectionSetup& operator=(const ComponentReflectionSetup& other); //Copy assignment operator
@@ -61,7 +65,7 @@ namespace LAG
 		template<typename ClassType, auto Variable>
 		class VariableReflectionSetup
 		{
-			friend class ReflectionSystem;
+			friend class ReflectionSystem<ClassType>;
 		public:
 			VariableReflectionSetup(const VariableReflectionSetup& other); //Copy constructor
 			VariableReflectionSetup& operator=(const VariableReflectionSetup& other); //Copy assignment operator
@@ -96,6 +100,7 @@ namespace LAG
 			entt::meta_factory<ClassType>* m_Factory = nullptr;
 		};
 
+		template<typename ClassType>
 		class ReflectionSystem
 		{
 		public:
@@ -104,8 +109,7 @@ namespace LAG
 			/// </summary>
 			/// <typeparam name="T">The component type</typeparam>
 			/// <returns>The class for configuring the reflection of the component. Uses the builder pattern.</returns>
-			template<typename T>
-			ComponentReflectionSetup<T> RegisterComponent() { return ComponentReflectionSetup<T>(); };
+			ComponentReflectionSetup<ClassType> RegisterComponent() { return ComponentReflectionSetup<ClassType>(); };
 
 			/// <summary>
 			/// Registers a variable from a specific component. Registering the variable allows it to be used in the editor.
@@ -113,7 +117,8 @@ namespace LAG
 			/// <typeparam name="ClassType">The component type.</typeparam>
 			/// <typeparam name="Variable">The variable / member function pointer.</typeparam>
 			/// <returns>The class for configuring the reflection of the variable. Uses the builder pattern.</returns>
-			template<typename ClassType, auto Variable>
+			
+			template<auto Variable>
 			VariableReflectionSetup<ClassType, Variable> RegisterVariable() { return VariableReflectionSetup<ClassType, Variable>(); };
 		};
 
