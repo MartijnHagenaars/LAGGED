@@ -9,9 +9,6 @@ namespace LAG
 {
 	struct SurfaceComponent
 	{
-		SurfaceComponent();
-		~SurfaceComponent();
-
 		std::unique_ptr<Surface> m_Surface = nullptr;
 		TextureHandle m_SurfaceTexture = {};
 

@@ -11,9 +11,9 @@
 bool LAG::DefaultComponent::InitializeReflection()
 {
 	Reflection::ReflectionSystem setup;
-	setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default Component").SetVisibleInEditor(false);
+	setup.RegisterComponent<DefaultComponent>().SetDisplayName("Default Component").SetVisibleInEditor(true);
 	setup.RegisterVariable<DefaultComponent, &DefaultComponent::name>().SetDisplayName("Name");
-	return false;
+	return true;
 }
 
 LAG::TransformComponent::TransformComponent() :
@@ -58,12 +58,11 @@ const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
 
 bool LAG::TransformComponent::InitializeReflection()
 {
-	auto factory = entt::meta<TransformComponent>();
-	factory.type(entt::type_hash<TransformComponent>::value()).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Transform Component"));;
+	Reflection::ReflectionSystem setup;
+	setup.RegisterComponent<TransformComponent>().SetDisplayName("Transform Component").SetVisibleInEditor(true);
+	setup.RegisterVariable<TransformComponent, &TransformComponent::m_Translation>().SetDisplayName("Translation");
+	setup.RegisterVariable<TransformComponent, &TransformComponent::m_Rotation>().SetDisplayName("Rotation");
+	setup.RegisterVariable<TransformComponent, &TransformComponent::m_Scale>().SetDisplayName("Scale");
 
-	factory.data<&TransformComponent::m_Translation>(entt::hashed_string("translation")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Position"));
-	factory.data<&TransformComponent::m_Rotation>(entt::hashed_string("rotation")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Rotation"));
-	factory.data<&TransformComponent::m_Scale>(entt::hashed_string("scale")).prop(Reflection::VariableProperties::DISPLAY_NAME, std::string("Scale"));
-
-	return false;
+	return true;
 }
