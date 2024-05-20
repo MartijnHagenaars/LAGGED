@@ -15,6 +15,11 @@ namespace LAG
 	EntityViewer::EntityViewer() :
 		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
 	{
+		std::string defaultNewEntityName = std::string("New entity name...");
+		for (int i = 0; i < defaultNewEntityName.size() && defaultNewEntityName.size() < s_MaxNameLength; i++)
+		{
+			m_NewEntityName[i] = defaultNewEntityName[i];
+		}
 	}
 
 	EntityViewer::~EntityViewer()

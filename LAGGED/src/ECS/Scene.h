@@ -66,8 +66,8 @@ namespace LAG
 
 
 	private:
-		bool ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, Entity* entity, Reflection::WidgetModes mode);
-		void ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode);
+		bool ReflectComponent(entt::meta_type& compMeta, entt::meta_any& compInstance, Entity* entity, Reflection::WidgetModes mode);
+		void ReflectProperty(const entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode);
 		void ReflectType(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode);
 
 		entt::registry m_Registry;

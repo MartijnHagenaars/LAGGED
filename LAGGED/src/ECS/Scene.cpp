@@ -68,60 +68,72 @@ namespace LAG
 
 	void Scene::HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode)
 	{
-		for (auto&& [idType, storageSet] : m_Registry.storage())
+		for (const auto& it : m_Registry.storage())
 		{
+			entt::sparse_set& storageSet = it.second;
 			if (storageSet.contains(entt::entity(entity->GetEntityID())))
 			{
-				auto componentMeta = entt::resolve(storageSet.type());
-				if (!componentMeta)
-					continue;
+				//Get the component meta for this specific type and check if it's valid. 
+				entt::meta_type compMeta = entt::resolve(storageSet.type());
+				if (compMeta)
+				{
+					auto compElement = storageSet.value(entt::entity(entity->GetEntityID()));
+					entt::meta_any compInstance = compMeta.from_void(compElement);
+					if (compInstance != nullptr)
+					{
+						//Get the display name of the component
+						std::string compName;
+						entt::meta_prop compDisplayNameProp = compMeta.prop(Reflection::ComponentProperties::DISPLAY_NAME);
+						if (compDisplayNameProp)
+							compName = compDisplayNameProp.value() != nullptr ? compDisplayNameProp.value().cast<std::string>() : std::string(compMeta.info().name());
+						else compName = std::string(compMeta.info().name());
 
-				std::string compName = std::string(componentMeta.info().name());
+						ImGui::SeparatorText(compName.c_str());
+						ReflectComponent(compMeta, compInstance, entity, mode);
 
-				//entt::entity ent;
-				//m_Registry.emplace(ent, componentMeta)
-
-				//ImGui::Text(compName.c_str());
-
-				if (!ReflectComponent(componentMeta, storageSet, entity, mode))
-					ImGui::Text("Failed to load reflection data for component.");
-				else ImGui::Separator();
+					}
+					else
+					{
+						ImGui::SeparatorText(std::string(compMeta.info().name()).c_str());
+						ImGui::Text("Failed to load reflection data for component. Has the component reflection been set up?");
+					}
+				}
+				else printf("???\n");
 			}
 		}
 	}
 
-	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::sparse_set& storageSet, Entity* entity, Reflection::WidgetModes mode)
+	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::meta_any& compInstance, Entity* entity, Reflection::WidgetModes mode)
 	{
-		entt::meta_any compElement = compMeta.from_void(storageSet.value(entt::entity(entity->GetEntityID())));
-		if (compElement == nullptr)
-			return false;
-		for (auto&& [idType, propMetaData] : compMeta.data())
+		//ImGui::SeparatorText("Entity Editor");
+
+		for (const auto& it : compMeta.data())
 		{
+			const entt::meta_data& propData = it.second;
 			entt::meta_any propInstance, propInstanceCompare;
-			propInstanceCompare = propInstance = propMetaData.get(compElement);
-			ReflectProperty(propMetaData, propInstance, entity, mode);
+			propInstanceCompare = propInstance = propData.get(compInstance);
+			ReflectProperty(propData, propInstance, entity, mode);
 
 			//Check if the component has been modified. If so, (re)set the values
 			if (propInstance != propInstanceCompare)
-				propMetaData.set(compElement, propInstance);
+				propData.set(compInstance, propInstance);
 		}
 
 		return true;
 	}
 
-	void Scene::ReflectProperty(entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode)
+	void Scene::ReflectProperty(const entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode)
 	{
+		//Get the (display) name of the component
 		std::string propDisplayName;
-		entt::meta_prop displayNameProp = propData.prop(Reflection::VariableProperties::DISPLAY_NAME);
-		if (displayNameProp.value() != nullptr)
-		{
-			propDisplayName = displayNameProp.value().cast<std::string>();
-			ImGui::PushID(std::string(std::to_string(propValues.type().id()) + propDisplayName).c_str());
-			ReflectType(propValues, entity, propDisplayName, mode);
-			ImGui::PopID();
-		}
-		else
-			propDisplayName = "Undefined property display name";
+		entt::meta_prop compDisplayNameProp = propData.prop(Reflection::ComponentProperties::DISPLAY_NAME);
+		if (compDisplayNameProp)
+			propDisplayName = compDisplayNameProp.value() != nullptr ? compDisplayNameProp.value().cast<std::string>() : std::string(propData.type().info().name());
+		else propDisplayName = "Undefined display name (" + std::string(propData.type().info().name()) + ")";
+
+		ImGui::PushID(std::string(std::to_string(propValues.type().id()) + propDisplayName).c_str());
+		ReflectType(propValues, entity, propDisplayName, mode);
+		ImGui::PopID();
 	}
 
 	void Scene::ReflectType(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode)
