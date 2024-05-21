@@ -9,7 +9,7 @@ namespace LAG
 	{
         Reflection::ReflectionSystem<SurfaceComponent> setup;
         setup.RegisterComponent().SetDisplayName("Surface Component").SetVisibleInEditor(true);
-        setup.RegisterVariable<&SurfaceComponent::m_SurfaceTexture>().SetDisplayName("Texture");
+        setup.RegisterVariable<&SurfaceComponent::surfaceTexture>().SetDisplayName("Texture");
 
         return true;
 	}
@@ -19,9 +19,9 @@ namespace LAG
         Reflection::ReflectionSystem<ProceduralSurfaceComponent> setup;
         setup.RegisterComponent().SetDisplayName("Procedural Surface Component").SetVisibleInEditor(true);
 
-        setup.RegisterVariable<&ProceduralSurfaceComponent::m_SurfaceSubdivisions>().SetDisplayName("Subdivision");
-        setup.RegisterVariable<&ProceduralSurfaceComponent::m_NoiseProperties>().SetDisplayName("Noise properties");
-        setup.RegisterVariable<&ProceduralSurfaceComponent::m_SurfaceTexture>().SetDisplayName("Texture");
+        setup.RegisterVariable<&ProceduralSurfaceComponent::surfaceSubdivisions>().SetDisplayName("Subdivision");
+        setup.RegisterVariable<&ProceduralSurfaceComponent::noiseProperties>().SetDisplayName("Noise properties");
+        setup.RegisterVariable<&ProceduralSurfaceComponent::surfaceTexture>().SetDisplayName("Texture");
 
         return true;
     }

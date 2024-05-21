@@ -131,7 +131,7 @@ namespace LAG
 		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
-		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->m_Framebuffer->FrameStart(m_ShowWireframe);
+		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->framebuffer->FrameStart(m_ShowWireframe);
 
 
 		//Get an active camera
@@ -168,12 +168,12 @@ namespace LAG
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
 				if (entity.GetComponent<DefaultComponent>()->visible)
-					surfaceComp.m_Surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+					surfaceComp.surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
 				if (entity.GetComponent<DefaultComponent>()->visible)
-					surfaceComp.m_Surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+					surfaceComp.surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
 		//Render all lines in the line render list
@@ -184,7 +184,7 @@ namespace LAG
 			m_LineRenderList.clear();
 		}
 
-		CameraSystem::GetActiveCameraComponent()->m_Framebuffer->FrameEnd();
+		CameraSystem::GetActiveCameraComponent()->framebuffer->FrameEnd();
 
 		ImGuiFrameEnd();
 		m_RenderTime = m_RenderTimer.GetMilliseconds();

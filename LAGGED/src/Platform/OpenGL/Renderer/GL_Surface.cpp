@@ -68,19 +68,19 @@ namespace LAG
 	void Surface::GenerateNoiseSurface(const TransformComponent& transformComp, const ProceduralSurfaceComponent& procSurfaceComp)
 	{
 		//Set noise positions
-		glm::vec2 noisePos = procSurfaceComp.m_NoiseProperties.m_UseTransformPositionForNoise ?
+		glm::vec2 noisePos = procSurfaceComp.noiseProperties.m_UseTransformPositionForNoise ?
 			glm::vec2(transformComp.GetPosition().x, transformComp.GetPosition().z) :
-			procSurfaceComp.m_NoiseProperties.m_NoisePosition;
+			procSurfaceComp.noiseProperties.m_NoisePosition;
 
-		glm::vec2 noiseScale = glm::vec2(static_cast<float>(procSurfaceComp.m_SurfaceSubdivisions));
+		glm::vec2 noiseScale = glm::vec2(static_cast<float>(procSurfaceComp.surfaceSubdivisions));
 
-		m_Subdivisions = procSurfaceComp.m_SurfaceSubdivisions;
-		Noise::GeneratedData noiseData = Noise::GenerateNoiseData(procSurfaceComp.m_NoiseProperties, noisePos, noiseScale, m_Subdivisions);
+		m_Subdivisions = procSurfaceComp.surfaceSubdivisions;
+		Noise::GeneratedData noiseData = Noise::GenerateNoiseData(procSurfaceComp.noiseProperties, noisePos, noiseScale, m_Subdivisions);
 		m_HeightMapData = noiseData.m_Data;
 		m_HeightMapWidth = static_cast<int>(noiseData.m_Size.x);
 		m_HeightMapHeight = static_cast<int>(noiseData.m_Size.y);
 
-		GenerateSurface(procSurfaceComp.m_SurfaceSubdivisions, procSurfaceComp.m_SurfaceSubdivisions);
+		GenerateSurface(procSurfaceComp.surfaceSubdivisions, procSurfaceComp.surfaceSubdivisions);
 	}
 
 	void Surface::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)

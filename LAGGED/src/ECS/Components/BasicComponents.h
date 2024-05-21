@@ -29,19 +29,19 @@ namespace LAG
 		void SetTransformMatrix(const glm::mat4 transformMat);
 		const glm::mat4& GetTransformMatrix();
 
-		void SetPosition(const glm::vec3& translation) { m_Translation = translation; m_Dirty = true; }
-		void SetRotation(const glm::vec3& rotation) { m_Rotation = rotation; m_Dirty = true; }
-		void SetScale(const glm::vec3& scale) { m_Scale = scale; m_Dirty = true; }
+		void SetPosition(const glm::vec3& translation) { this->translation = translation; m_Dirty = true; }
+		void SetRotation(const glm::vec3& rotation) { this->rotation = rotation; m_Dirty = true; }
+		void SetScale(const glm::vec3& scale) { this->scale = scale; m_Dirty = true; }
 
-		glm::vec3 GetPosition() const { return m_Translation; }
-		glm::vec3 GetRotation() const { return m_Rotation; }
-		glm::vec3 GetScale() const { return m_Scale; }
+		glm::vec3 GetPosition() const { return translation; }
+		glm::vec3 GetRotation() const { return rotation; }
+		glm::vec3 GetScale() const { return scale; }
 
 	private:
-		glm::vec3 m_Translation;
-		glm::vec3 m_Rotation;
-		glm::vec3 m_Scale;
-		glm::mat4 m_Transform;
+		glm::vec3 translation;
+		glm::vec3 rotation;
+		glm::vec3 scale;
+		glm::mat4 transform;
 		bool m_Dirty = true;
 
 		static bool InitializeReflection();

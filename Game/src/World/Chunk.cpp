@@ -23,9 +23,9 @@ void Chunk::Load(const glm::vec2& position)
 
 		//Add procedural surface component
 		LAG::ProceduralSurfaceComponent* procSurface = m_Entity.AddComponent<LAG::ProceduralSurfaceComponent>();
-		procSurface->m_SurfaceSubdivisions = 64;
-		procSurface->m_NoiseProperties.m_Amplitude = 0.7f;
-		procSurface->m_NoiseProperties.m_Frequency = 0.5f;
+		procSurface->surfaceSubdivisions = 64;
+		procSurface->noiseProperties.m_Amplitude = 0.7f;
+		procSurface->noiseProperties.m_Frequency = 0.5f;
 		LAG::SurfaceSystems::GenerateNoiseSurface(&m_Entity);
 	}
 	//TODO: Noise movement is incorrecct
@@ -37,7 +37,7 @@ void Chunk::Unload()
 	{
 		//TODO: The user should not have to do this. There should be some sort of function in the entity object that gets all components and checks if they have unload functions.
 		//		If they do, the Unload function is called.
-		m_Entity.GetComponent<LAG::ProceduralSurfaceComponent>()->m_Surface.Unload();
+		m_Entity.GetComponent<LAG::ProceduralSurfaceComponent>()->surface.Unload();
 		LAG::GetScene()->RemoveEntity(m_Entity.GetEntityID());
 	}
 }

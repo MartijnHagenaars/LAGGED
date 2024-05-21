@@ -28,7 +28,7 @@ namespace LAG
 		glm::mat4 projMat = glm::mat4(1.f);
 		CameraPerspectiveType perspectiveType = CameraPerspectiveType::PERSPECTIVE;
 		
-		FrameBuffer* m_Framebuffer = new FrameBuffer();
+		FrameBuffer* framebuffer = new FrameBuffer();
 
 	private:
 		static bool InitializeReflection();

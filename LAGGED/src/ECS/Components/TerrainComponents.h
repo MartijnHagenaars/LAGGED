@@ -9,8 +9,8 @@ namespace LAG
 {
 	struct SurfaceComponent
 	{
-		std::unique_ptr<Surface> m_Surface = nullptr;
-		TextureHandle m_SurfaceTexture = {};
+		std::unique_ptr<Surface> surface = nullptr;
+		TextureHandle surfaceTexture = {};
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();
@@ -18,13 +18,13 @@ namespace LAG
 
 	struct ProceduralSurfaceComponent
 	{
-		Surface m_Surface = {};
-		int m_SurfaceSubdivisions = 16;
-		glm::vec2 m_SurfaceScale = glm::vec2(1.f);
+		Surface surface = {};
+		int surfaceSubdivisions = 16;
+		glm::vec2 surfaceScale = glm::vec2(1.f);
 
-		TextureHandle m_SurfaceTexture = {};
+		TextureHandle surfaceTexture = {};
 
-		Noise::Properties m_NoiseProperties = {};
+		Noise::Properties noiseProperties = {};
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();

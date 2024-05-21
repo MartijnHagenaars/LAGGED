@@ -10,8 +10,8 @@ namespace LAG::SurfaceSystems
 
 	void GenerateNoiseSurface(Entity* entity)
 	{
-		entity->GetComponent<ProceduralSurfaceComponent>()->m_Surface.GenerateNoiseSurface(*entity->GetComponent<TransformComponent>(), *entity->GetComponent<ProceduralSurfaceComponent>());
-		entity->GetComponent<ProceduralSurfaceComponent>()->m_Surface.Reload();
+		entity->GetComponent<ProceduralSurfaceComponent>()->surface.GenerateNoiseSurface(*entity->GetComponent<TransformComponent>(), *entity->GetComponent<ProceduralSurfaceComponent>());
+		entity->GetComponent<ProceduralSurfaceComponent>()->surface.Reload();
 	}
 
 	void SetHeightMapTexture(Entity* entity, Texture* texture)

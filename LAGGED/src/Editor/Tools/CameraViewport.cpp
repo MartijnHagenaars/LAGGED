@@ -34,22 +34,22 @@ namespace LAG
 
 			m_ViewportSize = winSize;
 			cameraComp->hasCameraDimensionChanged = true;
-			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
-			cameraComp->m_Framebuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
+			cameraComp->framebuffer->Resize(m_ViewportSize);
+			cameraComp->framebuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
 
-			GetRenderer()->OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
+			GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
 		}
 
 		ImGui::PopStyleVar();
-		ImGui::Image(cameraComp->m_Framebuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
+		ImGui::Image(cameraComp->framebuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
 		ImGui::End();
 
 		if (m_IsOpen != isWindowOpen)
 		{
 			isWindowOpen = m_IsOpen;
-			cameraComp->m_Framebuffer->UseWindowSize(!m_IsOpen);
-			cameraComp->m_Framebuffer->Resize(m_ViewportSize);
-			GetRenderer()->OnResize(cameraComp->m_Framebuffer->GetSize().x, cameraComp->m_Framebuffer->GetSize().y);
+			cameraComp->framebuffer->UseWindowSize(!m_IsOpen);
+			cameraComp->framebuffer->Resize(m_ViewportSize);
+			GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
 		}
 	}
 
