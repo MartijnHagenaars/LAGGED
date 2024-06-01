@@ -88,9 +88,25 @@ namespace LAG
 							compName = compDisplayNameProp.value() != nullptr ? compDisplayNameProp.value().cast<std::string>() : std::string(compMeta.info().name());
 						else compName = std::string(compMeta.info().name());
 
-						ImGui::SeparatorText(compName.c_str());
-						ReflectComponent(compMeta, compInstance, entity, mode);
+						//Only reflect the component if it has any reflected variables set up.
+						if (compMeta.data().end() - compMeta.data().begin() > 0)
+						{
+							if (ImGui::CollapsingHeader(compName.c_str(), ImGuiTreeNodeFlags_None))
+							{
+								//Apply some nice formatting
+								const float spacingAmount = 16.f;
+								ImGui::PushID(compMeta.info().hash());
+								ImGui::Indent(spacingAmount);
 
+								//Now actually reflect the component
+								ReflectComponent(compMeta, compInstance, entity, mode);
+
+								//Reset formatting
+								ImGui::Unindent(spacingAmount);
+								ImGui::Dummy(ImVec2(spacingAmount, 0.f));
+								ImGui::PopID();
+							}
+						}
 					}
 					else
 					{
@@ -98,15 +114,12 @@ namespace LAG
 						ImGui::Text("Failed to load reflection data for component. Has the component reflection been set up?");
 					}
 				}
-				else printf("???\n");
 			}
 		}
 	}
 
 	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::meta_any& compInstance, Entity* entity, Reflection::WidgetModes mode)
 	{
-		//ImGui::SeparatorText("Entity Editor");
-
 		for (const auto& it : compMeta.data())
 		{
 			const entt::meta_data& propData = it.second;
@@ -136,10 +149,7 @@ namespace LAG
 			memberDisplayName = memberDisplayNameProp.value() != nullptr ? memberDisplayNameProp.value().cast<std::string>() : std::string(propData.type().info().name());
 		else memberDisplayName = "Undefined display name (" + std::string(propData.type().info().name()) + ")";
 
-		//Now create the widget
-		ImGui::PushID(std::string(std::to_string(propValues.type().id()) + memberDisplayName).c_str());
 		RenderMemberWidget(propValues, entity, memberDisplayName, mode);
-		ImGui::PopID();
 	}
 
 	void Scene::RenderMemberWidget(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode)
