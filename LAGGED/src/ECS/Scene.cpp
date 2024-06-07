@@ -164,16 +164,15 @@ namespace LAG
 			ImGui::Text(std::string("No meta inspect function detected for " + propName).c_str());
 	}
 
-	void Scene::ComponentLoop(std::function<void(ComponentData& compData)> func)
+	void Scene::ComponentLoop(std::function<void(Component& comp)> func)
 	{
 		for (auto&& [id, type] : entt::resolve())
 		{
-			ComponentData data;
-			data.ID = type.id();
-			if (type.prop(Reflection::VariableProperties::DISPLAY_NAME))
-				data.displayName = type.prop(Reflection::VariableProperties::DISPLAY_NAME).value().cast<std::string>();
-
-			func(data);
+			if (type && type.prop(entt::hashed_string("REFLECTED_COMPONENT")))
+			{
+				Component component(type);
+				func(component);
+			}
 		}
 	}
 }

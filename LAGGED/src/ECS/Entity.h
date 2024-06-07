@@ -66,6 +66,5 @@ namespace LAG
 
 		entt::entity m_EntityID = entt::tombstone;
 		entt::registry* m_RegistryPtr = nullptr;
-
 	};
 }

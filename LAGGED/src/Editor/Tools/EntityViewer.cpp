@@ -80,22 +80,38 @@ namespace LAG
 
 		if (m_SelectedEntity.IsValid())
 		{
+			if (ImGui::Button("Duplicate Entity"))
+			{
+
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Delete Entity"))
+			{
+
+			}
+
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("AddComponentPopup");
+
+			if (ImGui::BeginPopup("AddComponentPopup"))
+			{
+				ImGui::SeparatorText("Select a component");
+				//TODO
+				ImGui::EndPopup();
+			}
+
 			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity.GetEntityID());
 			ImGui::Text(selectedEntityDisplay.c_str());
 
 			ImGui::Text("Add new component by picking one from the list below.");
 			if (ImGui::BeginListBox("Registered components"))
 			{
-				GetEngine().GetScene()->ComponentLoop([&](ComponentData& data)
+				GetEngine().GetScene()->ComponentLoop([&](Component& comp)
 					{
-						if (!data.displayName.empty())
+						if (ImGui::Selectable(comp.GetDisplayName().c_str(), false))
 						{
-							if (ImGui::Selectable(data.displayName.empty() ? "No display name" : data.displayName.c_str(), false))
-							{
-								Logger::Info("Adding component with ID {0}", data.ID);
-							}
+							Logger::Info("Adding component with ID {0}", comp.GetDisplayName());
 						}
-
 					});
 
 				ImGui::EndListBox();

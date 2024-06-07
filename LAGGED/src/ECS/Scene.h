@@ -1,6 +1,8 @@
 #pragma once
 #include "entt/entt.hpp"
+
 #include "Entity.h"
+#include "Component.h"
 
 namespace LAG
 {
@@ -8,13 +10,6 @@ namespace LAG
 	{
 		enum class WidgetModes;
 	}
-
-
-	struct ComponentData
-	{
-		uint32_t ID;
-		std::string displayName;
-	};
 
 	class Scene
 	{
@@ -60,7 +55,7 @@ namespace LAG
 		/// Loops over all components. When looping, the function pointer is called for every registered component type.
 		/// </summary>
 		/// <param name="func">The function that is called when looping over a registered component. When calling the function pointer, an object of type ComponentData is passed in. This object contains info about the component like name and ID.</param>
-		void ComponentLoop(std::function<void(ComponentData& compData)> func);
+		void ComponentLoop(std::function<void(Component& comp)> func);
 
 		void HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode);
 

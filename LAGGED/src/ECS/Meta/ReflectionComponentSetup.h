@@ -56,6 +56,8 @@ namespace LAG
 
 				std::string displayName = typeid(ClassType).name();
 				m_Factory.type(entt::hashed_string(displayName.c_str()));
+				
+				m_Factory.prop(entt::hashed_string("REFLECTED_COMPONENT"), displayName);
 			}
 
 			entt::meta_factory<ClassType>& m_Factory;
