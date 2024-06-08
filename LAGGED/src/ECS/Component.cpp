@@ -27,4 +27,15 @@ namespace LAG
 		else
 			Logger::Critical("Failed to add component {0} to entity: Meta function not found.", GetDisplayName());
 	}
+
+	bool Component::ExistsOnEntity(const Entity& entity)
+	{
+		auto func = m_MetaType.func(entt::hashed_string("IS_COMPONENT_ON_ENTITY"));
+		if (func)
+			return func.invoke(entt::meta_handle(), entity).cast<bool>();
+		else
+			Logger::Critical("Failed to check if component {0} exists on entity: Meta function not found.", GetDisplayName());
+
+		return false;
+	}
 }

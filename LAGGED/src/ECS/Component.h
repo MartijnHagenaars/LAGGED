@@ -16,6 +16,7 @@ namespace LAG
 		Component(const entt::meta_type& metaType);
 
 		void AddToEntity(const Entity& entity);
+		bool ExistsOnEntity(const Entity& entity);
 
 		std::string GetDisplayName() const { return m_DisplayName; }
 

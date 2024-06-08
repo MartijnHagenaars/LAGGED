@@ -96,7 +96,17 @@ namespace LAG
 			if (ImGui::BeginPopup("AddComponentPopup"))
 			{
 				ImGui::SeparatorText("Select a component");
-				//TODO
+
+				//Loop through all components. Add them to the popup if the entity doesn't already use them. 
+				GetEngine().GetScene()->ComponentLoop([&](Component& comp)
+					{
+						if (!comp.ExistsOnEntity(m_SelectedEntity))
+							if (ImGui::Selectable(comp.GetDisplayName().c_str(), false))
+							{
+								Logger::Info("Adding component with ID {0}...", comp.GetDisplayName());
+								comp.AddToEntity(m_SelectedEntity);
+							}
+					});
 				ImGui::EndPopup();
 			}
 
@@ -104,20 +114,6 @@ namespace LAG
 			ImGui::Text(selectedEntityDisplay.c_str());
 
 			ImGui::Text("Add new component by picking one from the list below.");
-			if (ImGui::BeginListBox("Registered components"))
-			{
-				GetEngine().GetScene()->ComponentLoop([&](Component& comp)
-					{
-						if (ImGui::Selectable(comp.GetDisplayName().c_str(), false))
-						{
-							Logger::Info("Adding component with ID {0}...", comp.GetDisplayName());
-							comp.AddToEntity(m_SelectedEntity);
-						}
-					});
-
-				ImGui::EndListBox();
-			}
-
 
 			//Draw all component widgets
 			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);

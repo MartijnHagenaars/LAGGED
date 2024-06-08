@@ -61,9 +61,8 @@ namespace LAG
 				m_Factory.type(entt::hashed_string(displayName.c_str()));
 
 				m_Factory.prop(entt::hashed_string("REFLECTED_COMPONENT"), displayName);
-				//m_Factory.func<&entt::registry::emplace<ClassType>>(entt::hashed_string("ADD_COMPONENT"));
 				m_Factory.func<&Entity::AddComponent<ClassType>>(entt::hashed_string("ADD_COMPONENT"));
-				
+				m_Factory.func<&Entity::HasComponent<ClassType>>(entt::hashed_string("IS_COMPONENT_ON_ENTITY"));
 			}
 
 			entt::meta_factory<ClassType>& m_Factory;
