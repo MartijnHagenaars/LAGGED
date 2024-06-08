@@ -168,7 +168,7 @@ namespace LAG
 	{
 		for (auto&& [id, type] : entt::resolve())
 		{
-			if (type && type.prop(entt::hashed_string("REFLECTED_COMPONENT")))
+			if (type && type.prop(Reflection::ComponentProperties::Internal::IS_REFLECTED_COMPONENT))
 			{
 				Component component(type);
 				func(component);

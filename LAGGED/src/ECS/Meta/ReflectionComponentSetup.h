@@ -16,6 +16,14 @@ namespace LAG
 
 			//TODO: Implement this one!
 			constexpr entt::hashed_string HIDE_IN_EDITOR = entt::hashed_string("HIDE_IN_EDITOR");
+
+			namespace Internal
+			{
+				constexpr entt::hashed_string IS_REFLECTED_COMPONENT = entt::hashed_string("IS_REFLECTED_COMPONENT");
+
+				constexpr entt::hashed_string ADD_COMPONENT = entt::hashed_string("ADD_COMPONENT");
+				constexpr entt::hashed_string IS_COMPONENT_ON_ENTITY = entt::hashed_string("IS_COMPONENT_ON_ENTITY");
+			}
 		}
 
 		namespace VariableProperties
@@ -60,15 +68,14 @@ namespace LAG
 				std::string displayName = typeid(ClassType).name();
 				m_Factory.type(entt::hashed_string(displayName.c_str()));
 
-				m_Factory.prop(entt::hashed_string("REFLECTED_COMPONENT"), displayName);
-				m_Factory.func<&Entity::AddComponent<ClassType>>(entt::hashed_string("ADD_COMPONENT"));
-				m_Factory.func<&Entity::HasComponent<ClassType>>(entt::hashed_string("IS_COMPONENT_ON_ENTITY"));
+				m_Factory.prop(ComponentProperties::Internal::IS_REFLECTED_COMPONENT, displayName);
+				m_Factory.func<&Entity::AddComponent<ClassType>>(ComponentProperties::Internal::ADD_COMPONENT);
+				m_Factory.func<&Entity::HasComponent<ClassType>>(ComponentProperties::Internal::IS_COMPONENT_ON_ENTITY);
 			}
 
 			entt::meta_factory<ClassType>& m_Factory;
 		};
 
-		//TODO: Figure out a way of doing this without having to pass in the ClassType. Should make the syntax a bit nicer to look at.
 		template<typename ClassType, auto Variable>
 		class VariableReflectionSetup
 		{
