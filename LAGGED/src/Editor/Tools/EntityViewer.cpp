@@ -110,7 +110,8 @@ namespace LAG
 					{
 						if (ImGui::Selectable(comp.GetDisplayName().c_str(), false))
 						{
-							Logger::Info("Adding component with ID {0}", comp.GetDisplayName());
+							Logger::Info("Adding component with ID {0}...", comp.GetDisplayName());
+							comp.AddToEntity(m_SelectedEntity);
 						}
 					});
 

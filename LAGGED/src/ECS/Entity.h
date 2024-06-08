@@ -30,11 +30,9 @@ namespace LAG
 				return &m_RegistryPtr->get<T>(m_EntityID);
 			}
 			
-			Logger::Warning("Tried to add a component to an entity that already has the same component.");
+			Logger::Warning("Tried to add a component to an entity that already has the same component. Discarding...");
 			return &m_RegistryPtr->get<T>(m_EntityID);
 		}
-
-		void AddComponent(uint32_t componentID);
 
 		template<typename T>
 		void RemoveComponent()

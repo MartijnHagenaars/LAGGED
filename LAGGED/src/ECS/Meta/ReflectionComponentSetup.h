@@ -4,6 +4,8 @@
 #include "ECS/Components/BasicComponents.h"
 #include "Core/Defines.h"
 
+#include "ECS/Entity.h"
+
 namespace LAG
 {
 	namespace Reflection
@@ -27,7 +29,7 @@ namespace LAG
 
 		//Forward declaring reflection system class
 		template<typename ClassType>
-		class ReflectionSystem; 
+		class ReflectionSystem;
 
 		template<typename ClassType>
 		class ComponentReflectionSetup
@@ -49,15 +51,19 @@ namespace LAG
 			ComponentReflectionSetup& SetVisibleInEditor(bool isVisible);
 
 		private:
-			ComponentReflectionSetup(entt::meta_factory<ClassType>& factory) : 
+			ComponentReflectionSetup(entt::meta_factory<ClassType>& factory) :
 				m_Factory(factory)
 			{
 				static_assert(!std::is_fundamental<ClassType>::value, "Type cannot be a fundamental type.");
+				static_assert(std::is_default_constructible<ClassType>::value, "Class type is not constructible.");
 
 				std::string displayName = typeid(ClassType).name();
 				m_Factory.type(entt::hashed_string(displayName.c_str()));
-				
+
 				m_Factory.prop(entt::hashed_string("REFLECTED_COMPONENT"), displayName);
+				//m_Factory.func<&entt::registry::emplace<ClassType>>(entt::hashed_string("ADD_COMPONENT"));
+				m_Factory.func<&Entity::AddComponent<ClassType>>(entt::hashed_string("ADD_COMPONENT"));
+				
 			}
 
 			entt::meta_factory<ClassType>& m_Factory;
@@ -122,15 +128,7 @@ namespace LAG
 		class ReflectionSystem
 		{
 		public:
-			ReflectionSystem()
-			{
-			}
-
-			~ReflectionSystem()
-			{
-			}
-
-			//TODO: Rule of three
+			ReflectionSystem() = default;
 
 			/// <summary>
 			/// Registers a component for use in the editor.
