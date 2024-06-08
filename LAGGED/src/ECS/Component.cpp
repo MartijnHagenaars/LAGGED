@@ -9,7 +9,7 @@
 
 namespace LAG
 {
-	Component::Component(entt::meta_type& metaType) :
+	Component::Component(const entt::meta_type& metaType) :
 		m_MetaType(metaType)
 	{
 		entt::meta_prop memberDisplayNameProp = metaType.prop(Reflection::ComponentProperties::DISPLAY_NAME);

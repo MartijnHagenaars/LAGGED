@@ -11,18 +11,16 @@ namespace LAG
 	class Entity;
 	class Component
 	{
-		friend class Scene;
 	public:
 		Component() = delete;
+		Component(const entt::meta_type& metaType);
 
 		void AddToEntity(const Entity& entity);
 
 		std::string GetDisplayName() const { return m_DisplayName; }
 
 	private:
-		Component(entt::meta_type& metaType);
-		
-		entt::meta_type& m_MetaType;
+		const entt::meta_type& m_MetaType;
 		std::string m_DisplayName;
 	};
 }
