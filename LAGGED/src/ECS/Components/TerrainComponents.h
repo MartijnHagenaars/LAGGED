@@ -3,7 +3,6 @@
 #include "Core/Resources/ResourceHandles.h"
 
 #include "Utility/Noise.h"
-#include <memory>
 
 namespace LAG
 {

@@ -55,6 +55,7 @@
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
     <ClCompile Include="src\ECS\Component.cpp" />
+    <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\FileIO\FileIO.h" />
@@ -87,7 +88,7 @@
     <ClInclude Include="src\ECS\Components\BasicComponents.h" />
     <ClInclude Include="src\ECS\Components\CameraComponent.h" />
     <ClInclude Include="src\ECS\Components\LightComponent.h" />
-    <ClInclude Include="src\ECS\Components\MeshComponent.h" />
+    <ClInclude Include="src\ECS\Components\ModelComponent.h" />
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Texture.h" />

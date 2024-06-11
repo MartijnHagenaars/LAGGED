@@ -1,4 +1,5 @@
 #pragma once
+#include "Utility/HashedString.h"
 
 namespace LAG
 {
@@ -9,6 +10,6 @@ namespace LAG
 
 	struct ModelHandle
 	{
-		HashedString m_TextureLookup;
+		HashedString m_ModelLookup;
 	};
 }
