@@ -65,12 +65,13 @@ namespace LAG
 				static_assert(!std::is_fundamental<ClassType>::value, "Type cannot be a fundamental type.");
 				static_assert(std::is_default_constructible<ClassType>::value, "Class type is not constructible.");
 
-				std::string displayName = typeid(ClassType).name();
-				m_Factory.type(entt::hashed_string(displayName.c_str()));
-
-				m_Factory.prop(ComponentProperties::Internal::IS_REFLECTED_COMPONENT, displayName);
+				//First, set up some useful functions that'll be used for this component type.
 				m_Factory.func<&Entity::AddComponent<ClassType>>(ComponentProperties::Internal::ADD_COMPONENT);
 				m_Factory.func<&Entity::HasComponent<ClassType>>(ComponentProperties::Internal::IS_COMPONENT_ON_ENTITY);
+
+				//After that, set up the component properties. 
+				m_Factory.type(entt::hashed_string(typeid(ClassType).name()));
+				m_Factory.prop(ComponentProperties::Internal::IS_REFLECTED_COMPONENT);
 			}
 
 			entt::meta_factory<ClassType>& m_Factory;
