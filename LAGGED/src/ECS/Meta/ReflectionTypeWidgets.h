@@ -115,7 +115,7 @@ namespace LAG
 		static void DrawWidgetType<ModelHandle>(LAG::Entity* entity, ModelHandle& value, const std::string& name)
 		{
 			Model* model = nullptr;
-			if (ImGui::BeginCombo("Models", value.m_ModelLookup.GetValue() != 0 ? value.m_ModelLookup.GetString().c_str() : "No texture selected..."))
+			if (ImGui::BeginCombo("Models", value.m_ModelLookup.GetValue() != 0 ? value.m_ModelLookup.GetString().c_str() : "No model selected..."))
 			{
 				std::vector<HashedString> models = GetEngine().GetResources()->GetResourceNames<Model>();
 				for (int i = 0; i < models.size(); i++)
