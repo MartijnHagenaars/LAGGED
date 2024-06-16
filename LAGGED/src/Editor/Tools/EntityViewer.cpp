@@ -78,6 +78,16 @@ namespace LAG
 		//Selected entity container
 		ImGui::BeginChild("EntityProperties", ImVec2(0.f, 0.f), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
 
+		RenderProperties();
+
+		ImGui::EndChild();
+		ImGui::PopStyleVar();
+
+		ImGui::End();
+	}
+
+	void EntityViewer::RenderProperties()
+	{
 		if (m_SelectedEntity.IsValid())
 		{
 			if (ImGui::Button("Duplicate Entity"))
@@ -87,7 +97,8 @@ namespace LAG
 			ImGui::SameLine();
 			if (ImGui::Button("Delete Entity"))
 			{
-
+				GetScene()->RemoveEntity(m_SelectedEntity.GetEntityID());
+				return;
 			}
 
 			if (ImGui::Button("Add Component"))
@@ -119,10 +130,5 @@ namespace LAG
 			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);
 		}
 		else ImGui::Text("Select an entity to view its properties");
-
-		ImGui::EndChild();
-		ImGui::PopStyleVar();
-
-		ImGui::End();
 	}
 }

@@ -16,6 +16,8 @@ namespace LAG
 		Entity* GetSelectedEntityID() { return &m_SelectedEntity; }
 
 	private:
+		void RenderProperties();
+
 		static constexpr int s_MaxNameLength = 128;
 
 		Entity m_SelectedEntity;
