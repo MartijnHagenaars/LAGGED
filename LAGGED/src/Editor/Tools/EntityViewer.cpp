@@ -15,11 +15,6 @@ namespace LAG
 	EntityViewer::EntityViewer() :
 		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
 	{
-		std::string defaultNewEntityName = std::string("New entity name...");
-		for (int i = 0; i < defaultNewEntityName.size() && defaultNewEntityName.size() < s_MaxNameLength; i++)
-		{
-			m_NewEntityName[i] = defaultNewEntityName[i];
-		}
 	}
 
 	EntityViewer::~EntityViewer()
@@ -36,9 +31,12 @@ namespace LAG
 		ImGui::SeparatorText("Entity Editor");
 
 		if (ImGui::Button("Add object"))
-			GetScene()->AddEntity(std::string(m_NewEntityName));
+		{
+			GetScene()->AddEntity(std::string((m_NewEntityName[0] != '\0') ? m_NewEntityName : "Unnamed entity"));
+			memset(m_NewEntityName, 0, sizeof(m_NewEntityName));
+		}
 		ImGui::SameLine();
-		ImGui::InputText("##InputText", m_NewEntityName, s_MaxNameLength);
+		ImGui::InputTextWithHint("##InputText", "Enter name here...", m_NewEntityName, sizeof(m_NewEntityName));
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());

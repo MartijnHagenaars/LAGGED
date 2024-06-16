@@ -18,12 +18,10 @@ namespace LAG
 	private:
 		void RenderProperties();
 
-		static constexpr int s_MaxNameLength = 128;
-
 		Entity m_SelectedEntity;
 		float m_BrowserHeight = 0;
 
-		char m_NewEntityName[s_MaxNameLength];
+		char m_NewEntityName[128];
 	};
 }
 
