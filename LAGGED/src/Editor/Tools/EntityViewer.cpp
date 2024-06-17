@@ -96,6 +96,7 @@ namespace LAG
 			if (ImGui::Button("Delete Entity"))
 			{
 				GetScene()->RemoveEntity(m_SelectedEntity.GetEntityID());
+				m_SelectedEntity = Entity();
 				return;
 			}
 
