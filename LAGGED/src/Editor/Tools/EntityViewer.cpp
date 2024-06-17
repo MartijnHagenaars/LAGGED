@@ -90,7 +90,7 @@ namespace LAG
 		{
 			if (ImGui::Button("Duplicate Entity"))
 			{
-
+				GetScene()->DuplicateEntity(m_SelectedEntity.GetEntityID());
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Delete Entity"))

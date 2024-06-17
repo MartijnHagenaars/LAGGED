@@ -29,6 +29,24 @@ namespace LAG
 		return Entity(newEntity, m_Registry);
 	}
 
+	Entity Scene::DuplicateEntity(uint32_t entityID)
+	{
+		Entity newEntity = AddEntity();
+		Entity targetEntity = GetEntity(entityID);
+
+		ComponentLoop([&](Component& comp)
+			{
+				if (comp.ExistsOnEntity(targetEntity))
+				{
+					comp.AddToEntity(newEntity);
+				}
+			});
+
+		//Update the name to indicate it's a copy.
+		newEntity.GetComponent<DefaultComponent>()->name = targetEntity.GetComponent<DefaultComponent>()->name + " - Copy";
+		return newEntity;
+	}
+
 	void Scene::RemoveEntity(uint32_t entityID)
 	{
 		entt::entity entity = static_cast<entt::entity>(entityID);
