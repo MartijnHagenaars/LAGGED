@@ -7,6 +7,7 @@
 
 #include "ECS/Entity.h"
 #include "Core/Engine.h"
+#include "Core/Resources/Model.h"
 #include "Core/Resources/Texture.h"
 #include "Core/Resources/ResourceHandles.h"
 #include "Core/Resources/ResourceManager.h"
@@ -111,6 +112,30 @@ namespace LAG
 		}
 
 		template <>
+		static void DrawWidgetType<ModelHandle>(LAG::Entity* entity, ModelHandle& value, const std::string& name)
+		{
+			Model* model = nullptr;
+			if (ImGui::BeginCombo("Models", value.m_ModelLookup.GetValue() != 0 ? value.m_ModelLookup.GetString().c_str() : "No model selected..."))
+			{
+				std::vector<HashedString> models = GetEngine().GetResources()->GetResourceNames<Model>();
+				for (int i = 0; i < models.size(); i++)
+				{
+					const bool isSelected = (model != nullptr) && (model->GetPath().GetValue() == models[i].GetValue());
+					if (ImGui::Selectable(models[i].GetString().c_str(), isSelected))
+					{
+						value.m_ModelLookup = models[i];
+					}
+				}
+				if (ImGui::Selectable("Other..."))
+				{
+					printf("other selected...");
+				}
+
+				ImGui::EndCombo();
+			}
+		}
+
+		template <>
 		[[maybe_unused]] static void DrawWidgetType<Noise::Properties>(LAG::Entity* entity, Noise::Properties& value, const std::string& name)
 		{
 			ImGui::DragFloat("Amplitude", &value.m_Amplitude, 0.05f);
@@ -144,7 +169,6 @@ namespace LAG
 			if (ImGui::Button("Apply"))
 				SurfaceSystems::GenerateNoiseSurface(entity);
 		}
-
 
 
 		////////////////////////

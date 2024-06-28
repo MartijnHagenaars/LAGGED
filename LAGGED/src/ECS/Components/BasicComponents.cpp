@@ -11,9 +11,9 @@
 bool LAG::DefaultComponent::InitializeReflection()
 {
 	Reflection::ReflectionSystem<DefaultComponent> setup;
-	setup.RegisterComponent().SetDisplayName("Default Component").SetVisibleInEditor(true);
+	setup.RegisterComponent().SetDisplayName("General data").SetVisibleInEditor(true);
+	setup.RegisterVariable<&DefaultComponent::visible>().SetDisplayName("Is Visible").SetHidden(false);
 	setup.RegisterVariable<&DefaultComponent::name>().SetDisplayName("Name");
-	setup.RegisterVariable<&DefaultComponent::visible>().SetDisplayName("Is Visible").SetHidden(true);
 	return true;
 }
 

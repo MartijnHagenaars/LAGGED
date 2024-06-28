@@ -4,6 +4,8 @@
 #include "ECS/Components/BasicComponents.h"
 #include "Core/Defines.h"
 
+#include "ECS/Entity.h"
+
 namespace LAG
 {
 	namespace Reflection
@@ -14,6 +16,14 @@ namespace LAG
 
 			//TODO: Implement this one!
 			constexpr entt::hashed_string HIDE_IN_EDITOR = entt::hashed_string("HIDE_IN_EDITOR");
+
+			namespace Internal
+			{
+				constexpr entt::hashed_string IS_REFLECTED_COMPONENT = entt::hashed_string("IS_REFLECTED_COMPONENT");
+
+				constexpr entt::hashed_string ADD_COMPONENT = entt::hashed_string("ADD_COMPONENT");
+				constexpr entt::hashed_string IS_COMPONENT_ON_ENTITY = entt::hashed_string("IS_COMPONENT_ON_ENTITY");
+			}
 		}
 
 		namespace VariableProperties
@@ -27,7 +37,7 @@ namespace LAG
 
 		//Forward declaring reflection system class
 		template<typename ClassType>
-		class ReflectionSystem; 
+		class ReflectionSystem;
 
 		template<typename ClassType>
 		class ComponentReflectionSetup
@@ -49,19 +59,24 @@ namespace LAG
 			ComponentReflectionSetup& SetVisibleInEditor(bool isVisible);
 
 		private:
-			ComponentReflectionSetup(entt::meta_factory<ClassType>& factory) : 
+			ComponentReflectionSetup(entt::meta_factory<ClassType>& factory) :
 				m_Factory(factory)
 			{
 				static_assert(!std::is_fundamental<ClassType>::value, "Type cannot be a fundamental type.");
+				static_assert(std::is_default_constructible<ClassType>::value, "Class type is not constructible.");
 
-				std::string displayName = typeid(ClassType).name();
-				m_Factory.type(entt::hashed_string(displayName.c_str()));
+				//First, set up some useful functions that'll be used for this component type.
+				m_Factory.func<&Entity::AddComponent<ClassType>>(ComponentProperties::Internal::ADD_COMPONENT);
+				m_Factory.func<&Entity::HasComponent<ClassType>>(ComponentProperties::Internal::IS_COMPONENT_ON_ENTITY);
+
+				//After that, set up the component properties. 
+				m_Factory.type(entt::hashed_string(typeid(ClassType).name()));
+				m_Factory.prop(ComponentProperties::Internal::IS_REFLECTED_COMPONENT);
 			}
 
 			entt::meta_factory<ClassType>& m_Factory;
 		};
 
-		//TODO: Figure out a way of doing this without having to pass in the ClassType. Should make the syntax a bit nicer to look at.
 		template<typename ClassType, auto Variable>
 		class VariableReflectionSetup
 		{
@@ -120,15 +135,7 @@ namespace LAG
 		class ReflectionSystem
 		{
 		public:
-			ReflectionSystem()
-			{
-			}
-
-			~ReflectionSystem()
-			{
-			}
-
-			//TODO: Rule of three
+			ReflectionSystem() = default;
 
 			/// <summary>
 			/// Registers a component for use in the editor.
