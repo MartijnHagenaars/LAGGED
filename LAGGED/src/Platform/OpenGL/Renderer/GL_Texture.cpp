@@ -36,8 +36,9 @@ namespace LAG
 				return false;
 			}
 
+			//TODO: THIS IS REALLY BAD. DIRECTORY SHOULD NOT BE HARDCODED.
 			FileIO::ImageData data;
-			if (!FileIO::LoadImageFromFile(filePath, data))
+			if (!FileIO::LoadImageFromFile(FileIO::Directory::Models, filePath, data))
 			{
 				Logger::Error("Failed to load texture.");
 				return false;

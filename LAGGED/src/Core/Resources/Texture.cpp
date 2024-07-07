@@ -9,7 +9,8 @@ namespace LAG
 
 	bool TextureBase::SetPath(const std::string& path)
 	{
-		if (FileIO::IsPathValid(path))
+		//TODO: THIS IS REALLY BAD! DIRECTORY SHOULD NOT BE HARDCODED HERE
+		if (FileIO::IsValid(FileIO::Directory::Models, path))
 		{
 			m_LoadFromFile = true;
 			delete m_TempBuffer;

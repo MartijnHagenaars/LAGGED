@@ -7,14 +7,34 @@
 
 namespace LAG
 {
-	bool FileIO::IsPathValid(const std::string& path)
+
+	bool FileIO::IsValid(Directory directory, const std::string& path)
 	{
-		return std::filesystem::exists(path);
+		return std::filesystem::exists(GetPath(directory, path));
 	}
 
-	bool FileIO::LoadImageFromFile(const std::string& path, ImageData& data)
+	std::string FileIO::GetPath(Directory dir)
 	{
-		if (!IsPathValid(path))
+		switch (dir)
+		{
+		case Directory::Models: return "Resources/Models/";
+		case Directory::Shaders: return "Resources/Shaders/";
+		case Directory::Saves: return "Resources/Saves";
+		case Directory::Logs: return "Logs/";
+		default:
+			Logger::Critical("Incorrect directory type.");
+			return std::string();
+		}
+	}
+
+	std::string FileIO::GetPath(Directory dir, const std::string& path)
+	{
+		return GetPath(dir);
+	}
+
+	bool FileIO::LoadImageFromFile(Directory dir, const std::string& path, ImageData& data)
+	{
+		if (!IsValid(dir, path))
 		{
 			Logger::Error("Invalid path: {0}", path);
 			return false;
