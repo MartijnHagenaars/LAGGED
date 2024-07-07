@@ -130,14 +130,13 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\FileIO\FileIO.h" />
-    <ClInclude Include="src\FileIO\FileWatch.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
     <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
     <ClInclude Include="src\Platform\Base\Renderer\BufferLayout.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
+    <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
@@ -214,11 +213,10 @@ xcopy "$(SolutionDir)LAGGED\res\Shaders\OpenGL" "$(OutDir)res\Shaders\OpenGL" /e
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\FileIO\FileIO.cpp" />
-    <ClCompile Include="src\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
+    <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Core\Resources\Texture.cpp" />
     <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
