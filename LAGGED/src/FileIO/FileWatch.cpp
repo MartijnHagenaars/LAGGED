@@ -63,8 +63,8 @@ namespace LAG
 			auto writeTime = std::filesystem::last_write_time(it.filePath);
 			if (it.lastFileTime < writeTime)
 			{
-				it.callbackFunc(it.filePath);
 				it.lastFileTime = writeTime;
+				it.callbackFunc(it.filePath);
 			}
 		}
 	}

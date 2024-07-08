@@ -65,15 +65,19 @@ namespace LAG
 
 	bool Shader::Reload()
 	{
+		unsigned int prevProgramID = m_ProgramID;
+
+		//Check if we can load the new shader files.
 		if (!Load())
 		{
 			Logger::Error("Failed to reload shader: {0}", GetPath().GetString());
-			
 			CleanUpCompiledShaders();
 			return false;
 		}
 
+		//Since the new shader has loaded correctly, the old one can be removed.
 		Unbind();
+		LAG_GRAPHICS_CHECK(glDeleteProgram(prevProgramID));
 
 		return true;
 	}
@@ -100,12 +104,15 @@ namespace LAG
 		LAG_GRAPHICS_CHECK(glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus));
 		if (compileStatus != GL_TRUE)
 		{
+			//Print an error message. After that, delete the shader. 
+			//Also dump the entire shader code to the console if we're running debug. Might be useful to see the entire shader when debugging.
 			char shaderInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
 			Logger::Error("Failed to compile shader for {0} shaders: {1}", GetPath().GetString(), shaderInfoLog);
 #ifdef DEBUG
 			Logger::Info("Dumping shader source: \n{0}", shaderSource);
 #endif
+			glDeleteShader(shaderID);
 			return 0;
 		}
 
@@ -126,9 +133,12 @@ namespace LAG
 		LAG_GRAPHICS_CHECK(glGetProgramiv(programID, GL_LINK_STATUS, &programStatus));
 		if (programStatus != GL_TRUE)
 		{
+			//Print an error message. After that, delete the shader program.
 			char programInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
 			Logger::Critical("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
+
+			glDeleteProgram(programID);
 			return 0;
 		}
 
