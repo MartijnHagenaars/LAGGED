@@ -15,7 +15,12 @@ namespace LAG
 		static void Register(const std::string& filePath, std::function<void(const std::string&)> watchCallback);
 		static void Remove(const std::string& filePath);
 
+		static bool IsWatchingFile(const std::string& filePath);
+
 		static void CheckWatches();
+
+		static void EnableFileWatch(bool enable);
+		static bool IsEnabled() { return m_IsEnabled; }
 
 	private:
 		struct WatchData
@@ -24,9 +29,12 @@ namespace LAG
 			std::function<void(const std::string&)> callbackFunc;
 
 			std::filesystem::file_time_type lastFileTime;
-
 		};
-		static std::vector<WatchData> m_WatchedFiles;
+
+		//TODO: Consider changing this to a map. Need to profile this...
+		static inline std::vector<WatchData> m_WatchedFiles;
+
+		static inline bool m_IsEnabled = false;
 	};
 }
 

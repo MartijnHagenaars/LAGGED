@@ -58,14 +58,15 @@ namespace LAG
 			return false;
 		}
 
-
-
 		return true;
 	}
 
 	bool Shader::Unload()
 	{
-		return false;
+		Unbind();
+		LAG_GRAPHICS_CHECK(glDeleteProgram(m_ProgramID));
+
+		return true;
 	}
 
 	std::string Shader::ReadFile(const std::string& filePath)
