@@ -11,6 +11,7 @@ namespace LAG
 
 		enum class Directory
 		{
+			Root,
 			Models,
 			Shaders,
 			Saves,
@@ -37,16 +38,6 @@ namespace LAG
 		/// <param name="path">Relative path</param>
 		/// <returns>A string containing both the directory path and the relative path.</returns>
 		static std::string GetPath(Directory dir, const std::string& path);
-
-		struct ImageData
-		{
-			unsigned char* data = nullptr;
-			int width = 0;
-			int height = 0;
-			int channels = 0;
-		};
-		static bool LoadImageFromFile(Directory dir, const std::string& path, ImageData& imageData);
-		static bool FreeImageData(ImageData& data);
 	};
 }
 

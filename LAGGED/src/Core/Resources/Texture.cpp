@@ -7,26 +7,6 @@ namespace LAG
 	TextureBase::TextureBase() : Resource(HashedString()), m_LoadFromFile(false) {}
 	TextureBase::TextureBase(const HashedString& path) : Resource(path), m_LoadFromFile(true) {}
 
-	bool TextureBase::SetPath(const std::string& path)
-	{
-		//TODO: THIS IS REALLY BAD! DIRECTORY SHOULD NOT BE HARDCODED HERE
-		if (FileIO::IsValid(FileIO::Directory::Models, path))
-		{
-			m_LoadFromFile = true;
-			delete m_TempBuffer;
-			m_TempBuffer = nullptr;
-
-			SetPath(path);
-			return true;
-		}
-		else
-		{
-			if (path.length() != 0)
-				Logger::Error("Invalid path (\"{0}\") used for texture.", path);
-			return false;
-		}
-	}
-
 	bool TextureBase::SetBuffer(const float* buffer, size_t bufferSize, int width, int height, TextureFormat format)
 	{
 		if (width <= 0 && height <= 0)
@@ -47,7 +27,6 @@ namespace LAG
 				return false;
 
 			m_LoadFromFile = false;
-			SetPath("");
 
 			m_Format = format;
 			m_TempBuffer = buffer;
