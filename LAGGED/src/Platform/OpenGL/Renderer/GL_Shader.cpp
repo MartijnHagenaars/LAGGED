@@ -123,12 +123,13 @@ namespace LAG
 	{
 		unsigned int programID = glCreateProgram();
 
-		//The vertex and pixel shaders are always used. Because of that, we don't check the ID. 
+		//Attach the vertex and pixel shader. After that, link the newly created program.
 		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_VertexID));
 		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_PixelID));
 
 		LAG_GRAPHICS_CHECK(glLinkProgram(programID));
 
+		//Check if everything executed correctly.
 		GLint programStatus;
 		LAG_GRAPHICS_CHECK(glGetProgramiv(programID, GL_LINK_STATUS, &programStatus));
 		if (programStatus != GL_TRUE)
@@ -147,6 +148,8 @@ namespace LAG
 
 	void Shader::CleanUpCompiledShaders()
 	{
+		//Since there might be some left-over memory after trying to (re)compile shaders, we want to ensure that everything is deleted properly.
+
 		if (m_VertexID != 0)
 			LAG_GRAPHICS_CHECK(glDeleteShader(m_VertexID));
 		m_VertexID = 0;
