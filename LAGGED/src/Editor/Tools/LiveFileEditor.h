@@ -9,7 +9,6 @@ namespace LAG
 		LiveFileEditor();
 
 		void Render() override;
-
 	};
 }
 
