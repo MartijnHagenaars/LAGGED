@@ -24,7 +24,6 @@ namespace LAG
 		//Create all the paths
 		std::string vertexPath = GetPath().GetString() + ".vertex.glsl";
 		std::string pixelPath = GetPath().GetString() + ".pixel.glsl";
-		std::string tessellationControlPath = GetPath().GetString() + ".tesscontrol.glsl";
 
 		//Read all shader files that can be found
 		std::string m_VertexSource = "";
@@ -35,19 +34,14 @@ namespace LAG
 		if (std::filesystem::exists(pixelPath))
 			m_PixelSource = ReadFile(pixelPath);
 
-		std::string m_TessellationControlSource = "";
-		if (std::filesystem::exists(tessellationControlPath))
-			m_TessellationControlSource = ReadFile(tessellationControlPath);
-
 		//Check if the vertex and pixel files could be read. 
 		//If not, we don't compile the shader.
 		if (!m_VertexSource.empty() && !m_PixelSource.empty())
 		{
 			m_VertexID = CompileShader(m_VertexSource, GL_VERTEX_SHADER);
 			m_PixelID = CompileShader(m_PixelSource, GL_FRAGMENT_SHADER);
-
-			if(!m_TessellationControlSource.empty())
-				m_TessellationControlID = CompileShader(m_TessellationControlSource, GL_TESS_CONTROL_SHADER);
+			if (m_VertexID == 0 || m_PixelID == 0)
+				return false;
 
 			m_ProgramID = MakeProgram();
 			CleanUpCompiledShaders();
@@ -69,6 +63,21 @@ namespace LAG
 		return true;
 	}
 
+	bool Shader::Reload()
+	{
+		if (!Load())
+		{
+			Logger::Error("Failed to reload shader: {0}", GetPath().GetString());
+			
+			CleanUpCompiledShaders();
+			return false;
+		}
+
+		Unbind();
+
+		return true;
+	}
+
 	std::string Shader::ReadFile(const std::string& filePath)
 	{
 		std::stringstream ss = {};
@@ -82,7 +91,6 @@ namespace LAG
 
 	unsigned int Shader::CompileShader(const std::string& shaderSource, unsigned int shaderType)
 	{
-
 		unsigned int shaderID = glCreateShader(shaderType);
 		const char* shaderSourceChars = shaderSource.c_str();
 		LAG_GRAPHICS_CHECK(glShaderSource(shaderID, 1, &shaderSourceChars, NULL));
@@ -111,9 +119,6 @@ namespace LAG
 		//The vertex and pixel shaders are always used. Because of that, we don't check the ID. 
 		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_VertexID));
 		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_PixelID));
-		if(m_TessellationControlID > 0)
-			LAG_GRAPHICS_CHECK(glAttachShader(programID, m_TessellationControlID));
-
 
 		LAG_GRAPHICS_CHECK(glLinkProgram(programID));
 
@@ -123,7 +128,7 @@ namespace LAG
 		{
 			char programInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
-			Logger::Error("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
+			Logger::Critical("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
 			return 0;
 		}
 
@@ -136,8 +141,6 @@ namespace LAG
 			LAG_GRAPHICS_CHECK(glDeleteShader(m_VertexID));
 		if (m_PixelID != 0)
 			LAG_GRAPHICS_CHECK(glDeleteShader(m_PixelID));
-		if (m_TessellationControlID != 0)
-			LAG_GRAPHICS_CHECK(glDeleteShader(m_TessellationControlID));
 	}
 
 	void Shader::Bind()

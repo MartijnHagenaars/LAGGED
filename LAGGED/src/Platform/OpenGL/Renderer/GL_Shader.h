@@ -20,6 +20,7 @@ namespace LAG
 		void SetVec3(const std::string& location, glm::vec3 value) override;
 		void SetMat4(const std::string& location, const glm::mat4& value) override;
 
+		bool Reload() override;
 	private:
 		bool Load() override;
 		bool Unload() override;
@@ -33,9 +34,6 @@ namespace LAG
 
 		unsigned int m_VertexID = 0;
 		unsigned int m_PixelID = 0;
-		unsigned int m_TessellationControlID = 0;
-
-
 	};
 
 }
