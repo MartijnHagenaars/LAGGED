@@ -52,9 +52,10 @@ namespace LAG
 						{
 							const std::string& noExt = file.substr(0, file.length() - 5);
 							const std::string& noType = noExt.substr(0, noExt.find_last_of("."));
-							GetResourceManager()->GetResource<Shader>(HashedString(noType))->Reload();
-
-							Logger::Info("Reloading shader: {0}", noType);
+							if (GetResourceManager()->GetResource<Shader>(HashedString(noType))->Reload())
+								Logger::Info("Successfully reloaded shader: {0}", noType);
+							else
+								Logger::Error("Failed to reload shader: {0}", noType);
 						}
 					);
 				}

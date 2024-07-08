@@ -139,8 +139,11 @@ namespace LAG
 	{
 		if (m_VertexID != 0)
 			LAG_GRAPHICS_CHECK(glDeleteShader(m_VertexID));
+		m_VertexID = 0;
+
 		if (m_PixelID != 0)
 			LAG_GRAPHICS_CHECK(glDeleteShader(m_PixelID));
+		m_PixelID = 0;
 	}
 
 	void Shader::Bind()
