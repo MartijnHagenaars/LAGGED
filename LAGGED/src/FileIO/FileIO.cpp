@@ -67,7 +67,10 @@ namespace LAG
 		for (const auto& it : std::filesystem::directory_iterator(GetPath(dir, path)))
 			if (!it.is_directory())
 				if (useRelativePath)
-					files.emplace_back(it.path().string().substr(GetPath(dir).length(), it.path().string().length())); //TODO: This sucks
+				{
+					const std::string& path = it.path().string();
+					files.emplace_back(path.substr(GetPath(dir).length(), path.length()));
+				}
 				else
 					files.emplace_back(it.path().string());
 
@@ -85,7 +88,10 @@ namespace LAG
 		for (const auto& it : std::filesystem::directory_iterator(GetPath(dir, path)))
 			if (it.is_directory())
 				if (useRelativePath)
-					directories.emplace_back(it.path().string().substr(GetPath(dir).length(), it.path().string().length())); //TODO: This sucks
+				{
+					const std::string& path = it.path().string();
+					directories.emplace_back(path.substr(GetPath(dir).length(), path.length()));
+				}
 				else
 					directories.emplace_back(it.path().string());
 
