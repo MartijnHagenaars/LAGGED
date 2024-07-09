@@ -83,28 +83,25 @@ namespace LAG
 
 	void RenderDirectoryFiles(FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> callbackFunction)
 	{
-		std::string directoryPath = FileIO::GetPath(dir, relPath);
 		const auto& files = FileIO::GetAllFilesInDirectory(dir, relPath);
 		ImGui::Indent(16.f);
 
 		//Loop through all files in the directory
-		for (size_t i = 0; i < files.size(); i++)
+		for (const auto& path : files)
 		{
-
-			const std::string& path = files[i];
-			bool isWatching = FileWatch::IsWatchingFile(dir, relPath);
+			bool isWatching = FileWatch::IsWatchingFile(dir, path);
 
 			//Checkbox widget for registering/removing file
-			if (ImGui::Checkbox(std::string("##" + std::to_string(i)).c_str(), &isWatching))
+			if (ImGui::Checkbox(std::string("##" + path).c_str(), &isWatching))
 				if (isWatching)
 				{
-					FileWatch::Register(dir, relPath, callbackFunction);
+					FileWatch::Register(dir, path, callbackFunction);
 				}
 				else
-					FileWatch::Remove(dir, relPath);
+					FileWatch::Remove(dir, path);
 
 			ImGui::SameLine();
-			ImGui::Text(path.substr(directoryPath.length(), path.length()).c_str());
+			ImGui::Text(path.c_str());
 		}
 		ImGui::Indent(-16.f);
 	}

@@ -55,7 +55,7 @@ namespace LAG
 		return std::string(GetPath(dir) + path);
 	}
 
-	std::vector<std::string> FileIO::GetAllFilesInDirectory(Directory dir, const std::string& path)
+	std::vector<std::string> FileIO::GetAllFilesInDirectory(Directory dir, const std::string& path, bool useRelativePath)
 	{
 		if (!IsValid(dir, path))
 		{
@@ -66,7 +66,10 @@ namespace LAG
 		std::vector<std::string> files;
 		for (const auto& it : std::filesystem::directory_iterator(GetPath(dir, path)))
 			if (!it.is_directory())
-				files.emplace_back(it.path().string());
+				if (useRelativePath)
+					files.emplace_back(it.path().string().substr(GetPath(dir).length(), it.path().string().length())); //TODO: This sucks
+				else
+					files.emplace_back(it.path().string());
 
 		return files;
 	}

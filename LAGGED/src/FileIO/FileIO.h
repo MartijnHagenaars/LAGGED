@@ -43,7 +43,7 @@ namespace LAG
 		/// <returns>A string containing both the directory path and the relative path.</returns>
 		static std::string GetPath(Directory dir, const std::string& path);
 
-		static std::vector<std::string> GetAllFilesInDirectory(Directory dir, const std::string& path);
+		static std::vector<std::string> GetAllFilesInDirectory(Directory dir, const std::string& path, bool useRelativePath = true);
 
 		static std::vector<std::string> GetAllSubDirectories(Directory dir, const std::string& path, bool useRelativePath = true);
 	};
