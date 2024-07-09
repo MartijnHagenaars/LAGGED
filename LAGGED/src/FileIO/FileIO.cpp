@@ -1,9 +1,34 @@
 #include "FileIO.h"
-#include <filesystem>
 #include "Utility/Logger.h"
+
+#include <fstream>
+#include <sstream>
+#include <filesystem>
 
 namespace LAG
 {
+	std::string FileIO::ReadFile(Directory dir, const std::string& path)
+	{
+		if (!IsValid(dir, path))
+		{
+			Logger::Error("Tried to read a file that does not exist: {0}", GetPath(dir, path));
+			return std::string();
+		}
+
+		std::stringstream ss = {};
+		std::ifstream vertexStream(GetPath(dir, path));
+
+		if (vertexStream.is_open())
+			ss << vertexStream.rdbuf();
+		else 
+			Logger::Error("Failed to open ifstream for file {0}.", GetPath(dir, path));
+
+		return ss.str();
+	}
+	void FileIO::WriteFile(Directory directory, const std::string& relativePath, const std::string& data, bool append)
+	{
+		Logger::Critical("TODO: Implement!");
+	}
 
 	bool FileIO::IsValid(Directory directory, const std::string& path)
 	{

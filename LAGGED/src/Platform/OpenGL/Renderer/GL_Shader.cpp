@@ -1,8 +1,6 @@
 #include "GL_Shader.h"
 
-#include <sstream>
-#include <fstream>
-#include <filesystem>
+#include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
 
 #include "GL/glew.h"
@@ -21,18 +19,10 @@ namespace LAG
 
 	bool Shader::Load()
 	{
-		//Create all the paths
-		std::string vertexPath = GetPath().GetString() + ".vertex.glsl";
-		std::string pixelPath = GetPath().GetString() + ".pixel.glsl";
-
 		//Read all shader files that can be found
-		std::string m_VertexSource = "";
-		if (std::filesystem::exists(vertexPath))
-			m_VertexSource = ReadFile(vertexPath);
-
-		std::string m_PixelSource = "";
-		if (std::filesystem::exists(pixelPath))
-			m_PixelSource = ReadFile(pixelPath);
+		std::string fileName = GetPath().GetString().substr(GetPath().GetString().find_last_of('/') + 1, GetPath().GetString().length());
+		std::string m_VertexSource = FileIO::ReadFile(FileIO::Directory::Shaders, fileName + ".vertex.glsl");
+		std::string m_PixelSource = FileIO::ReadFile(FileIO::Directory::Shaders, fileName + ".pixel.glsl");
 
 		//Check if the vertex and pixel files could be read. 
 		//If not, we don't compile the shader.
@@ -80,17 +70,6 @@ namespace LAG
 		LAG_GRAPHICS_CHECK(glDeleteProgram(prevProgramID));
 
 		return true;
-	}
-
-	std::string Shader::ReadFile(const std::string& filePath)
-	{
-		std::stringstream ss = {};
-		std::ifstream vertexStream(filePath);
-
-		if (vertexStream.is_open())
-			ss << vertexStream.rdbuf();
-		else Logger::Error("Failed to open ifstream for file {0}.", filePath);
-		return ss.str();
 	}
 
 	unsigned int Shader::CompileShader(const std::string& shaderSource, unsigned int shaderType)

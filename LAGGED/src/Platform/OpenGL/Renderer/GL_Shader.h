@@ -25,9 +25,9 @@ namespace LAG
 		bool Load() override;
 		bool Unload() override;
 
-		std::string ReadFile(const std::string& filePath); //TODO: Should be moved. A FileIO class should take care of this. 
 		unsigned int CompileShader(const std::string& shaderSource, unsigned int shaderType); 
 		unsigned int MakeProgram();
+		
 		void CleanUpCompiledShaders();
 
 		unsigned int m_ProgramID = 0; 

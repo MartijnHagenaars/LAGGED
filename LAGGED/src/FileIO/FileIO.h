@@ -19,6 +19,9 @@ namespace LAG
 			Logs
 		};
 
+		[[nodiscard]] static std::string ReadFile(Directory directory, const std::string& relativePath);
+		[[nodiscard]] static void WriteFile(Directory directory, const std::string& relativePath, const std::string& data, bool append = false);
+
 		/// <summary>
 		/// Check if a file path is valid.
 		/// </summary>
