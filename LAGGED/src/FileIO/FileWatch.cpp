@@ -4,8 +4,9 @@
 namespace LAG
 {
 #ifdef DEBUG
-	void FileWatch::Register(const std::string& filePath, std::function<void(const std::string&)> watchCallback)
+	void FileWatch::Register(FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> watchCallback)
 	{
+		const std::string& filePath = FileIO::GetPath(dir, relPath);
 		if (watchCallback == nullptr)
 		{
 			Logger::Error("Callback function for {0} is nullptr.", filePath);
@@ -29,8 +30,9 @@ namespace LAG
 		m_WatchedFiles.emplace_back(wd);
 	}
 
-	void FileWatch::Remove(const std::string& filePath)
+	void FileWatch::Remove(FileIO::Directory dir, const std::string& relPath)
 	{
+		const std::string& filePath = FileIO::GetPath(dir, relPath);
 		for (auto it = m_WatchedFiles.begin(); it != m_WatchedFiles.end();)
 		{
 			if (filePath == it->filePath)
@@ -44,10 +46,10 @@ namespace LAG
 		Logger::Warning("Tried removing file watch entry that does not exist: {0}", filePath);
 	}
 
-	bool FileWatch::IsWatchingFile(const std::string& filePath)
+	bool FileWatch::IsWatchingFile(FileIO::Directory dir, const std::string& relPath)
 	{
 		for (const auto& it : m_WatchedFiles)
-			if (it.filePath == filePath)
+			if (it.filePath == FileIO::GetPath(dir, relPath))
 				return true;
 
 		return false;
@@ -75,15 +77,15 @@ namespace LAG
 	}
 
 #else
-	void FileWatch::Register(const std::string& filePath, std::function<void(const std::string&)> watchCallback)
+	void FileWatch::Register(FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> watchCallback)
 	{
 	}
 
-	void FileWatch::Remove(const std::string& filePath)
+	void FileWatch::Remove(FileIO::Directory dir, const std::string& relPath)
 	{
 	}
 
-	bool FileWatch::IsWatchingFile(const std::string& filePath)
+	bool FileWatch::IsWatchingFile(FileIO::Directory dir, const std::string& relPath)
 	{
 		return false;
 	}

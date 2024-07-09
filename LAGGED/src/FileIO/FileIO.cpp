@@ -20,7 +20,7 @@ namespace LAG
 
 		if (vertexStream.is_open())
 			ss << vertexStream.rdbuf();
-		else 
+		else
 			Logger::Error("Failed to open ifstream for file {0}.", GetPath(dir, path));
 
 		return ss.str();
@@ -71,17 +71,20 @@ namespace LAG
 		return files;
 	}
 
-	std::vector<std::string> FileIO::GetAllSubDirectories(Directory dir, const std::string& path)
+	std::vector<std::string> FileIO::GetAllSubDirectories(Directory dir, const std::string& path, bool useRelativePath)
 	{
 		if (!IsValid(dir, path))
 		{
-			Logger::Error("Cannot get all subdirectories in directory: path ({0}) is incorrect.", path);
+			Logger::Error("Cannot get all subdirectories in directory: path ({0}) is incorrect.", GetPath(dir, path));
 			return std::vector<std::string>();
 		}
 		std::vector<std::string> directories;
 		for (const auto& it : std::filesystem::directory_iterator(GetPath(dir, path)))
 			if (it.is_directory())
-				directories.emplace_back(it.path().string());
+				if (useRelativePath)
+					directories.emplace_back(it.path().string().substr(GetPath(dir).length(), it.path().string().length())); //TODO: This sucks
+				else
+					directories.emplace_back(it.path().string());
 
 		return directories;
 	}

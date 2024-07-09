@@ -2,6 +2,8 @@
 #include <string>
 #include <functional>
 #include <unordered_map>
+
+#include "FileIO/FileIO.h"
 #include <filesystem>
 
 namespace LAG
@@ -12,10 +14,10 @@ namespace LAG
 		FileWatch() = default;
 		~FileWatch() = delete;
 
-		static void Register(const std::string& filePath, std::function<void(const std::string&)> watchCallback);
-		static void Remove(const std::string& filePath);
+		static void Register(FileIO::Directory directory, const std::string& relativePath, std::function<void(const std::string&)> watchCallback);
+		static void Remove(FileIO::Directory directory, const std::string& relativePath);
 
-		static bool IsWatchingFile(const std::string& filePath);
+		static bool IsWatchingFile(FileIO::Directory directory, const std::string& relativePath);
 
 		static void CheckWatches();
 

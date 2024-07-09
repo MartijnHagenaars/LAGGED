@@ -45,7 +45,7 @@ namespace LAG
 
 		static std::vector<std::string> GetAllFilesInDirectory(Directory dir, const std::string& path);
 
-		static std::vector<std::string> GetAllSubDirectories(Directory dir, const std::string& path);
+		static std::vector<std::string> GetAllSubDirectories(Directory dir, const std::string& path, bool useRelativePath = true);
 	};
 }
 

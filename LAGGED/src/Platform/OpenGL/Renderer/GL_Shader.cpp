@@ -35,14 +35,13 @@ namespace LAG
 
 			m_ProgramID = MakeProgram();
 			CleanUpCompiledShaders();
+			return true;
 		}
 		else
 		{
-			Logger::Error("Shaders in directory {0} could not be found.", GetPath().GetString());
+			Logger::Error("Shaders in directory {0} could not be read/found.", GetPath().GetString());
 			return false;
 		}
-
-		return true;
 	}
 
 	bool Shader::Unload()
