@@ -7,7 +7,7 @@
 
 namespace LAG
 {
-	std::string FileIO::ReadFile(Directory dir, const std::string& path)
+	std::string FileIO::Read(Directory dir, const std::string& path)
 	{
 		if (!IsValid(dir, path))
 		{
@@ -16,18 +16,26 @@ namespace LAG
 		}
 
 		std::stringstream ss = {};
-		std::ifstream vertexStream(GetPath(dir, path));
+		std::ifstream file(GetPath(dir, path));
 
-		if (vertexStream.is_open())
-			ss << vertexStream.rdbuf();
+		if (file.is_open())
+			ss << file.rdbuf();
 		else
 			Logger::Error("Failed to open ifstream for file {0}.", GetPath(dir, path));
 
 		return ss.str();
 	}
-	void FileIO::WriteFile(Directory directory, const std::string& relativePath, const std::string& data, bool append)
+
+	void FileIO::Write(Directory dir, const std::string& path, const std::string& data, bool append)
 	{
-		Logger::Critical("TODO: Implement!");
+		std::ofstream file(GetPath(dir, path), append ? std::fstream::app : std::fstream::trunc);
+		if (!file.is_open())
+		{
+			Logger::Error("Failed to open stream for file: {0}", GetPath(dir, path));
+			return;
+		}
+		else
+			file << data;
 	}
 
 	bool FileIO::IsValid(Directory directory, const std::string& path)

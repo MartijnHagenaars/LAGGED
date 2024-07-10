@@ -21,8 +21,8 @@ namespace LAG
 	{
 		//Read all shader files that can be found
 		std::string fileName = GetPath().GetString().substr(GetPath().GetString().find_last_of('/') + 1, GetPath().GetString().length());
-		std::string m_VertexSource = FileIO::ReadFile(FileIO::Directory::Shaders, fileName + ".vertex.glsl");
-		std::string m_PixelSource = FileIO::ReadFile(FileIO::Directory::Shaders, fileName + ".pixel.glsl");
+		std::string m_VertexSource = FileIO::Read(FileIO::Directory::Shaders, fileName + ".vertex.glsl");
+		std::string m_PixelSource = FileIO::Read(FileIO::Directory::Shaders, fileName + ".pixel.glsl");
 
 		//Check if the vertex and pixel files could be read. 
 		//If not, we don't compile the shader.
