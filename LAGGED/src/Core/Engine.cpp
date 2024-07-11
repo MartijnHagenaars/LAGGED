@@ -66,9 +66,7 @@ namespace LAG
 
 	bool Engine::Initialize(IApplication* applicationPtr)
 	{
-		Logger::Initialize();
-
-
+		//Logger::Initialize();
 
 		//Create the window manager and a primary window
 		m_Window = new Window(1920, 1280, "LAGGED", false);
@@ -130,7 +128,7 @@ namespace LAG
 		delete m_Window;
 		m_Window = nullptr;
 
-		Logger::Shutdown();
+		//Logger::Shutdown();
 
 		return true;
 	}

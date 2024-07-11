@@ -1,33 +1,32 @@
 #pragma once
-#include "spdlog/spdlog.h"
 
 namespace LAG::Logger
 {
-	void Initialize();
-	void Shutdown();
+	//void Initialize() {};
+	//void Shutdown() {};
 
 	template<typename Msg, typename... Args>
 	void Info(const Msg& fmt, const Args&... args)
 	{
-		spdlog::info(fmt, args...);
+		//TODO: Implement
 	}
 
 	template<typename Msg, typename... Args>
 	void Warning(const Msg& fmt, const Args&... args)
 	{
-		spdlog::warn(fmt, args...);
+		//TODO: Implement
 	}
 
 	template<typename Msg, typename... Args>
 	void Error(const Msg& fmt, const Args&... args)
 	{
-		spdlog::error(fmt, args...);
+		//TODO: Implement
 	}
 
 	template<typename Msg, typename... Args>
 	void Critical(const Msg& fmt, const Args&... args)
 	{
-		spdlog::critical(fmt, args...);
+		//TODO: Implement
 		__debugbreak();
 	}
 }
