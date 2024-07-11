@@ -1,33 +1,30 @@
 #pragma once
+#include <string>
 
-namespace LAG::Logger
+namespace LAG
 {
-	//void Initialize() {};
-	//void Shutdown() {};
-
-	template<typename Msg, typename... Args>
-	void Info(const Msg& fmt, const Args&... args)
+	enum class LoggerSeverity
 	{
-		//TODO: Implement
-	}
+		Info,
+		Warning,
+		Error,
+		Critical
+	};
 
-	template<typename Msg, typename... Args>
-	void Warning(const Msg& fmt, const Args&... args)
+	class Logger
 	{
-		//TODO: Implement
-	}
+	public:
+		Logger();
+		
+		static void Placeholder() {}
 
-	template<typename Msg, typename... Args>
-	void Error(const Msg& fmt, const Args&... args)
-	{
-		//TODO: Implement
-	}
+		static void LogMessage(LoggerSeverity severity, const std::string& file, int line, const std::string& message);
+	};
 
-	template<typename Msg, typename... Args>
-	void Critical(const Msg& fmt, const Args&... args)
-	{
-		//TODO: Implement
-		__debugbreak();
-	}
+#define INFO(x) Logger::Placeholder()
+#define WARNING(x) Logger::Placeholder()
+#define ERROR(x) Logger::Placeholder()
+#define CRITICAL(x) Logger::Placeholder()
+
 }
 

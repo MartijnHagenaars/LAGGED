@@ -32,7 +32,7 @@ void World::Update()
 
 	if (!cameraEntity.IsValid())
 	{
-		LAG::Logger::Error("Failed to find camera");
+		LAG::ERROR("Failed to find camera");
 		return;
 	}
 

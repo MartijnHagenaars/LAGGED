@@ -75,7 +75,7 @@ namespace LAG
 
 	void Renderer::OnResize(unsigned int width, unsigned int height)
 	{
-		Logger::Info("Window resize: {0}, {1}", width, height);
+		INFO("Window resize: {0}, {1}", width, height);
 
 		glViewport(0, 0, width, height);
 		CameraSystem::ResizeCameraBuffers();

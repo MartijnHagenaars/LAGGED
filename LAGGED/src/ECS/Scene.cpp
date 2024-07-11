@@ -34,7 +34,7 @@ namespace LAG
 		entt::entity entity = static_cast<entt::entity>(entityID);
 		if (m_Registry.valid(entity))
 			m_Registry.destroy(entity);
-		else Logger::Warning("Tried to remove an entity that is invalid.");
+		else WARNING("Tried to remove an entity that is invalid.");
 	}
 
 	bool Scene::DoesEntityExist(uint32_t entityID)

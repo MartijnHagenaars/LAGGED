@@ -32,7 +32,7 @@ namespace LAG
 		{
 			m_IndexData = data;
 		}
-		else Logger::Warning("Index data does not contain any data.");
+		else WARNING("Index data does not contain any data.");
 	}
 
 	void IndexBuffer::Bind()
@@ -85,7 +85,7 @@ namespace LAG
 				LAG_GRAPHICS_CHECK(glEnableVertexAttribArray(i));
 				continue;
 			}
-			else Logger::Critical("Undefined buffer element type.");
+			else CRITICAL("Undefined buffer element type.");
 		}
 
 		m_Initialized = true;
@@ -108,7 +108,7 @@ namespace LAG
 		//Check if buffer is initialized
 		if (!m_Initialized)
 		{
-			Logger::Critical("Cannot render buffer: not initialized.");
+			CRITICAL("Cannot render buffer: not initialized.");
 			return;
 		}
 

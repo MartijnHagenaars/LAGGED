@@ -27,7 +27,7 @@ namespace LAG
 	{
 		if (Initialize(applicationPtr) != true)
 		{
-			Logger::Critical("Failed to initialize.");
+			CRITICAL("Failed to initialize.");
 			return -1;
 		}
 

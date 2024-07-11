@@ -118,7 +118,7 @@ namespace LAG
 				return it->IsOpen();
 
 		//Return false if tool hasn't been found.
-		Logger::Error("Tool with internal name \"{0}\" not found.", internalToolName);
+		ERROR("Tool with internal name \"{0}\" not found.", internalToolName);
 		return false;
 	}
 
@@ -137,7 +137,7 @@ namespace LAG
 		bool isOpen = true;
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
 		if (!ImGui::Begin("Editor", &isOpen, dockspaceFlags))
-			Logger::Critical("Failed to load dockspace");
+			CRITICAL("Failed to load dockspace");
 
 		//Create the dockspace
 		ImGuiIO& io = ImGui::GetIO();

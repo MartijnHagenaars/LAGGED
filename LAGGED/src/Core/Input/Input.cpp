@@ -16,7 +16,7 @@ namespace LAG::Input
 		//Check if input action already exists
 		if (inputActions.find(actionName.GetValue()) != inputActions.end())
 		{
-			Logger::Warning("Input action with ID \"{0}\" already exists.", actionName.GetValue());
+			WARNING("Input action with ID \"{0}\" already exists.", actionName.GetValue());
 			return false;
 		}
 
@@ -35,7 +35,7 @@ namespace LAG::Input
 		iteratorOut = inputActions.find(actionValue);
 		if (iteratorOut == inputActions.end())
 		{
-			Logger::Error("Input action with ID \"{0}\" not found.", actionValue);
+			ERROR("Input action with ID \"{0}\" not found.", actionValue);
 			return false;
 		}
 		else return true;

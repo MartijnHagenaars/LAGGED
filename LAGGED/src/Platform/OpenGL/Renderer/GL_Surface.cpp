@@ -23,7 +23,7 @@ namespace LAG
 	Surface::Surface(const std::string& heightTexturePath) :
 		SurfaceBase()
 	{
-		Logger::Error("Constructor for loading height map from texture has not been implemented.");
+		ERROR("Constructor for loading height map from texture has not been implemented.");
 	}
 
 	void Surface::GenerateSurface(int width, int height)
@@ -59,7 +59,7 @@ namespace LAG
 	//////////////////////////////////////////
 	void Surface::GenerateHeightMapSurface(const std::string& heightTexturePath)
 	{
-		Logger::Critical("GenerateHeightMapSurface() has not been implemented.");
+		CRITICAL("GenerateHeightMapSurface() has not been implemented.");
 	}
 
 	////////////////////////////////////////
@@ -115,7 +115,7 @@ namespace LAG
 	{
 		if (IsLoaded())
 		{
-			Logger::Warning("Tried to load a surface thats's already loaded");
+			WARNING("Tried to load a surface thats's already loaded");
 			return false;
 		}
 
