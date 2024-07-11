@@ -12,6 +12,8 @@
 #include "ECS/Scene.h"
 #include "ECS/Entity.h"
 
+#include "FileIO/FileWatch.h"
+
 #include "ECS/Systems/BasicSystems.h"
 
 namespace LAG
@@ -38,6 +40,8 @@ namespace LAG
 		while (GetWindow()->IsOpen())
 		{
 			GetWindow()->Update();
+
+			FileWatch::CheckWatches();
 
 			//Update all basic systems
 			BasicSystems::UpdateBasicSystems();

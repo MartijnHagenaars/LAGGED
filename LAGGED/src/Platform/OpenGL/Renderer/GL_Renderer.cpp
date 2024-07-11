@@ -135,7 +135,6 @@ namespace LAG
 
 
 		//Get an active camera
-		//TODO: This should be done in some sort of camera system. We shouldn't have to loop through the entire scene every single time to find a camera
 		Entity selectedCamera = CameraSystem::GetActiveCameraEntity();
 		CameraSystem::Update(&selectedCamera);
 

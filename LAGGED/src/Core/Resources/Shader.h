@@ -6,9 +6,7 @@
 enum class ShaderType
 {
 	VERTEX = 0,
-	PIXEL, 
-	TESSELLATION
-
+	PIXEL
 };
 
 namespace LAG

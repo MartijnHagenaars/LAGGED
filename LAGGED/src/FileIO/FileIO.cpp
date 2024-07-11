@@ -1,47 +1,108 @@
 #include "FileIO.h"
-#include <filesystem>
 #include "Utility/Logger.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <fstream>
+#include <sstream>
+#include <filesystem>
 
 namespace LAG
 {
-	bool FileIO::IsPathValid(const std::string& path)
+	std::string FileIO::Read(Directory dir, const std::string& path)
 	{
-		return std::filesystem::exists(path);
+		if (!IsValid(dir, path))
+		{
+			Logger::Error("Tried to read a file that does not exist: {0}", GetPath(dir, path));
+			return std::string();
+		}
+
+		std::stringstream ss = {};
+		std::ifstream file(GetPath(dir, path));
+
+		if (file.is_open())
+			ss << file.rdbuf();
+		else
+			Logger::Error("Failed to open ifstream for file {0}.", GetPath(dir, path));
+
+		return ss.str();
 	}
 
-	bool FileIO::LoadImageFromFile(const std::string& path, ImageData& data)
+	void FileIO::Write(Directory dir, const std::string& path, const std::string& data, bool append)
 	{
-		if (!IsPathValid(path))
+		std::ofstream file(GetPath(dir, path), append ? std::fstream::app : std::fstream::trunc);
+		if (!file.is_open())
 		{
-			Logger::Error("Invalid path: {0}", path);
-			return false;
+			Logger::Error("Failed to open stream for file: {0}", GetPath(dir, path));
+			return;
 		}
-
-		//Load image data
-		stbi_set_flip_vertically_on_load(true);
-		data.data = stbi_load(path.c_str(), &data.width, &data.height, &data.channels, 0);
-		if (data.data == nullptr)
-		{
-			Logger::Error("Failed to load image from location \"{0}\": data is NULL", path);
-			return false;
-		}
-
-		return true;
+		else
+			file << data;
 	}
 
-	bool FileIO::FreeImageData(ImageData& data)
+	bool FileIO::IsValid(Directory directory, const std::string& path)
 	{
-		if (!data.data)
+		return std::filesystem::exists(GetPath(directory, path));
+	}
+
+	std::string FileIO::GetPath(Directory dir)
+	{
+		switch (dir)
 		{
-			stbi_image_free(data.data);
-			data.width = 0;
-			data.height = 0;
-			data.channels = 0;
-			return true;
+		case Directory::Root: return "/";
+		case Directory::Models: return "res/Assets/Models/";
+		case Directory::Shaders: return "res/Shaders/OpenGL/";
+		case Directory::Saves: return "res/Saves";
+		case Directory::Logs: return "Logs/";
+		default:
+			Logger::Critical("Incorrect directory type.");
+			return std::string();
 		}
-		else return false;
+	}
+
+	std::string FileIO::GetPath(Directory dir, const std::string& path)
+	{
+		return std::string(GetPath(dir) + path);
+	}
+
+	std::vector<std::string> FileIO::GetAllFilesInDirectory(Directory dir, const std::string& path, bool useRelativePath)
+	{
+		if (!IsValid(dir, path))
+		{
+			Logger::Critical("Cannot get all files in directory: path ({0}) is incorrect.", GetPath(dir, path));
+			return std::vector<std::string>();
+		}
+
+		std::vector<std::string> files;
+		for (const auto& it : std::filesystem::directory_iterator(GetPath(dir, path)))
+			if (!it.is_directory())
+				if (useRelativePath)
+				{
+					const std::string& path = it.path().string();
+					files.emplace_back(path.substr(GetPath(dir).length(), path.length()));
+				}
+				else
+					files.emplace_back(it.path().string());
+
+		return files;
+	}
+
+	std::vector<std::string> FileIO::GetAllSubDirectories(Directory dir, const std::string& path, bool useRelativePath)
+	{
+		if (!IsValid(dir, path))
+		{
+			Logger::Error("Cannot get all subdirectories in directory: path ({0}) is incorrect.", GetPath(dir, path));
+			return std::vector<std::string>();
+		}
+		std::vector<std::string> directories;
+		for (const auto& it : std::filesystem::directory_iterator(GetPath(dir, path)))
+			if (it.is_directory())
+				if (useRelativePath)
+				{
+					const std::string& path = it.path().string();
+					directories.emplace_back(path.substr(GetPath(dir).length(), path.length()));
+				}
+				else
+					directories.emplace_back(it.path().string());
+
+		return directories;
 	}
 }

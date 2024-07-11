@@ -1,8 +1,6 @@
 #include "GL_Shader.h"
 
-#include <sstream>
-#include <fstream>
-#include <filesystem>
+#include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
 
 #include "GL/glew.h"
@@ -21,23 +19,10 @@ namespace LAG
 
 	bool Shader::Load()
 	{
-		//Create all the paths
-		std::string vertexPath = GetPath().GetString() + ".vertex.glsl";
-		std::string pixelPath = GetPath().GetString() + ".pixel.glsl";
-		std::string tessellationControlPath = GetPath().GetString() + ".tesscontrol.glsl";
-
 		//Read all shader files that can be found
-		std::string m_VertexSource = "";
-		if (std::filesystem::exists(vertexPath))
-			m_VertexSource = ReadFile(vertexPath);
-
-		std::string m_PixelSource = "";
-		if (std::filesystem::exists(pixelPath))
-			m_PixelSource = ReadFile(pixelPath);
-
-		std::string m_TessellationControlSource = "";
-		if (std::filesystem::exists(tessellationControlPath))
-			m_TessellationControlSource = ReadFile(tessellationControlPath);
+		std::string fileName = GetPath().GetString().substr(GetPath().GetString().find_last_of('/') + 1, GetPath().GetString().length());
+		std::string m_VertexSource = FileIO::Read(FileIO::Directory::Shaders, fileName + ".vertex.glsl");
+		std::string m_PixelSource = FileIO::Read(FileIO::Directory::Shaders, fileName + ".pixel.glsl");
 
 		//Check if the vertex and pixel files could be read. 
 		//If not, we don't compile the shader.
@@ -45,43 +30,49 @@ namespace LAG
 		{
 			m_VertexID = CompileShader(m_VertexSource, GL_VERTEX_SHADER);
 			m_PixelID = CompileShader(m_PixelSource, GL_FRAGMENT_SHADER);
-
-			if(!m_TessellationControlSource.empty())
-				m_TessellationControlID = CompileShader(m_TessellationControlSource, GL_TESS_CONTROL_SHADER);
+			if (m_VertexID == 0 || m_PixelID == 0)
+				return false;
 
 			m_ProgramID = MakeProgram();
 			CleanUpCompiledShaders();
+			return true;
 		}
 		else
 		{
-			Logger::Error("Shaders in directory {0} could not be found.", GetPath().GetString());
+			Logger::Error("Shaders in directory {0} could not be read/found.", GetPath().GetString());
 			return false;
 		}
-
-
-
-		return true;
 	}
 
 	bool Shader::Unload()
 	{
-		return false;
+		Unbind();
+		LAG_GRAPHICS_CHECK(glDeleteProgram(m_ProgramID));
+
+		return true;
 	}
 
-	std::string Shader::ReadFile(const std::string& filePath)
+	bool Shader::Reload()
 	{
-		std::stringstream ss = {};
-		std::ifstream vertexStream(filePath);
+		unsigned int prevProgramID = m_ProgramID;
 
-		if (vertexStream.is_open())
-			ss << vertexStream.rdbuf();
-		else Logger::Error("Failed to open ifstream for file {0}.", filePath);
-		return ss.str();
+		//Check if we can load the new shader files.
+		if (!Load())
+		{
+			Logger::Error("Failed to reload shader: {0}", GetPath().GetString());
+			CleanUpCompiledShaders();
+			return false;
+		}
+
+		//Since the new shader has loaded correctly, the old one can be removed.
+		Unbind();
+		LAG_GRAPHICS_CHECK(glDeleteProgram(prevProgramID));
+
+		return true;
 	}
 
 	unsigned int Shader::CompileShader(const std::string& shaderSource, unsigned int shaderType)
 	{
-
 		unsigned int shaderID = glCreateShader(shaderType);
 		const char* shaderSourceChars = shaderSource.c_str();
 		LAG_GRAPHICS_CHECK(glShaderSource(shaderID, 1, &shaderSourceChars, NULL));
@@ -91,12 +82,15 @@ namespace LAG
 		LAG_GRAPHICS_CHECK(glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compileStatus));
 		if (compileStatus != GL_TRUE)
 		{
+			//Print an error message. After that, delete the shader. 
+			//Also dump the entire shader code to the console if we're running debug. Might be useful to see the entire shader when debugging.
 			char shaderInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
 			Logger::Error("Failed to compile shader for {0} shaders: {1}", GetPath().GetString(), shaderInfoLog);
 #ifdef DEBUG
 			Logger::Info("Dumping shader source: \n{0}", shaderSource);
 #endif
+			glDeleteShader(shaderID);
 			return 0;
 		}
 
@@ -107,22 +101,23 @@ namespace LAG
 	{
 		unsigned int programID = glCreateProgram();
 
-		//The vertex and pixel shaders are always used. Because of that, we don't check the ID. 
+		//Attach the vertex and pixel shader. After that, link the newly created program.
 		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_VertexID));
 		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_PixelID));
-		if(m_TessellationControlID > 0)
-			LAG_GRAPHICS_CHECK(glAttachShader(programID, m_TessellationControlID));
-
 
 		LAG_GRAPHICS_CHECK(glLinkProgram(programID));
 
+		//Check if everything executed correctly.
 		GLint programStatus;
 		LAG_GRAPHICS_CHECK(glGetProgramiv(programID, GL_LINK_STATUS, &programStatus));
 		if (programStatus != GL_TRUE)
 		{
+			//Print an error message. After that, delete the shader program.
 			char programInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
-			Logger::Error("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
+			Logger::Critical("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
+
+			glDeleteProgram(programID);
 			return 0;
 		}
 
@@ -131,12 +126,15 @@ namespace LAG
 
 	void Shader::CleanUpCompiledShaders()
 	{
+		//Since there might be some left-over memory after trying to (re)compile shaders, we want to ensure that everything is deleted properly.
+
 		if (m_VertexID != 0)
 			LAG_GRAPHICS_CHECK(glDeleteShader(m_VertexID));
+		m_VertexID = 0;
+
 		if (m_PixelID != 0)
 			LAG_GRAPHICS_CHECK(glDeleteShader(m_PixelID));
-		if (m_TessellationControlID != 0)
-			LAG_GRAPHICS_CHECK(glDeleteShader(m_TessellationControlID));
+		m_PixelID = 0;
 	}
 
 	void Shader::Bind()
