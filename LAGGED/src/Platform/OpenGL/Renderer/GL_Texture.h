@@ -27,6 +27,16 @@ namespace LAG
 		void* GetEditorHandle() override { return (void*)(intptr_t)m_ID; }
 
 	private:
+		struct TextureData
+		{
+			unsigned char* data = nullptr;
+			int width = 0;
+			int height = 0;
+			int channels = 0;
+		};
+		bool LoadTextureData(TextureData& textureData, const std::string& path);
+		void FreeTextureData(TextureData& textureData);
+
 		GLenum ConvertFormatToGLEnum(TextureFormat format);
 		unsigned int m_ID = 0;
 	};

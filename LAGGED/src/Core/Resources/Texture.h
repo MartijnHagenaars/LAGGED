@@ -19,7 +19,6 @@ namespace LAG
 		explicit TextureBase(const HashedString& path);
 		virtual ~TextureBase() {};
 
-		bool SetPath(const std::string& path);
 		bool SetBuffer(const float* buffer, size_t bufferSize, int width, int height, TextureFormat format);
 
 		virtual void Bind(size_t textureUnit) = 0;
