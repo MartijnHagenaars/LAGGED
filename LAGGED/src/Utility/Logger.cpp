@@ -41,6 +41,6 @@ namespace LAG
 
 	std::string Logger::GetFileDataPrefix(const std::string& file, int line)
 	{
-		return std::string("[" + file + "][" + std::to_string(line) + "]");
+		return std::string("[" + file.substr(file.find_last_of('\\') + 1, file.length()) + "][" + std::to_string(line) + "]");
 	}
 }
