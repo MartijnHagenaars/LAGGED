@@ -18,6 +18,12 @@
 
 namespace LAG
 {
+	Engine& GetEngine()
+	{
+		static Engine engine;
+		return engine;
+	}
+
 	Engine::~Engine()
 	{
 		Shutdown();
@@ -25,6 +31,7 @@ namespace LAG
 
 	int Engine::Run(IApplication* applicationPtr)
 	{
+		m_EngineInitTime = std::chrono::steady_clock::now();
 		if (Initialize(applicationPtr) != true)
 		{
 			CRITICAL("Failed to initialize.");
@@ -133,9 +140,9 @@ namespace LAG
 		return true;
 	}
 
-	Engine& GetEngine()
+	long long Engine::GetElapsedTimeSinceInit()
 	{
-		static Engine engine;
-		return engine;
+		long long elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - m_EngineInitTime).count();  // Calculate elapsed time in milliseconds
+		return elapsedMs;
 	}
 }

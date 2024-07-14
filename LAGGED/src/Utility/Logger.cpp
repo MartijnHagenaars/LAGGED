@@ -1,31 +1,46 @@
 #include "Logger.h"
 
+#include "Core/Engine.h"
 #include "Platform/Base/PlatformIncludes.h"
-#include "Core/Defines.h"
 
 namespace LAG
 {
-	void Logger::LogMessage(LoggerSeverity severity, const std::string& file, int line, const std::string& message)
+	std::string Logger::GenerateMessagePrefix(LoggerSeverity severity, const std::string& file, int line)
 	{
-		std::string severityDisplay;
+		return std::string(GetTimePrefix() + GetSeverityPrefix(severity) + GetFileDataPrefix(file, line) + ": ");
+	}
+
+	std::string Logger::GetTimePrefix()
+	{
+		unsigned int elapsedSeconds = GetEngine().GetElapsedTimeSinceInit() / 1000;
+
+		unsigned int seconds = elapsedSeconds % 60;
+		unsigned int minutes = elapsedSeconds / 60;
+		if (minutes > 0)
+			return std::string("[" + std::to_string(minutes) + "m " + std::to_string(seconds) + "s]");
+		else
+			return std::string("[" + std::to_string(seconds) + "s]");
+	}
+
+	std::string Logger::GetSeverityPrefix(LoggerSeverity severity)
+	{
 		switch (severity)
 		{
 		case LoggerSeverity::Info:
-			severityDisplay = "Info";
-			break;
+			return "[Info]";
 		case LoggerSeverity::Warning:
-			severityDisplay = "Warning";
-			break;
+			return "[Warning]";
 		case LoggerSeverity::Error:
-			severityDisplay = "Error";
-			break;
+			return "[Error]";
 		case LoggerSeverity::Critical:
-			severityDisplay = "Critical";
-			break;
-		default: 
-			severityDisplay = "Unknown";
-			break;
-
+			return "[Critical]";
+		default:
+			return "[Unknown]";
 		}
+	}
+
+	std::string Logger::GetFileDataPrefix(const std::string& file, int line)
+	{
+		return std::string("[" + file + "][" + std::to_string(line) + "]");
 	}
 }
