@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <vector>
 #include "Utility/StringUtility.h"
 
 namespace LAG
@@ -28,11 +27,8 @@ namespace LAG
 		static std::string GetSeverityPrefix(LoggerSeverity severity);
 		static std::string GetFileDataPrefix(const std::string& file, int line);
 
-		template<typename... Args>
-		static std::string ApplyArgumentsToMessageFormat(const std::string& fmt, const Args&... arguments);
-
 		template <class ... Arg>
-		static std::vector<std::string> ConvertParameterPackToVector(Arg & ... inputs);
+		static inline std::string ApplyArgumentsToFormat(std::string message, Arg & ...inputs);
 	};
 
 
@@ -46,22 +42,30 @@ namespace LAG
 	template<typename ...Args>
 	inline void Logger::LogMessage(LoggerSeverity severity, const std::string& file, int line, const std::string& messageFormat, const Args & ...arguments)
 	{
-		ConvertParameterPackToVector(arguments...);
+		std::string newMessage = ApplyArgumentsToFormat(messageFormat, arguments...);
 
-		printf("%s%s\n", GenerateMessagePrefix(severity, file, line).c_str(), messageFormat.c_str());
+		printf("%s%s\n", GenerateMessagePrefix(severity, file, line).c_str(), newMessage.c_str());
 	}
 
 	template<class ...Arg>
-	inline std::vector<std::string> Logger::ConvertParameterPackToVector(Arg & ...inputs)
+	inline std::string Logger::ApplyArgumentsToFormat(std::string message, Arg & ...inputs)
 	{
-		std::vector<std::string> parameterPack;
-		([&inputs, &parameterPack]
+		int count = 0;
+		
+		([&inputs, &message, &count]
 			{
-				parameterPack.emplace_back(Utility::ConvertToString(inputs));
+				const auto& unorderedParamPos = message.find("{}");
+				if (unorderedParamPos != std::string::npos)
+					message.replace(unorderedParamPos, unorderedParamPos + 2, Utility::ConvertToString(inputs));
+				
+				size_t orderedParamPos = std::string::npos;
+				while((orderedParamPos = message.find("{" + std::to_string(count) + "}")) != std::string::npos)
+					message.replace(orderedParamPos, orderedParamPos + 3, Utility::ConvertToString(inputs));
 
+				++count;
 			} (), ...);
-		return parameterPack;
-	}
 
+		return message;
+	}
 }
 
