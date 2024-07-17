@@ -2,7 +2,6 @@
 
 #include "Core/Engine.h"
 #include "Platform/Window.h"
-#include "Editor/ToolsManager.h"
 
 #include "Core/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
@@ -119,9 +118,10 @@ namespace LAG
 		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
-		if (GetToolsManager()->IsToolOpen("CamView"))
-			return;
+		////TODO: FIND A SOLUTION FOR THIS!!!!
+		////We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
+		//if (GetToolsManager()->IsToolOpen("CamView"))
+		//	return;
 
 		//Bind VAO and Shader
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));

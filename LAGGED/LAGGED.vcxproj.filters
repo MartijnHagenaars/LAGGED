@@ -10,17 +10,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Core\Resources\Texture.cpp" />
-    <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
     <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="src\Editor\ToolsManager.cpp" />
-    <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="src\Editor\Tools\Gizmo.cpp" />
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp" />
@@ -50,12 +46,10 @@
     <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Base\Window.cpp" />
-    <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
-    <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -63,11 +57,7 @@
     <ClInclude Include="src\ECS\Meta\ReflectionComponentSetup.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
-    <ClInclude Include="src\Editor\ToolsManager.h" />
-    <ClInclude Include="src\Editor\ToolBase.h" />
-    <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
@@ -118,8 +108,6 @@
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
-    <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
-    <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
@@ -128,7 +116,6 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
     <ClInclude Include="src\FileIO\FileWatch.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
-    <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
   </ItemGroup>
   <ItemGroup>

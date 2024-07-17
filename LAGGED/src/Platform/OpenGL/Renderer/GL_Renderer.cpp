@@ -33,7 +33,6 @@
 #include "ImGuizmo/ImGuizmo.h"
 
 #include "Utility/Timer.h"
-#include "Editor/ToolsManager.h"
 
 namespace LAG
 {
@@ -127,8 +126,6 @@ namespace LAG
 
 		//Render ImGui editor windows
 		DrawOptionsWindow();
-
-		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
 		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->framebuffer->FrameStart(m_ShowWireframe);

@@ -2,6 +2,8 @@
 #include "Core/Defines.h"
 #include "Core/ApplicationInterface.h"
 
+
+class ToolsManager;
 class Editor : public LAG::IApplication
 {
 public:

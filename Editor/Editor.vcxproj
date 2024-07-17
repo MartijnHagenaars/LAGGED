@@ -59,7 +59,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src\;$(SolutionDir)Game\src\;$(SolutionDir)External\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src\;$(SolutionDir)Editor\src\;$(SolutionDir)External\;$(SolutionDir)LAGGED\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -79,7 +79,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src\;$(SolutionDir)Game\src\;$(SolutionDir)External\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src\;$(SolutionDir)Editor\src\;$(SolutionDir)External\;$(SolutionDir)LAGGED\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
@@ -93,10 +93,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Editor.h" />
+    <ClInclude Include="src\Editor.h" />
+    <ClInclude Include="src\Tools\ToolBase.h" />
+    <ClInclude Include="src\Tools\ToolsManager.h" />
+    <ClInclude Include="src\Tools\Tools\CameraViewport.h" />
+    <ClInclude Include="src\Tools\Tools\EntityViewer.h" />
+    <ClInclude Include="src\Tools\Tools\Gizmo.h" />
+    <ClInclude Include="src\Tools\Tools\ImGuiTools.h" />
+    <ClInclude Include="src\Tools\Tools\LiveFileEditor.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Editor.cpp" />
+    <ClCompile Include="src\Editor.cpp" />
+    <ClCompile Include="src\Tools\ToolsManager.cpp" />
+    <ClCompile Include="src\Tools\Tools\CameraViewport.cpp" />
+    <ClCompile Include="src\Tools\Tools\EntityViewer.cpp" />
+    <ClCompile Include="src\Tools\Tools\Gizmo.cpp" />
+    <ClCompile Include="src\Tools\Tools\ImGuiTools.cpp" />
+    <ClCompile Include="src\Tools\Tools\LiveFileEditor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

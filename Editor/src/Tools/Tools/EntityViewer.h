@@ -1,10 +1,15 @@
 #pragma once
-#include "Editor/ToolBase.h"
+#include "Tools/ToolBase.h"
 #include "ECS/Entity.h"
 
 namespace LAG
 {
 	class Entity;
+}
+
+namespace LAGEditor
+{
+
 	class EntityViewer : public ToolBase
 	{
 	public: 
@@ -13,12 +18,12 @@ namespace LAG
 
 		void Render() override; 
 
-		Entity* GetSelectedEntityID() { return &m_SelectedEntity; }
+		LAG::Entity* GetSelectedEntityID() { return &m_SelectedEntity; }
 
 	private:
 		static constexpr int s_MaxNameLength = 128;
 
-		Entity m_SelectedEntity;
+		LAG::Entity m_SelectedEntity;
 		float m_BrowserHeight = 0;
 
 		char m_NewEntityName[s_MaxNameLength];
