@@ -38,15 +38,6 @@ namespace LAG
 			return -1;
 		}
 
-		INFO("Good things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-		WARNING("Mediocore things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-		ERROR("Bad things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-		CRITICAL("Terrible things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);		
-		INFO("Good things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-		WARNING("Mediocore things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-		ERROR("Bad things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-		CRITICAL("Terrible things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-
 		LAG::Timer timer;
 		float elapsedTime = 0.f;
 		int frames = 0;
@@ -82,7 +73,7 @@ namespace LAG
 
 	bool Engine::Initialize(IApplication* applicationPtr)
 	{
-		//Logger::Initialize();
+		INFO("Initializing engine...");
 
 		//Create the window manager and a primary window
 		m_Window = new Window(1920, 1280, "LAGGED", false);
@@ -121,6 +112,8 @@ namespace LAG
 
 	bool Engine::Shutdown()
 	{
+		INFO("Shutting down engine...");
+
 		if (m_Application != nullptr)
 		{
 			m_Application->Shutdown();
