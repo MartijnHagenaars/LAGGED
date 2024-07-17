@@ -11,7 +11,7 @@ namespace LAG
 	{
 		if (!IsValid(dir, path))
 		{
-			Logger::Error("Tried to read a file that does not exist: {0}", GetPath(dir, path));
+			ERROR("Tried to read a file that does not exist: {0}", GetPath(dir, path));
 			return std::string();
 		}
 
@@ -21,7 +21,7 @@ namespace LAG
 		if (file.is_open())
 			ss << file.rdbuf();
 		else
-			Logger::Error("Failed to open ifstream for file {0}.", GetPath(dir, path));
+			ERROR("Failed to open ifstream for file {0}.", GetPath(dir, path));
 
 		return ss.str();
 	}
@@ -31,7 +31,7 @@ namespace LAG
 		std::ofstream file(GetPath(dir, path), append ? std::fstream::app : std::fstream::trunc);
 		if (!file.is_open())
 		{
-			Logger::Error("Failed to open stream for file: {0}", GetPath(dir, path));
+			ERROR("Failed to open stream for file: {0}", GetPath(dir, path));
 			return;
 		}
 		else
@@ -53,7 +53,7 @@ namespace LAG
 		case Directory::Saves: return "res/Saves";
 		case Directory::Logs: return "Logs/";
 		default:
-			Logger::Critical("Incorrect directory type.");
+			CRITICAL("Incorrect directory type.");
 			return std::string();
 		}
 	}
@@ -67,7 +67,7 @@ namespace LAG
 	{
 		if (!IsValid(dir, path))
 		{
-			Logger::Critical("Cannot get all files in directory: path ({0}) is incorrect.", GetPath(dir, path));
+			CRITICAL("Cannot get all files in directory: path ({0}) is incorrect.", GetPath(dir, path));
 			return std::vector<std::string>();
 		}
 
@@ -89,7 +89,7 @@ namespace LAG
 	{
 		if (!IsValid(dir, path))
 		{
-			Logger::Error("Cannot get all subdirectories in directory: path ({0}) is incorrect.", GetPath(dir, path));
+			ERROR("Cannot get all subdirectories in directory: path ({0}) is incorrect.", GetPath(dir, path));
 			return std::vector<std::string>();
 		}
 		std::vector<std::string> directories;

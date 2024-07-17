@@ -6,7 +6,7 @@
 
 //Assertion defines
 #ifdef DEBUG
-#define LAG_ASSERT(AssertMessage) { LAG::Logger::Critical("Assertion called on line {0} in file {1}: {2}", __LINE__, __FILE__, AssertMessage); __debugbreak(); }
+#define LAG_ASSERT(AssertMessage) { CRITICAL("Assertion called on line {0} in file {1}: {2}", __LINE__, __FILE__, AssertMessage); __debugbreak(); }
 #else
 #define LAG_ASSERT(AssertMessage)
 #endif

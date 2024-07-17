@@ -22,7 +22,7 @@ namespace LAG
 	void LineTool::Initialize()
 	{
 		if (!GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/LineRender")))
-			Logger::Critical("Failed to load line drawing shader.");
+			CRITICAL("Failed to load line drawing shader.");
 		m_LineShader = GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/LineRender"));
 
 		LAG_GRAPHICS_CHECK(glGenVertexArrays(1, &m_VAO));

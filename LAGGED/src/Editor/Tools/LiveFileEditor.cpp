@@ -44,18 +44,18 @@ namespace LAG
 				const std::string& noExt = file.substr(0, file.length() - 5);
 				const std::string& noType = noExt.substr(0, noExt.find_last_of("."));
 				if (GetResourceManager()->GetResource<Shader>(HashedString(noType))->Reload())
-					Logger::Info("Successfully reloaded shader: {0}", noType);
+					INFO("Successfully reloaded shader: {0}", noType);
 				else
-					Logger::Error("Failed to reload shader: {0}", noType);
+					ERROR("Failed to reload shader: {0}", noType);
 			});
 
 		//Render model directory
 		RenderDirectories(FileIO::Directory::Models, "Models", [](const std::string& file)
 			{
 				if (GetResourceManager()->GetResource<Model>(HashedString(file))->Reload())
-					Logger::Info("Successfully reloaded shader: {0}", file);
+					INFO("Successfully reloaded shader: {0}", file);
 				else
-					Logger::Error("Failed to reload shader: {0}", file);
+					ERROR("Failed to reload shader: {0}", file);
 			});
 
 		ImGui::End();

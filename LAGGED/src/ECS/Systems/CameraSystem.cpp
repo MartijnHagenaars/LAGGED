@@ -93,7 +93,7 @@ namespace LAG::CameraSystem
 			});
 
 		if (!entity.IsValid())
-			Logger::Warning("Failed to find active camera in GetActiveCameraEntity()");
+			WARNING("Failed to find active camera in GetActiveCameraEntity()");
 		return entity;
 	}
 
