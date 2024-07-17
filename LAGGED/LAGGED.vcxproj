@@ -213,6 +213,7 @@
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
     <ClInclude Include="src\Utility\HashedString.h" />
     <ClInclude Include="src\Utility\Noise.h" />
+    <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
