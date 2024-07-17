@@ -38,6 +38,8 @@ namespace LAG
 			return -1;
 		}
 
+		ERROR("Bad things are happening! {}, {}, {}", int(4), float(6.4f), "crap!");
+
 		LAG::Timer timer;
 		float elapsedTime = 0.f;
 		int frames = 0;

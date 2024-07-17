@@ -7,37 +7,45 @@ namespace LAG
 	{
         //Functions for converting variables into strings
 
-        //Convert any number into a string
-        template<typename T, std::enable_if_t <std::is_arithmetic<T>::value>> std::string ConvertToString(T variable)
-        {
-            return std::to_string(variable);
-        }
-
-        //Undefined variable type
-        template<typename T> std::string ConvertToString(T variable)
+        template<typename T>
+        inline std::string ConvertToString(T variable)
         {
             return std::string("[UNDEFINED VARIABLE TYPE]");
         }
 
-        //Convert string into string
+        // Specialization for bool
         template<>
-        inline std::string ConvertToString(std::string variable)
+        inline std::string ConvertToString<bool>(bool variable)
+        {
+            return variable ? "true" : "false";
+        }
+
+        // Specialization for string
+        template<>
+        inline std::string ConvertToString<std::string>(std::string variable)
         {
             return variable;
         }
 
-        //Convert const char* into string
+        // Specialization for int
         template<>
-        inline std::string ConvertToString(const char* variable)
+        inline std::string ConvertToString<int>(int variable)
         {
-            return std::string(variable);
+            return std::to_string(variable);
         }
 
-        //Convert Boolean into string
+        // Specialization for unsigned int
         template<>
-        inline std::string ConvertToString(bool variable)
+        inline std::string ConvertToString<unsigned int>(unsigned int variable)
         {
-            return (variable) ? "true" : "false";
+            return std::to_string(variable);
+        }
+
+        // Specialization for float
+        template<>
+        inline std::string ConvertToString<float>(float variable)
+        {
+            return std::to_string(variable);
         }
 	}
 }
