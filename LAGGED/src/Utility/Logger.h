@@ -28,7 +28,7 @@ namespace LAG
 		static std::string GetFileDataPrefix(const std::string& file, int line);
 
 		template <class ... Arg>
-		static inline std::string ApplyArgumentsToFormat(std::string message, Arg & ...inputs);
+		static inline std::string ApplyArgumentsToFormat(std::string message, Arg & ...args);
 	};
 
 
@@ -48,22 +48,30 @@ namespace LAG
 	}
 
 	template<class ...Arg>
-	inline std::string Logger::ApplyArgumentsToFormat(std::string message, Arg & ...inputs)
+	inline std::string Logger::ApplyArgumentsToFormat(std::string message, Arg & ...args)
 	{
-		int count = 0;
-		
-		([&inputs, &message, &count]
-			{
-				const auto& unorderedParamPos = message.find("{}");
-				if (unorderedParamPos != std::string::npos)
-					message.replace(unorderedParamPos, unorderedParamPos + 2, Utility::ConvertToString(inputs));
-				
-				size_t orderedParamPos = std::string::npos;
-				while((orderedParamPos = message.find("{" + std::to_string(count) + "}")) != std::string::npos)
-					message.replace(orderedParamPos, orderedParamPos + 3, Utility::ConvertToString(inputs));
+		if (sizeof...(args) > 0)
+		{
+			int count = 0;
+			([&args, &message, &count]
+				{
+					const auto& unorderedParamPos = message.find("{}");
+					if (unorderedParamPos != std::string::npos)
+					{
+						message.erase(message.begin() + unorderedParamPos, message.begin() + unorderedParamPos + 2);
+						message.insert(unorderedParamPos, Utility::ConvertToString(args));
+					}
 
-				++count;
-			} (), ...);
+					size_t orderedParamPos = std::string::npos;
+					while ((orderedParamPos = message.find("{" + std::to_string(count) + "}")) != std::string::npos)
+					{
+						message.erase(message.begin() + orderedParamPos, message.begin() + orderedParamPos + 3);
+						message.insert(orderedParamPos, Utility::ConvertToString(args));
+					}
+
+					++count;
+				} (), ...);
+		}
 
 		return message;
 	}
