@@ -27,6 +27,8 @@ namespace LAG
 		static std::string GetSeverityPrefix(LoggerSeverity severity);
 		static std::string GetFileDataPrefix(const std::string& file, int line);
 
+		static void SetSeverityColor(LoggerSeverity severity);
+
 		template <class ... Arg>
 		static inline std::string ApplyArgumentsToFormat(std::string message, Arg & ...args);
 	};
@@ -42,9 +44,14 @@ namespace LAG
 	template<typename ...Args>
 	inline void Logger::LogMessage(LoggerSeverity severity, const std::string& file, int line, const std::string& messageFormat, const Args & ...arguments)
 	{
-		std::string newMessage = ApplyArgumentsToFormat(messageFormat, arguments...);
+		std::string message = ApplyArgumentsToFormat(messageFormat, arguments...);
 
-		printf("%s%s\n", GenerateMessagePrefix(severity, file, line).c_str(), newMessage.c_str());
+		//Set text color and print message
+		SetSeverityColor(severity);
+		printf("%s%s\n", GenerateMessagePrefix(severity, file, line).c_str(), message.c_str());
+
+		//Reset the color
+		SetSeverityColor(LoggerSeverity::Info);
 	}
 
 	template<class ...Arg>

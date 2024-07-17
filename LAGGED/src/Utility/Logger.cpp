@@ -43,4 +43,28 @@ namespace LAG
 	{
 		return std::string("[" + file.substr(file.find_last_of('\\') + 1, file.length()) + "][" + std::to_string(line) + "]");
 	}
+
+	void Logger::SetSeverityColor(LoggerSeverity severity)
+	{
+		HANDLE winHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		switch (severity)
+		{
+		case LoggerSeverity::Info:
+			SetConsoleTextAttribute(winHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			return;
+		case LoggerSeverity::Warning:
+			SetConsoleTextAttribute(winHandle, FOREGROUND_RED | FOREGROUND_GREEN);
+			return;
+		case LoggerSeverity::Error:
+			SetConsoleTextAttribute(winHandle, FOREGROUND_RED);
+			return;
+		case LoggerSeverity::Critical:
+			SetConsoleTextAttribute(winHandle, BACKGROUND_RED | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			return;
+		default:
+			SetConsoleTextAttribute(winHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+			return;
+		}
+	}
 }

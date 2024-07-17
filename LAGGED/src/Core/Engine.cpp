@@ -38,9 +38,14 @@ namespace LAG
 			return -1;
 		}
 
+		INFO("Good things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
+		WARNING("Mediocore things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
 		ERROR("Bad things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
-		ERROR("Bad things are happening! {3}, {2}, {1}, {0}", int(4), float(6.4f), "crap!", false);
-		//ERROR("Bad things are happening! {}, {}, {}, {}", false, float(6.4f), "crap!", false);
+		CRITICAL("Terrible things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);		
+		INFO("Good things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
+		WARNING("Mediocore things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
+		ERROR("Bad things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
+		CRITICAL("Terrible things are happening! {}, {}, {}, {}", int(4), float(6.4f), "crap!", false);
 
 		LAG::Timer timer;
 		float elapsedTime = 0.f;
