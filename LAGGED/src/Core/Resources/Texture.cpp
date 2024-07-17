@@ -11,7 +11,7 @@ namespace LAG
 	{
 		if (width <= 0 && height <= 0)
 		{
-			Logger::Error("Invalid texture size: {0}x{1}.", width, height);
+			ERROR("Invalid texture size: {0}x{1}.", width, height);
 			return false;
 		}
 
@@ -39,7 +39,7 @@ namespace LAG
 		}
 		else
 		{
-			Logger::Error("Buffer is invalid.");
+			ERROR("Buffer is invalid.");
 			return false;
 		}
 	}

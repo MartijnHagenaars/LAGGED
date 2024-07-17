@@ -10,8 +10,8 @@ namespace LAG
 		m_IsFullscreen(fullscreen), m_UseVSync(useVSync), m_IsOpen(false)
 	{
 		if (!Initialize())
-			Logger::Critical("Failed to initialize window.");
-		else Logger::Info("Successfully initialized window.");
+			CRITICAL("Failed to initialize window.");
+		else INFO("Successfully initialized window.");
 	}
 
 	bool Window::Initialize()
@@ -19,7 +19,7 @@ namespace LAG
 		//If the window is already open and/or initialized
 		if (m_IsOpen || glfwInit() != GLFW_TRUE)
 		{
-			Logger::Error("Window already initialized.");
+			ERROR("Window already initialized.");
 			return false;
 		}
 
@@ -27,7 +27,7 @@ namespace LAG
 		m_Window = glfwCreateWindow(m_WindowWidth, m_WindowHeight, m_WindowTitle, NULL, NULL);
 		if (m_Window == nullptr)
 		{
-			Logger::Critical("Failed to create GLFW window");
+			CRITICAL("Failed to create GLFW window");
 			Shutdown();
 			return false;
 		}

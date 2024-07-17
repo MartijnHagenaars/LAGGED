@@ -43,10 +43,10 @@ namespace LAG
 				if (res != nullptr)
 					return res;
 				else
-					Logger::Error("Resource could not be converted.");
+					ERROR("Resource could not be converted.");
 			}
 			else 
-				Logger::Error("Resource is not stored in resource manager.");
+				ERROR("Resource is not stored in resource manager.");
 
 			return nullptr;
 		}

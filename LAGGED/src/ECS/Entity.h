@@ -30,7 +30,7 @@ namespace LAG
 				return &m_RegistryPtr->get<T>(m_EntityID);
 			}
 			
-			Logger::Warning("Tried to add a component to an entity that already has the same component.");
+			WARNING("Tried to add a component to an entity that already has the same component.");
 			return &m_RegistryPtr->get<T>(m_EntityID);
 		}
 
@@ -42,7 +42,7 @@ namespace LAG
 			if (HasComponent<T>())
 				m_RegistryPtr->remove<T>(m_EntityID);
 			else 
-				Logger::Warning("Failed to remove component: entity doesn't have component.");
+				WARNING("Failed to remove component: entity doesn't have component.");
 		}
 
 		template<typename T>
@@ -53,7 +53,7 @@ namespace LAG
 				if (HasComponent<T>())
 					return &m_RegistryPtr->get<T>(m_EntityID);
 			}
-			else Logger::Error("Tried to get an invalid entity.");
+			else ERROR("Tried to get an invalid entity.");
 
 			return nullptr;
 		}

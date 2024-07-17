@@ -39,7 +39,7 @@ namespace LAG
 		}
 		else
 		{
-			Logger::Error("Shaders in directory {0} could not be read/found.", GetPath().GetString());
+			ERROR("Shaders in directory {0} could not be read/found.", GetPath().GetString());
 			return false;
 		}
 	}
@@ -59,7 +59,7 @@ namespace LAG
 		//Check if we can load the new shader files.
 		if (!Load())
 		{
-			Logger::Error("Failed to reload shader: {0}", GetPath().GetString());
+			ERROR("Failed to reload shader: {0}", GetPath().GetString());
 			CleanUpCompiledShaders();
 			return false;
 		}
@@ -86,9 +86,9 @@ namespace LAG
 			//Also dump the entire shader code to the console if we're running debug. Might be useful to see the entire shader when debugging.
 			char shaderInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
-			Logger::Error("Failed to compile shader for {0} shaders: {1}", GetPath().GetString(), shaderInfoLog);
+			ERROR("Failed to compile shader for {0} shaders: {1}", GetPath().GetString(), shaderInfoLog);
 #ifdef DEBUG
-			Logger::Info("Dumping shader source: \n{0}", shaderSource);
+			INFO("Dumping shader source: \n{0}", shaderSource);
 #endif
 			glDeleteShader(shaderID);
 			return 0;
@@ -115,7 +115,7 @@ namespace LAG
 			//Print an error message. After that, delete the shader program.
 			char programInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
-			Logger::Critical("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
+			CRITICAL("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
 
 			glDeleteProgram(programID);
 			return 0;

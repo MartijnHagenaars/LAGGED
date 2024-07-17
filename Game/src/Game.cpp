@@ -27,12 +27,10 @@ ENTRY_APP(Game)
 
 Game::Game()
 {
-	std::cout << "Construct..." << std::endl;
 }
 
 Game::~Game()
 {
-	printf("Destruct\n");
 }
 
 void Game::Initialize()
@@ -85,7 +83,6 @@ void Game::Initialize()
 
 void Game::Shutdown()
 {
-	printf("Shutdown\n");
 }
 
 void Game::Update()

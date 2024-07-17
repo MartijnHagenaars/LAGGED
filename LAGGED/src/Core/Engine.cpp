@@ -18,6 +18,12 @@
 
 namespace LAG
 {
+	Engine& GetEngine()
+	{
+		static Engine engine;
+		return engine;
+	}
+
 	Engine::~Engine()
 	{
 		Shutdown();
@@ -25,9 +31,10 @@ namespace LAG
 
 	int Engine::Run(IApplication* applicationPtr)
 	{
+		m_EngineInitTime = std::chrono::steady_clock::now();
 		if (Initialize(applicationPtr) != true)
 		{
-			Logger::Critical("Failed to initialize.");
+			CRITICAL("Failed to initialize.");
 			return -1;
 		}
 
@@ -66,9 +73,7 @@ namespace LAG
 
 	bool Engine::Initialize(IApplication* applicationPtr)
 	{
-		Logger::Initialize();
-
-
+		INFO("Initializing engine...");
 
 		//Create the window manager and a primary window
 		m_Window = new Window(1920, 1280, "LAGGED", false);
@@ -107,6 +112,8 @@ namespace LAG
 
 	bool Engine::Shutdown()
 	{
+		INFO("Shutting down engine...");
+
 		if (m_Application != nullptr)
 		{
 			m_Application->Shutdown();
@@ -130,14 +137,14 @@ namespace LAG
 		delete m_Window;
 		m_Window = nullptr;
 
-		Logger::Shutdown();
+		//Logger::Shutdown();
 
 		return true;
 	}
 
-	Engine& GetEngine()
+	long long Engine::GetElapsedTimeSinceInit()
 	{
-		static Engine engine;
-		return engine;
+		long long elapsedMs = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - m_EngineInitTime).count();  // Calculate elapsed time in milliseconds
+		return elapsedMs;
 	}
 }

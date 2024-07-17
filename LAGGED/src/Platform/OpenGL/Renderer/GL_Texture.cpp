@@ -24,7 +24,7 @@ namespace LAG
 	{
 		if (IsLoaded())
 		{
-			Logger::Warning("Tried to load an already loaded Texture class.");
+			WARNING("Tried to load an already loaded Texture class.");
 			return false;
 		}
 
@@ -35,14 +35,14 @@ namespace LAG
 			//Check if the texture hasn't been loaded yet. 
 			if (m_ID != 0)
 			{
-				Logger::Warning("Texture \"{0}\" has already been loaded.", filePath);
+				WARNING("Texture \"{0}\" has already been loaded.", filePath);
 				return false;
 			}
 
 			TextureData texData;
 			if (!LoadTextureData(texData, filePath))
 			{
-				Logger::Error("Failed to load texture.");
+				ERROR("Failed to load texture.");
 				return false;
 			}
 
@@ -76,7 +76,7 @@ namespace LAG
 		}
 		else 
 		{
-			Logger::Error("Trying to load invalid texture.");
+			ERROR("Trying to load invalid texture.");
 			return false;
 		}
 
@@ -141,7 +141,7 @@ namespace LAG
 		texData.data = stbi_load(path.c_str(), &texData.width, &texData.height, &texData.channels, 0);
 		if (texData.data == nullptr)
 		{
-			Logger::Critical("Failed to load image from location \"{0}\": data is NULL", path);
+			CRITICAL("Failed to load image from location \"{0}\": data is NULL", path);
 			return false;
 		}
 		else return true;

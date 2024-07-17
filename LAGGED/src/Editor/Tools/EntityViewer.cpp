@@ -92,7 +92,7 @@ namespace LAG
 						{
 							if (ImGui::Selectable(data.displayName.empty() ? "No display name" : data.displayName.c_str(), false))
 							{
-								Logger::Info("Adding component with ID {0}", data.ID);
+								INFO("Adding component with ID {0}", data.ID);
 							}
 						}
 

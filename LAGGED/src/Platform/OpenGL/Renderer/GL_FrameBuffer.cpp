@@ -19,13 +19,13 @@ namespace LAG
 	FrameBuffer::FrameBuffer() : FrameBufferBase()
 	{
 		if (!Initialize())
-			Logger::Critical("Failed to create frame buffer.");
+			CRITICAL("Failed to create frame buffer.");
 	}
 
 	FrameBuffer::~FrameBuffer()
 	{
 		if (!Shutdown())
-			Logger::Critical("Failed to shut down frame buffer.");
+			CRITICAL("Failed to shut down frame buffer.");
 	}
 
 	bool FrameBuffer::Initialize()
@@ -81,7 +81,7 @@ namespace LAG
 		bool shaderSucceeded = GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/FrameBuffer"));
 
 		if (!(bufferStatusSucceeded && shaderSucceeded))
-			Logger::Critical("Failed to create frame buffer.");
+			CRITICAL("Failed to create frame buffer.");
 		else glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		return (bufferStatusSucceeded && shaderSucceeded);
 	}
