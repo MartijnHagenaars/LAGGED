@@ -124,12 +124,8 @@ namespace LAG
 		// Begin of ImGui rendering
 		ImGuiFrameStart();
 
-		//Render ImGui editor windows
-		DrawOptionsWindow();
-
 		//First render pass using custom frame buffer
 		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->framebuffer->FrameStart(m_ShowWireframe);
-
 
 		//Get an active camera
 		Entity selectedCamera = CameraSystem::GetActiveCameraEntity();
@@ -182,7 +178,12 @@ namespace LAG
 
 		CameraSystem::GetActiveCameraComponent()->framebuffer->FrameEnd();
 
+		//Render ImGui editor windows
+		DrawOptionsWindow();
+		GetApp()->OnImGui();
+
 		ImGuiFrameEnd();
+
 		m_RenderTime = m_RenderTimer.GetMilliseconds();
 	}
 }

@@ -1,5 +1,6 @@
 #include "Gizmo.h"
 
+#include "Editor.h"
 #include "Core/Engine.h"
 #include "Tools/ToolsManager.h"
 
@@ -26,7 +27,8 @@ namespace LAGEditor
 		ImVec2 viewportPos;
 		ImVec2 viewportSize;
 
-		if (GetToolsManager()->IsToolOpen("CamView"))
+		//TODO: This isn't very good. There must be a better approach for this.
+		if (static_cast<Editor*>(LAG::GetApp())->GetToolsManager()->IsToolOpen("CamView"))
 		{
 			//Not a fan of this, but cannot come up with another approach.
 			ImGuiContext* currentContext = ImGui::GetCurrentContext();

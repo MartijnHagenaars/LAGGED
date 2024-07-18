@@ -18,6 +18,7 @@ namespace LAG
 
 		int Run(IApplication* applicationPtr);
 
+		IApplication* GetApp() const { return m_Application; }
 		Window* GetWindow() const { return m_Window; }
 		Renderer* GetRenderer() { return m_Renderer; }
 		ResourceManager* GetResources() const { return m_ResourceManager; }
@@ -57,6 +58,7 @@ namespace LAG
 
 	Engine& GetEngine();
 
+	inline IApplication* GetApp() { return GetEngine().GetApp(); }
 	inline Window* GetWindow() { return GetEngine().GetWindow(); }
 	inline Renderer* GetRenderer() { return GetEngine().GetRenderer(); }
 	inline ResourceManager* GetResourceManager() { return GetEngine().GetResources(); }
