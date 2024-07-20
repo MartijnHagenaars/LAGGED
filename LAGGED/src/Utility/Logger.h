@@ -34,8 +34,10 @@ namespace LAG
 	};
 
 
-
+	//Ensure that no other ERROR macro exists...
+#define NOGDI
 #undef ERROR
+
 #define INFO(msg, ...) LAG::Logger::LogMessage(LAG::LoggerSeverity::Info, __FILE__, __LINE__, msg, __VA_ARGS__)
 #define WARNING(msg, ...) LAG::Logger::LogMessage(LAG::LoggerSeverity::Warning, __FILE__, __LINE__, msg, __VA_ARGS__)
 #define ERROR(msg, ...) LAG::Logger::LogMessage(LAG::LoggerSeverity::Error, __FILE__, __LINE__, msg, __VA_ARGS__)

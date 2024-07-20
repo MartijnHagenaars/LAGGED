@@ -4,7 +4,6 @@
 
 #include "Platform/Window.h"
 #include "Resources/ResourceManager.h"
-#include "Editor/ToolsManager.h"
 #include "Platform/Renderer.h"
 
 #include "Core/Resources/Model.h"
@@ -88,9 +87,6 @@ namespace LAG
 		//Create the scene
 		m_Scene = new Scene();
 
-		m_ToolsManager = new ToolsManager();
-		m_ToolsManager->Initialize();
-
 		//Add some input actions that'll be used by the engine and the editor. 
 		Input::AddInputAction(Input::InputType::LAG_W, HashedString("cameraMoveForward"));
 		Input::AddInputAction(Input::InputType::LAG_S, HashedString("cameraMoveBackward"));
@@ -120,10 +116,6 @@ namespace LAG
 			delete m_Application;
 		}
 		m_Application = nullptr;
-
-		if (m_ToolsManager != nullptr)
-			m_ToolsManager->Shutdown();
-		delete m_ToolsManager;
 
 		m_Renderer->Shutdown();
 		delete m_Renderer;

@@ -68,9 +68,9 @@ namespace LAG
 
 		//Check error messages
 		if (!errorMsg.empty() || !loadSuccess)
-			ERROR("Error while loading Model: {0}", errorMsg.empty() ? "No information available" : errorMsg);
+			CRITICAL("Error while loading Model: {0}", errorMsg.empty() ? "No information available" : errorMsg);
 		if (!warningMsg.empty())
-			WARNING("Warning while loading Model: {0}", warningMsg);
+			CRITICAL("Warning while loading Model: {0}", warningMsg);
 
 		std::string modelDirPath = std::filesystem::path(filePath).parent_path().string();
 		LoadModel(*m_Model);

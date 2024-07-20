@@ -11,11 +11,11 @@
 #include "Core/Resources/Shader.h"
 #include "Core/Resources/Model.h"
 
-namespace LAG
+namespace LAGEditor
 {
 	//Forward declaring a function that'll be used for reusing common ImGui rendering code
-	void RenderDirectories(FileIO::Directory dir, const std::string& displayName, std::function<void(const std::string&)> callbackFunction, const std::string& relPath = "");
-	void RenderDirectoryFiles(FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> callbackFunction);
+	void RenderDirectories(LAG::FileIO::Directory dir, const std::string& displayName, std::function<void(const std::string&)> callbackFunction, const std::string& relPath = "");
+	void RenderDirectoryFiles(LAG::FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> callbackFunction);
 
 	LiveFileEditor::LiveFileEditor() :
 		ToolBase(ToolType::GRAPHICS, "Live File Editor", "LiveFileEditor")
@@ -26,9 +26,9 @@ namespace LAG
 	{
 		ImGui::Begin(GetDisplayName().c_str(), &m_IsOpen);
 
-		bool isEnabled = FileWatch::IsEnabled();
+		bool isEnabled = LAG::FileWatch::IsEnabled();
 		if (ImGui::Checkbox("Enable file watch", &isEnabled))
-			FileWatch::EnableFileWatch(isEnabled);
+			LAG::FileWatch::EnableFileWatch(isEnabled);
 
 		ImGui::Separator();
 		if (!isEnabled)
@@ -39,20 +39,20 @@ namespace LAG
 		}
 
 		//Render shader directory
-		RenderDirectories(FileIO::Directory::Shaders, "Shaders", [](const std::string& file)
+		RenderDirectories(LAG::FileIO::Directory::Shaders, "Shaders", [](const std::string& file)
 			{
 				const std::string& noExt = file.substr(0, file.length() - 5);
 				const std::string& noType = noExt.substr(0, noExt.find_last_of("."));
-				if (GetResourceManager()->GetResource<Shader>(HashedString(noType))->Reload())
+				if (LAG::GetResourceManager()->GetResource<LAG::Shader>(LAG::HashedString(noType))->Reload())
 					INFO("Successfully reloaded shader: {0}", noType);
 				else
 					ERROR("Failed to reload shader: {0}", noType);
 			});
 
 		//Render model directory
-		RenderDirectories(FileIO::Directory::Models, "Models", [](const std::string& file)
+		RenderDirectories(LAG::FileIO::Directory::Models, "Models", [](const std::string& file)
 			{
-				if (GetResourceManager()->GetResource<Model>(HashedString(file))->Reload())
+				if (LAG::GetResourceManager()->GetResource<LAG::Model>(LAG::HashedString(file))->Reload())
 					INFO("Successfully reloaded shader: {0}", file);
 				else
 					ERROR("Failed to reload shader: {0}", file);
@@ -61,12 +61,12 @@ namespace LAG
 		ImGui::End();
 	}
 
-	void RenderDirectories(FileIO::Directory dir, const std::string& displayName, std::function<void(const std::string&)> callbackFunction, const std::string& relPath)
+	void RenderDirectories(LAG::FileIO::Directory dir, const std::string& displayName, std::function<void(const std::string&)> callbackFunction, const std::string& relPath)
 	{
 		if (relPath.length() == 0)
 			ImGui::SeparatorText(displayName.c_str());
 
-		const auto& dirs = FileIO::GetAllSubDirectories(dir, relPath);
+		const auto& dirs = LAG::FileIO::GetAllSubDirectories(dir, relPath);
 		for (const auto& it : dirs)
 		{
 			ImGui::Indent(16.f);
@@ -81,24 +81,24 @@ namespace LAG
 		RenderDirectoryFiles(dir, relPath, callbackFunction);
 	}
 
-	void RenderDirectoryFiles(FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> callbackFunction)
+	void RenderDirectoryFiles(LAG::FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> callbackFunction)
 	{
-		const auto& files = FileIO::GetAllFilesInDirectory(dir, relPath);
+		const auto& files = LAG::FileIO::GetAllFilesInDirectory(dir, relPath);
 		ImGui::Indent(16.f);
 
 		//Loop through all files in the directory
 		for (const auto& path : files)
 		{
-			bool isWatching = FileWatch::IsWatchingFile(dir, path);
+			bool isWatching = LAG::FileWatch::IsWatchingFile(dir, path);
 
 			//Checkbox widget for registering/removing file
 			if (ImGui::Checkbox(std::string("##" + path).c_str(), &isWatching))
 				if (isWatching)
 				{
-					FileWatch::Register(dir, path, callbackFunction);
+					LAG::FileWatch::Register(dir, path, callbackFunction);
 				}
 				else
-					FileWatch::Remove(dir, path);
+					LAG::FileWatch::Remove(dir, path);
 
 			ImGui::SameLine();
 			ImGui::Text(path.c_str());

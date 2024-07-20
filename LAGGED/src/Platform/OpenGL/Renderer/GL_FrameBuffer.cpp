@@ -2,7 +2,6 @@
 
 #include "Core/Engine.h"
 #include "Platform/Window.h"
-#include "Editor/ToolsManager.h"
 
 #include "Core/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
@@ -67,12 +66,12 @@ namespace LAG
 		//Create a render buffer object for the depth stencil
 		LAG_GRAPHICS_CHECK(glGenRenderbuffers(1, &m_DepthStencilBuffer));
 		LAG_GRAPHICS_CHECK(glBindRenderbuffer(GL_RENDERBUFFER, m_DepthStencilBuffer));
-		LAG_GRAPHICS_CHECK(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, GetSize().x, GetSize().y));
+		LAG_GRAPHICS_CHECK(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, static_cast<GLsizei>(GetSize().x), static_cast<GLsizei>(GetSize().y)));
 		LAG_GRAPHICS_CHECK(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_DepthStencilBuffer));
 
 		LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ColorBuffer));
 		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, m_ColorBuffer));
-		LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, GetSize().x, GetSize().y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
+		LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, static_cast<GLsizei>(GetSize().x), static_cast<GLsizei>(GetSize().y), 0, GL_RGB, GL_UNSIGNED_BYTE, NULL));
 		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
 		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBuffer, 0);
@@ -119,9 +118,10 @@ namespace LAG
 		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
-		if (GetToolsManager()->IsToolOpen("CamView"))
-			return;
+		////TODO: FIND A SOLUTION FOR THIS!!!!
+		////We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
+		//if (GetToolsManager()->IsToolOpen("CamView"))
+		//	return;
 
 		//Bind VAO and Shader
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));
@@ -154,7 +154,7 @@ namespace LAG
 		return (void*)(intptr_t)m_ColorBuffer;
 	}
 
-	const glm::uvec2& FrameBuffer::GetSize() const
+	glm::uvec2 FrameBuffer::GetSize() const
 	{
 		if (m_UseWindowSize)
 			return glm::uvec2(GetWindow()->GetWidth(), GetWindow()->GetHeight());

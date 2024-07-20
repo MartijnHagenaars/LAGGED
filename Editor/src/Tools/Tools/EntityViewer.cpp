@@ -10,7 +10,7 @@
 
 #include "ECS/Components/BasicComponents.h"
 
-namespace LAG
+namespace LAGEditor
 {
 	EntityViewer::EntityViewer() :
 		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
@@ -30,13 +30,13 @@ namespace LAG
 	{
 		ImGui::Begin("Entity Editor", &m_IsOpen);
 
-		Scene* scene = GetEngine().GetScene();
+		LAG::Scene* scene = LAG::GetEngine().GetScene();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 		ImGui::SeparatorText("Entity Editor");
 
 		if (ImGui::Button("Add object"))
-			GetScene()->AddEntity(std::string(m_NewEntityName));
+			LAG::GetScene()->AddEntity(std::string(m_NewEntityName));
 		ImGui::SameLine();
 		ImGui::InputText("##InputText", m_NewEntityName, s_MaxNameLength);
 
@@ -45,7 +45,7 @@ namespace LAG
 
 		//Browser container
 		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-		scene->Loop<DefaultComponent>([&scene, &selectedEntity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
+		scene->Loop<LAG::DefaultComponent>([&scene, &selectedEntity = m_SelectedEntity](LAG::Entity entity, LAG::DefaultComponent& comp)
 			{
 				ImGui::PushID(entity.GetEntityID());
 				if (ImGui::Button(comp.visible ? "Hide" : "Show"))
@@ -58,11 +58,11 @@ namespace LAG
 					{
 						//Unload the previously selected entity (if it's valid)
 						if (selectedEntity.IsValid())
-							GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::UNLOAD);
+							LAG::GetScene()->HandleComponentWidgets(&selectedEntity, LAG::Reflection::WidgetModes::UNLOAD);
 
 						//Set new selected entity and load its widgets
 						selectedEntity = entity;
-						GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::LOAD);
+						LAG::GetScene()->HandleComponentWidgets(&selectedEntity, LAG::Reflection::WidgetModes::LOAD);
 					}
 				}
 				ImGui::PopID();
@@ -86,7 +86,7 @@ namespace LAG
 			ImGui::Text("Add new component by picking one from the list below.");
 			if (ImGui::BeginListBox("Registered components"))
 			{
-				GetEngine().GetScene()->ComponentLoop([&](ComponentData& data)
+				LAG::GetEngine().GetScene()->ComponentLoop([&](LAG::ComponentData& data)
 					{
 						if (!data.displayName.empty())
 						{
@@ -103,7 +103,7 @@ namespace LAG
 
 
 			//Draw all component widgets
-			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);
+			LAG::GetScene()->HandleComponentWidgets(&m_SelectedEntity, LAG::Reflection::WidgetModes::DRAW);
 		}
 		else ImGui::Text("Select an entity to view its properties");
 

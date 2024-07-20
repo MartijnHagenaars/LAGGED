@@ -16,7 +16,7 @@ namespace LAG
 
 		void* GetEditorHandle() override;
 
-		const glm::uvec2& GetSize() const override;
+		glm::uvec2 GetSize() const override;
 
 	private:
 		bool Initialize();
