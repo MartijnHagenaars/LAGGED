@@ -98,7 +98,7 @@ namespace LAG
 						ImGui::Text("Failed to load reflection data for component. Has the component reflection been set up?");
 					}
 				}
-				else ERROR("Some issue in HandleComponentWidgets??? FIX ME!");
+				else CRITICAL("Component meta is nullptr. Reflection needs to be set up for this component.");
 			}
 		}
 	}
