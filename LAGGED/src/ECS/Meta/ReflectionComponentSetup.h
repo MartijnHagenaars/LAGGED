@@ -125,7 +125,7 @@ namespace LAG
 					std::string typeName = std::string(typeid(Variable).name()) + "_" + std::to_string(variableCount);
 					m_Factory.data<Variable>(entt::hashed_string(typeName.c_str()));
 				}
-				else Logger::Critical("Tried to setup a variable for a component that hasn't been registered.");
+				else CRITICAL("Tried to setup a variable for a component that hasn't been registered.");
 			}
 
 			entt::meta_factory<ClassType>& m_Factory;

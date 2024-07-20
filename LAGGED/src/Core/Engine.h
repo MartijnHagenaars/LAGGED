@@ -1,5 +1,5 @@
 #pragma once
-#include <memory>
+#include <chrono>
 #include "Defines.h"
 
 #include "Core/ApplicationInterface.h"
@@ -28,6 +28,12 @@ namespace LAG
 		float GetFPS() const { return m_FPS; }
 		float GetDeltaTime() const { return m_DeltaTime; }
 
+		/// <summary>
+		/// Returns the elapsed time since engine initialization. Time is stored in milliseconds.
+		/// </summary>
+		/// <returns>Milliseconds since engine initialization.</returns>
+		long long GetElapsedTimeSinceInit();
+
 	private:
 		friend Engine& GetEngine();
 		Engine() {}
@@ -46,6 +52,10 @@ namespace LAG
 
 		float m_FPS = 0.f;
 		float m_DeltaTime = 0.f;
+
+		// Stores the time when the engine initialize function was called. 
+		// Used for calculating the elapsed time since engine start.
+		std::chrono::steady_clock::time_point m_EngineInitTime;
 	};
 
 	Engine& GetEngine();

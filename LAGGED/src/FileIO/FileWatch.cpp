@@ -9,7 +9,7 @@ namespace LAG
 		const std::string& filePath = FileIO::GetPath(dir, relPath);
 		if (watchCallback == nullptr)
 		{
-			Logger::Error("Callback function for {0} is nullptr.", filePath);
+			ERROR("Callback function for {0} is nullptr.", filePath);
 			return;
 		}
 
@@ -17,7 +17,7 @@ namespace LAG
 		{
 			if (filePath == it.filePath)
 			{
-				Logger::Error("File watch already exists for {0}.", filePath);
+				ERROR("File watch already exists for {0}.", filePath);
 				return;
 			}
 		}
@@ -43,7 +43,7 @@ namespace LAG
 			++it;
 		}
 
-		Logger::Warning("Tried removing file watch entry that does not exist: {0}", filePath);
+		WARNING("Tried removing file watch entry that does not exist: {0}", filePath);
 	}
 
 	bool FileWatch::IsWatchingFile(FileIO::Directory dir, const std::string& relPath)

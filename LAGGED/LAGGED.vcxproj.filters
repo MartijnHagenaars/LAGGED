@@ -131,6 +131,7 @@
     <ClInclude Include="src\FileIO\FileWatch.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
+    <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\ECS\Component.h" />
   </ItemGroup>
   <ItemGroup>

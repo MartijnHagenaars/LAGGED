@@ -26,7 +26,7 @@ namespace LAG
 
 		if (glewInit() != GLEW_OK)
 		{
-			Logger::Critical("Failed to initialize GLEW.");
+			CRITICAL("Failed to initialize GLEW.");
 			return false;
 		}
 
@@ -35,7 +35,7 @@ namespace LAG
 		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 			{
 				if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
-					Logger::Error("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
+					ERROR("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
 			}, 0);
 
 		return true;

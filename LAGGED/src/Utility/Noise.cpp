@@ -27,7 +27,7 @@ namespace LAG::Noise
 			}
 		}
 		else
-			Logger::Warning("Invalid noise map size");
+			WARNING("Invalid noise map size");
 
 		return noiseData;
 	}
