@@ -15,11 +15,6 @@ namespace LAGEditor
 	EntityViewer::EntityViewer() :
 		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
 	{
-		std::string defaultNewEntityName = std::string("New entity name...");
-		for (int i = 0; i < defaultNewEntityName.size() && defaultNewEntityName.size() < s_MaxNameLength; i++)
-		{
-			m_NewEntityName[i] = defaultNewEntityName[i];
-		}
 	}
 
 	EntityViewer::~EntityViewer()
@@ -36,9 +31,12 @@ namespace LAGEditor
 		ImGui::SeparatorText("Entity Editor");
 
 		if (ImGui::Button("Add object"))
-			LAG::GetScene()->AddEntity(std::string(m_NewEntityName));
+		{
+			LAG::GetScene()->AddEntity(std::string((m_NewEntityName[0] != '\0') ? m_NewEntityName : "Unnamed entity"));
+			memset(m_NewEntityName, 0, sizeof(m_NewEntityName));
+		}
 		ImGui::SameLine();
-		ImGui::InputText("##InputText", m_NewEntityName, s_MaxNameLength);
+		ImGui::InputTextWithHint("##InputText", "Enter name here...", m_NewEntityName, sizeof(m_NewEntityName));
 
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());
@@ -78,38 +76,58 @@ namespace LAGEditor
 		//Selected entity container
 		ImGui::BeginChild("EntityProperties", ImVec2(0.f, 0.f), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
 
-		if (m_SelectedEntity.IsValid())
-		{
-			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity.GetEntityID());
-			ImGui::Text(selectedEntityDisplay.c_str());
-
-			ImGui::Text("Add new component by picking one from the list below.");
-			if (ImGui::BeginListBox("Registered components"))
-			{
-				LAG::GetEngine().GetScene()->ComponentLoop([&](LAG::ComponentData& data)
-					{
-						if (!data.displayName.empty())
-						{
-							if (ImGui::Selectable(data.displayName.empty() ? "No display name" : data.displayName.c_str(), false))
-							{
-								INFO("Adding component with ID {0}", data.ID);
-							}
-						}
-
-					});
-
-				ImGui::EndListBox();
-			}
-
-
-			//Draw all component widgets
-			LAG::GetScene()->HandleComponentWidgets(&m_SelectedEntity, LAG::Reflection::WidgetModes::DRAW);
-		}
-		else ImGui::Text("Select an entity to view its properties");
+		RenderProperties();
 
 		ImGui::EndChild();
 		ImGui::PopStyleVar();
 
 		ImGui::End();
+	}
+
+	void EntityViewer::RenderProperties()
+	{
+		if (m_SelectedEntity.IsValid())
+		{
+			if (ImGui::Button("Duplicate Entity"))
+			{
+				LAG::GetScene()->DuplicateEntity(m_SelectedEntity.GetEntityID());
+			}
+			ImGui::SameLine();
+			if (ImGui::Button("Delete Entity"))
+			{
+				LAG::GetScene()->RemoveEntity(m_SelectedEntity.GetEntityID());
+				m_SelectedEntity = LAG::Entity();
+				return;
+			}
+
+			if (ImGui::Button("Add Component"))
+				ImGui::OpenPopup("AddComponentPopup");
+
+			if (ImGui::BeginPopup("AddComponentPopup"))
+			{
+				ImGui::SeparatorText("Select a component");
+
+				//Loop through all components. Add them to the popup if the entity doesn't already use them. 
+				LAG::GetEngine().GetScene()->ComponentLoop([&](LAG::Component& comp)
+					{
+						if (!comp.ExistsOnEntity(m_SelectedEntity))
+							if (ImGui::Selectable(comp.GetDisplayName().c_str(), false))
+							{
+								INFO("Adding component with ID {0}...", comp.GetDisplayName());
+								comp.AddToEntity(m_SelectedEntity);
+							}
+					});
+				ImGui::EndPopup();
+			}
+
+			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity.GetEntityID());
+			ImGui::Text(selectedEntityDisplay.c_str());
+
+			ImGui::Text("Add new component by picking one from the list below.");
+
+			//Draw all component widgets
+			LAG::GetScene()->HandleComponentWidgets(&m_SelectedEntity, LAG::Reflection::WidgetModes::DRAW);
+		}
+		else ImGui::Text("Select an entity to view its properties");
 	}
 }

@@ -13,6 +13,7 @@ namespace LAG
 
 			SetupReflectionType<glm::vec3>();
 
+			SetupReflectionType<LAG::ModelHandle>();
 			SetupReflectionType<LAG::TextureHandle>();
 			SetupReflectionType<LAG::Noise::Properties>();
 

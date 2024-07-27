@@ -50,6 +50,9 @@
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
+    <ClCompile Include="src\ECS\Component.cpp" />
+    <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -77,7 +80,7 @@
     <ClInclude Include="src\ECS\Components\BasicComponents.h" />
     <ClInclude Include="src\ECS\Components\CameraComponent.h" />
     <ClInclude Include="src\ECS\Components\LightComponent.h" />
-    <ClInclude Include="src\ECS\Components\MeshComponent.h" />
+    <ClInclude Include="src\ECS\Components\ModelComponent.h" />
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Texture.h" />
@@ -117,6 +120,7 @@
     <ClInclude Include="src\FileIO\FileWatch.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
+    <ClInclude Include="src\ECS\Component.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />

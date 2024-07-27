@@ -9,7 +9,7 @@
 #include "ECS/Scene.h"
 #include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
-#include "ECS/Components/MeshComponent.h"
+#include "ECS/Components/ModelComponent.h"
 #include "ECS/Components/CameraComponent.h"
 
 #include "Tools/ToolsManager.h"
@@ -31,7 +31,7 @@ namespace LAGEditor
 		//Load an entity with a model and a transform
 		LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
 		ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));
-		ent1.AddComponent<LAG::MeshComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
+		ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 		ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
 
 		LAG::Entity ent5 = LAG::GetEngine().GetScene()->AddEntity("Camera");

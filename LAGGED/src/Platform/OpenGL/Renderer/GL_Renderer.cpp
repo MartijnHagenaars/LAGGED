@@ -18,7 +18,7 @@
 #include "ECS/Entity.h"
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
-#include "ECS/Components/MeshComponent.h"
+#include "ECS/Components/ModelComponent.h"
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/TerrainComponents.h"
@@ -145,11 +145,12 @@ namespace LAG
 		}
 
 		//Render all meshes
-		GetScene()->Loop<MeshComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, MeshComponent& meshComp, TransformComponent& transformComp)
+		GetScene()->Loop<ModelComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ModelComponent& meshComp, TransformComponent& transformComp)
 			{
-				if (entity.GetComponent<DefaultComponent>()->visible)
+				//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
+				if (entity.GetComponent<DefaultComponent>()->visible && meshComp.modelHandle.m_ModelLookup.GetValue() != 0)
 				{
-					GetResourceManager()->GetResource<Model>(meshComp.meshPath)->Render(
+					GetResourceManager()->GetResource<Model>(meshComp.modelHandle.m_ModelLookup)->Render(
 						transformComp, &selectedCamera,
 						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
 						lights);
@@ -160,7 +161,7 @@ namespace LAG
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
 				if (entity.GetComponent<DefaultComponent>()->visible)
-					surfaceComp.surface->Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+					surfaceComp.surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{

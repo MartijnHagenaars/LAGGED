@@ -7,6 +7,7 @@ namespace LAG
 {
 	struct DefaultComponent
 	{
+		DefaultComponent() = default;
 		explicit DefaultComponent(std::string name) :
 			name(name), visible(true)
 		{
