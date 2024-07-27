@@ -3,13 +3,12 @@
 #include "Core/Resources/ResourceHandles.h"
 
 #include "Utility/Noise.h"
-#include <memory>
 
 namespace LAG
 {
 	struct SurfaceComponent
 	{
-		std::unique_ptr<Surface> surface = nullptr;
+		Surface surface = {};
 		TextureHandle surfaceTexture = {};
 
 		static bool InitializeReflection();
