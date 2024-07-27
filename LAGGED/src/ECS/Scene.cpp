@@ -31,20 +31,50 @@ namespace LAG
 
 	Entity Scene::DuplicateEntity(uint32_t entityID)
 	{
-		Entity newEntity = AddEntity();
-		Entity targetEntity = GetEntity(entityID);
+		Entity duplicateEntity = AddEntity();
+		Entity originalEntity = GetEntity(entityID);
 
 		ComponentLoop([&](Component& comp)
 			{
-				if (comp.ExistsOnEntity(targetEntity))
+				if (comp.ExistsOnEntity(originalEntity))
 				{
-					comp.AddToEntity(newEntity);
+					comp.AddToEntity(duplicateEntity);
 				}
 			});
 
+		for (const auto& it : m_Registry.storage())
+		{
+			entt::sparse_set& storageSet = it.second;
+			if (storageSet.contains(entt::entity(duplicateEntity.GetEntityID())))
+			{
+				//Get the component meta for this specific type and check if it's valid. 
+				entt::meta_type compMeta = entt::resolve(storageSet.type());
+				if (!compMeta)
+					continue;
+
+				entt::meta_any duplicateCompInstance = compMeta.from_void(storageSet.value(entt::entity(duplicateEntity.GetEntityID())));
+				if (duplicateCompInstance != nullptr)
+				{
+					//Only reflect the component if it has any reflected variables set up.
+					if (compMeta.data().end() - compMeta.data().begin() > 0)
+					{
+						for (const auto& metadataIt : compMeta.data())
+						{
+							const entt::meta_data& propData = metadataIt.second;
+
+							entt::meta_any originalCompInstance = compMeta.from_void(storageSet.value(entt::entity(originalEntity.GetEntityID())));
+							propData.set(duplicateCompInstance, propData.get(originalCompInstance));
+						}
+					}
+				}
+				else CRITICAL("Cannot duplicate component data. Has the component reflection been set up?");
+			}
+		}
+
+
 		//Update the name to indicate it's a copy.
-		newEntity.GetComponent<DefaultComponent>()->name = targetEntity.GetComponent<DefaultComponent>()->name + " - Copy";
-		return newEntity;
+		duplicateEntity.GetComponent<DefaultComponent>()->name = duplicateEntity.GetComponent<DefaultComponent>()->name + " - Copy";
+		return duplicateEntity;
 	}
 
 	void Scene::RemoveEntity(uint32_t entityID)
