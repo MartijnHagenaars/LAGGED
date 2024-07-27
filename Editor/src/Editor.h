@@ -5,11 +5,11 @@
 namespace LAGEditor
 {
 	class ToolsManager;
-	class Editor : public LAG::IApplication
+	class EditorApp : public LAG::IApplication
 	{
 	public:
-		Editor() = default;
-		~Editor() override = default;
+		EditorApp() = default;
+		~EditorApp() override = default;
 
 		void Initialize() override;
 		void Shutdown() override;

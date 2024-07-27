@@ -164,7 +164,6 @@ namespace LAG
 						ImGui::Text("Failed to load reflection data for component. Has the component reflection been set up?");
 					}
 				}
-				else CRITICAL("Component meta is nullptr. Reflection needs to be set up for this component.");
 			}
 		}
 	}

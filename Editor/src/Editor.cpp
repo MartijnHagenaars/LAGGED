@@ -15,11 +15,11 @@
 #include "Tools/ToolsManager.h"
 
 
-ENTRY_APP(LAGEditor::Editor)
+ENTRY_APP(LAGEditor::EditorApp)
 
 namespace LAGEditor
 {
-	void Editor::Initialize()
+	void EditorApp::Initialize()
 	{
 		INFO("Initializing editor...");
 
@@ -40,7 +40,7 @@ namespace LAGEditor
 		ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 80.f;
 	}
 
-	void Editor::Shutdown()
+	void EditorApp::Shutdown()
 	{
 		INFO("Shutting down editor...");
 
@@ -52,12 +52,12 @@ namespace LAGEditor
 		m_ToolsManager = nullptr;
 	}
 
-	void Editor::Update()
+	void EditorApp::Update()
 	{
 
 	}
 
-	void Editor::OnImGui()
+	void EditorApp::OnImGui()
 	{
 		m_ToolsManager->Render();
 	}

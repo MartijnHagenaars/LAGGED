@@ -28,7 +28,7 @@ namespace LAGEditor
 		ImVec2 viewportSize;
 
 		//TODO: This isn't very good. There must be a better approach for this.
-		if (static_cast<Editor*>(LAG::GetApp())->GetToolsManager()->IsToolOpen("CamView"))
+		if (static_cast<EditorApp*>(LAG::GetApp())->GetToolsManager()->IsToolOpen("CamView"))
 		{
 			//Not a fan of this, but cannot come up with another approach.
 			ImGuiContext* currentContext = ImGui::GetCurrentContext();
