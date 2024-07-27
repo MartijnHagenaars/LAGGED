@@ -10,7 +10,7 @@
 
 #include "ECS/Components/BasicComponents.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	EntityViewer::EntityViewer() :
 		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)

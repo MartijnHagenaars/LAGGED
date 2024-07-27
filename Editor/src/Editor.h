@@ -2,7 +2,7 @@
 #include "Core/Defines.h"
 #include "Core/ApplicationInterface.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	class ToolsManager;
 	class EditorApp : public LAG::IApplication

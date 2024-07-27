@@ -15,9 +15,9 @@
 #include "Tools/ToolsManager.h"
 
 
-ENTRY_APP(LAGEditor::EditorApp)
+ENTRY_APP(Editor::EditorApp)
 
-namespace LAGEditor
+namespace Editor
 {
 	void EditorApp::Initialize()
 	{

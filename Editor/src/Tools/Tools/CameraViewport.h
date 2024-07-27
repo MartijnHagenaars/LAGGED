@@ -2,7 +2,7 @@
 #include "Tools/ToolBase.h"
 #include "glm/vec2.hpp"
 
-namespace LAGEditor
+namespace Editor
 {
 	class CameraViewport : public ToolBase
 	{

@@ -11,7 +11,7 @@
 #include "Core/Resources/Shader.h"
 #include "Core/Resources/Model.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	//Forward declaring a function that'll be used for reusing common ImGui rendering code
 	void RenderDirectories(LAG::FileIO::Directory dir, const std::string& displayName, std::function<void(const std::string&)> callbackFunction, const std::string& relPath = "");

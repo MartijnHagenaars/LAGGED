@@ -7,7 +7,7 @@ namespace LAG
 	class Entity;
 }
 
-namespace LAGEditor
+namespace Editor
 {
 
 	class EntityViewer : public ToolBase

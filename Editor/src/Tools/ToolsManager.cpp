@@ -14,7 +14,7 @@
 #include "Tools/CameraViewport.h"
 #include "Tools/LiveFileEditor.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	//TODO: Rewrite should remove this
 	static Gizmo* m_TempGizmoPtr = nullptr;

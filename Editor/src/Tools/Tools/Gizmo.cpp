@@ -14,7 +14,7 @@
 
 #include "ImGui/imgui_internal.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	Gizmo::Gizmo() :
 		ToolBase(ToolType::LEVEL, "Gizmo Properties", "GizmoProperties"), m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)

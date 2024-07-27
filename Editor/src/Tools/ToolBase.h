@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-namespace LAGEditor
+namespace Editor
 {
 	enum class ToolType : unsigned char
 	{

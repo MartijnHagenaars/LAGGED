@@ -9,7 +9,7 @@
 
 #include "ImGui/imgui.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	CameraViewport::CameraViewport() : ToolBase(ToolType::LEVEL, "Camera Viewport", "CamView")
 	{

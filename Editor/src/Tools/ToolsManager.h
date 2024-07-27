@@ -2,7 +2,7 @@
 #include <vector>
 #include "ToolBase.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	class Gizmo;
 	class EntityViewer;

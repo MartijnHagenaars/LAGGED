@@ -1,7 +1,7 @@
 #pragma once
 #include "Tools/ToolBase.h"
 
-namespace LAGEditor
+namespace Editor
 {
 	class ImGuiDemoViewer : public ToolBase
 	{
