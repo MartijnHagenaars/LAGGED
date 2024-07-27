@@ -34,6 +34,7 @@ namespace LAG
 		Entity duplicateEntity = AddEntity();
 		Entity originalEntity = GetEntity(entityID);
 
+		//Add the same component type to the duplicate entity
 		ComponentLoop([&](Component& comp)
 			{
 				if (comp.ExistsOnEntity(originalEntity))
@@ -42,6 +43,7 @@ namespace LAG
 				}
 			});
 
+		//Assign all the same values
 		for (const auto& it : m_Registry.storage())
 		{
 			entt::sparse_set& storageSet = it.second;
@@ -72,7 +74,7 @@ namespace LAG
 		}
 
 
-		//Update the name to indicate it's a copy.
+		//Update the name to indicate it's a copy
 		duplicateEntity.GetComponent<DefaultComponent>()->name = duplicateEntity.GetComponent<DefaultComponent>()->name + " - Copy";
 		return duplicateEntity;
 	}
