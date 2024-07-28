@@ -39,8 +39,6 @@ namespace LAG
 	private:
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
-
-		virtual void LoadModel(tinygltf::Model& modelData) = 0;
 	};
 }
 
