@@ -133,7 +133,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\FileIO\FileWatch.h" />
@@ -221,7 +220,6 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
