@@ -1,13 +1,11 @@
 #pragma once
 #include <vector>
-#include <string>
 
 #include "Platform/Base/Renderer/Buffer.h"
 
 namespace tinygltf
 {
 	class Model;
-	//struct Mesh;
 }
 
 namespace LAG
@@ -16,7 +14,6 @@ namespace LAG
 	{
 	public: 
 		Mesh() = default;
-
 
 		bool Load(const std::string& path, tinygltf::Model& modelData, size_t meshIndex);
 		void Unload();

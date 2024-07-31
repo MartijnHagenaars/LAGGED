@@ -2,6 +2,7 @@
 #include "Core/Resources/Model.h"
 
 #include "GL_Mesh.h"
+#include "glm/mat4x4.hpp"
 
 namespace LAG
 {
@@ -20,5 +21,13 @@ namespace LAG
 		bool Unload() override;
 
 		std::vector<Mesh> m_Meshes;
+
+		struct Node
+		{
+			size_t m_MeshID;
+			glm::mat4 m_LocalTransform;
+		};
+		std::vector<Node> m_Nodes;
+		glm::mat4 m_MeshOffset;
 	};
 }
