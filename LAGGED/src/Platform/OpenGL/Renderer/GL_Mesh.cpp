@@ -23,7 +23,7 @@ namespace LAG
 
 	std::vector<VertexData> LoadVertices(tinygltf::Model& modelData, tinygltf::Primitive& primitive);
 	std::vector<unsigned int> LoadIndices(tinygltf::Model& modelData, tinygltf::Primitive& primitive);
-	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, std::string modelPath);
+	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive);
 
 	bool Mesh::Load(const std::string& path, tinygltf::Model& modelData, size_t meshIndex)
 	{
@@ -44,7 +44,7 @@ namespace LAG
 			//Index 0 is wrong!
 			std::vector<VertexData> vertexData = LoadVertices(modelData, meshData.primitives[0]);
 			std::vector<unsigned int> indices = LoadIndices(modelData, meshData.primitives[0]);
-			m_Textures = LoadTexture(modelData, path);
+			m_Textures = LoadTexture(modelData, meshData.primitives[0]);
 			m_TotalIndices = static_cast<unsigned int>(indices.size());
 
 			VertexBuffer vertexBuffer;
@@ -87,7 +87,7 @@ namespace LAG
 
 		//Load vertex data
 		{
-			
+
 			const auto& primitiveAttributes = primitive.attributes["POSITION"];
 			const auto& accessors = modelData.accessors[primitiveAttributes];
 			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
@@ -136,45 +136,60 @@ namespace LAG
 		return meshData;
 	}
 
-	std::vector<unsigned int> LoadIndices(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
+	std::vector<unsigned int> LoadIndices(tinygltf::Model& model, tinygltf::Primitive& primitive)
 	{
-		std::vector<unsigned int> indices;
+		std::vector<unsigned int> indicesVec;
 
-		const auto& accessors = modelData.accessors[primitive.indices];
-		const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
-		const auto& buffers = modelData.buffers[bufferViews.buffer];
-		size_t accessorSize = tinygltf::GetNumComponentsInType(accessors.type) * tinygltf::GetComponentSizeInBytes(accessors.componentType);
+		const auto& indexAccessor = model.accessors[primitive.indices];
+		const auto& indexBufferView = model.bufferViews[indexAccessor.bufferView];
+		const auto& indexBuffer = model.buffers[indexBufferView.buffer];
 
-		indices.reserve((bufferViews.byteLength / accessorSize));
+		// Ensure the index type is correct
+		//TODO: Instead of using for-loops, check if we can use a memcpy
+		if (indexAccessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_SHORT) 
 		{
-			auto* indexArray = &buffers.data.data()[bufferViews.byteOffset];
-			const unsigned short* indexArrayShort = reinterpret_cast<const unsigned short*>(indexArray);
-
-			for (size_t i = 0; i < indices.capacity(); i++)
-			{
-				indices.emplace_back(indexArrayShort[i]);
-			}
+			const uint16_t* indices = reinterpret_cast<const uint16_t*>(&indexBuffer.data[indexBufferView.byteOffset + indexAccessor.byteOffset]);
+			for (size_t i = 0; i < indexAccessor.count; i++) 
+				indicesVec.push_back(indices[i]);
 		}
+		else if (indexAccessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT) 
+		{
+			const uint32_t* indices = reinterpret_cast<const uint32_t*>(&indexBuffer.data[indexBufferView.byteOffset + indexAccessor.byteOffset]);
+			for (size_t i = 0; i < indexAccessor.count; i++) 
+				indicesVec.push_back(indices[i]);
+		}
+		else CRITICAL("Mesh is using unsupported component type: {}", indexAccessor.componentType);
 
-		return indices;
+		return indicesVec;
 	}
 
-	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, std::string modelPath)
+	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
 	{
 		std::vector<size_t> textures;
+		tinygltf::Material& material = modelData.materials[primitive.material];
 
-		tinygltf::Texture& texture = modelData.textures.at(0);
-		std::string textureName = modelData.images[texture.source].uri; //Get texture resource identifier
+		//Create a diffuse texture, if it exists.
+		if (material.values.find("baseColorTexture") != material.values.end()) 
+		{
+			int diffuseTexIndex = material.values.at("baseColorTexture").TextureIndex();
+			const tinygltf::Texture& texture = modelData.textures[diffuseTexIndex];
+			const tinygltf::Image& image = modelData.images[texture.source];
 
-		std::string texturePath = modelPath.erase(modelPath.find_last_of('/'), modelPath.length() - 1 - 1) + "/" + textureName; //Get texture path for loading through resource manager
-
-		HashedString pathString = HashedString(texturePath.c_str());
-
-		GetResourceManager()->AddResource<Texture>(pathString);
-		INFO("Loading texture at location {0}", texturePath);
-
-		textures.emplace_back(pathString.GetValue());
-		GetResourceManager()->GetResource<Texture>(pathString)->Unbind(0);
+			//TODO: THIS IS DUMB!
+			// This is stupid! Instead of returning a boolean, it needs to return the pointer!
+			// If the pointer is null, the resource could not be added. Otherwise, everything was successful.
+			// Now I have to get the resource again which is really annoying.
+			//TODO: This is potentially dangerous! Using image.name as the texture handle could be dangerous. 
+			// Should be prefixed with the model name
+			HashedString texHandle = HashedString(image.name);
+			GetResourceManager()->AddResource<Texture>(texHandle);
+			//TODO: This is annoying! 
+			// Having to write "HashedString" when trying to look something up is annoying. Is preferably automatic. 
+			//TODO: Doing this will cause issues, since texHandle is not a valid path! Need to reconsider how I want to do this in the resource manager!
+			Texture* texPtr = GetResourceManager()->GetResource<Texture>(texHandle);
+			texPtr->SetBuffer(reinterpret_cast<const float*>(&image.image), image.image.size(), image.width, image.height, LAG::TextureFormat::FORMAT_RGBA);
+			textures.emplace_back(texHandle.GetValue());
+		}
 
 		return textures;
 	}
