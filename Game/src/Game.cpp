@@ -49,6 +49,7 @@ void Game::Initialize()
 	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 5.f, 0.f));
 	ent1.AddComponent<LAG::TransformComponent>()->SetScale (glm::vec3(6.f));
 	ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/ChessGame/ABeautifulGame.gltf");
+	//ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
 
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");

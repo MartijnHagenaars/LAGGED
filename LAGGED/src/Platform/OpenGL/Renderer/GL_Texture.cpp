@@ -15,6 +15,15 @@ namespace LAG
 	{
 	}
 
+	Texture::Texture(const HashedString& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) : 
+		TextureBase(handle)
+	{
+		if (handle.GetString().empty())
+			ERROR("Empty handle used for texture.");
+
+		SetBuffer(buffer, bufferSize, width, height, format);
+	}
+
 	Texture::~Texture()
 	{
 
@@ -71,7 +80,7 @@ namespace LAG
 			LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
 			LAG_GRAPHICS_CHECK(Bind(0));
 
-			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_FLOAT, m_TempBuffer));
+			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_UNSIGNED_BYTE, m_TempBuffer));
 			LAG_GRAPHICS_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 		}
 		else 

@@ -62,7 +62,8 @@ namespace LAG
 		bool loadSuccess = false;
 		std::string errorMsg = "", warningMsg = "";
 
-		//Load data from file. GLB is used for binary files. 
+		//Load data from GLTF file. Before loading, flip textures vertically so that they're rendered properly.
+		stbi_set_flip_vertically_on_load(true);
 		if (fileExtension.compare("glb") == 0)
 			loadSuccess = modelLoader.LoadBinaryFromFile(m_Model, &errorMsg, &warningMsg, filePath);
 		else if (fileExtension.compare("gltf") == 0)
@@ -116,9 +117,10 @@ namespace LAG
 				translationMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(dblScale[0], dblScale[1], dblScale[2]));
 			}
 			else scaleMatrix = glm::identity<glm::mat4>();
-
-			//Combine all three matrices into one
-			m_Nodes[i].m_LocalTransform = translationMatrix * rotationMatrix * scaleMatrix;
+			
+			////TODO: This seems to be incorrect! Test with the helmet model.
+			////Combine all three matrices into one
+			//m_Nodes[i].m_LocalTransform = translationMatrix * rotationMatrix * scaleMatrix;
 		}
 
 		m_PreTransformScale = 1.f;
@@ -156,7 +158,7 @@ namespace LAG
 
 		for (const auto& node : m_Nodes)
 		{
-			shader.SetMat4("a_ModelMat", transform.GetTransformMatrix() * node.m_LocalTransform);
+			shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
 			m_Meshes[node.m_MeshID].Render();
 		}
 	}

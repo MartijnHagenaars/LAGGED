@@ -21,7 +21,7 @@ namespace LAG
 		void Render();
 
 	private:
-		ArrayBuffer m_Buffer;
+		ArrayBuffer m_MeshBuffer;
 		std::vector<size_t> m_Textures;
 
 		unsigned int m_TotalIndices = 0;

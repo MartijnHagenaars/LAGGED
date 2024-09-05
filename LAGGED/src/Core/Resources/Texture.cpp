@@ -7,7 +7,7 @@ namespace LAG
 	TextureBase::TextureBase() : Resource(HashedString()), m_LoadFromFile(false) {}
 	TextureBase::TextureBase(const HashedString& path) : Resource(path), m_LoadFromFile(true) {}
 
-	bool TextureBase::SetBuffer(const float* buffer, size_t bufferSize, int width, int height, TextureFormat format)
+	bool TextureBase::SetBuffer(const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format)
 	{
 		if (width <= 0 && height <= 0)
 		{

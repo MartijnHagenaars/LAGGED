@@ -78,7 +78,7 @@ namespace LAG
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorBuffer, 0);
 
 		bool bufferStatusSucceeded = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
-		bool shaderSucceeded = GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/FrameBuffer"));
+		bool shaderSucceeded = GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/FrameBuffer")) != nullptr;
 
 		if (!(bufferStatusSucceeded && shaderSucceeded))
 			CRITICAL("Failed to create frame buffer.");
