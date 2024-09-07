@@ -16,13 +16,25 @@ namespace LAG
 {
 	struct VertexData
 	{
-		glm::vec3 vertices;
-		glm::vec3 normals;
-		glm::vec2 textureCoords;
+		glm::vec3 vertices = glm::vec3(0.f);
+		glm::vec3 normals = glm::vec3(0.f);;
+		glm::vec2 textureCoords = glm::vec2(0.f);
 	};
 
-	std::vector<VertexData> GetVertexData(tinygltf::Model& modelData, tinygltf::Primitive& primitive);
-	std::vector<unsigned int> GetIndexData(tinygltf::Model& modelData, tinygltf::Primitive& primitive);
+	namespace ModelAttributes
+	{
+		constexpr const char* POSITION = "POSITION";
+		constexpr const char* NORMAL = "NORMAL";
+		constexpr const char* TEXTURE_COORD = "TEXCOORD_0";
+	}
+
+	std::vector<VertexData> GetVertexData(const tinygltf::Model& model, const tinygltf::Primitive& primitive);
+	std::vector<unsigned int> GetIndexData(const tinygltf::Model& model, const tinygltf::Primitive& primitive);
+
+	//Gets the attribute data from a primitive accessor and stores it in a vector.
+	std::vector<unsigned char> GetAttributeData(const tinygltf::Model& model, const tinygltf::Accessor& accessor);
+	void AddAttributeDataToVertexBuffer(std::vector<VertexData>& vertexData, const std::vector<unsigned char>& attributeData, int attributeSize, int attributeOffset);
+
 	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive);
 
 	bool Mesh::Load(const std::string& path, tinygltf::Model& modelData, size_t meshIndex)
@@ -79,32 +91,31 @@ namespace LAG
 		m_MeshBuffer.Render();
 	}
 
-	std::vector<VertexData> GetVertexData(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
+	std::vector<VertexData> GetVertexData(const tinygltf::Model& model, const tinygltf::Primitive& primitive)
 	{
 		std::vector<VertexData> vertData;
 
 		//Load vertex data
 		{
+			//Check if the POSITION attribute exists.
+			const auto& posAttribute = primitive.attributes.find(ModelAttributes::POSITION);
+			if (posAttribute == primitive.attributes.end())
+				CRITICAL("Primitive is missing {} attribute.", ModelAttributes::POSITION);
 
-			const auto& primitiveAttributes = primitive.attributes["POSITION"];
-			const auto& accessors = modelData.accessors[primitiveAttributes];
-			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
-			const auto& buffers = modelData.buffers[bufferViews.buffer];
+			const tinygltf::Accessor& accessor = model.accessors[posAttribute->second];
 
-			vertData.resize(accessors.count);
-			const float* positions = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
-			for (size_t i = 0; i < vertData.capacity(); i++)
-			{
-				vertData[i].vertices = glm::vec3(positions[i * 3 + 0], positions[i * 3 + 1], positions[i * 3 + 2]);
-			}
+			//Resize the vertex data vector here so that attribute data can be stored.
+			vertData.resize(accessor.count, VertexData());
+			const auto& accessorData = GetAttributeData(model, accessor);
+			AddAttributeDataToVertexBuffer(vertData, accessorData, sizeof(glm::vec3), 0);
 		}
 
 		//Load normals
 		{
-			const auto& primitiveAttributes = primitive.attributes["NORMAL"];
-			const auto& accessors = modelData.accessors[primitiveAttributes];
-			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
-			const auto& buffers = modelData.buffers[bufferViews.buffer];
+			const int primitiveAttributes = primitive.attributes.find(ModelAttributes::NORMAL)->second;
+			const auto& accessors = model.accessors[primitiveAttributes];
+			const auto& bufferViews = model.bufferViews[accessors.bufferView];
+			const auto& buffers = model.buffers[bufferViews.buffer];
 			const float* normals = reinterpret_cast<const float*>(&buffers.data[bufferViews.byteOffset + accessors.byteOffset]);
 			for (size_t i = 0; i < vertData.capacity(); i++)
 			{
@@ -114,10 +125,10 @@ namespace LAG
 
 		//Load texture coordinates
 		{
-			const auto& primitiveAttributes = primitive.attributes["TEXCOORD_0"];
-			const auto& accessors = modelData.accessors[primitiveAttributes];
-			const auto& bufferViews = modelData.bufferViews[accessors.bufferView];
-			const auto& buffers = modelData.buffers[bufferViews.buffer];
+			const int primitiveAttributes = primitive.attributes.find(ModelAttributes::TEXTURE_COORD)->second;
+			const auto& accessors = model.accessors[primitiveAttributes];
+			const auto& bufferViews = model.bufferViews[accessors.bufferView];
+			const auto& buffers = model.buffers[bufferViews.buffer];
 
 			if (accessors.componentType != TINYGLTF_COMPONENT_TYPE_FLOAT)
 			{
@@ -134,7 +145,7 @@ namespace LAG
 		return vertData;
 	}
 
-	std::vector<unsigned int> GetIndexData(tinygltf::Model& model, tinygltf::Primitive& primitive)
+	std::vector<unsigned int> GetIndexData(const tinygltf::Model& model, const tinygltf::Primitive& primitive)
 	{
 		std::vector<unsigned int> indicesVec;
 
@@ -160,6 +171,45 @@ namespace LAG
 
 		return indicesVec;
 	}
+
+	std::vector<unsigned char> GetAttributeData(const tinygltf::Model& model, const tinygltf::Accessor& accessor)
+	{
+		int accessorSize = tinygltf::GetComponentSizeInBytes(accessor.componentType) * tinygltf::GetNumComponentsInType(accessor.type);
+		int bufferSize = accessorSize * accessor.count;
+
+		std::vector<unsigned char> dataBuffer;
+		dataBuffer.resize(bufferSize, 0);
+
+		if (accessor.bufferView < 0)
+			CRITICAL("Cannot load accessor data for {}: accessor doesn't have a buffer view.", !accessor.name.empty() ? accessor.name : "unnamed accessor");
+
+		const auto& bufferView = model.bufferViews[accessor.bufferView];
+		const auto& buffer = model.buffers[bufferView.buffer];
+
+		const unsigned char* bufferSrcPtr = buffer.data.data() + bufferView.byteOffset + accessor.byteOffset;
+		std::memcpy(&dataBuffer.data()[0], bufferSrcPtr, bufferSize);
+
+		return dataBuffer;
+	}
+
+	void AddAttributeDataToVertexBuffer(std::vector<VertexData>& vertexData, const std::vector<unsigned char>& attributeData,
+		int attributeSize, int attributeOffset)
+	{
+		const int count = vertexData.size();
+		const int stride = sizeof(VertexData);
+
+		//Get the attribute source data and copy it to the destination
+		const unsigned char* attributeSrcPtr = &attributeData.data()[0];
+		VertexData* attributeDestPtr = &vertexData.data()[0] + attributeOffset;
+
+		for (int i = 0; i < count; i++)
+		{
+			std::memcpy(attributeDestPtr, attributeSrcPtr, attributeSize);
+			attributeDestPtr += 1; //TODO: Adding 1 since we're incrementing the VertexData* and not an unsigned char*. If we increment with the size of VertexData, we actually increment by 1024 (= sizeof(VertexData) * 32)
+			attributeSrcPtr += attributeSize;
+		}
+	}
+
 
 	std::vector<size_t> LoadTexture(tinygltf::Model& modelData, tinygltf::Primitive& primitive)
 	{
