@@ -62,8 +62,6 @@ namespace LAG
 		bool loadSuccess = false;
 		std::string errorMsg = "", warningMsg = "";
 
-		//Load data from GLTF file. Before loading, flip textures vertically so that they're rendered properly.
-		stbi_set_flip_vertically_on_load(true);
 		if (fileExtension.compare("glb") == 0)
 			loadSuccess = modelLoader.LoadBinaryFromFile(m_Model, &errorMsg, &warningMsg, filePath);
 		else if (fileExtension.compare("gltf") == 0)

@@ -21,7 +21,8 @@ namespace LAG
 		if (handle.GetString().empty())
 			ERROR("Empty handle used for texture.");
 
-		SetBuffer(buffer, bufferSize, width, height, format);
+		if(!SetBuffer(buffer, bufferSize, width, height, format))
+			CRITICAL("Failed to set texture buffer.");
 	}
 
 	Texture::~Texture()
@@ -89,13 +90,10 @@ namespace LAG
 			return false;
 		}
 
-		//Apply some texture paramters before finishing loading
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));				//Use nearest texture filtering when texture is minified. 
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));				//Use linear texture filtering when texture is magnified.
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
 		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 		
 		//Swizzle the texture if only the red channel is used. This prevents textures from looking red and instead grayscales them
 		if (m_Format == TextureFormat::FORMAT_R)

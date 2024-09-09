@@ -39,7 +39,7 @@ namespace LAG
 		}
 		else
 		{
-			ERROR("Buffer is invalid.");
+			CRITICAL("Texture buffer is empty.");
 			return false;
 		}
 	}
