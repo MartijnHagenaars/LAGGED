@@ -53,11 +53,13 @@
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
-    <ClCompile Include="src\FileIO\FileWatch.cpp" />
-    <ClCompile Include="src\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileWatch.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Cubemap.cpp" />
+    <ClCompile Include="src\Utility\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -128,11 +130,12 @@
     <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
     <ClInclude Include="src\Platform\Base\Renderer\BufferLayout.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
-    <ClInclude Include="src\FileIO\FileWatch.h" />
-    <ClInclude Include="src\FileIO\FileIO.h" />
+    <ClInclude Include="src\Core\FileIO\FileWatch.h" />
+    <ClInclude Include="src\Core\FileIO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\ECS\Component.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Cubemap.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />

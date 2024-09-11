@@ -35,6 +35,8 @@
 #include "Utility/Timer.h"
 #include "Editor/ToolsManager.h"
 
+#include "GL_Cubemap.h"
+
 namespace LAG
 {
 	Renderer::Renderer()
@@ -50,6 +52,9 @@ namespace LAG
 		//Create some essential shaders.
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
+
+		Cubemap cm(FileIO::Directory::Assets, "Cubemaps/Desert");
+		cm.Load();
 
 		glEnable(GL_DEPTH_TEST);
 

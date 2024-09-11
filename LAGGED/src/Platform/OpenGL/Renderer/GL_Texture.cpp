@@ -1,12 +1,11 @@
 #include "GL_Texture.h"
 #include "GL/glew.h"
 
-#include "FileIO/FileIO.h"
+#include "Core/FileIO/FileIO.h"
 #include "Utility/Logger.h"
 #include "GL_ErrorChecks.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "stb/stb_image.h"
 
 namespace LAG
 {

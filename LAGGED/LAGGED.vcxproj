@@ -133,9 +133,10 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Cubemap.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
-    <ClInclude Include="src\FileIO\FileIO.h" />
-    <ClInclude Include="src\FileIO\FileWatch.h" />
+    <ClInclude Include="src\Core\FileIO\FileIO.h" />
+    <ClInclude Include="src\Core\FileIO\FileWatch.h" />
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
     <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
@@ -220,9 +221,10 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Cubemap.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
-    <ClCompile Include="src\FileIO\FileIO.cpp" />
-    <ClCompile Include="src\FileIO\FileWatch.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
@@ -312,6 +314,7 @@
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
+    <ClCompile Include="src\Utility\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl">
