@@ -3,6 +3,8 @@
 
 #include "Core/FileIO/FileIO.h"
 #include "Utility/Logger.h"
+
+#include "GL_Utility.h"
 #include "GL_ErrorChecks.h"
 
 #include "stb/stb_image.h"
@@ -59,7 +61,7 @@ namespace LAG
 			LAG_GRAPHICS_CHECK(Bind(0));
 
 			//Apply image data
-			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, texData.data));
+			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, Utility::ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, GL_RGB, GL_UNSIGNED_BYTE, texData.data));
 			LAG_GRAPHICS_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 
 			FreeTextureData(texData);
@@ -70,7 +72,7 @@ namespace LAG
 			LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
 			LAG_GRAPHICS_CHECK(Bind(0));
 
-			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_FLOAT, m_TempBuffer));
+			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, Utility::ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, Utility::ConvertFormatToGLEnum(m_Format), GL_FLOAT, m_TempBuffer));
 			LAG_GRAPHICS_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 		}
 		else 
@@ -158,16 +160,4 @@ namespace LAG
 			textureData.channels = 0;
 		}
 	}
-
-	GLenum Texture::ConvertFormatToGLEnum(TextureFormat format)
-	{
-		switch (format)
-		{
-		default: case TextureFormat::FORMAT_RGB: return GL_RGB;
-		case TextureFormat::FORMAT_RGBA: return GL_RGBA;
-		case TextureFormat::FORMAT_RG: return GL_RG;
-		case TextureFormat::FORMAT_R: return GL_RED;
-		}
-	}
-
 }

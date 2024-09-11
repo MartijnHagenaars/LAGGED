@@ -1,11 +1,13 @@
 #include "GL_Cubemap.h"
 
 #include <array>
+
 #include <GL/glew.h>
+#include <stb/stb_image.h>
 
+#include "GL_Utility.h"
+#include "GL_ErrorChecks.h"
 #include "Utility/Logger.h"
-
-#include "stb/stb_image.h"
 
 namespace LAG
 {
@@ -17,14 +19,12 @@ namespace LAG
 
 	static std::array<CubemapFaces, 6> cubemapFaceData =
 	{ {
-
 		{"px.png", GL_TEXTURE_CUBE_MAP_POSITIVE_X},
 		{"nx.png", GL_TEXTURE_CUBE_MAP_NEGATIVE_X},
 		{"py.png", GL_TEXTURE_CUBE_MAP_POSITIVE_Y},
 		{"ny.png", GL_TEXTURE_CUBE_MAP_NEGATIVE_Y},
 		{"pz.png", GL_TEXTURE_CUBE_MAP_POSITIVE_Z},
 		{"nz.png", GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}
-
 	} };
 
 	Cubemap::Cubemap(const FileIO::Directory& dir, const std::string& path)
@@ -40,6 +40,11 @@ namespace LAG
 			return false;
 		}
 
+		//Create cubemap
+		LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_CUBE_MAP, m_ID));
+
+		//Load all the data for the six faces
 		const auto& files = FileIO::GetAllFilesInDirectory(m_Directory);
 		for (const auto& face : cubemapFaceData)
 		{
@@ -52,7 +57,13 @@ namespace LAG
 			int width, height, channel;
 			unsigned char* faceData = stbi_load(facePath.c_str(), &width, &height, &channel, 0);
 			if (faceData == nullptr)
+			{
 				CRITICAL("Failed to load cubemap data for face {} in directory {}.", face.fileName, m_Directory);
+				stbi_image_free(faceData);
+			}
+
+			GLenum formatEnum = Utility::ConvertFormatToGLEnum(TextureFormat(channel));
+			LAG_GRAPHICS_CHECK(glTexImage2D(face.targetID, 0, formatEnum, width, height, 0, formatEnum, GL_UNSIGNED_BYTE, faceData));
 
 			stbi_image_free(faceData);
 		}
@@ -62,6 +73,10 @@ namespace LAG
 
 	void Cubemap::Unload()
 	{
+		LAG_GRAPHICS_CHECK(glDeleteTextures(1, &m_ID));
 	}
 
+	void Cubemap::Bind()
+	{
+	}
 }

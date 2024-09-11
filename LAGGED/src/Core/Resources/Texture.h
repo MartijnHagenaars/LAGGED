@@ -2,16 +2,10 @@
 #include "Core/Resources/Resource.h"
 #include "Core/Defines.h"
 
+#include "Platform/Base/RendererTypes.h"
+
 namespace LAG
 {
-	enum class TextureFormat
-	{
-		FORMAT_RGBA = 0,
-		FORMAT_RGB,
-		FORMAT_RG,
-		FORMAT_R
-	};
-
 	class TextureBase : public Resource
 	{
 	public:

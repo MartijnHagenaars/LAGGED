@@ -3,7 +3,6 @@
 
 namespace LAG
 {
-	typedef unsigned int GLenum;
 	class Texture : public TextureBase
 	{
 		friend class Model;
@@ -37,7 +36,6 @@ namespace LAG
 		bool LoadTextureData(TextureData& textureData, const std::string& path);
 		void FreeTextureData(TextureData& textureData);
 
-		GLenum ConvertFormatToGLEnum(TextureFormat format);
 		unsigned int m_ID = 0;
 	};
 

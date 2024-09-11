@@ -133,6 +133,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\Base\RendererTypes.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Utility.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Cubemap.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Core\FileIO\FileIO.h" />
@@ -221,6 +223,7 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Utility.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Cubemap.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\Core\FileIO\FileIO.cpp" />
