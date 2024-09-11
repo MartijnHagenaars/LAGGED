@@ -78,5 +78,11 @@ namespace LAG
 
 	void Cubemap::Bind()
 	{
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_CUBE_MAP, m_ID));
+	}
+
+	void Cubemap::Unbind()
+	{
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_CUBE_MAP, 0));
 	}
 }
