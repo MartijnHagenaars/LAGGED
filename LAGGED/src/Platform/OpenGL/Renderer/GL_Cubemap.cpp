@@ -52,10 +52,8 @@ namespace LAG
 			if (it == files.end())
 				CRITICAL("No cubemap texture found for {} in directory {}.", face.fileName, m_Directory);
 
-			std::string facePath = *it;
-
 			int width, height, channel;
-			unsigned char* faceData = stbi_load(facePath.c_str(), &width, &height, &channel, 0);
+			unsigned char* faceData = stbi_load(it->c_str(), &width, &height, &channel, 0);
 			if (faceData == nullptr)
 			{
 				CRITICAL("Failed to load cubemap data for face {} in directory {}.", face.fileName, m_Directory);

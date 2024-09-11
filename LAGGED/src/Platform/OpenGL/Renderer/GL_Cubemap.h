@@ -2,7 +2,6 @@
 #include <string>
 
 #include "Core/FileIO/FileIO.h"
-#include "Platform/Base/Renderer/Buffer.h"
 
 namespace LAG
 {
@@ -19,8 +18,6 @@ namespace LAG
 		void Unbind();
 
 	private:
-		ArrayBuffer m_Buffer;
-
 		unsigned int m_ID = 0;
 		std::string m_Directory;
 	};

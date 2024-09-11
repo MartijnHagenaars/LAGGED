@@ -61,6 +61,7 @@
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Cubemap.cpp" />
     <ClCompile Include="src\Utility\stb_image.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Utility.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -139,6 +140,7 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Cubemap.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Utility.h" />
     <ClInclude Include="src\Platform\Base\RendererTypes.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
