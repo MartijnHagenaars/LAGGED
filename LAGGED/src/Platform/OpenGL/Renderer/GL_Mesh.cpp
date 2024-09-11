@@ -80,7 +80,7 @@ namespace LAG
 
 	void Mesh::Unload()
 	{
-		CRITICAL("FAILED TO UNLOAD MESH");
+		m_MeshBuffer.Shutdown();
 	}
 
 	void Mesh::Render()

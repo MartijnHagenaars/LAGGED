@@ -133,6 +133,11 @@ namespace LAG
 	{
 		for (auto& it : m_Meshes)
 			it.Unload();
+
+		if (m_Model != nullptr)
+			delete m_Model;
+		m_Model = nullptr;
+
 		return true;
 	}
 
