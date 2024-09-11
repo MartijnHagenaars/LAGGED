@@ -1,10 +1,16 @@
 #include "GL_Model.h"
-#include "GL_ErrorChecks.h"
-#include "Platform/OpenGL/Renderer/GL_Shader.h" //TODO: BAD. Should use a general resource class instead of this platform-specific shit. Will also allow me to use it in the res manager
+
+#define TINYGLTF_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#define TINYGLTF_NOEXCEPTION
+#define JSON_NOEXCEPTION
+#include "TinyGLTF/tiny_gltf.h"
 
 #include "Core/Engine.h"
 #include "Utility/Logger.h"
 
+#include "GL_ErrorChecks.h"
+#include "Core/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Core/Resources/Texture.h"
 
@@ -20,17 +26,6 @@
 #include "glm/gtx/quaternion.hpp"
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/type_ptr.hpp" //make_vec3
-
-
-//#ifndef STB_IMAGE_IMPLEMENTATION
-//#define STB_IMAGE_IMPLEMENTATION
-//#endif
-#define TINYGLTF_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#define TINYGLTF_NOEXCEPTION
-#define JSON_NOEXCEPTION
-#include "TinyGLTF/tiny_gltf.h"
-
 
 
 namespace LAG
@@ -75,7 +70,7 @@ namespace LAG
 			WARNING("Warning while loading Model: {0}", warningMsg);
 
 		std::string modelDirPath = std::filesystem::path(filePath).parent_path().string();
-		
+
 		m_Meshes.resize(m_Model->meshes.size());
 		for (int i = 0; i < m_Model->meshes.size(); i++)
 		{
@@ -85,43 +80,52 @@ namespace LAG
 		m_Nodes.resize(m_Model->nodes.size());
 		for (int i = 0; i < m_Model->nodes.size(); i++)
 		{
+			Node& node = m_Nodes[i];
+			tinygltf::Node& gltfNode = m_Model->nodes[i];
+
 			int meshID = m_Model->nodes[i].mesh;
-			m_Nodes[i].m_MeshID = meshID;
+			node.m_MeshID = meshID;
+			node.m_DebugName = gltfNode.name;
 
-			//Calculate the local transform
+			node.m_Children.reserve(gltfNode.children.size());
+			for (auto& childID : gltfNode.children)
+				node.m_Children.emplace_back(&m_Nodes[childID]);
 
-			glm::mat4 translationMatrix, rotationMatrix, scaleMatrix;
-			
-			//First, calculate the translation matrix
-			if (!m_Model->nodes[meshID].translation.empty())
+			//First, apply translation
+			glm::mat4 transformMat = glm::identity<glm::mat4>();
+			if (!gltfNode.translation.empty())
 			{
-				const auto& dblTranslate = m_Model->nodes[meshID].translation;
-				translationMatrix = glm::translate(glm::mat4(1.0f), glm::vec3(dblTranslate[0], dblTranslate[1], dblTranslate[2]));
+				const auto& translation = gltfNode.translation;
+				transformMat = glm::translate(transformMat, glm::vec3(translation[0], translation[1], translation[2]));
 			}
-			else translationMatrix = glm::identity<glm::mat4>();
+			else transformMat = glm::translate(transformMat, glm::vec3(0.f));
 
-			//Next, the rotation matrix
-			if (!m_Model->nodes[meshID].rotation.empty())
+			//Next, the rotation
+			if (!gltfNode.rotation.empty())
 			{
-				const auto& dblRotate = m_Model->nodes[meshID].rotation;
-				rotationMatrix = glm::toMat4(glm::quat(dblRotate[0], dblRotate[0], dblRotate[0], dblRotate[0]));
+				const auto& rotation = gltfNode.rotation;
+				transformMat = transformMat * glm::toMat4(glm::quat(rotation[3], rotation[0], rotation[1], rotation[2]));
 			}
-			else rotationMatrix = glm::identity<glm::mat4>();
+			else transformMat = transformMat * glm::toMat4(glm::identity<glm::quat>());
 
-			//Lastly, the scale matrix
-			if (!m_Model->nodes[meshID].scale.empty())
+			//Lastly, the scale
+			if (!gltfNode.scale.empty())
 			{
-				const auto& dblScale = m_Model->nodes[meshID].scale;
-				translationMatrix = glm::scale(glm::mat4(1.0f), glm::vec3(dblScale[0], dblScale[1], dblScale[2]));
+				const auto& scale = gltfNode.scale;
+				transformMat = glm::scale(transformMat, glm::vec3(scale[0], scale[1], scale[2]));
 			}
-			else scaleMatrix = glm::identity<glm::mat4>();
-			
-			////TODO: This seems to be incorrect! Test with the helmet model.
-			////Combine all three matrices into one
-			//m_Nodes[i].m_LocalTransform = translationMatrix * rotationMatrix * scaleMatrix;
+			else transformMat = glm::scale(transformMat, glm::vec3(1.f));
+
+			node.m_LocalTransform = transformMat;
 		}
 
-		m_PreTransformScale = 1.f;
+		for (auto& node : m_Nodes)
+		{
+			node.m_Parent = nullptr;
+			for (auto& child : node.m_Children)
+				child->m_Parent = &node;
+		}
+
 		return true;
 	}
 
@@ -130,6 +134,24 @@ namespace LAG
 		for (auto& it : m_Meshes)
 			it.Unload();
 		return true;
+	}
+
+	void Model::UpdateTransformHierarchies(const glm::mat4& transformMat)
+	{
+		for (auto& node : m_Nodes)
+		{
+			if (node.m_Parent == nullptr)
+				UpdateTransformHierarchy(node, transformMat);
+		}
+	}
+
+	void Model::UpdateTransformHierarchy(Node& node, const glm::mat4& parentTransformMat)
+	{
+		node.m_GlobalTransform = parentTransformMat * node.m_LocalTransform;
+
+		for (auto& child : node.m_Children)
+			UpdateTransformHierarchy(*child, node.m_GlobalTransform);
+
 	}
 
 	void LAG::Model::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
@@ -154,9 +176,12 @@ namespace LAG
 		}
 		else shader.SetBool("a_UseLight", false);
 
+		if (!m_Nodes.empty())
+			UpdateTransformHierarchies(transform.GetTransformMatrix());
+
 		for (const auto& node : m_Nodes)
 		{
-			shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
+			shader.SetMat4("a_ModelMat", node.m_GlobalTransform);
 			m_Meshes[node.m_MeshID].Render();
 		}
 	}

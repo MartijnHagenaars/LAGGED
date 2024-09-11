@@ -3,6 +3,7 @@
 
 #include "GL_Mesh.h"
 #include "glm/mat4x4.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace LAG
 {
@@ -20,12 +21,22 @@ namespace LAG
 		bool Load() override;
 		bool Unload() override;
 
+		struct Node;
+		void UpdateTransformHierarchies(const glm::mat4& transformMat);
+		void UpdateTransformHierarchy(Node& node, const glm::mat4& parentTransformMat);
+
 		std::vector<Mesh> m_Meshes;
 
 		struct Node
 		{
 			size_t m_MeshID;
-			glm::mat4 m_LocalTransform;
+			std::string m_DebugName;
+
+			glm::mat4 m_LocalTransform = glm::identity<glm::mat4>();
+			glm::mat4 m_GlobalTransform = glm::identity<glm::mat4>();
+
+			Node* m_Parent;
+			std::vector<Node*> m_Children;
 		};
 		std::vector<Node> m_Nodes;
 		glm::mat4 m_MeshOffset;

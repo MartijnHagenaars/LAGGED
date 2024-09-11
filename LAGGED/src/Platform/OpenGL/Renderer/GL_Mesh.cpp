@@ -219,8 +219,6 @@ namespace LAG
 			// Should be prefixed with the model name
 			HashedString texHandle = HashedString(image.name);
 			GetResourceManager()->AddResource<Texture>(texHandle, &image.image.data()[0], image.image.size(), image.width, image.height, LAG::TextureFormat::FORMAT_RGBA);
-			//TODO: This is annoying! 
-			// Having to write "HashedString" when trying to look something up is annoying. Is preferably automatic.
 			textures.emplace_back(texHandle.GetValue());
 		}
 
