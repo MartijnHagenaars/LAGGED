@@ -3,11 +3,10 @@
 #include "Core/ApplicationInterface.h"
 
 class World;
-class Game : public LAG::IApplication
+class GameApp : public LAG::IApplication
 {
 public:
-	Game();
-	~Game() override;
+	GameApp() = default;
 
 	void Initialize() override;
 	void Shutdown() override;

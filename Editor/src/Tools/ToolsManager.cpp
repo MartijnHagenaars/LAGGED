@@ -14,7 +14,7 @@
 #include "Tools/CameraViewport.h"
 #include "Tools/LiveFileEditor.h"
 
-namespace LAG
+namespace Editor
 {
 	//TODO: Rewrite should remove this
 	static Gizmo* m_TempGizmoPtr = nullptr;
@@ -50,7 +50,7 @@ namespace LAG
             if (ImGui::BeginMenu("File"))
             {
 				if (ImGui::MenuItem("Exit"))
-					GetWindow()->Close();
+					LAG::GetWindow()->Close();
 
                 ImGui::EndMenu();
 			}
@@ -97,7 +97,7 @@ namespace LAG
 				m_Tools[i]->Render();
 
 		//TODO: This has to be fully reworked. This is not good. 
-		Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
+		LAG::Entity cameraEntity = LAG::CameraSystem::GetActiveCameraEntity();
 		if (cameraEntity.IsValid() && m_TempEntViewerPtr->GetSelectedEntityID()->IsValid())
 		{
 			m_TempGizmoPtr->BeginWindow();

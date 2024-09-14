@@ -24,7 +24,7 @@ namespace LAG
 
 		virtual void Resize(const glm::uvec2& size) = 0;
 
-		virtual const glm::uvec2& GetSize() const = 0;
+		virtual glm::uvec2 GetSize() const = 0;
 		void UseWindowSize(bool useWindowSize) { m_UseWindowSize = useWindowSize; }
 
 	protected:

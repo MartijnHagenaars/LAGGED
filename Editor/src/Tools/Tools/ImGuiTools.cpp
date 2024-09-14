@@ -1,7 +1,7 @@
 #include "ImGuiTools.h"
 #include "ImGui/imgui.h"
 
-namespace LAG
+namespace Editor
 {
 	ImGuiDemoViewer::ImGuiDemoViewer() : 
 		ToolBase(ToolType::GRAPHICS, "ImGui Demo Viewer", "DemoViewer")

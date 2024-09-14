@@ -10,7 +10,7 @@
 
 #include "ECS/Components/BasicComponents.h"
 
-namespace LAG
+namespace Editor
 {
 	EntityViewer::EntityViewer() :
 		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
@@ -25,14 +25,14 @@ namespace LAG
 	{
 		ImGui::Begin("Entity Editor", &m_IsOpen);
 
-		Scene* scene = GetEngine().GetScene();
+		LAG::Scene* scene = LAG::GetEngine().GetScene();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 		ImGui::SeparatorText("Entity Editor");
 
 		if (ImGui::Button("Add object"))
 		{
-			GetScene()->AddEntity(std::string((m_NewEntityName[0] != '\0') ? m_NewEntityName : "Unnamed entity"));
+			LAG::GetScene()->AddEntity(std::string((m_NewEntityName[0] != '\0') ? m_NewEntityName : "Unnamed entity"));
 			memset(m_NewEntityName, 0, sizeof(m_NewEntityName));
 		}
 		ImGui::SameLine();
@@ -43,7 +43,7 @@ namespace LAG
 
 		//Browser container
 		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-		scene->Loop<DefaultComponent>([&scene, &selectedEntity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
+		scene->Loop<LAG::DefaultComponent>([&scene, &selectedEntity = m_SelectedEntity](LAG::Entity entity, LAG::DefaultComponent& comp)
 			{
 				ImGui::PushID(entity.GetEntityID());
 				if (ImGui::Button(comp.visible ? "Hide" : "Show"))
@@ -56,11 +56,11 @@ namespace LAG
 					{
 						//Unload the previously selected entity (if it's valid)
 						if (selectedEntity.IsValid())
-							GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::UNLOAD);
+							LAG::GetScene()->HandleComponentWidgets(&selectedEntity, LAG::Reflection::WidgetModes::UNLOAD);
 
 						//Set new selected entity and load its widgets
 						selectedEntity = entity;
-						GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::LOAD);
+						LAG::GetScene()->HandleComponentWidgets(&selectedEntity, LAG::Reflection::WidgetModes::LOAD);
 					}
 				}
 				ImGui::PopID();
@@ -90,13 +90,13 @@ namespace LAG
 		{
 			if (ImGui::Button("Duplicate Entity"))
 			{
-				GetScene()->DuplicateEntity(m_SelectedEntity.GetEntityID());
+				LAG::GetScene()->DuplicateEntity(m_SelectedEntity.GetEntityID());
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Delete Entity"))
 			{
-				GetScene()->RemoveEntity(m_SelectedEntity.GetEntityID());
-				m_SelectedEntity = Entity();
+				LAG::GetScene()->RemoveEntity(m_SelectedEntity.GetEntityID());
+				m_SelectedEntity = LAG::Entity();
 				return;
 			}
 
@@ -108,7 +108,7 @@ namespace LAG
 				ImGui::SeparatorText("Select a component");
 
 				//Loop through all components. Add them to the popup if the entity doesn't already use them. 
-				GetEngine().GetScene()->ComponentLoop([&](Component& comp)
+				LAG::GetEngine().GetScene()->ComponentLoop([&](LAG::Component& comp)
 					{
 						if (!comp.ExistsOnEntity(m_SelectedEntity))
 							if (ImGui::Selectable(comp.GetDisplayName().c_str(), false))
@@ -126,7 +126,7 @@ namespace LAG
 			ImGui::Text("Add new component by picking one from the list below.");
 
 			//Draw all component widgets
-			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);
+			LAG::GetScene()->HandleComponentWidgets(&m_SelectedEntity, LAG::Reflection::WidgetModes::DRAW);
 		}
 		else ImGui::Text("Select an entity to view its properties");
 	}

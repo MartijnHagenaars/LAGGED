@@ -21,9 +21,10 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <UseDebugLibraries>true</UseDebugLibraries>
+    <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -71,7 +72,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
       <SubSystem>NotSet</SubSystem>
@@ -133,7 +134,6 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\FileIO\FileWatch.h" />
     <ClInclude Include="src\ECS\Component.h" />
@@ -142,18 +142,12 @@
     <ClInclude Include="src\Platform\Base\Renderer\BufferLayout.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
-    <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
-    <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionComponentSetup.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
-    <ClInclude Include="src\Editor\ToolsManager.h" />
-    <ClInclude Include="src\Editor\ToolBase.h" />
-    <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
@@ -220,30 +214,24 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
-    <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
     <ClCompile Include="src\Core\Resources\Texture.cpp" />
-    <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
     <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
-    <ClCompile Include="src\Editor\ToolsManager.cpp" />
-    <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">NotUsing</PrecompiledHeader>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">Level3</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">Level3</WarningLevel>
     </ClCompile>
-    <ClCompile Include="src\Editor\Tools\Gizmo.cpp" />
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\Base\Window.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />

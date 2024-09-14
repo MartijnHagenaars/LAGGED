@@ -1,7 +1,8 @@
 #include "Gizmo.h"
 
+#include "Editor.h"
 #include "Core/Engine.h"
-#include "Editor/ToolsManager.h"
+#include "Tools/ToolsManager.h"
 
 #include "ImGui/imgui.h"
 #include "ImGuizmo/ImGuizmo.h"
@@ -13,7 +14,7 @@
 
 #include "ImGui/imgui_internal.h"
 
-namespace LAG
+namespace Editor
 {
 	Gizmo::Gizmo() :
 		ToolBase(ToolType::LEVEL, "Gizmo Properties", "GizmoProperties"), m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)
@@ -26,7 +27,8 @@ namespace LAG
 		ImVec2 viewportPos;
 		ImVec2 viewportSize;
 
-		if (GetToolsManager()->IsToolOpen("CamView"))
+		//TODO: This isn't very good. There must be a better approach for this.
+		if (static_cast<EditorApp*>(LAG::GetApp())->GetToolsManager()->IsToolOpen("CamView"))
 		{
 			//Not a fan of this, but cannot come up with another approach.
 			ImGuiContext* currentContext = ImGui::GetCurrentContext();
@@ -67,13 +69,13 @@ namespace LAG
 		ImGui::End();
 	}
 
-	void Gizmo::RenderGizmo(Entity* targetEntity)
+	void Gizmo::RenderGizmo(LAG::Entity* targetEntity)
 	{
-		TransformComponent* targetTransform = targetEntity->GetComponent<TransformComponent>();
+		LAG::TransformComponent* targetTransform = targetEntity->GetComponent<LAG::TransformComponent>();
 		if (targetTransform == nullptr)
 			return;
 
-		CameraComponent* camera = m_CameraEntity->GetComponent<CameraComponent>();
+		LAG::CameraComponent* camera = m_CameraEntity->GetComponent<LAG::CameraComponent>();
 		if (targetTransform == nullptr || camera == nullptr)
 		{
 			ImGuizmo::Enable(false);
@@ -96,8 +98,8 @@ namespace LAG
 
 	void Gizmo::RenderViewManipulator()
 	{
-		TransformComponent* transform = m_CameraEntity->GetComponent<TransformComponent>();
-		CameraComponent* cameraComp = m_CameraEntity->GetComponent<CameraComponent>();
+		LAG::TransformComponent* transform = m_CameraEntity->GetComponent<LAG::TransformComponent>();
+		LAG::CameraComponent* cameraComp = m_CameraEntity->GetComponent<LAG::CameraComponent>();
 
 		ImVec2 winPos = ImGui::GetWindowPos();
 		glm::mat4 viewMat = transform->GetTransformMatrix();

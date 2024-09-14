@@ -9,7 +9,7 @@
 
 #include "ImGui/imgui.h"
 
-namespace LAG
+namespace Editor
 {
 	CameraViewport::CameraViewport() : ToolBase(ToolType::LEVEL, "Camera Viewport", "CamView")
 	{
@@ -24,7 +24,7 @@ namespace LAG
 		ImGui::Begin(GetInternalName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
-		CameraComponent* cameraComp = CameraSystem::GetActiveCameraComponent();
+		LAG::CameraComponent* cameraComp = LAG::CameraSystem::GetActiveCameraComponent();
 		glm::uvec2 winSize = glm::uvec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
 		if (m_ViewportSize != winSize)
 		{
@@ -37,7 +37,7 @@ namespace LAG
 			cameraComp->framebuffer->Resize(m_ViewportSize);
 			cameraComp->framebuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
 
-			GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
+			LAG::GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
 		}
 
 		ImGui::PopStyleVar();
@@ -49,7 +49,7 @@ namespace LAG
 			isWindowOpen = m_IsOpen;
 			cameraComp->framebuffer->UseWindowSize(!m_IsOpen);
 			cameraComp->framebuffer->Resize(m_ViewportSize);
-			GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
+			LAG::GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
 		}
 	}
 

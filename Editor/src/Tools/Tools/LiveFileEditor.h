@@ -1,7 +1,7 @@
 #pragma once
-#include "Editor/ToolBase.h"
+#include "Tools/ToolBase.h"
 
-namespace LAG
+namespace Editor
 {
 	class LiveFileEditor : public ToolBase
 	{

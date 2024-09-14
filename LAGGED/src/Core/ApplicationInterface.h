@@ -16,6 +16,8 @@ namespace LAG
 
 		virtual void Update() = 0;
 
+		virtual void OnImGui() {};
+
 	};
 }
 

@@ -23,17 +23,9 @@
 
 #include "World/World.h"
 
-ENTRY_APP(Game)
+ENTRY_APP(GameApp)
 
-Game::Game()
-{
-}
-
-Game::~Game()
-{
-}
-
-void Game::Initialize()
+void GameApp::Initialize()
 {
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::HashedString("UpButton"));
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::HashedString("DownButton"));
@@ -84,11 +76,11 @@ void Game::Initialize()
 	m_World = new World(8, true);
 }
 
-void Game::Shutdown()
+void GameApp::Shutdown()
 {
 }
 
-void Game::Update()
+void GameApp::Update()
 {
 	m_World->Update();
 
