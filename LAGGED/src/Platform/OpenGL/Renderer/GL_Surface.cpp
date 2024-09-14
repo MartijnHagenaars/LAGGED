@@ -76,9 +76,9 @@ namespace LAG
 
 		m_Subdivisions = procSurfaceComp.surfaceSubdivisions;
 		Noise::GeneratedData noiseData = Noise::GenerateNoiseData(procSurfaceComp.noiseProperties, noisePos, noiseScale, m_Subdivisions);
-		m_HeightMapData = noiseData.m_Data;
-		m_HeightMapWidth = static_cast<int>(noiseData.m_Size.x);
-		m_HeightMapHeight = static_cast<int>(noiseData.m_Size.y);
+		m_HeightMapData = noiseData.data;
+		m_HeightMapWidth = static_cast<int>(noiseData.size.x);
+		m_HeightMapHeight = static_cast<int>(noiseData.size.y);
 
 		GenerateSurface(procSurfaceComp.surfaceSubdivisions, procSurfaceComp.surfaceSubdivisions);
 	}
@@ -122,8 +122,8 @@ namespace LAG
 		VertexBuffer vertexBuffer;
 		vertexBuffer.SetVertexData(&m_VertexData.data()[0], m_VertexData.size() * sizeof(VertexData));
 		vertexBuffer.SetLayout(std::vector<BufferLayoutElement>{
-			BufferLayoutElement("a_Position", BufferVariableType::Float3, false),
-			BufferLayoutElement("a_Normal", BufferVariableType::Float3, false)
+			BufferLayoutElement(BufferVariableType::Float3, false),	//Position
+			BufferLayoutElement(BufferVariableType::Float3, false)	//Normal
 		});
 
 		IndexBuffer indexBuffer;

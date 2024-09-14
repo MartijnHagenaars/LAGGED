@@ -76,7 +76,7 @@ namespace LAG
 		INFO("Initializing engine...");
 
 		//Create the window manager and a primary window
-		m_Window = new Window(1920, 1280, "LAGGED", false);
+		m_Window = new Window(1280, 720, "LAGGED", false);
 
 		//Create the resource manager
 		m_ResourceManager = new ResourceManager();
