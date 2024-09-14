@@ -7,6 +7,8 @@ namespace LAG
 	class Skybox
 	{
 	public:
+		Skybox() = default;
+		~Skybox() = default;
 
 		static void Load();
 		static void Unload();
@@ -14,10 +16,7 @@ namespace LAG
 		static void Render(Cubemap& cubemap);
 
 	private:
-		Skybox() = default;
-		~Skybox() = default;
-
-		static ArrayBuffer m_Buffer;
+		inline static ArrayBuffer m_Buffer;
 
 	};
 }

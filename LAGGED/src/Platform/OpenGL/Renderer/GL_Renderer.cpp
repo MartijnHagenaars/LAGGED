@@ -36,9 +36,13 @@
 #include "Editor/ToolsManager.h"
 
 #include "GL_Cubemap.h"
+#include "GL_Skybox.h"
 
 namespace LAG
 {
+	static Cubemap* skyCubemap = nullptr;
+	static Skybox* skybox = nullptr;
+
 	Renderer::Renderer()
 	{
 	}
@@ -52,9 +56,13 @@ namespace LAG
 		//Create some essential shaders.
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
+		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
 
-		Cubemap cm(FileIO::Directory::Assets, "Cubemaps/Desert");
-		cm.Load();
+		skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Desert");
+		skyCubemap->Load();
+
+		skybox = new Skybox();
+		skybox->Load();
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -142,6 +150,18 @@ namespace LAG
 		//Get an active camera
 		Entity selectedCamera = CameraSystem::GetActiveCameraEntity();
 		CameraSystem::Update(&selectedCamera);
+
+		//Temp skybox code
+		{
+			//TODO: Skybox is rendering black / without a texture. What is causing this?
+			Shader* skyShader = GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
+			skyShader->Bind();
+
+			glm::mat4 skyboxViewMat = glm::mat4(glm::mat3(selectedCamera.GetComponent<CameraComponent>()->viewMat));
+			skyShader->SetMat4("a_ViewMat", skyboxViewMat);
+			skyShader->SetMat4("a_ProjMat", selectedCamera.GetComponent<CameraComponent>()->projMat);
+			skybox->Render(*skyCubemap);
+		}
 
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights

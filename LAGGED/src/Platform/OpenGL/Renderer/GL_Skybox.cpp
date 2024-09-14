@@ -1,7 +1,9 @@
 #include "GL_Skybox.h"
 
 #include <vector>
+#include <GL/glew.h>
 #include <glm/vec3.hpp>
+
 
 namespace LAG
 {
@@ -45,8 +47,13 @@ namespace LAG
 
 	void Skybox::Render(Cubemap& cubemap)
 	{
+		//Disable writing to the depth buffer so that skybox depth is not added to the buffer
+		glDepthMask(false);
+
 		cubemap.Bind();
 		m_Buffer.Render();
+
+		glDepthMask(true);
 	}
 
 }

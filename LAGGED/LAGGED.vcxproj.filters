@@ -151,5 +151,7 @@
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.pixel.glsl" />
   </ItemGroup>
 </Project>

@@ -346,6 +346,8 @@
     <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
   </ItemGroup>
