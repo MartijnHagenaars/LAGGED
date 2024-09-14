@@ -34,13 +34,10 @@ namespace LAG
 
 	protected:
 		tinygltf::Model* m_Model = nullptr;
-		float m_PreTransformScale = 1.f;
 
 	private:
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;
-
-		virtual void LoadModel(tinygltf::Model& modelData) = 0;
 	};
 }
 

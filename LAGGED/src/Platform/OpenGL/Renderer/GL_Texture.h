@@ -15,6 +15,7 @@ namespace LAG
 		/// </summary>
 		/// <param name="path">The path to where the texture file is stored.</param>
 		explicit Texture(const HashedString& path);
+		explicit Texture(const HashedString& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format);
 		~Texture() override;
 
 		bool Load() override;

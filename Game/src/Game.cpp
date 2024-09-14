@@ -39,15 +39,17 @@ void Game::Initialize()
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::HashedString("DownButton"));
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::HashedString("LMB"));
 
-	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
-	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Avocado/Avocado.gltf"));
-	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/BoomBox/BoomBox.gltf"));
+	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
+	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/Avocado/Avocado.gltf"));
+	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/BoomBox/BoomBox.gltf"));
 	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/ChessGame/ABeautifulGame.gltf"));
 
 	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
-	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));
-	ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
+	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, 0.f));
+	ent1.AddComponent<LAG::TransformComponent>()->SetScale (glm::vec3(1.f));
+	ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/ChessGame/ABeautifulGame.gltf");
+	//ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
 
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");
@@ -71,9 +73,9 @@ void Game::Initialize()
 	ent4Light->lightColor = glm::vec3(1.f, 1.f, 1.f);
 
 	LAG::Entity ent5 = LAG::GetEngine().GetScene()->AddEntity("Camera");
-	ent5.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, -10.f, 0.f));
+	ent5.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, -2.f, 0.f));
 	ent5.GetComponent<LAG::TransformComponent>()->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
-	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 80.f;
+	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 5.f;
 
 	LAG::Entity ent6 = LAG::GetEngine().GetScene()->AddEntity("Surface");
 	ent6.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(1.f));

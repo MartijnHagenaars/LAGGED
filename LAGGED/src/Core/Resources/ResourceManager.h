@@ -15,22 +15,32 @@ namespace LAG
 	public:
 		ResourceManager(const ResourceManager&) = delete;
 
+		/// <summary>
+		/// Add a resource to the resource manager
+		/// </summary>
+		/// <typeparam name="T">Resource type. The object type needs to be derived from the Resource class.</typeparam>
+		/// <param name="path">The path/handle that will be used to store and retrieve the resource.</param>
+		/// <param name="...args">The arguments for constructing the resource object.</param>
+		/// <returns>A pointer to the resource is returned if the object was created and stored correctly. If the object cannot be created, a nullptr is returned.</returns>
 		template<typename T, typename... Args>
-		bool AddResource(const HashedString& path, Args&&... args)
+		T* AddResource(const HashedString& path, Args&&... args)
 		{
 			//Check if template type is of type "Resource"
 			constexpr bool validResType = std::is_base_of<LAG::Resource, T>::value; 
 			if constexpr (validResType)
 			{
 				T* resPtr = new T(path, args...);
-				resPtr->Load();
+				if (!resPtr->Load())
+					CRITICAL("Failed to load resource: {}", path);
 				m_Resources.emplace(path.GetValue(), std::move(resPtr));
-				return true;
+				return resPtr;
 			}
 			else if (!validResType)
 			{
 				LAG_ASSERT("Cannot load resource: Template type of is not child of type \"Resource\".");
 			}
+
+			return nullptr;
 		}
 
 		template<typename T>

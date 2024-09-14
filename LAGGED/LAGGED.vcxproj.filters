@@ -58,6 +58,7 @@
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Cubemap.cpp" />
     <ClCompile Include="src\Utility\stb_image.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Utility.cpp" />
@@ -137,6 +138,7 @@
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\ECS\Component.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Cubemap.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Utility.h" />
     <ClInclude Include="src\Platform\Base\RendererTypes.h" />

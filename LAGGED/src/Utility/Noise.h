@@ -25,8 +25,8 @@ namespace LAG
 
 		struct GeneratedData
 		{
-			std::vector<float> m_Data;
-			glm::vec2 m_Size;
+			std::vector<float> data;
+			glm::vec2 size;
 		};
 
 		GeneratedData GenerateNoiseData(const Properties& noiseProperties, const glm::vec2& position, const glm::vec2& size, int surfaceSubdivision);

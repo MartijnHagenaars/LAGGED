@@ -1,32 +1,12 @@
 #pragma once
 #include "Core/Resources/Model.h"
-#include "Platform/Base/Renderer/Buffer.h"
 
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-
-#include <map>
-#include <utility>
-#include <vector>
-
-namespace tinygltf
-{
-	class Model;
-	class Node;
-	struct Mesh;
-}
-
-typedef unsigned int GLuint;
+#include "GL_Mesh.h"
+#include "glm/mat4x4.hpp"
+#include "glm/gtx/quaternion.hpp"
 
 namespace LAG
 {
-	struct MeshData
-	{
-		glm::vec3 vertices;
-		glm::vec3 normals;
-		glm::vec2 textureCoords;
-	};
-
 	class Entity;
 	class Model : public ModelBase
 	{
@@ -41,12 +21,24 @@ namespace LAG
 		bool Load() override;
 		bool Unload() override;
 
-		void LoadModel(tinygltf::Model& modelData) override;
-		
-		ArrayBuffer m_Buffer;
+		struct Node;
+		void UpdateTransformHierarchies(const glm::mat4& transformMat);
+		void UpdateTransformHierarchy(Node& node, const glm::mat4& parentTransformMat);
 
-		std::vector<size_t> m_Textures;
+		std::vector<Mesh> m_Meshes;
 
-		unsigned int m_TotalIndices = 0;
+		struct Node
+		{
+			size_t m_MeshID;
+			std::string m_DebugName;
+
+			glm::mat4 m_LocalTransform = glm::identity<glm::mat4>();
+			glm::mat4 m_GlobalTransform = glm::identity<glm::mat4>();
+
+			Node* m_Parent;
+			std::vector<Node*> m_Children;
+		};
+		std::vector<Node> m_Nodes;
+		glm::mat4 m_MeshOffset;
 	};
 }

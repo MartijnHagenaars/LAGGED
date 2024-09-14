@@ -13,7 +13,7 @@ namespace LAG
 		explicit TextureBase(const HashedString& path);
 		virtual ~TextureBase() {};
 
-		bool SetBuffer(const float* buffer, size_t bufferSize, int width, int height, TextureFormat format);
+		bool SetBuffer(const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format);
 
 		virtual void Bind(size_t textureUnit) = 0;
 		virtual void Unbind(size_t textureUnit) = 0;
@@ -33,7 +33,7 @@ namespace LAG
 		bool m_LoadFromFile = false;
 
 		size_t m_BufferSize = -1;
-		const float* m_TempBuffer = nullptr;
+		const unsigned char* m_TempBuffer = nullptr;
 	};
 }
 

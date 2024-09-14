@@ -42,7 +42,9 @@ void main()
 		for(int i = 0; i < TOTAL_POINT_LIGHTS; i++)
 			lightCalculation += (CalculateDiffuse(a_PointLightData[i].a_LightPosition, a_PointLightData[i].a_LightColor)) * CalculateAttenuation(a_PointLightData[i].a_LightPosition, a_PointLightData[i].a_LightIntensity, a_PointLightData[i].a_LightAttenuation);
 	}
+	else lightCalculation = vec3(1.0);
 
     colorOut = texture(a_Texture1, texCoord) * vec4(lightCalculation, 1.f);
     //colorOut = vec4(normal, 1.f); //Draw normal
+    //colorOut = vec4(vec3(texCoord.xy, 0), 1.f); //Draw texture coords in solid color
 } 

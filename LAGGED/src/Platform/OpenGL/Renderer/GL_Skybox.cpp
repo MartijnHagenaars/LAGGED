@@ -32,7 +32,7 @@ namespace LAG
 		};
 
 		VertexBuffer vb;
-		vb.SetLayout(BufferLayout({ BufferLayoutElement("Position", BufferVariableType::Int3, false)}));
+		vb.SetLayout(BufferLayout({ BufferLayoutElement(BufferVariableType::Int3, false)}));
 		vb.SetVertexData(&vertices.data()[0], vertices.size() * sizeof(glm::vec3));
 
 		IndexBuffer ib;

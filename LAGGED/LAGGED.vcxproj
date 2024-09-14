@@ -133,6 +133,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Skybox.h" />
     <ClInclude Include="src\Platform\Base\RendererTypes.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Utility.h" />
@@ -224,6 +225,7 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Skybox.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Utility.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Cubemap.cpp" />

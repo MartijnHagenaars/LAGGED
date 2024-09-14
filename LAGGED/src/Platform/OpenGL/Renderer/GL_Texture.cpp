@@ -16,6 +16,16 @@ namespace LAG
 	{
 	}
 
+	Texture::Texture(const HashedString& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) : 
+		TextureBase(handle)
+	{
+		if (handle.GetString().empty())
+			ERROR("Empty handle used for texture.");
+
+		if(!SetBuffer(buffer, bufferSize, width, height, format))
+			CRITICAL("Failed to set texture buffer.");
+	}
+
 	Texture::~Texture()
 	{
 
@@ -72,7 +82,7 @@ namespace LAG
 			LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
 			LAG_GRAPHICS_CHECK(Bind(0));
 
-			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, Utility::ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, Utility::ConvertFormatToGLEnum(m_Format), GL_FLOAT, m_TempBuffer));
+			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, Utility::ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, Utility::ConvertFormatToGLEnum(m_Format), GL_UNSIGNED_BYTE, m_TempBuffer));
 			LAG_GRAPHICS_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 		}
 		else 
@@ -81,13 +91,10 @@ namespace LAG
 			return false;
 		}
 
-		//Apply some texture paramters before finishing loading
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));				//Use nearest texture filtering when texture is minified. 
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));				//Use linear texture filtering when texture is magnified.
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
 		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT));
-		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT));
+		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 		
 		//Swizzle the texture if only the red channel is used. This prevents textures from looking red and instead grayscales them
 		if (m_Format == TextureFormat::FORMAT_R)
