@@ -122,8 +122,8 @@ namespace LAG
 		VertexBuffer vertexBuffer;
 		vertexBuffer.SetVertexData(&m_VertexData.data()[0], m_VertexData.size() * sizeof(VertexData));
 		vertexBuffer.SetLayout(std::vector<BufferLayoutElement>{
-			BufferLayoutElement("a_Position", BufferVariableType::Float3, false),
-			BufferLayoutElement("a_Normal", BufferVariableType::Float3, false)
+			BufferLayoutElement(BufferVariableType::Float3, false),	//Position
+			BufferLayoutElement(BufferVariableType::Float3, false)	//Normal
 		});
 
 		IndexBuffer indexBuffer;

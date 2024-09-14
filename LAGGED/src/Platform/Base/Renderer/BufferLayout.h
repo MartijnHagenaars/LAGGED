@@ -7,13 +7,11 @@ namespace LAG
 	enum class BufferVariableType;
 	struct BufferLayoutElement
 	{
-		//TODO: Remove name; it is useless!
 		BufferLayoutElement() = delete;
-		BufferLayoutElement(const std::string& name, BufferVariableType type, bool isNormalized) :
-			/*name(name), */type(type), isNormalized(isNormalized)
+		BufferLayoutElement(BufferVariableType type, bool isNormalized) :
+			type(type), isNormalized(isNormalized)
 		{}
 
-		//std::string name;
 		BufferVariableType type;
 		bool isNormalized;
 		uint32_t offset;

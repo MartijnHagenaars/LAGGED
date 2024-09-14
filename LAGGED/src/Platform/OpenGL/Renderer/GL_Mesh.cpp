@@ -64,9 +64,9 @@ namespace LAG
 			VertexBuffer vertexBuffer;
 			vertexBuffer.SetLayout(
 				std::vector<BufferLayoutElement>{
-				BufferLayoutElement("a_Position", BufferVariableType::Float3, false),
-					BufferLayoutElement("a_Normal", BufferVariableType::Float3, false),
-					BufferLayoutElement("a_TextureCoords", BufferVariableType::Float2, false)
+					BufferLayoutElement(BufferVariableType::Float3, false),	//Position
+					BufferLayoutElement(BufferVariableType::Float3, false),	//Normal
+					BufferLayoutElement(BufferVariableType::Float2, false)	//Texture coordinates
 			});
 			vertexBuffer.SetVertexData(vertexData.data(), vertexData.size() * sizeof(VertexData));
 
