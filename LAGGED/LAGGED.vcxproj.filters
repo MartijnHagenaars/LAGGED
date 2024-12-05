@@ -53,12 +53,16 @@
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
-    <ClCompile Include="src\FileIO\FileWatch.cpp" />
-    <ClCompile Include="src\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileWatch.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Cubemap.cpp" />
+    <ClCompile Include="src\Utility\stb_image.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Utility.cpp" />
+    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Skybox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -129,12 +133,16 @@
     <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
     <ClInclude Include="src\Platform\Base\Renderer\BufferLayout.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
-    <ClInclude Include="src\FileIO\FileWatch.h" />
-    <ClInclude Include="src\FileIO\FileIO.h" />
+    <ClInclude Include="src\Core\FileIO\FileWatch.h" />
+    <ClInclude Include="src\Core\FileIO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Cubemap.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Utility.h" />
+    <ClInclude Include="src\Platform\Base\RendererTypes.h" />
+    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
@@ -145,5 +153,7 @@
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.pixel.glsl" />
   </ItemGroup>
 </Project>
