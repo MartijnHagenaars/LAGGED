@@ -40,17 +40,8 @@ namespace LAG
 		template<typename... Components>
 		bool Loop(std::function<void(Entity entity, Components&...)> func)
 		{
-			auto view = m_Registry.view<Components...>();
-			if (view.back() == entt::null)
-				return false;
-
-			for (auto& current : m_Registry.view<Components...>())
-			{
-				Entity ent(current, m_Registry);
-				func(ent, m_Registry.get<Components>(current)...);
-			}
-
-			return true;
+			//TODO: Implement function...
+			return false;
 		}
 
 		/// <summary>
@@ -63,10 +54,6 @@ namespace LAG
 
 
 	private:
-		bool ReflectComponent(entt::meta_type& compMeta, entt::meta_any& compInstance, Entity* entity, Reflection::WidgetModes mode);
-		void ReflectMember(const entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode);
-		void RenderMemberWidget(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode);
-
 		entt::registry m_Registry;
 	};
 }
