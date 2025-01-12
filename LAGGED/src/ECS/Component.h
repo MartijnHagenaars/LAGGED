@@ -1,10 +1,7 @@
 #pragma once
 #include <string>
 
-namespace entt
-{
-	class meta_type;
-}
+// NOTE: CONSIDER REMOVING CLASS.
 
 namespace LAG
 {           
@@ -12,8 +9,7 @@ namespace LAG
 	class Component
 	{
 	public:
-		Component() = delete;
-		Component(const entt::meta_type& metaType);
+		Component() = default;
 
 		void AddToEntity(const Entity& entity);
 		bool ExistsOnEntity(const Entity& entity);
@@ -21,7 +17,6 @@ namespace LAG
 		std::string GetDisplayName() const { return m_DisplayName; }
 
 	private:
-		const entt::meta_type& m_MetaType;
 		std::string m_DisplayName;
 	};
 }
