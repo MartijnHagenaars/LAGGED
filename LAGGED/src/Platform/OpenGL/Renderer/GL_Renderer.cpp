@@ -131,7 +131,10 @@ namespace LAG
 		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
-		CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>()->framebuffer->FrameStart(m_ShowWireframe);
+		CameraComponent* camComp = CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>();
+		if(!camComp)
+			LAG_ASSERT("Entity CameraComponent is nullptr.")
+		camComp->framebuffer->FrameStart(m_ShowWireframe);
 
 
 		//Get an active camera

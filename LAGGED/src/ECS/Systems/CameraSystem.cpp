@@ -20,6 +20,8 @@ namespace LAG::CameraSystem
 	void Update(Entity* entity)
 	{
 		CameraComponent* camera = entity->GetComponent<CameraComponent>();
+		if (!camera)
+			LAG_ASSERT("Entity CameraComponent is nullptr.");
 
 		//Only update active cameras
 		if (!camera->isActive)
