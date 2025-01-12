@@ -16,16 +16,16 @@ namespace LAG
 		Scene();
 		~Scene();
 
-		Entity AddEntity();
-		Entity AddEntity(const std::string& entityName);
+		Entity* AddEntity();
+		Entity* AddEntity(const std::string& entityName);
 
-		Entity DuplicateEntity(EntityID entityID);
+		Entity* DuplicateEntity(EntityID entityID);
 
 		void RemoveEntity(EntityID entityID);
 
 		bool DoesEntityExist(EntityID entityID);
 
-		Entity GetEntity(EntityID entityID);
+		Entity* GetEntity(EntityID entityID);
 		size_t Count() const;
 
 		void RemoveAll();

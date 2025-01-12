@@ -9,10 +9,6 @@ namespace LAG
 	typedef TypeID ComponentID;
 	typedef std::vector<ComponentID> ArchetypeID;
 
-	struct EntityID
-	{
-		TypeID id;
-	};
-
-	const EntityID ENTITY_NULL = { 0 };
+	typedef TypeID EntityID;
+	const EntityID ENTITY_NULL = 0;
 }

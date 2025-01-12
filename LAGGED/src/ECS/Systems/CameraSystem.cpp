@@ -81,22 +81,24 @@ namespace LAG::CameraSystem
 
 	CameraComponent* GetActiveCameraComponent()
 	{
-		return GetActiveCameraEntity().GetComponent<CameraComponent>();
+		return GetActiveCameraEntity()->GetComponent<CameraComponent>();
 	}
 
-	Entity GetActiveCameraEntity()
+	Entity* GetActiveCameraEntity()
 	{
-		Entity entity = {};
-		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
-			{
-				if (cameraComp.isActive && cameraEntity.IsValid())
-					entity = cameraEntity;
-				else cameraComp.isActive = false;
-			});
+		//EntityID camEntityID = {};
+		//GetScene()->Loop<CameraComponent>([&camEntityID](Entity cameraEntity, CameraComponent& cameraComp)
+		//	{
+		//		if (cameraComp.isActive && cameraEntity.IsValid())
+		//			camEntityID = cameraEntity.GetEntityID();
+		//		else cameraComp.isActive = false;
+		//	});
 
-		if (!entity.IsValid())
-			WARNING("Failed to find active camera in GetActiveCameraEntity()");
-		return entity;
+		////TODO: Look into other ways of doing this. This is not very good.
+		//Entity entity = GetScene()->GetEntity(camEntityID);
+		//if (!entity.IsValid())
+		//	WARNING("Failed to find active camera in GetActiveCameraEntity()");
+		return nullptr;
 	}
 
 	void ResizeCameraBuffers()

@@ -131,15 +131,15 @@ namespace LAG
 		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
-		CameraComponent* camComp = CameraSystem::GetActiveCameraEntity().GetComponent<CameraComponent>();
+		CameraComponent* camComp = CameraSystem::GetActiveCameraEntity()->GetComponent<CameraComponent>();
 		if(!camComp)
 			LAG_ASSERT("Entity CameraComponent is nullptr.")
 		camComp->framebuffer->FrameStart(m_ShowWireframe);
 
 
 		//Get an active camera
-		Entity selectedCamera = CameraSystem::GetActiveCameraEntity();
-		CameraSystem::Update(&selectedCamera);
+		Entity* selectedCamera = CameraSystem::GetActiveCameraEntity();
+		CameraSystem::Update(selectedCamera);
 
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
@@ -161,7 +161,7 @@ namespace LAG
 				if (entity.GetComponent<DefaultComponent>()->visible && meshComp.modelHandle.m_ModelLookup.GetValue() != 0)
 				{
 					GetResourceManager()->GetResource<Model>(meshComp.modelHandle.m_ModelLookup)->Render(
-						transformComp, &selectedCamera,
+						transformComp, selectedCamera,
 						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
 						lights);
 				}
@@ -171,12 +171,12 @@ namespace LAG
 		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
 				if (entity.GetComponent<DefaultComponent>()->visible)
-					surfaceComp.surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+					surfaceComp.surface.Render(transformComp, selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
 			{
 				if (entity.GetComponent<DefaultComponent>()->visible)
-					surfaceComp.surface.Render(transformComp, &selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+					surfaceComp.surface.Render(transformComp, selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			});
 
 		//Render all lines in the line render list

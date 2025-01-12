@@ -46,7 +46,7 @@ namespace LAG
 		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
 		scene->Loop<DefaultComponent>([&scene, &entity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
 			{
-				ImGui::PushID(entity.GetEntityID().id);
+				ImGui::PushID(entity.GetEntityID());
 				if (ImGui::Button(comp.visible ? "Hide" : "Show"))
 					comp.visible = !comp.visible;
 
@@ -108,7 +108,7 @@ namespace LAG
 				ImGui::EndPopup();
 			}
 
-			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity->GetEntityID().id);
+			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity->GetEntityID());
 			ImGui::Text(selectedEntityDisplay.c_str());
 
 			ImGui::Text("Add new component by picking one from the list below.");

@@ -96,17 +96,17 @@ namespace LAG
 			if (m_Tools[i]->IsOpen())
 				m_Tools[i]->Render();
 
-		//TODO: This has to be fully reworked. This is not good. 
-		Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
-		Entity targetEntity = Entity(); //TODO: Implement properly...
-		if (cameraEntity.IsValid() && targetEntity.IsValid())
-		{
-			m_TempGizmoPtr->BeginWindow();
-			m_TempGizmoPtr->SetCameraEntity(&cameraEntity);
-			m_TempGizmoPtr->RenderGizmo(&targetEntity);
-			m_TempGizmoPtr->RenderViewManipulator();
-			m_TempGizmoPtr->EndWindow();
-		}
+		////TODO: This has to be fully reworked. This is not good. 
+		//Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
+		//Entity targetEntity = Entity(); //TODO: Implement properly...
+		//if (cameraEntity.IsValid() && targetEntity.IsValid())
+		//{
+		//	m_TempGizmoPtr->BeginWindow();
+		//	m_TempGizmoPtr->SetCameraEntity(&cameraEntity);
+		//	m_TempGizmoPtr->RenderGizmo(&targetEntity);
+		//	m_TempGizmoPtr->RenderViewManipulator();
+		//	m_TempGizmoPtr->EndWindow();
+		//}
 
 		EndDockSpace();
 

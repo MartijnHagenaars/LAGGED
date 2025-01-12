@@ -14,22 +14,22 @@ namespace LAG
 	{
 	}
 
-	Entity Scene::AddEntity()
+	Entity* Scene::AddEntity()
 	{
 		//TODO: Implement function...
-		return Entity();
+		return nullptr;
 	}
 
-	Entity Scene::AddEntity(const std::string& entityName)
+	Entity* Scene::AddEntity(const std::string& entityName)
 	{
 		//TODO: Implement function...
-		return Entity();
+		return nullptr;
 	}
 
-	Entity Scene::DuplicateEntity(EntityID entityID)
+	Entity* Scene::DuplicateEntity(EntityID entityID)
 	{
 		//TODO: Implement function...
-		return Entity();
+		return nullptr;
 	}
 
 	void Scene::RemoveEntity(EntityID entityID)
@@ -43,10 +43,10 @@ namespace LAG
 		return false;
 	}
 
-	Entity Scene::GetEntity(EntityID entityID)
+	Entity* Scene::GetEntity(EntityID entityID)
 	{
 		//TODO: Implement function...
-		return Entity();
+		return nullptr;
 	}
 
 	size_t Scene::Count() const

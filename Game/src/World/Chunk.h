@@ -19,6 +19,6 @@ public:
 	void Unload();
 
 private:
-	LAG::Entity m_Entity;
+	LAG::Entity* m_Entity;
 };
 

@@ -9,6 +9,7 @@ namespace LAG
 	{
 	public:
 		Entity() = default;
+		Entity(const Entity& entity) = default;
 
 		bool IsValid();
 
@@ -47,6 +48,6 @@ namespace LAG
 		Entity(EntityID entityID, Scene& sceneRef);
 
 		EntityID m_ID;
-		Scene& m_SceneRef;
+		Scene* m_SceneRef;
 	};
 }

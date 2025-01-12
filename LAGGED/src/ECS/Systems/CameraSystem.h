@@ -9,7 +9,7 @@ namespace LAG::CameraSystem
 
 	void SetActiveCameraEntity(Entity* entity);
 
-	Entity GetActiveCameraEntity();
+	Entity* GetActiveCameraEntity();
 	CameraComponent* GetActiveCameraComponent();
 
 	void ResizeCameraBuffers();

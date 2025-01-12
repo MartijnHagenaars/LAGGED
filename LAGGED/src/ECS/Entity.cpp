@@ -4,7 +4,7 @@
 namespace LAG
 {
 	Entity::Entity(EntityID entityID, Scene& sceneRef) :
-		m_ID(entityID), m_SceneRef(sceneRef)
+		m_ID(entityID), m_SceneRef(&sceneRef)
 	{
 	}
 
@@ -17,6 +17,6 @@ namespace LAG
 	EntityID Entity::GetEntityID() const
 	{
 		//TODO: Implement function...
-		return EntityID({ 0 });
+		return 0;
 	}
 }
