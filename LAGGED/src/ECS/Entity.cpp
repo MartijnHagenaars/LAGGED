@@ -5,7 +5,6 @@ namespace LAG
 	Entity::Entity(entt::entity entityID, entt::registry& registryPtr) :
 		m_EntityID(entityID), m_RegistryPtr(&registryPtr)
 	{
-
 	}
 
 	Entity::Entity(const Entity& entity) : 
@@ -15,11 +14,13 @@ namespace LAG
 
 	bool Entity::IsValid()
 	{
-		return m_EntityID != entt::tombstone;
+		//TODO: Implement function...
+		return false;
 	}
 
 	uint32_t Entity::GetEntityID() const
 	{
-		return static_cast<uint32_t>(m_EntityID);
+		//TODO: Implement function...
+		return 0;
 	}
 }
