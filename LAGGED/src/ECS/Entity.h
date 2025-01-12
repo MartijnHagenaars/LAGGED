@@ -1,5 +1,4 @@
 #pragma once
-#include "entt/entt.hpp"
 #include "Utility/Logger.h"
 
 namespace LAG
@@ -45,8 +44,5 @@ namespace LAG
 	private:
 		friend class Scene;
 		Entity(entt::entity entityID, entt::registry& registryPtr);
-
-		entt::entity m_EntityID = entt::tombstone;
-		entt::registry* m_RegistryPtr = nullptr;
 	};
 }
