@@ -3,7 +3,6 @@
 #include "Components/BasicComponents.h"
 
 #include "ImGui/imgui.h"
-#include "Meta/ReflectionComponentSetup.h"
 
 namespace LAG
 {
@@ -27,24 +26,24 @@ namespace LAG
 		return Entity();
 	}
 
-	Entity Scene::DuplicateEntity(uint32_t entityID)
+	Entity Scene::DuplicateEntity(EntityID entityID)
 	{
 		//TODO: Implement function...
 		return Entity();
 	}
 
-	void Scene::RemoveEntity(uint32_t entityID)
+	void Scene::RemoveEntity(EntityID entityID)
 	{
 		//TODO: Implement function...
 	}
 
-	bool Scene::DoesEntityExist(uint32_t entityID)
+	bool Scene::DoesEntityExist(EntityID entityID)
 	{
 		//TODO: Implement function...
 		return false;
 	}
 
-	Entity Scene::GetEntity(uint32_t entityID)
+	Entity Scene::GetEntity(EntityID entityID)
 	{
 		//TODO: Implement function...
 		return Entity();
@@ -57,21 +56,6 @@ namespace LAG
 	}
 
 	void Scene::RemoveAll()
-	{
-		//TODO: Implement function...
-	}
-
-
-	///////////////////////////////////////////////////////////////
-	// Functionality for Entt Meta widgets, used in Editor Tools //
-	///////////////////////////////////////////////////////////////
-
-	void Scene::HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode)
-	{
-
-	}
-
-	void Scene::ComponentLoop(std::function<void(Component& comp)> func)
 	{
 		//TODO: Implement function...
 	}

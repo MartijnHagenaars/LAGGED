@@ -1,7 +1,7 @@
 #pragma once
+#include <functional>
 
 #include "Entity.h"
-#include "Component.h"
 
 namespace LAG
 {
@@ -19,13 +19,13 @@ namespace LAG
 		Entity AddEntity();
 		Entity AddEntity(const std::string& entityName);
 
-		Entity DuplicateEntity(uint32_t entityID);
+		Entity DuplicateEntity(EntityID entityID);
 
-		void RemoveEntity(uint32_t entityID);
+		void RemoveEntity(EntityID entityID);
 
-		bool DoesEntityExist(uint32_t entityID); 
+		bool DoesEntityExist(EntityID entityID);
 
-		Entity GetEntity(uint32_t entityID);
+		Entity GetEntity(EntityID entityID);
 		size_t Count() const;
 
 		void RemoveAll();
@@ -43,16 +43,6 @@ namespace LAG
 			return false;
 		}
 
-		/// <summary>
-		/// Loops over all components. When looping, the function pointer is called for every registered component type.
-		/// </summary>
-		/// <param name="func">The function that is called when looping over a registered component. When calling the function pointer, an object of type ComponentData is passed in. This object contains info about the component like name and ID.</param>
-		void ComponentLoop(std::function<void(Component& comp)> func);
-
-		void HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode);
-
-
 	private:
-		entt::registry m_Registry;
 	};
 }

@@ -133,11 +133,11 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\FileIO\FileWatch.h" />
-    <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
     <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
     <ClInclude Include="src\Platform\Base\Renderer\BufferLayout.h" />
@@ -223,7 +223,6 @@
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
-    <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />

@@ -98,11 +98,12 @@ namespace LAG
 
 		//TODO: This has to be fully reworked. This is not good. 
 		Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
-		if (cameraEntity.IsValid() && m_TempEntViewerPtr->GetSelectedEntityID()->IsValid())
+		Entity targetEntity = Entity(); //TODO: Implement properly...
+		if (cameraEntity.IsValid() && targetEntity.IsValid())
 		{
 			m_TempGizmoPtr->BeginWindow();
 			m_TempGizmoPtr->SetCameraEntity(&cameraEntity);
-			m_TempGizmoPtr->RenderGizmo(m_TempEntViewerPtr->GetSelectedEntityID());
+			m_TempGizmoPtr->RenderGizmo(&targetEntity);
 			m_TempGizmoPtr->RenderViewManipulator();
 			m_TempGizmoPtr->EndWindow();
 		}

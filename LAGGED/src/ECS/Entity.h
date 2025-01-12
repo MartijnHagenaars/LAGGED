@@ -1,13 +1,14 @@
 #pragma once
 #include "Utility/Logger.h"
+#include "ECS/TypeDefines.h"
 
 namespace LAG
 {
+	class Scene;
 	class Entity
 	{
 	public:
 		Entity() = default;
-		Entity(const Entity& entity);
 
 		bool IsValid();
 
@@ -39,10 +40,13 @@ namespace LAG
 			return nullptr;
 		}
 
-		uint32_t GetEntityID() const;
+		EntityID GetEntityID() const;
 
 	private:
 		friend class Scene;
-		Entity(entt::entity entityID, entt::registry& registryPtr);
+		Entity(EntityID entityID, Scene& sceneRef);
+
+		EntityID m_ID;
+		Scene& m_SceneRef;
 	};
 }

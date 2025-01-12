@@ -55,7 +55,6 @@
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
-    <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
   </ItemGroup>
@@ -130,8 +129,8 @@
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
-    <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
+    <ClInclude Include="src\ECS\TypeDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
