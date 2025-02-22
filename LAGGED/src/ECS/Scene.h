@@ -23,6 +23,9 @@ namespace LAG
 		void RemoveEntity(EntityID entityID);
 		Entity* DuplicateEntity(EntityID entityID);
 
+		template<typename Comp, typename ...Args>
+		Comp* AddComponent(const EntityID entityID, Args&&... args);
+
 		bool DoesEntityExist(EntityID entityID);
 
 		size_t Count() const;
@@ -43,6 +46,11 @@ namespace LAG
 		}
 
 	private:
+		template<typename Comp>
+		static const ComponentID GetComponentID();
+
+
+
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
 
@@ -57,4 +65,18 @@ namespace LAG
 		std::unordered_map<uint64_t, Record> m_EntityArchetypes;
 
 	};
+
+	template<typename Comp, typename ...Args>
+	inline Comp* Scene::AddComponent(const EntityID entityID, Args && ...args)
+	{
+		ComponentID newCompID = GetComponentID<Comp>();
+
+		return nullptr;
+	}
+	template<typename Comp>
+	inline const ComponentID Scene::GetComponentID()
+	{
+		static const ComponentID compID = s_ComponentCounter++;
+		return compID;
+	}
 }
