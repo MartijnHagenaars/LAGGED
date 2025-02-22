@@ -131,6 +131,7 @@
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
+    <ClInclude Include="src\ECS\Archetype.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />

@@ -2,6 +2,7 @@
 #include <functional>
 
 #include "Entity.h"
+#include "Archetype.h"
 
 namespace LAG
 {
@@ -46,6 +47,16 @@ namespace LAG
 	private:
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
+
+
+		struct Record
+		{
+			size_t index;
+			Archetype* archetype;
+		};
+
+		// Track which entity uses which archetype.
+		std::unordered_map<uint64_t, Record> m_EntityArchetypes;
 
 	};
 }

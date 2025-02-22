@@ -133,6 +133,7 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
