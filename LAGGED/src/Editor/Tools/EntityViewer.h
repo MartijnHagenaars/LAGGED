@@ -4,7 +4,6 @@
 
 namespace LAG
 {
-	class Entity;
 	class EntityViewer : public ToolBase
 	{
 	public: 
@@ -13,7 +12,7 @@ namespace LAG
 
 		void Render() override; 
 
-		Entity* GetSelectedEntity() const { return m_SelectedEntity; }
+		//Entity GetSelectedEntity() const { return m_SelectedEntity; }
 
 	private:
 		void RenderProperties();

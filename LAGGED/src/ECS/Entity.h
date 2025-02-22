@@ -1,6 +1,5 @@
 #pragma once
-#include "Utility/Logger.h"
-#include "ECS/TypeDefines.h"
+#include "ECS/Scene.h"
 
 namespace LAG
 {
@@ -20,12 +19,10 @@ namespace LAG
 			return false;
 		}
 
-		//Adds the specified component to the entity. 
-		template<typename T, typename ... Args>
-		T* AddComponent(Args&&... arguments)
+		template<typename Comp, typename ...Args>
+		Comp* AddComponent(Args && ...args)
 		{
-			//TODO: Implement function...
-			return nullptr;
+			return m_SceneRef->AddComponent<Comp>(m_ID, args...);
 		}
 
 		template<typename T>

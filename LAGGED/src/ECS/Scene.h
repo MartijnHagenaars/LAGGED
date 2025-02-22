@@ -1,8 +1,8 @@
 #pragma once
 #include <functional>
 
-#include "Entity.h"
 #include "Archetype.h"
+#include "Utility/Logger.h"
 
 namespace LAG
 {
@@ -11,6 +11,7 @@ namespace LAG
 		enum class WidgetModes;
 	}
 
+	class Entity;
 	class Scene
 	{
 	public: 
@@ -49,9 +50,6 @@ namespace LAG
 		template<typename Comp>
 		static const ComponentID GetComponentID();
 
-		template<typename Comp>
-		Comp* RegisterComponent();
-
 	private:
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
@@ -70,6 +68,9 @@ namespace LAG
 			std::function<void(unsigned char* src, unsigned char* dest)> moveData;
 		};
 		std::unordered_map<ComponentID, ComponentData*> m_ComponentMap;
+
+		template<typename Comp>
+		ComponentData* RegisterComponent();
 	};
 }
 

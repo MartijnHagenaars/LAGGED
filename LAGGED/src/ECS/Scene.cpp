@@ -1,8 +1,7 @@
 #include "Scene.h"
+#include "ECS/Entity.h"
 
 #include "Components/BasicComponents.h"
-
-#include "ImGui/imgui.h"
 
 namespace LAG
 {

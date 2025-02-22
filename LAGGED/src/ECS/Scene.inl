@@ -1,10 +1,11 @@
+#include "Scene.h"
 
 namespace LAG
 {
 	template<typename Comp, typename ...Args>
 	inline Comp* Scene::AddComponent(const EntityID entityID, Args && ...args)
 	{
-		const ComponentData* compData = nullptr;
+		ComponentData* compData = nullptr;
 		const ComponentID compID = GetComponentID<Comp>();
 
 		const auto& compDataIt = m_ComponentMap.find(compID);
@@ -26,7 +27,7 @@ namespace LAG
 	}
 
 	template<typename Comp>
-	inline Comp* LAG::Scene::RegisterComponent()
+	inline Scene::ComponentData* Scene::RegisterComponent()
 	{
 		ComponentID compID = GetComponentID<Comp>();
 
@@ -35,10 +36,10 @@ namespace LAG
 		if (compPtr != m_ComponentMap.end())
 			return compPtr->second;
 
-		//Create and insert new data into the m_ComponentMap map
+		// Create and insert new data into the m_ComponentMap map
 		ComponentData* newCompData = new ComponentData;
 		newCompData->size = sizeof(Comp);
-		newCompData->moveData = [](unsigned char* src, unsigned char* dest) 
+		newCompData->moveData = [](unsigned char* src, unsigned char* dest)
 			{ new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
 
 		m_ComponentMap.insert({ compID, newCompData });
