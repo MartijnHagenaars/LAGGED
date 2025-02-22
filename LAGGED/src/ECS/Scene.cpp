@@ -21,7 +21,7 @@ namespace LAG
 		if (entArchetype != m_EntityArchetypes.end())
 			ERROR("Entity with ID {} already exists in EnityArchetypes map.", newEntityID);
 
-		Record rec = {};
+		ArchetypeRecord rec = {};
 		rec.index = 0;
 		rec.archetype = nullptr;
 		m_EntityArchetypes.insert({ newEntityID, rec });

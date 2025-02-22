@@ -57,13 +57,13 @@ namespace LAG
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
 
-		struct Record
+		struct ArchetypeRecord
 		{
 			uint64_t index;
 			Archetype* archetype;
 		};
 		// Track which entity uses which archetype.
-		std::unordered_map<EntityID, Record> m_EntityArchetypes;
+		std::unordered_map<EntityID, ArchetypeRecord> m_EntityArchetypes;
 
 		struct ComponentData
 		{
