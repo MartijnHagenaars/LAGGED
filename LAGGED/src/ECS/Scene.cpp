@@ -64,4 +64,34 @@ namespace LAG
 	{
 		//TODO: Implement function...
 	}
+
+
+	// ======== ARCHETYPES ========
+
+	Archetype* Scene::CreateArchetype(const ArchetypeID& archetypeID)
+	{
+		Archetype* archetype = new Archetype();
+		archetype->typeID = archetypeID;
+
+		m_Archetypes.emplace_back(archetype);
+
+		for (int i = 0; i < archetypeID.size(); i++)
+		{
+			archetype->compData.push_back(nullptr);
+			archetype->compDataSize.push_back(0);
+		}
+
+		return archetype;
+	}
+
+	Archetype* Scene::GetArchetype(const ArchetypeID& archetypeID)
+	{
+		for (auto* archetype : m_Archetypes)
+		{
+			if (archetype->typeID == archetypeID)
+				return archetype;
+		}
+
+		return nullptr;
+	}
 }

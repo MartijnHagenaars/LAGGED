@@ -44,19 +44,22 @@ void Game::Initialize()
 	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/BoomBox/BoomBox.gltf"));
 	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::HashedString("res/Assets/Models/ChessGame/ABeautifulGame.gltf"));
 
-	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
-	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, 0.f));
-	ent1.AddComponent<LAG::TransformComponent>()->SetScale (glm::vec3(1.f));
-	//ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/ChessGame/ABeautifulGame.gltf");
-	ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
-	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
-
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");
-	ent2.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));
-	auto ent2Light = ent2.AddComponent<LAG::LightComponent>();
-	ent2Light->lightAttenuation = 5.f;
-	ent2Light->lightIntensity = 2.f;
+
+	//Load an entity with a model and a transform
+	//LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
+	//ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, 0.f));
+	//ent1.AddComponent<LAG::TransformComponent>()->SetScale (glm::vec3(1.f));
+	////ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/ChessGame/ABeautifulGame.gltf");
+	//ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
+	//ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
+
+	//LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");
+	//ent2.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));
+	//auto ent2Light = ent2.AddComponent<LAG::LightComponent>();
+	//ent2Light->lightAttenuation = 5.f;
+	//ent2Light->lightIntensity = 2.f;
 
 	//LAG::Entity ent3 = LAG::GetEngine().GetScene()->AddEntity("Light2");
 	//ent3.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(-5.f, -2.f, -7.f));
