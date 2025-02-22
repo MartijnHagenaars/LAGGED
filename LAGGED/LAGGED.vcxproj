@@ -339,6 +339,7 @@
     <None Include="res\Shaders\OpenGL\ObjectShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
+    <None Include="src\ECS\Scene.inl" />
   </ItemGroup>
   <ItemGroup>
     <Natvis Include="src\Utility\Natvis\glm.natvis" />
