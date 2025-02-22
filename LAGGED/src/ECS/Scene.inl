@@ -1,3 +1,4 @@
+#include "Scene.h"
 #pragma once
 #define ARCHETYPE_ALLOC_GROWTH 2
 
@@ -80,6 +81,54 @@ namespace LAG
 		record.index = newArchetype->entityIDs.size() - 1;
 		return newComponent;
 	}
+
+
+	inline int GetSystemCompIndex(ComponentID compID, const std::vector<EntityID>& entityIDs)
+	{
+		for (int i = 0; i < entityIDs.size(); i++)
+		{
+			if (compID == entityIDs[i])
+				return i;
+		}
+
+		CRITICAL("Failed to get System Component Index: No ComponentID matches {}.", compID);
+		return -1;
+	}
+
+	template<typename ...Comps>
+	inline void Scene::RunSystem(std::function<void(EntityID, Comps*...)> func)
+	{
+		if (func == nullptr)
+		{
+			CRITICAL("Function pointer in RunSystem is invalid.");
+			return;
+		}
+
+		//Create key
+		ArchetypeID archetypeID = { { GetComponentID<Comps>()... } };
+		std::sort(archetypeID.begin(), archetypeID.end());
+
+		for (Archetype* archetype : m_Archetypes)
+		{
+			if (std::includes(archetype->typeID.begin(), archetype->typeID.end(), archetypeID.begin(), archetypeID.end()))
+			{
+				for (const auto& entity : archetype->entityIDs)
+				{
+					const auto& archRecord = m_EntityArchetypes.find(entity);
+					if (archRecord == m_EntityArchetypes.end())
+					{
+						CRITICAL("Invalid archetype record.");
+						return;
+					}
+
+					func(entity, (reinterpret_cast<Comps*>(&archetype->compData[GetSystemCompIndex(GetComponentID<Comps>(), archetype->typeID)][archRecord->second.index * sizeof(Comps)]))...);
+				}
+			}
+		}
+	}
+
+
+
 
 	template<typename Comp>
 	inline const ComponentID Scene::GetComponentID()

@@ -46,6 +46,12 @@ void Game::Initialize()
 
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");
+	LAG::GetEngine().GetScene()->RunSystem<LAG::DefaultComponent>(
+		[](LAG::EntityID id, LAG::DefaultComponent* comp) 
+		{
+			INFO("RunSystem has been called! EntityID: {}, name: {}, visible: {}", id, comp->name, comp->visible);
+		}
+	);
 
 	//Load an entity with a model and a transform
 	//LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");

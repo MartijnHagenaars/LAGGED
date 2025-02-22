@@ -1,5 +1,6 @@
 #pragma once
 #include <functional>
+#include <algorithm>
 
 #include "Archetype.h"
 #include "Utility/Logger.h"
@@ -32,6 +33,10 @@ namespace LAG
 		size_t Count() const;
 
 		void RemoveAll();
+
+		template<typename ...Comps>
+		void RunSystem(std::function<void(EntityID, Comps*...)> func);
+
 
 		/// <summary>
 		/// This function is used to loop over all entities in the scene.
