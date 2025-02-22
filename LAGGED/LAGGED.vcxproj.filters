@@ -143,5 +143,6 @@
     <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
     <None Include="src\ECS\Scene.inl" />
+    <None Include="src\ECS\Entity.inl" />
   </ItemGroup>
 </Project>

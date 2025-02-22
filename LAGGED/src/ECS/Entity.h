@@ -10,33 +10,19 @@ namespace LAG
 		Entity() = default;
 		Entity(const Entity& entity) = default;
 
-		bool IsValid();
-
-		template<typename T>
-		bool HasComponent()
-		{
-			//TODO: Implement function...
-			return false;
-		}
-
 		template<typename Comp, typename ...Args>
-		Comp* AddComponent(Args && ...args)
-		{
-			return m_SceneRef->AddComponent<Comp>(m_ID, args...);
-		}
+		Comp* AddComponent(Args && ...args);
 
-		template<typename T>
-		void RemoveComponent()
-		{
-			//TODO: Implement function...
-		}
+		template<typename Comp>
+		void RemoveComponent();
 
-		template<typename T>
-		T* GetComponent()
-		{
-			//TODO: Implement function...
-			return nullptr;
-		}
+		template<typename Comp>
+		bool HasComponent();
+
+		template<typename Comp>
+		Comp* GetComponent();
+
+		bool IsValid();
 
 		EntityID GetEntityID() const;
 
@@ -48,3 +34,6 @@ namespace LAG
 		Scene* m_SceneRef = nullptr;
 	};
 }
+
+// Implement the Entity template functions
+#include "Entity.inl"

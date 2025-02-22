@@ -1,4 +1,4 @@
-#include "Scene.h"
+#pragma once
 
 namespace LAG
 {

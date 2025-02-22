@@ -74,5 +74,5 @@ namespace LAG
 	};
 }
 
-// Implement the template functions
+// Implement the Scene template functions
 #include "Scene.inl"
