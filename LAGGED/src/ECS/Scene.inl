@@ -41,6 +41,9 @@ namespace LAG
 		newCompData->size = sizeof(Comp);
 		newCompData->moveData = [](unsigned char* src, unsigned char* dest)
 			{ new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
+#ifdef DEBUG
+		newCompData->debugName = typeid(Comp).name();
+#endif
 
 		m_ComponentMap.insert({ compID, newCompData });
 		return newCompData;

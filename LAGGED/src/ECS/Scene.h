@@ -50,6 +50,9 @@ namespace LAG
 		template<typename Comp>
 		static const ComponentID GetComponentID();
 
+		struct ComponentData;
+		template<typename Comp>
+		ComponentData* RegisterComponent();
 	private:
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
@@ -66,11 +69,12 @@ namespace LAG
 		{
 			uint64_t size;
 			std::function<void(unsigned char* src, unsigned char* dest)> moveData;
+#ifdef DEBUG
+			std::string debugName;
+#endif
 		};
 		std::unordered_map<ComponentID, ComponentData*> m_ComponentMap;
 
-		template<typename Comp>
-		ComponentData* RegisterComponent();
 	};
 }
 
