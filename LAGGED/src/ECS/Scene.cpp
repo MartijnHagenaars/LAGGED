@@ -19,7 +19,7 @@ namespace LAG
 		EntityID newEntityID = ++s_EntityCounter;
 
 		auto entArchetype = m_EntityArchetypes.find(newEntityID);
-		if (entArchetype == m_EntityArchetypes.end())
+		if (entArchetype != m_EntityArchetypes.end())
 			ERROR("Entity with ID {} already exists in EnityArchetypes map.", newEntityID);
 
 		Record rec = {};
