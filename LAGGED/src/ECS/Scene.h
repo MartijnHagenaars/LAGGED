@@ -49,21 +49,27 @@ namespace LAG
 		template<typename Comp>
 		static const ComponentID GetComponentID();
 
+		template<typename Comp>
+		Comp* RegisterComponent();
 
-
+	private:
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
 
-
 		struct Record
 		{
-			size_t index;
+			uint64_t index;
 			Archetype* archetype;
 		};
-
 		// Track which entity uses which archetype.
-		std::unordered_map<uint64_t, Record> m_EntityArchetypes;
+		std::unordered_map<EntityID, Record> m_EntityArchetypes;
 
+		struct ComponentData
+		{
+			uint64_t size;
+			std::function<void(unsigned char* src, unsigned char* dest)> moveData;
+		};
+		std::unordered_map<ComponentID, ComponentData*> m_ComponentMap;
 	};
 }
 
