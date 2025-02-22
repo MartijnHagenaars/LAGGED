@@ -20,13 +20,11 @@ namespace LAG
 		Entity AddEntity();
 		Entity AddEntity(const std::string& entityName);
 
-		Entity* DuplicateEntity(EntityID entityID);
-
 		void RemoveEntity(EntityID entityID);
+		Entity* DuplicateEntity(EntityID entityID);
 
 		bool DoesEntityExist(EntityID entityID);
 
-		Entity* GetEntity(EntityID entityID);
 		size_t Count() const;
 
 		void RemoveAll();
