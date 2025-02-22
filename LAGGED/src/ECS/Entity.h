@@ -45,9 +45,9 @@ namespace LAG
 
 	private:
 		friend class Scene;
-		Entity(EntityID entityID, Scene& sceneRef);
+		Entity(Scene& sceneRef, EntityID entityID);
 
-		EntityID m_ID;
-		Scene* m_SceneRef;
+		EntityID m_ID = ENTITY_NULL;
+		Scene* m_SceneRef = nullptr;
 	};
 }

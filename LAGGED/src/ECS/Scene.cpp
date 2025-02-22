@@ -14,16 +14,19 @@ namespace LAG
 	{
 	}
 
-	Entity* Scene::AddEntity()
+	Entity Scene::AddEntity()
 	{
-		//TODO: Implement function...
-		return nullptr;
+		EntityID newEntityID = ++s_EntityCounter;
+
+		return Entity(*this, newEntityID);
 	}
 
-	Entity* Scene::AddEntity(const std::string& entityName)
+	Entity Scene::AddEntity(const std::string& entityName)
 	{
-		//TODO: Implement function...
-		return nullptr;
+		Entity newEntity = AddEntity();
+		newEntity.AddComponent<DefaultComponent>(entityName);
+		
+		return newEntity;
 	}
 
 	Entity* Scene::DuplicateEntity(EntityID entityID)

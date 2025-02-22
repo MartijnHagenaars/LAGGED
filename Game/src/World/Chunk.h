@@ -4,11 +4,6 @@
 
 static const int CHUNK_SIZE = 64;
 
-namespace LAG
-{
-	class Entity;
-}
-
 class Chunk
 {
 public: 
@@ -19,6 +14,6 @@ public:
 	void Unload();
 
 private:
-	LAG::Entity* m_Entity;
+	LAG::Entity m_Entity;
 };
 

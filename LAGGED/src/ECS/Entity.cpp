@@ -3,20 +3,18 @@
 
 namespace LAG
 {
-	Entity::Entity(EntityID entityID, Scene& sceneRef) :
-		m_ID(entityID), m_SceneRef(&sceneRef)
+	Entity::Entity(Scene& sceneRef, EntityID entityID) :
+		m_SceneRef(&sceneRef), m_ID(entityID)
 	{
 	}
 
 	bool Entity::IsValid()
 	{
-		//TODO: Implement function...
-		return false;
+		return m_ID != ENTITY_NULL;
 	}
 
 	EntityID Entity::GetEntityID() const
 	{
-		//TODO: Implement function...
-		return 0;
+		return m_ID;
 	}
 }

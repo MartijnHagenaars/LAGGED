@@ -16,8 +16,8 @@ namespace LAG
 		Scene();
 		~Scene();
 
-		Entity* AddEntity();
-		Entity* AddEntity(const std::string& entityName);
+		Entity AddEntity();
+		Entity AddEntity(const std::string& entityName);
 
 		Entity* DuplicateEntity(EntityID entityID);
 
@@ -44,5 +44,8 @@ namespace LAG
 		}
 
 	private:
+		static inline EntityID s_EntityCounter = 0;
+		static inline ComponentID s_ComponentCounter = 0;
+
 	};
 }
