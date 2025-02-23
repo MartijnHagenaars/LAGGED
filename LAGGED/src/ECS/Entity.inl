@@ -17,8 +17,13 @@ namespace LAG
 	template<typename Comp>
 	inline bool Entity::HasComponent()
 	{
-		//TODO: Implement function...
-		return false;
+		const auto& record = m_SceneRef->m_EntityArchetypes.find(m_ID);
+		if (record == m_SceneRef->m_EntityArchetypes.end())
+			return false;
+
+		Archetype* archetype = record->second.archetype;
+		ComponentID compID = Scene::GetComponentID<Comp>();
+		return (std::find(archetype->typeID.begin(), archetype->typeID.end(), compID)) != archetype->typeID.end();
 	}
 
 	template<typename Comp>
