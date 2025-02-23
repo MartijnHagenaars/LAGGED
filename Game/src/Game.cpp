@@ -46,6 +46,7 @@ void Game::Initialize()
 
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
 	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");
+	LAG::DefaultComponent* defComp = ent2.GetComponent<LAG::DefaultComponent>();
 	LAG::GetEngine().GetScene()->RunSystem<LAG::DefaultComponent>(
 		[](LAG::EntityID id, LAG::DefaultComponent* comp) 
 		{
