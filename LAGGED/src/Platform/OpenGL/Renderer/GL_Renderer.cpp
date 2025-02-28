@@ -78,7 +78,13 @@ namespace LAG
 		INFO("Window resize: {0}, {1}", width, height);
 
 		glViewport(0, 0, width, height);
-		CameraSystem::ResizeCameraBuffers();
+
+		// Resize all camera buffers
+		GetScene()->RunSystem<CameraComponent>([](EntityID cameraEntity, CameraComponent* cameraComp)
+			{
+				cameraComp->framebuffer->Resize(cameraComp->framebuffer->GetSize());
+				cameraComp->hasCameraDimensionChanged = true;
+			});
 	}
 
 	void Renderer::ImGuiFrameStart()
@@ -131,15 +137,18 @@ namespace LAG
 		GetToolsManager()->Render();
 
 		//First render pass using custom frame buffer
-		CameraComponent* camComp = CameraSystem::GetActiveCameraEntity()->GetComponent<CameraComponent>();
-		if(!camComp)
-			LAG_ASSERT("Entity CameraComponent is nullptr.")
+		EntityID camEntityID = CameraSystem::GetActiveCameraEntityID();
+		if (camEntityID == ENTITY_NULL)
+			LAG_ASSERT("Camera Entity ID is nullptr.");
+
+		CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(camEntityID);
+		if(camComp == nullptr)
+			LAG_ASSERT("Tried to get CameraComponent using Camera Entity ID, but failed to retrieve CameraComponent pointer.");
+
 		camComp->framebuffer->FrameStart(m_ShowWireframe);
 
-
 		//Get an active camera
-		Entity* selectedCamera = CameraSystem::GetActiveCameraEntity();
-		CameraSystem::Update(selectedCamera);
+		CameraSystem::Update(camEntityID);
 
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
@@ -147,37 +156,49 @@ namespace LAG
 		if (m_UseLighting)
 		{
 			lights.reserve(3);
-			GetScene()->Loop<LightComponent, TransformComponent>([&lights](Entity entity, LightComponent& lightComp, TransformComponent& lightTransformComp)
+			GetScene()->RunSystem<LightComponent, TransformComponent>([&lights](EntityID entity, LightComponent* lightComp, TransformComponent* lightTransformComp)
 				{
 					if (lights.size() < TOTAL_POINT_LIGHTS)
-						lights.push_back({ &lightTransformComp, &lightComp });
+						lights.push_back({ lightTransformComp, lightComp });
 				});
 		}
 
-		//Render all meshes
-		GetScene()->Loop<ModelComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ModelComponent& meshComp, TransformComponent& transformComp)
+		const auto& renderEntities = GetScene()->GetEntitiesWithComponents<TransformComponent>();
+		if (!renderEntities.empty())
+		{
+			for (const auto& entityID : renderEntities)
 			{
-				//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
-				if (entity.GetComponent<DefaultComponent>()->visible && meshComp.modelHandle.m_ModelLookup.GetValue() != 0)
-				{
-					GetResourceManager()->GetResource<Model>(meshComp.modelHandle.m_ModelLookup)->Render(
-						transformComp, selectedCamera,
-						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
-						lights);
-				}
-			});
+				DefaultComponent* defPtr = GetScene()->GetComponent<DefaultComponent>(entityID);
+				TransformComponent* transformPtr = GetScene()->GetComponent<TransformComponent>(entityID);
 
-		//Render all surfaces
-		GetScene()->Loop<SurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, SurfaceComponent& surfaceComp, TransformComponent& transformComp)
-			{
-				if (entity.GetComponent<DefaultComponent>()->visible)
-					surfaceComp.surface.Render(transformComp, selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-			});
-		GetScene()->Loop<ProceduralSurfaceComponent, TransformComponent>([&selectedCamera, &lights](Entity entity, ProceduralSurfaceComponent& surfaceComp, TransformComponent& transformComp)
-			{
-				if (entity.GetComponent<DefaultComponent>()->visible)
-					surfaceComp.surface.Render(transformComp, selectedCamera, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-			});
+				ModelComponent* modelPtr = GetScene()->GetComponent<ModelComponent>(entityID);
+				if (modelPtr != nullptr)
+				{
+					//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
+					if (defPtr->visible && modelPtr->modelHandle.m_ModelLookup.GetValue() != 0)
+					{
+						GetResourceManager()->GetResource<Model>(modelPtr->modelHandle.m_ModelLookup)->Render(
+							entityID, camEntityID,
+							*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
+							lights);
+					}
+				}
+
+				SurfaceComponent* surfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
+				if (surfacePtr)
+				{
+					if (defPtr->visible)
+						surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				}
+
+				ProceduralSurfaceComponent* procSurfacePtr = GetScene()->GetComponent<ProceduralSurfaceComponent>(entityID);
+				if (procSurfacePtr)
+				{
+					if (defPtr->visible)
+						procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				}
+			}
+		}
 
 		//Render all lines in the line render list
 		if (!m_LineRenderList.empty())
@@ -187,7 +208,7 @@ namespace LAG
 			m_LineRenderList.clear();
 		}
 
-		CameraSystem::GetActiveCameraComponent()->framebuffer->FrameEnd();
+		camComp->framebuffer->FrameEnd();
 
 		ImGuiFrameEnd();
 		m_RenderTime = m_RenderTimer.GetMilliseconds();

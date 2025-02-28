@@ -8,13 +8,13 @@ namespace LAG
 	inline Comp* Scene::AddComponent(const EntityID entityID, Args && ...compArgs)
 	{
 		ComponentData* compData = nullptr;
-		const ComponentID compID = GetComponentID<Comp>();
+		const ComponentID newCompID = GetComponentID<Comp>();
 
-		const auto& compDataIt = m_ComponentMap.find(compID);
+		const auto& compDataIt = m_ComponentMap.find(newCompID);
 		if (compDataIt == m_ComponentMap.end())
 		{
 			compData = RegisterComponent<Comp>();
-			INFO("Component {} not registered. Registering with ID {}...", typeid(Comp).name(), compID);
+			INFO("Component {} not registered. Registering with ID {}...", typeid(Comp).name(), newCompID);
 		}
 		else compData = compDataIt->second;
 
@@ -33,7 +33,7 @@ namespace LAG
 		{
 			//This is the first time we're adding a component to this entity. 
 			//Create a new archetypeID which contains this component ID
-			ArchetypeID newArchetypeID = { compID };
+			ArchetypeID newArchetypeID = { newCompID };
 
 			newArchetype = GetArchetype(newArchetypeID);
 			if (newArchetype == nullptr)
@@ -41,7 +41,7 @@ namespace LAG
 				newArchetype = CreateArchetype(newArchetypeID);
 #ifdef DEBUG
 				newArchetype->debugName = typeid(Comp).name();
-				INFO("Creating Archetype with {} component : ({})", 
+				INFO("Creating Archetype with {} component : ({})",
 					newArchetype->typeID.size(), newArchetype->debugName
 				);
 #endif
@@ -72,7 +72,149 @@ namespace LAG
 			int compDataIndex = newArchetype->entityIDs.size() * sizeof(Comp);
 			newComponent = new(&newArchetype->compData[0][compDataIndex])  Comp(std::forward<Args>(compArgs)...);
 		}
+		else
+		{
+			//Check if this component already exists on the entity.
+			//If that's the case, log a warning and return the component
+			if (std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), newCompID) != oldArchetype->typeID.end())
+			{
+				WARNING("Component ({}) already exists on entity with ID {}", typeid(Comp).name(), GetComponentID<Comp>());
+				return GetComponent<Comp>(entityID);
+			}
 
+			ArchetypeID newArchetypeId = oldArchetype->typeID;
+			newArchetypeId.push_back(newCompID);
+			std::sort(newArchetypeId.begin(), newArchetypeId.end());
+
+			newArchetype = GetArchetype(newArchetypeId);
+			if (newArchetype == nullptr)
+			{
+				newArchetype = CreateArchetype(newArchetypeId);
+#ifdef DEBUG
+				newArchetype->debugName = oldArchetype->debugName + "|" + typeid(Comp).name();
+				INFO("Creating Archetype with {} components: {}", newArchetype->typeID.size(), newArchetype->debugName);
+#endif
+			}
+
+			// This for-loop goes over all components.
+			// It handles allocating more space in the new archetype and moving the component data from the old archetype to the new one. 
+			// In the end, after everything has been moved, the new component is added. 
+			for (int compIndex = 0; compIndex < newArchetypeId.size(); ++compIndex)
+			{
+				//This variable name is SUPER dangerous and almost conflicts with the previous newCompID. PLEASE FIX!!!
+				const ComponentID& newCompId = newArchetypeId[compIndex];
+				const ComponentData* newCompData = m_ComponentMap[newCompId];
+				const std::size_t& newCompDataSize = newCompData->size;
+
+				std::size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
+				std::size_t newSize = currentSize + newCompDataSize;
+
+				// If there is no more space left for a component in a archetype, allocate some more and move all the previous 
+				// component data from the old archetype buffer to the new one. 
+				if (newSize > newArchetype->compDataSize[compIndex])
+				{
+					int targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
+#ifdef DEBUG
+					INFO("Archetype component buffer is too small. Allocating more memory ({} -> {}) for ({})...",
+						newArchetype->compDataSize[compIndex],
+						targetSize, newArchetype->debugName);
+#endif
+					newArchetype->compDataSize[compIndex] = targetSize;
+					unsigned char* newData = new unsigned char[newArchetype->compDataSize[compIndex]];
+					//If this archetype has entities, we need to loop through all entities and move their data from the old (smaller) to the new (larger) buffer
+					for (int entIndex = 0; entIndex < newArchetype->entityIDs.size(); ++entIndex)
+					{
+						newCompData->moveData(&newArchetype->compData[compIndex][entIndex * newCompDataSize], &newData[entIndex * newCompDataSize]);
+					}
+					//The data has been moved so we can delete the old buffer and replace it with the new one.
+					delete[] newArchetype->compData[compIndex];
+					newArchetype->compData[compIndex] = newData;
+				}
+
+
+				// In this loop, we move all the data from the old archetype to the new one. 
+				// While doing this, the new component is also added to the new archetype at the correct index.
+				ArchetypeID oldArchetypeId = oldArchetype->typeID;
+				for (int i = 0; i < oldArchetype->typeID.size(); i++)
+				{
+					ComponentID oldCompId = oldArchetype->typeID[i];
+					bool matchingIDs = (oldCompId == newCompId);
+					if (matchingIDs)
+					{
+						ComponentData* oldCompData = m_ComponentMap[oldArchetype->typeID[i]];
+						oldCompData->moveData(&oldArchetype->compData[i][record.index * oldCompData->size], &newArchetype->compData[compIndex][currentSize]);
+						break;
+					}
+					else if (i == (oldArchetype->typeID.size() - 1) && !matchingIDs)
+					{
+						newComponent = new (&newArchetype->compData[compIndex][currentSize]) Comp(std::forward<Args>(compArgs)...);
+					}
+				}
+			}
+
+			// If a new component is added, the data buffer for the old archetype needs to be shrunk.
+			if (!oldArchetype->entityIDs.empty())
+			{
+				for (int typeIndex = 0; typeIndex < oldArchetype->typeID.size(); typeIndex++)
+				{
+					const ComponentData* oldCompData = m_ComponentMap[oldArchetype->typeID[typeIndex]];
+
+					unsigned char* newData;
+					size_t oldCompDataSize = oldCompData->size;
+
+					int targetSize = (oldArchetype->entityIDs.size() * oldCompDataSize) - oldCompDataSize;
+					if (!!(targetSize > 0))
+					{
+#ifdef DEBUG
+						INFO("Archetype component buffer is too large. Shrinking buffer memory ({} -> {}) for ({})...",
+							newArchetype->compDataSize[typeIndex],
+							oldArchetype->compDataSize[typeIndex] - oldCompDataSize,
+							newArchetype->debugName.c_str());
+#endif
+						newData = new unsigned char[oldArchetype->compDataSize[typeIndex] - oldCompDataSize];
+						oldArchetype->compDataSize[typeIndex] -= oldCompDataSize;
+
+						int ei = 0; // Index for the new data buffer
+						for (int entIndex = 0; entIndex < oldArchetype->entityIDs.size(); ++entIndex)
+						{
+							if (entIndex == record.index)
+								continue;
+
+							oldCompData->moveData(&oldArchetype->compData[typeIndex][entIndex * oldCompDataSize], &newData[ei * oldCompDataSize]);
+							++ei;
+						}
+					}
+					else
+					{
+#ifdef DEBUG
+						INFO("Deallocating component buffer ({} -> {}) for ({})...",
+							oldArchetype->compDataSize[typeIndex],
+							0, newArchetype->debugName.c_str());
+#endif
+						newData = nullptr;
+						oldArchetype->compDataSize[typeIndex] = 0;
+					}
+
+					delete[] oldArchetype->compData[typeIndex];
+					oldArchetype->compData[typeIndex] = newData;
+				}
+
+				int decrementStartingIndex = -1;
+				for (int i = 0; i < oldArchetype->entityIDs.size(); i++)
+				{
+					if (decrementStartingIndex == -1 && oldArchetype->entityIDs[i] == entityID)
+						decrementStartingIndex = i;
+
+					if (decrementStartingIndex != -1)
+					{
+						ArchetypeRecord& record = m_EntityArchetypes[oldArchetype->entityIDs[i]];
+						record.index -= 1;
+					}
+				}
+				if (decrementStartingIndex != -1)
+					oldArchetype->entityIDs.erase(oldArchetype->entityIDs.begin() + decrementStartingIndex);
+			}
+		}
 
 		// Update the entity archetype record and add the EntityID to the archetype. 
 		newArchetype->entityIDs.push_back(entityID);
@@ -80,6 +222,18 @@ namespace LAG
 		record.archetype = newArchetype;
 		record.index = newArchetype->entityIDs.size() - 1;
 		return newComponent;
+	}
+
+	template<typename Comp>
+	inline bool Scene::HasComponent(const EntityID& entityID)
+	{
+		return Entity(*this, entityID).HasComponent<Comp>();
+	}
+
+	template<typename Comp>
+	inline Comp* Scene::GetComponent(const EntityID& entityID)
+	{
+		return Entity(*this, entityID).GetComponent<Comp>();
 	}
 
 	template<typename ...Comps>
@@ -92,7 +246,7 @@ namespace LAG
 		}
 
 		//Consider moving this into a private function in Scene class
-		const auto& GetSystemCompIndex = 
+		const auto& GetSystemCompIndex =
 			[](ComponentID compID, const std::vector<EntityID>& entityIDs)
 			{
 				for (int i = 0; i < entityIDs.size(); i++)
@@ -100,7 +254,7 @@ namespace LAG
 						return i;
 
 				CRITICAL("Failed to get System Component Index: No ComponentID matches {}.", compID);
-				return -1; 
+				return -1;
 			};
 
 		//Create key
@@ -126,8 +280,28 @@ namespace LAG
 		}
 	}
 
+	template<typename ...Comps>
+	inline std::vector<EntityID> Scene::GetEntitiesWithComponents()
+	{
+		//Create key
+		ArchetypeID archetypeID = { { GetComponentID<Comps>()... } };
+		std::sort(archetypeID.begin(), archetypeID.end());
 
+		std::vector<EntityID> results;
+		for (Archetype* archetype : m_Archetypes)
+		{
+			if (std::includes(archetype->typeID.begin(), archetype->typeID.end(), archetypeID.begin(), archetypeID.end()))
+			{
+				for (EntityID entity : archetype->entityIDs)
+				{
+					if (entity != ENTITY_NULL)
+						results.emplace_back(entity);
+				}
+			}
+		}
 
+		return results;
+	}
 
 	template<typename Comp>
 	inline const ComponentID Scene::GetComponentID()

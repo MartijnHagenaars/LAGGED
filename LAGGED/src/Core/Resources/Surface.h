@@ -1,6 +1,8 @@
 #pragma once
 #include "Core/Resources/Resource.h"
 #include "Platform/Base/Renderer/Buffer.h"
+#include "ECS/TypeDefines.h"
+
 #include <vector>
 
 namespace LAG
@@ -15,7 +17,7 @@ namespace LAG
 	public:
 		SurfaceBase() : Resource(HashedString("")) {};
 
-		virtual void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
+		virtual void Render(EntityID objectEntity, EntityID cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
 		virtual bool Load() = 0;
 		virtual bool Unload() = 0;

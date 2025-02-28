@@ -42,27 +42,29 @@ namespace LAG
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());
 
-		//Browser container
-		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-		scene->Loop<DefaultComponent>([&scene, &entity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
-			{
-				ImGui::PushID(entity.GetEntityID());
-				if (ImGui::Button(comp.visible ? "Hide" : "Show"))
-					comp.visible = !comp.visible;
+		CRITICAL("TEMPORARILY DISABLED");
 
-				ImGui::SameLine();
-				if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
-				{
-					if (entity.GetEntityID() != entity.GetEntityID())
-					{
-						//TODO: Implement reflection widgets...
-						ImGui::Text("TODO: IMPLEMENT REFLECTION WIDGETS...");
-					}
-				}
-				ImGui::PopID();
-			});
+		////Browser container
+		//ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
+		//scene->Loop<DefaultComponent>([&scene, &entity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
+		//	{
+		//		ImGui::PushID(entity.GetEntityID());
+		//		if (ImGui::Button(comp.visible ? "Hide" : "Show"))
+		//			comp.visible = !comp.visible;
 
-		ImGui::EndChild();
+		//		ImGui::SameLine();
+		//		if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
+		//		{
+		//			if (entity.GetEntityID() != entity.GetEntityID())
+		//			{
+		//				//TODO: Implement reflection widgets...
+		//				ImGui::Text("TODO: IMPLEMENT REFLECTION WIDGETS...");
+		//			}
+		//		}
+		//		ImGui::PopID();
+		//	});
+
+		//ImGui::EndChild();
 
 		ImGui::InvisibleButton("SplitButton", ImVec2(-1.f, 10.0f));
 		if (ImGui::IsItemActive())

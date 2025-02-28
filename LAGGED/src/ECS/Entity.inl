@@ -29,10 +29,16 @@ namespace LAG
 	template<typename Comp>
 	inline Comp* Entity::GetComponent()
 	{
+		if (m_ID == ENTITY_NULL)
+		{
+			CRITICAL("Failed to run GetComponent: EntityID is null.");
+			return nullptr;
+		}
+
 		const auto& recordIt = m_SceneRef->m_EntityArchetypes.find(m_ID);
 		if (recordIt == m_SceneRef->m_EntityArchetypes.end() || recordIt->second.archetype == nullptr)
 		{
-			CRITICAL("Failed to run GetComponent: Record is nullptr.");
+			CRITICAL("Failed to run GetComponent: Record is null.");
 			return nullptr;
 		}
 
@@ -48,8 +54,6 @@ namespace LAG
 				++dataOffset;
 		}
 
-		INFO("Component ({}) not found on entity {}", typeid(Comp).name(), m_ID);
-		printf("INFO: Component not found.");
 		return nullptr;
 	}
 }

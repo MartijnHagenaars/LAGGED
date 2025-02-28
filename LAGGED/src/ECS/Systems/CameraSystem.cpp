@@ -17,11 +17,17 @@
 
 namespace LAG::CameraSystem
 {
-	void Update(Entity* entity)
+	void Update(EntityID entityID)
 	{
-		CameraComponent* camera = entity->GetComponent<CameraComponent>();
+		if (entityID == ENTITY_NULL)
+		{
+			CRITICAL("Camera Entity ID is nullptr.");
+			return;
+		}
+
+		CameraComponent* camera = GetEngine().GetScene()->GetComponent<CameraComponent>(entityID);
 		if (!camera)
-			LAG_ASSERT("Entity CameraComponent is nullptr.");
+			LAG_ASSERT("Camera Entity ID does not contain CameraComponent.");
 
 		//Only update active cameras
 		if (!camera->isActive)
@@ -30,7 +36,10 @@ namespace LAG::CameraSystem
 		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
 		float cameraRotationSpeed = 1.f * camera->rotationSpeed * GetEngine().GetDeltaTime();
 
-		TransformComponent* transform = entity->GetComponent<TransformComponent>();
+		TransformComponent* transform = GetEngine().GetScene()->GetComponent<TransformComponent>(entityID);
+		if (!transform)
+			CRITICAL("Camera Entity ID does not contain TransformComponent.");
+
 		glm::vec3 camPosAdjustment = glm::vec3(0.f);
 		if (Input::IsActionPressed(HashedString("cameraMoveForward")))
 			camPosAdjustment += camera->forwardVector * cameraMovementSpeed;
@@ -69,23 +78,23 @@ namespace LAG::CameraSystem
 		
 	}
 
-	void SetActiveCameraEntity(Entity* entity)
+	EntityID GetActiveCameraEntityID()
 	{
-		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
-			{
-				if (entity->GetEntityID() == cameraEntity.GetEntityID())
-					cameraComp.isActive = true;
-				else cameraComp.isActive = false;
-			});
-	}
+		std::vector<EntityID> camEntities = GetScene()->GetEntitiesWithComponents<CameraComponent>();
+		if (camEntities.empty())
+		{
+			WARNING("Failed to find active camera in GetActiveCameraEntity()");
+			return ENTITY_NULL;
+		}
+		
+		for (const auto& id : camEntities)
+		{
+			CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(id);
+			if (camComp != nullptr && camComp->isActive)
+				return id;
+		}
 
-	CameraComponent* GetActiveCameraComponent()
-	{
-		return GetActiveCameraEntity()->GetComponent<CameraComponent>();
-	}
 
-	Entity* GetActiveCameraEntity()
-	{
 		//EntityID camEntityID = {};
 		//GetScene()->Loop<CameraComponent>([&camEntityID](Entity cameraEntity, CameraComponent& cameraComp)
 		//	{
@@ -98,22 +107,12 @@ namespace LAG::CameraSystem
 		//Entity entity = GetScene()->GetEntity(camEntityID);
 		//if (!entity.IsValid())
 		//	WARNING("Failed to find active camera in GetActiveCameraEntity()");
-		return nullptr;
-	}
-
-	void ResizeCameraBuffers()
-	{
-		GetScene()->Loop<CameraComponent>([](Entity cameraEntity, CameraComponent& cameraComp)
-			{
-				cameraComp.framebuffer->Resize(cameraComp.framebuffer->GetSize());
-				cameraComp.hasCameraDimensionChanged = true;
-			});
 	}
 	
-	glm::mat4 CalculateViewMat(Entity* entity)
+	glm::mat4 CalculateViewMat(EntityID entityID)
 	{
-		CameraComponent* camera = entity->GetComponent<CameraComponent>();
-		TransformComponent* transform = entity->GetComponent<TransformComponent>();
+		CameraComponent* camera = GetScene()->GetComponent<CameraComponent>(entityID);
+		TransformComponent* transform = GetScene()->GetComponent<TransformComponent>(entityID);
 		if (camera == nullptr || transform == nullptr)
 			return glm::mat4(0.f);
 
@@ -136,9 +135,9 @@ namespace LAG::CameraSystem
 		return camera->viewMat;
 	}
 
-	glm::mat4 CalculateProjMat(Entity* entity)
+	glm::mat4 CalculateProjMat(EntityID entityID)
 	{
-		CameraComponent* camera = entity->GetComponent<CameraComponent>();
+		CameraComponent* camera = GetScene()->GetComponent<CameraComponent>(entityID);
 		if (!camera->hasCameraDimensionChanged)
 			return camera->projMat;
 

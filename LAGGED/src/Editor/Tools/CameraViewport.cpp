@@ -24,7 +24,14 @@ namespace LAG
 		ImGui::Begin(GetInternalName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 
-		CameraComponent* cameraComp = CameraSystem::GetActiveCameraComponent();
+		EntityID camEntityID = CameraSystem::GetActiveCameraEntityID();
+		CameraComponent* cameraComp = GetEngine().GetScene()->GetComponent<CameraComponent>(camEntityID);
+		if (!cameraComp)
+		{
+			CRITICAL("Camera component is nullptr.");
+			return;
+		}
+
 		glm::uvec2 winSize = glm::uvec2(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
 		if (m_ViewportSize != winSize)
 		{

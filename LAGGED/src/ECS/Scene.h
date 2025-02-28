@@ -29,6 +29,12 @@ namespace LAG
 		template<typename Comp, typename ...Args>
 		Comp* AddComponent(const EntityID entityID, Args&&... compArgs);
 
+		template<typename Comp>
+		bool HasComponent(const EntityID& entityID);
+
+		template<typename Comp>
+		Comp* GetComponent(const EntityID& entityID);
+
 		bool DoesEntityExist(EntityID entityID);
 
 		size_t Count() const;
@@ -38,19 +44,8 @@ namespace LAG
 		template<typename ...Comps>
 		void RunSystem(std::function<void(EntityID, Comps*...)> func);
 
-
-		/// <summary>
-		/// This function is used to loop over all entities in the scene.
-		/// </summary>
-		/// <typeparam name="...Components">The component types that an entity needs to contain.</typeparam>
-		/// <param name="func">The function that is called when looping over an entity that contains all required components.</param>
-		/// <returns>Returns true if any entities are found containing all required components..</returns>
-		template<typename... Components>
-		bool Loop(std::function<void(Entity entity, Components&...)> func)
-		{
-			//TODO: Implement function...
-			return false;
-		}
+		template<typename ...Comps>
+		std::vector<EntityID> GetEntitiesWithComponents();
 
 	private:
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);

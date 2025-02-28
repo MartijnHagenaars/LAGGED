@@ -4,6 +4,9 @@
 #include "Core/Resources/Shader.h"
 #include "Core/Resources/Texture.h"
 
+#include "Core/Engine.h"
+
+#include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
@@ -83,10 +86,10 @@ namespace LAG
 		GenerateSurface(procSurfaceComp.surfaceSubdivisions, procSurfaceComp.surfaceSubdivisions);
 	}
 
-	void Surface::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
+	void Surface::Render(EntityID objectEntity, EntityID cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
 		shader.Bind();
-		shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
+		shader.SetMat4("a_ModelMat", GetEngine().GetScene()->GetComponent<TransformComponent>(objectEntity)->GetTransformMatrix());
 		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntity));
 		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntity));
 
