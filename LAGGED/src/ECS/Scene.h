@@ -75,7 +75,7 @@ namespace LAG
 
 		struct ComponentData
 		{
-			uint64_t size;
+			size_t size;
 			std::function<void(unsigned char* src, unsigned char* dest)> moveData;
 #ifdef DEBUG
 			std::string debugName;

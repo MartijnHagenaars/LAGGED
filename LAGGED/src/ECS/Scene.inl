@@ -47,7 +47,7 @@ namespace LAG
 #endif
 			}
 
-			int targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
+			uint64_t targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
 			if (newArchetype->compDataSize[0] <= targetSize)
 			{
 #ifdef DEBUG
@@ -69,7 +69,7 @@ namespace LAG
 			}
 
 			// Construct a new Comp object (with the correct Args) and place it into the component data array
-			int compDataIndex = newArchetype->entityIDs.size() * sizeof(Comp);
+			uint64_t compDataIndex = newArchetype->entityIDs.size() * sizeof(Comp);
 			newComponent = new(&newArchetype->compData[0][compDataIndex])  Comp(std::forward<Args>(compArgs)...);
 		}
 		else
@@ -82,14 +82,14 @@ namespace LAG
 				return GetComponent<Comp>(entityID);
 			}
 
-			ArchetypeID newArchetypeId = oldArchetype->typeID;
-			newArchetypeId.push_back(newCompID);
-			std::sort(newArchetypeId.begin(), newArchetypeId.end());
+			ArchetypeID newArchetypeID = oldArchetype->typeID;
+			newArchetypeID.push_back(newCompID);
+			std::sort(newArchetypeID.begin(), newArchetypeID.end());
 
-			newArchetype = GetArchetype(newArchetypeId);
+			newArchetype = GetArchetype(newArchetypeID);
 			if (newArchetype == nullptr)
 			{
-				newArchetype = CreateArchetype(newArchetypeId);
+				newArchetype = CreateArchetype(newArchetypeID);
 #ifdef DEBUG
 				newArchetype->debugName = oldArchetype->debugName + "|" + typeid(Comp).name();
 				INFO("Creating Archetype with {} components: {}", newArchetype->typeID.size(), newArchetype->debugName);
@@ -99,21 +99,20 @@ namespace LAG
 			// This for-loop goes over all components.
 			// It handles allocating more space in the new archetype and moving the component data from the old archetype to the new one. 
 			// In the end, after everything has been moved, the new component is added. 
-			for (int compIndex = 0; compIndex < newArchetypeId.size(); ++compIndex)
+			for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 			{
-				//This variable name is SUPER dangerous and almost conflicts with the previous newCompID. PLEASE FIX!!!
-				const ComponentID& newCompId = newArchetypeId[compIndex];
-				const ComponentData* newCompData = m_ComponentMap[newCompId];
-				const std::size_t& newCompDataSize = newCompData->size;
+				const ComponentID& compID = newArchetypeID[compIndex];
+				const ComponentData* newCompData = m_ComponentMap[compID];
+				const uint64_t newCompDataSize = newCompData->size;
 
-				std::size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
-				std::size_t newSize = currentSize + newCompDataSize;
+				uint64_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
+				uint64_t newSize = currentSize + newCompDataSize;
 
 				// If there is no more space left for a component in a archetype, allocate some more and move all the previous 
 				// component data from the old archetype buffer to the new one. 
 				if (newSize > newArchetype->compDataSize[compIndex])
 				{
-					int targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
+					const uint64_t targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
 #ifdef DEBUG
 					INFO("Archetype component buffer is too small. Allocating more memory ({} -> {}) for ({})...",
 						newArchetype->compDataSize[compIndex],
@@ -137,8 +136,8 @@ namespace LAG
 				ArchetypeID oldArchetypeId = oldArchetype->typeID;
 				for (int i = 0; i < oldArchetype->typeID.size(); i++)
 				{
-					ComponentID oldCompId = oldArchetype->typeID[i];
-					bool matchingIDs = (oldCompId == newCompId);
+					ComponentID oldCompID = oldArchetype->typeID[i];
+					bool matchingIDs = (oldCompID == compID);
 					if (matchingIDs)
 					{
 						ComponentData* oldCompData = m_ComponentMap[oldArchetype->typeID[i]];
@@ -160,10 +159,10 @@ namespace LAG
 					const ComponentData* oldCompData = m_ComponentMap[oldArchetype->typeID[typeIndex]];
 
 					unsigned char* newData;
-					size_t oldCompDataSize = oldCompData->size;
+					const size_t oldCompDataSize = oldCompData->size;
+					const size_t targetSize = (oldArchetype->entityIDs.size() * oldCompDataSize) - oldCompDataSize;
 
-					int targetSize = (oldArchetype->entityIDs.size() * oldCompDataSize) - oldCompDataSize;
-					if (!!(targetSize > 0))
+					if (targetSize > 0)
 					{
 #ifdef DEBUG
 						INFO("Archetype component buffer is too large. Shrinking buffer memory ({} -> {}) for ({})...",
@@ -174,14 +173,14 @@ namespace LAG
 						newData = new unsigned char[oldArchetype->compDataSize[typeIndex] - oldCompDataSize];
 						oldArchetype->compDataSize[typeIndex] -= oldCompDataSize;
 
-						int ei = 0; // Index for the new data buffer
+						int offsetIndex = 0;
 						for (int entIndex = 0; entIndex < oldArchetype->entityIDs.size(); ++entIndex)
 						{
 							if (entIndex == record.index)
 								continue;
 
-							oldCompData->moveData(&oldArchetype->compData[typeIndex][entIndex * oldCompDataSize], &newData[ei * oldCompDataSize]);
-							++ei;
+							oldCompData->moveData(&oldArchetype->compData[typeIndex][entIndex * oldCompDataSize], &newData[offsetIndex * oldCompDataSize]);
+							++offsetIndex;
 						}
 					}
 					else

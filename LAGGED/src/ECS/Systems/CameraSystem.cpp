@@ -94,19 +94,7 @@ namespace LAG::CameraSystem
 				return id;
 		}
 
-
-		//EntityID camEntityID = {};
-		//GetScene()->Loop<CameraComponent>([&camEntityID](Entity cameraEntity, CameraComponent& cameraComp)
-		//	{
-		//		if (cameraComp.isActive && cameraEntity.IsValid())
-		//			camEntityID = cameraEntity.GetEntityID();
-		//		else cameraComp.isActive = false;
-		//	});
-
-		////TODO: Look into other ways of doing this. This is not very good.
-		//Entity entity = GetScene()->GetEntity(camEntityID);
-		//if (!entity.IsValid())
-		//	WARNING("Failed to find active camera in GetActiveCameraEntity()");
+		return ENTITY_NULL;
 	}
 	
 	glm::mat4 CalculateViewMat(EntityID entityID)
