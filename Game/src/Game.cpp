@@ -81,10 +81,10 @@ void Game::Initialize()
 
 	LAG::Entity ent3 = LAG::GetEngine().GetScene()->AddEntity("Light2");
 	auto ent3Light = ent3.AddComponent<LAG::LightComponent>();
-	ent3.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(-5.f, -2.f, -7.f));
 	ent3Light->lightAttenuation = 0.1f;
 	ent3Light->lightIntensity = 2.f;
 	ent3Light->lightColor = glm::vec3(0.f, 1.f, 0.f);
+	ent3.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(-5.f, -2.f, -7.f));
 
 	LAG::Entity ent4 = LAG::GetEngine().GetScene()->AddEntity("Light3");
 	ent4.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(5.f, 40.f, -7.f));

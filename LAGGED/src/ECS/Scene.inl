@@ -168,7 +168,7 @@ namespace LAG
 						INFO("Archetype component buffer is too large. Shrinking buffer memory ({} -> {}) for ({})...",
 							newArchetype->compDataSize[typeIndex],
 							oldArchetype->compDataSize[typeIndex] - oldCompDataSize,
-							newArchetype->debugName.c_str());
+							newArchetype->debugName);
 #endif
 						newData = new unsigned char[oldArchetype->compDataSize[typeIndex] - oldCompDataSize];
 						oldArchetype->compDataSize[typeIndex] -= oldCompDataSize;
@@ -188,7 +188,7 @@ namespace LAG
 #ifdef DEBUG
 						INFO("Deallocating component buffer ({} -> {}) for ({})...",
 							oldArchetype->compDataSize[typeIndex],
-							0, newArchetype->debugName.c_str());
+							0, newArchetype->debugName);
 #endif
 						newData = nullptr;
 						oldArchetype->compDataSize[typeIndex] = 0;
