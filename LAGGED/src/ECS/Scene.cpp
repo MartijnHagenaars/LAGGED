@@ -56,8 +56,7 @@ namespace LAG
 
 	size_t Scene::Count() const
 	{
-		//TODO: Implement function...
-		return 0;
+		return m_EntityArchetypes.size();
 	}
 
 	void Scene::RemoveAll()

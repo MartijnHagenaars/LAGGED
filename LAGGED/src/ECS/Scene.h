@@ -37,6 +37,9 @@ namespace LAG
 
 		bool DoesEntityExist(EntityID entityID);
 
+		/// <summary>
+		/// Return the number of active entities
+		/// </summary>
 		size_t Count() const;
 
 		void RemoveAll();
