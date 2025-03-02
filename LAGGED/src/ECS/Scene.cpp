@@ -50,8 +50,7 @@ namespace LAG
 
 	bool Scene::DoesEntityExist(EntityID entityID)
 	{
-		//TODO: Implement function...
-		return false;
+		return (m_EntityArchetypes.find(entityID) != m_EntityArchetypes.end());
 	}
 
 	size_t Scene::Count() const

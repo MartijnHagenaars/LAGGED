@@ -35,6 +35,10 @@ namespace LAG
 		template<typename Comp>
 		Comp* GetComponent(const EntityID& entityID);
 
+		/// <summary>
+		/// Checks whether an entity with a specific ID exists.
+		/// </summary>
+		/// <returns>Returns true if an entity with EntityID exists.</returns>
 		bool DoesEntityExist(EntityID entityID);
 
 		/// <summary>
