@@ -98,6 +98,8 @@ void Game::Initialize()
 	ent5.GetComponent<LAG::TransformComponent>()->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
 	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 5.f;
 
+	ent1.RemoveComponent<LAG::TransformComponent>();
+
 	//LAG::Entity ent6 = LAG::GetEngine().GetScene()->AddEntity("Surface");
 	//ent6.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(1.f));
 	////ent6.AddComponent<LAG::SurfaceComponent>();

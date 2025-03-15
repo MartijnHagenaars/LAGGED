@@ -30,6 +30,9 @@ namespace LAG
 		Comp* AddComponent(const EntityID entityID, Args&&... compArgs);
 
 		template<typename Comp>
+		void RemoveComponent(const EntityID entityID);
+
+		template<typename Comp>
 		bool HasComponent(const EntityID& entityID);
 
 		template<typename Comp>

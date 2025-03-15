@@ -8,10 +8,11 @@ namespace LAG
 	{
 		return m_SceneRef->AddComponent<Comp>(m_ID, args...);
 	}
+
 	template<typename Comp>
 	inline void Entity::RemoveComponent()
 	{
-		//TODO: Implement function...
+		return m_SceneRef->AddComponent<Comp>(m_ID);
 	}
 
 	template<typename Comp>

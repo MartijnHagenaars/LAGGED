@@ -121,7 +121,7 @@ namespace LAG
 					newArchetype->compDataSize[compIndex] = targetSize;
 					unsigned char* newData = new unsigned char[newArchetype->compDataSize[compIndex]];
 					//If this archetype has entities, we need to loop through all entities and move their data from the old (smaller) to the new (larger) buffer
-					for (int entIndex = 0; entIndex < newArchetype->entityIDs.size(); ++entIndex)
+					for (int entIndex = 0; entIndex < newArchetype->entityIDs.size(); entIndex++)
 					{
 						newCompData->moveData(&newArchetype->compData[compIndex][entIndex * newCompDataSize], &newData[entIndex * newCompDataSize]);
 					}
@@ -140,7 +140,7 @@ namespace LAG
 					bool matchingIDs = (oldCompID == compID);
 					if (matchingIDs)
 					{
-						ComponentData* oldCompData = m_ComponentMap[oldArchetype->typeID[i]];
+						ComponentData* oldCompData = m_ComponentMap.at(oldArchetype->typeID[i]);
 						oldCompData->moveData(&oldArchetype->compData[i][record.index * oldCompData->size], &newArchetype->compData[compIndex][currentSize]);
 						break;
 					}
@@ -156,7 +156,7 @@ namespace LAG
 			{
 				for (int typeIndex = 0; typeIndex < oldArchetype->typeID.size(); typeIndex++)
 				{
-					const ComponentData* oldCompData = m_ComponentMap[oldArchetype->typeID[typeIndex]];
+					const ComponentData* oldCompData = m_ComponentMap.at(oldArchetype->typeID[typeIndex]);
 
 					unsigned char* newData;
 					const size_t oldCompDataSize = oldCompData->size;
@@ -174,13 +174,13 @@ namespace LAG
 						oldArchetype->compDataSize[typeIndex] -= oldCompDataSize;
 
 						int offsetIndex = 0;
-						for (int entIndex = 0; entIndex < oldArchetype->entityIDs.size(); ++entIndex)
+						for (int entIndex = 0; entIndex < oldArchetype->entityIDs.size(); entIndex++)
 						{
 							if (entIndex == record.index)
 								continue;
 
 							oldCompData->moveData(&oldArchetype->compData[typeIndex][entIndex * oldCompDataSize], &newData[offsetIndex * oldCompDataSize]);
-							++offsetIndex;
+							offsetIndex += 1;
 						}
 					}
 					else
@@ -221,6 +221,35 @@ namespace LAG
 		record.archetype = newArchetype;
 		record.index = newArchetype->entityIDs.size() - 1;
 		return newComponent;
+	}
+
+	template<typename Comp>
+	inline void Scene::RemoveComponent(const EntityID entityID)
+	{
+		const ComponentID compID = GetComponentID<Comp>();
+
+		const auto& compDataIt = m_ComponentMap.find(compID);
+		if (compDataIt == m_ComponentMap.end())
+			CRITICAL("Failed to remove component: Component {} is not registered.", typeid(Comp).name());
+		
+		const ComponentData* compDataPtr = compDataIt->second;
+		const auto& archRecordIt = m_EntityArchetypes.find(entityID);
+		if (archRecordIt == m_EntityArchetypes.end())
+			CRITICAL("Failed to remove component: Record for entity ({}) could not be found.", entityID);
+
+		ArchetypeRecord& archRecord = archRecordIt->second;
+		Archetype* oldArchetype = archRecord.archetype;
+		// If oldArchetype is nullptr, it doesnt contain any components.
+		if (oldArchetype == nullptr)
+			return;
+
+		// Check if this entity contains the component.
+		const ArchetypeID::iterator& archetypeIdIt = std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), compID);
+		if (archetypeIdIt == oldArchetype->typeID.end())
+		{
+			WARNING("Failed to remove component: Entity ({}) does not contain {} component.", entityID, typeid(Comp).name());
+			return;
+		}
 	}
 
 	template<typename Comp>
