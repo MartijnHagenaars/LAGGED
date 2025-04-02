@@ -1,8 +1,8 @@
 #include "GL_Surface.h"
 #include "Utility/Logger.h"
 
-#include "Core/Resources/Shader.h"
-#include "Core/Resources/Texture.h"
+#include "Platform/Resources/Shader.h"
+#include "Platform/Resources/Texture.h"
 
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"

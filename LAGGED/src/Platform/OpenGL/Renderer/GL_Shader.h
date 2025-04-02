@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Resources/Shader.h"
+#include "Platform/Resources/Shader.h"
 
 namespace LAG
 {

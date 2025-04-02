@@ -10,9 +10,9 @@
 #include "Utility/Logger.h"
 
 #include "GL_ErrorChecks.h"
-#include "Core/Resources/Shader.h"
+#include "Platform/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
-#include "Core/Resources/Texture.h"
+#include "Platform/Resources/Texture.h"
 
 #include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"

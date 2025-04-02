@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Core/Resources/Texture.h"
+
+#include "Platform/Resources/Texture.h"
 #include "glm/vec2.hpp"
 
 namespace LAG

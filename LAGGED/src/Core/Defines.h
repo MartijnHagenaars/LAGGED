@@ -16,3 +16,13 @@
 #else
 #define DEBUG_OPERATION(x)
 #endif
+
+namespace LAG
+{
+	enum class ErrResult
+	{
+		SUCCESS = 0,
+		ERR_INIT_FAIL,
+		ERR_UNDEFINED
+	};
+}

@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Resources/Texture.h"
+#include "Platform/Resources/Texture.h"
 
 namespace LAG
 {

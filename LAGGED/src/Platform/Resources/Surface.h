@@ -1,7 +1,8 @@
 #pragma once
+#include <vector>
+
 #include "Core/Resources/Resource.h"
 #include "Platform/Resources/Buffer/Buffer.h"
-#include <vector>
 
 namespace LAG
 {

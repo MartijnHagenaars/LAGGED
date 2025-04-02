@@ -133,14 +133,15 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Platform\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\FileIO\FileWatch.h" />
     <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
-    <ClInclude Include="src\Platform\Base\Renderer\Buffer.h" />
-    <ClInclude Include="src\Platform\Base\Renderer\BufferLayout.h" />
+    <ClInclude Include="src\Platform\Resources\Buffer\Buffer.h" />
+    <ClInclude Include="src\Platform\Resources\Buffer\BufferLayout.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
@@ -156,10 +157,9 @@
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
-    <ClInclude Include="src\Platform\Base\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\Platform\Resources\Buffer\FrameBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
-    <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
     <ClInclude Include="src\Core\Resources\Surface.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
@@ -187,10 +187,8 @@
     <ClInclude Include="src\ECS\Components\ModelComponent.h" />
     <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
-    <ClInclude Include="src\Core\Resources\Texture.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
-    <ClInclude Include="src\Core\Resources\Model.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorChecks.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
@@ -202,6 +200,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="src\Platform\RenderBackend.h" />
+    <ClInclude Include="src\Platform\Resources\Model.h" />
+    <ClInclude Include="src\Platform\Resources\Surface.h" />
+    <ClInclude Include="src\Platform\Resources\Texture.h" />
     <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
     <ClInclude Include="External\DirectX\d3dx12.h" />

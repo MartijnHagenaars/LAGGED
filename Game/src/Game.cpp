@@ -8,7 +8,7 @@
 
 #include "Core/Memory/ResourcePtr.h"
 #include "Core/Resources/ResourceManager.h"
-#include "Core/Resources/Model.h"
+#include "Platform/Resources/Model.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"

@@ -2,12 +2,12 @@
 #include "Platform/Base/ExceptionBase.h"
 #include "Utility/Timer.h"
 
-#include "Platform/Window.h"
 #include "Resources/ResourceManager.h"
 #include "Editor/ToolsManager.h"
-#include "Platform/Renderer.h"
 
-#include "Core/Resources/Model.h"
+#include "Platform/Window.h"
+#include "Platform/Renderer.h"
+#include "Platform/Resources/Model.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Entity.h"

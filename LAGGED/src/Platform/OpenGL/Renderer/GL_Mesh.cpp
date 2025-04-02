@@ -2,7 +2,7 @@
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
-#include "Core/Resources/Texture.h"
+#include "Platform/Resources/Texture.h"
 
 #include "TinyGLTF/tiny_gltf.h"
 #include "Utility/Logger.h"

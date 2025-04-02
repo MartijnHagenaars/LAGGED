@@ -1,6 +1,6 @@
 #pragma once
 #include "ECS/Entity.h"
-#include "Core/Resources/Texture.h"
+#include "Platform/Resources/Texture.h"
 
 namespace LAG::SurfaceSystems
 {

@@ -1,5 +1,5 @@
 #pragma once
-#include "Core/Resources/Model.h"
+#include "Platform/Resources/Model.h"
 
 #include "GL_Mesh.h"
 #include "glm/mat4x4.hpp"

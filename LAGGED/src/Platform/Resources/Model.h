@@ -1,9 +1,9 @@
 #pragma once
-#include "Core/Resources/Resource.h"
 #include "glm/vec3.hpp"
 #include <vector>
 
-#include "Platform/Base/Renderer/Buffer.h"
+#include "Core/Resources/Resource.h"
+#include "Platform/Resources/Buffer/Buffer.h"
 
 namespace tinygltf
 {

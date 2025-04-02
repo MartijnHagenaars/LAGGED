@@ -1,6 +1,6 @@
 #pragma once
 #include "glm/mat4x4.hpp"
-#include "Platform/Base/Renderer/FrameBuffer.h"
+#include "Platform/Resources/Buffer/FrameBuffer.h"
 
 namespace LAG
 {

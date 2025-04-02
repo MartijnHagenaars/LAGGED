@@ -7,8 +7,8 @@
 
 #include "ECS/Entity.h"
 #include "Core/Engine.h"
-#include "Core/Resources/Model.h"
-#include "Core/Resources/Texture.h"
+#include "Platform/Resources/Model.h"
+#include "Platform/Resources/Texture.h"
 #include "Core/Resources/ResourceHandles.h"
 #include "Core/Resources/ResourceManager.h"
 

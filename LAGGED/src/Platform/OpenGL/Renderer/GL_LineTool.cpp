@@ -1,7 +1,7 @@
 #include "GL_LineTool.h"
 
 #include "GL/glew.h"
-#include "Core/Resources/Shader.h"
+#include "Platform/Resources/Shader.h"
 #include "Platform/OpenGL/Renderer/GL_ErrorChecks.h"
 
 #include "Core/Engine.h"

@@ -4,7 +4,7 @@
 #include "Platform/Window.h"
 #include "Editor/ToolsManager.h"
 
-#include "Core/Resources/Shader.h"
+#include "Platform/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
 
 #include "GL/glew.h"

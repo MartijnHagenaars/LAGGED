@@ -1,5 +1,5 @@
 #pragma once
-#include "Platform/Base/Renderer/FrameBuffer.h"
+#include "Platform/Resources/Buffer/FrameBuffer.h"
 
 namespace LAG
 {
