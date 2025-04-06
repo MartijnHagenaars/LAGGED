@@ -7,9 +7,6 @@ static const int CHUNK_SIZE = 64;
 class Chunk
 {
 public: 
-	Chunk() = default;
-	~Chunk() = default;
-
 	void Load(const glm::vec2& position);
 	void Unload();
 

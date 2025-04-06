@@ -26,7 +26,7 @@ void World::Update()
 	LAG::EntityID camEntityID = LAG::ENTITY_NULL;
 	LAG::GetEngine().GetScene()->RunSystem<LAG::CameraComponent>([&camEntityID](LAG::EntityID entity, LAG::CameraComponent* cameraComp)
 		{
-			if(cameraComp->isActive)
+			if (cameraComp->isActive)
 				camEntityID = entity;
 		});
 
@@ -44,7 +44,7 @@ void World::Update()
 		m_UpdateChunks = true;
 	}
 
-	if(m_UpdateChunks)
+	if (m_UpdateChunks)
 	{
 		int xCamGridPos = static_cast<int>(camTransform->GetPosition().x / static_cast<float>(CHUNK_SIZE));
 		int zCamGridPos = static_cast<int>(camTransform->GetPosition().z / static_cast<float>(CHUNK_SIZE));
