@@ -2,8 +2,9 @@
 #include <string>
 #include <vector>
 
-#include "Platform/Resources/Texture.h"
-#include "glm/vec2.hpp"
+#include <glm/vec2.hpp>
+
+#include "Platform/RenderBackend.h"
 
 namespace LAG
 {

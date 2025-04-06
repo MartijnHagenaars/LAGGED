@@ -6,8 +6,7 @@
 #include "Editor/ToolsManager.h"
 
 #include "Platform/Window.h"
-#include "Platform/Renderer.h"
-#include "Platform/Resources/Model.h"
+#include "Platform/RenderBackend.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Entity.h"

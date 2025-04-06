@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Resources/ResourceHandles.h"
+#include "Platform/RenderBackend.h"
 
 #include "Utility/Noise.h"
 

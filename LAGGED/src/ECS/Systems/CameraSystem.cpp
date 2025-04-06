@@ -1,19 +1,17 @@
 #include "CameraSystem.h"
 
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <ImGui/imgui.h>
+
 #include "Core/Engine.h"
+#include "Core/Input/Input.h"
 #include "Platform/Window.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
-
-#include "Core/Input/Input.h"
-
 #include "ECS/Components/BasicComponents.h"
-#include "glm/ext/matrix_transform.hpp"
-#include <glm/ext/matrix_clip_space.hpp>
-
-#include "ImGui/imgui.h"
 
 namespace LAG::CameraSystem
 {
