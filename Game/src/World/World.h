@@ -16,7 +16,7 @@ public:
 private:
 	std::unordered_map<ChunkKey, Chunk> m_ChunkMap;
 
-	const int m_LoadDistance = 0;
+	const int m_LoadDistance;
 
 	bool m_UseInfiniteTerrain = true;
 	bool m_HasGeneratedTerrain = false;

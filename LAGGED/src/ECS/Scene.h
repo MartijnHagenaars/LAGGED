@@ -1,8 +1,9 @@
 #pragma once
-#include "entt/entt.hpp"
+#include <functional>
+#include <algorithm>
 
-#include "Entity.h"
-#include "Component.h"
+#include "Archetype.h"
+#include "Utility/Logger.h"
 
 namespace LAG
 {
@@ -11,8 +12,10 @@ namespace LAG
 		enum class WidgetModes;
 	}
 
+	class Entity;
 	class Scene
 	{
+		friend class Entity;
 	public: 
 		Scene();
 		~Scene();
@@ -20,53 +23,89 @@ namespace LAG
 		Entity AddEntity();
 		Entity AddEntity(const std::string& entityName);
 
-		Entity DuplicateEntity(uint32_t entityID);
+		void RemoveEntity(EntityID entityID);
+		Entity DuplicateEntity(EntityID entityID);
 
-		void RemoveEntity(uint32_t entityID);
+		template<typename Comp, typename ...Args>
+		Comp* AddComponent(const EntityID entityID, Args&&... compArgs);
 
-		bool DoesEntityExist(uint32_t entityID); 
+		template<typename Comp>
+		void RemoveComponent(const EntityID entityID);
 
-		Entity GetEntity(uint32_t entityID);
+		template<typename Comp>
+		bool HasComponent(const EntityID& entityID);
+
+		template<typename Comp>
+		Comp* GetComponent(const EntityID& entityID);
+
+		/// <summary>
+		/// Checks whether an entity with a specific ID exists.
+		/// </summary>
+		/// <returns>Returns true if an entity with EntityID exists.</returns>
+		bool DoesEntityExist(EntityID entityID);
+
+		/// <summary>
+		/// Return the number of active entities
+		/// </summary>
 		size_t Count() const;
 
 		void RemoveAll();
 
-		/// <summary>
-		/// This function is used to loop over all entities in the scene.
-		/// </summary>
-		/// <typeparam name="...Components">The component types that an entity needs to contain.</typeparam>
-		/// <param name="func">The function that is called when looping over an entity that contains all required components.</param>
-		/// <returns>Returns true if any entities are found containing all required components..</returns>
-		template<typename... Components>
-		bool Loop(std::function<void(Entity entity, Components&...)> func)
-		{
-			auto view = m_Registry.view<Components...>();
-			if (view.back() == entt::null)
-				return false;
+		template<typename ...Comps>
+		void RunSystem(std::function<void(EntityID, Comps*...)> func);
 
-			for (auto& current : m_Registry.view<Components...>())
-			{
-				Entity ent(current, m_Registry);
-				func(ent, m_Registry.get<Components>(current)...);
-			}
-
-			return true;
-		}
-
-		/// <summary>
-		/// Loops over all components. When looping, the function pointer is called for every registered component type.
-		/// </summary>
-		/// <param name="func">The function that is called when looping over a registered component. When calling the function pointer, an object of type ComponentData is passed in. This object contains info about the component like name and ID.</param>
-		void ComponentLoop(std::function<void(Component& comp)> func);
-
-		void HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode);
-
+		template<typename ...Comps>
+		std::vector<EntityID> GetEntitiesWithComponents();
 
 	private:
-		bool ReflectComponent(entt::meta_type& compMeta, entt::meta_any& compInstance, Entity* entity, Reflection::WidgetModes mode);
-		void ReflectMember(const entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode);
-		void RenderMemberWidget(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode);
+		struct EntityRecord;
+		struct ComponentData;
 
-		entt::registry m_Registry;
+		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
+		Archetype* GetArchetype(const ArchetypeID& archetypeID);
+
+		template<typename Comp>
+		static const ComponentID GetComponentID();
+
+		template<typename Comp>
+		ComponentData* RegisterComponent();
+
+		void RemoveEntityFromArchetype(EntityID entityID, Archetype& archetype);
+		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);
+		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& componentData, int componentIndex, size_t targetSize);
+
+	private:
+		static inline EntityID s_EntityCounter = 0;
+		static inline ComponentID s_ComponentCounter = 0;
+		
+		// This vector stores all possible archetypes
+		std::vector<Archetype*> m_Archetypes;
+
+		struct EntityRecord
+		{
+			size_t index;
+			Archetype* archetype;
+		};
+		// This map stores all entities and the archetypes that they use.
+		std::unordered_map<EntityID, EntityRecord> m_EntityArchetypes;
+
+		struct ComponentData
+		{
+			size_t size = -1;
+
+			std::function<void(unsigned char* dest)> CreateObjectInMemory;
+			std::function<void(unsigned char* src, unsigned char* dest)> MoveData;
+			std::function<void(unsigned char* data)> DestructData;
+#ifdef DEBUG
+			std::string debugName;
+#endif
+		};
+		// This map links all ComponentIDs to the correct ComponentData struct. 
+		// The ComponentData struct contains useful information / functions for managing component data.
+		std::unordered_map<ComponentID, ComponentData*> m_ComponentMap;
+
 	};
 }
+
+// Implement the Scene template functions
+#include "Scene.inl"

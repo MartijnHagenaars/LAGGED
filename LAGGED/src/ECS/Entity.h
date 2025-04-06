@@ -1,68 +1,39 @@
 #pragma once
-#include "entt/entt.hpp"
-#include "Utility/Logger.h"
+#include "ECS/Scene.h"
 
 namespace LAG
 {
+	class Scene;
 	class Entity
 	{
 	public:
 		Entity() = default;
-		Entity(const Entity& entity);
+		Entity(const Entity& entity) = default;
+
+		template<typename Comp, typename ...Args>
+		Comp* AddComponent(Args && ...args);
+
+		template<typename Comp>
+		void RemoveComponent();
+
+		template<typename Comp>
+		bool HasComponent();
+
+		template<typename Comp>
+		Comp* GetComponent();
 
 		bool IsValid();
 
-		template<typename T>
-		bool HasComponent()
-		{
-			if (m_RegistryPtr->valid(m_EntityID))
-				return m_RegistryPtr->try_get<T>(m_EntityID);
-			else return false;
-		}
-
-		//Adds the specified component to the entity. 
-		template<typename T, typename ... Args>
-		T* AddComponent(Args&&... arguments)
-		{
-			if (!HasComponent<T>())
-			{
-				m_RegistryPtr->emplace<T>(m_EntityID, std::forward<Args>(arguments)...);
-				return &m_RegistryPtr->get<T>(m_EntityID);
-			}
-			
-			WARNING("Tried to add a component to an entity that already has the same component. Discarding...");
-			return &m_RegistryPtr->get<T>(m_EntityID);
-		}
-
-		template<typename T>
-		void RemoveComponent()
-		{
-			if (HasComponent<T>())
-				m_RegistryPtr->remove<T>(m_EntityID);
-			else 
-				WARNING("Failed to remove component: entity doesn't have component.");
-		}
-
-		template<typename T>
-		T* GetComponent()
-		{
-			if (m_RegistryPtr->valid(m_EntityID))
-			{
-				if (HasComponent<T>())
-					return &m_RegistryPtr->get<T>(m_EntityID);
-			}
-			else ERROR("Tried to get an invalid entity.");
-
-			return nullptr;
-		}
-
-		uint32_t GetEntityID() const;
+		EntityID GetEntityID() const;
 
 	private:
 		friend class Scene;
-		Entity(entt::entity entityID, entt::registry& registryPtr);
+		Entity(Scene& sceneRef, EntityID entityID);
 
-		entt::entity m_EntityID = entt::tombstone;
-		entt::registry* m_RegistryPtr = nullptr;
+		EntityID m_ID = ENTITY_NULL;
+		Scene* m_SceneRef = nullptr;
 	};
 }
+
+// Implement the Entity template functions
+#include "Entity.inl"

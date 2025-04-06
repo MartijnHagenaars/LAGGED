@@ -3,17 +3,15 @@
 #include "ECS/Entity.h"
 #include "ECS/Components/CameraComponent.h"
 
-namespace LAG::CameraSystem
+namespace LAG
 {
-	void Update(Entity* entity);
+	namespace CameraSystem
+	{
+		void Update(EntityID entityID);
 
-	void SetActiveCameraEntity(Entity* entity);
+		EntityID GetActiveCameraEntityID();
 
-	Entity GetActiveCameraEntity();
-	CameraComponent* GetActiveCameraComponent();
-
-	void ResizeCameraBuffers();
-
-	glm::mat4 CalculateViewMat(Entity* entity);
-	glm::mat4 CalculateProjMat(Entity* entity);
+		glm::mat4 CalculateViewMat(EntityID entityID);
+		glm::mat4 CalculateProjMat(EntityID entityID);
+	}
 }

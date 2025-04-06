@@ -15,7 +15,6 @@
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
     <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
-    <ClCompile Include="src\ECS\Meta\ReflectionTypeDefinitions.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
     <ClCompile Include="src\Editor\ToolsManager.cpp" />
     <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
@@ -56,15 +55,12 @@
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
-    <ClCompile Include="src\ECS\Component.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
-    <ClInclude Include="src\ECS\Meta\ReflectionComponentSetup.h" />
-    <ClInclude Include="src\ECS\Meta\ReflectionTypeDefinitions.h" />
     <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
@@ -76,7 +72,6 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
-    <ClInclude Include="src\Core\Resources\Surface.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
     <ClInclude Include="imgui\ImGui\imgui.h" />
@@ -133,8 +128,9 @@
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
-    <ClInclude Include="src\ECS\Component.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
+    <ClInclude Include="src\ECS\TypeDefines.h" />
+    <ClInclude Include="src\ECS\Archetype.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
@@ -145,5 +141,7 @@
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
+    <None Include="src\ECS\Scene.inl" />
+    <None Include="src\ECS\Entity.inl" />
   </ItemGroup>
 </Project>
