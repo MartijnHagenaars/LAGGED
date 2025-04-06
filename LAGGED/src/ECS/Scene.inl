@@ -179,7 +179,7 @@ namespace LAG
 			newArchetype = CreateArchetype(newArchetypeID);
 #ifdef DEBUG
 			newArchetype->debugName = typeid(Comp).name();
-			printf("Info: Creating Archetype with %i components: (%s)\n", newArchetype->typeID.size(), newArchetype->debugName.c_str());
+			INFO("Creating archetype with {} components: {}", newArchetype->typeID.size(), newArchetype->debugName.c_str());
 #endif
 		}
 
