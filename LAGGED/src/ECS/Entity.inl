@@ -39,7 +39,7 @@ namespace LAG
 		const auto& recordIt = m_SceneRef->m_EntityArchetypes.find(m_ID);
 		if (recordIt == m_SceneRef->m_EntityArchetypes.end() || recordIt->second.archetype == nullptr)
 		{
-			CRITICAL("Failed to run GetComponent: Record is null.");
+			CRITICAL("Failed to run GetComponent for Entity {}: Record is null.", m_ID);
 			return nullptr;
 		}
 
