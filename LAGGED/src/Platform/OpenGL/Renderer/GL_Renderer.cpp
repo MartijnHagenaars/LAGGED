@@ -164,39 +164,36 @@ namespace LAG
 		}
 
 		const auto& renderEntities = GetScene()->GetEntitiesWithComponents<TransformComponent>();
-		if (!renderEntities.empty())
+		for (const auto& entityID : renderEntities)
 		{
-			for (const auto& entityID : renderEntities)
+			DefaultComponent* defPtr = GetScene()->GetComponent<DefaultComponent>(entityID);
+			TransformComponent* transformPtr = GetScene()->GetComponent<TransformComponent>(entityID);
+
+			ModelComponent* modelPtr = GetScene()->GetComponent<ModelComponent>(entityID);
+			if (modelPtr != nullptr)
 			{
-				DefaultComponent* defPtr = GetScene()->GetComponent<DefaultComponent>(entityID);
-				TransformComponent* transformPtr = GetScene()->GetComponent<TransformComponent>(entityID);
-
-				ModelComponent* modelPtr = GetScene()->GetComponent<ModelComponent>(entityID);
-				if (modelPtr != nullptr)
+				//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
+				if (defPtr->visible && modelPtr->modelHandle.m_ModelLookup.GetValue() != 0)
 				{
-					//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
-					if (defPtr->visible && modelPtr->modelHandle.m_ModelLookup.GetValue() != 0)
-					{
-						GetResourceManager()->GetResource<Model>(modelPtr->modelHandle.m_ModelLookup)->Render(
-							entityID, camEntityID,
-							*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
-							lights);
-					}
+					GetResourceManager()->GetResource<Model>(modelPtr->modelHandle.m_ModelLookup)->Render(
+						entityID, camEntityID,
+						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
+						lights);
 				}
+			}
 
-				SurfaceComponent* surfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
-				if (surfacePtr)
-				{
-					if (defPtr->visible)
-						surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-				}
+			SurfaceComponent* surfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
+			if (surfacePtr)
+			{
+				if (defPtr->visible)
+					surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+			}
 
-				ProceduralSurfaceComponent* procSurfacePtr = GetScene()->GetComponent<ProceduralSurfaceComponent>(entityID);
-				if (procSurfacePtr)
-				{
-					if (defPtr->visible)
-						procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-				}
+			ProceduralSurfaceComponent* procSurfacePtr = GetScene()->GetComponent<ProceduralSurfaceComponent>(entityID);
+			if (procSurfacePtr)
+			{
+				if (defPtr->visible)
+					procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			}
 		}
 
