@@ -15,7 +15,7 @@ namespace LAG
 		Model() = delete;
 		explicit Model(const HashedString& path);
 
-		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
+		void Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
 
 	private:
 		bool Load() override;

@@ -26,7 +26,7 @@ void Chunk::Load(const glm::vec2& position)
 		procSurface->surfaceSubdivisions = 64;
 		procSurface->noiseProperties.m_Amplitude = 0.7f;
 		procSurface->noiseProperties.m_Frequency = 0.5f;
-		LAG::SurfaceSystems::GenerateNoiseSurface(&m_Entity);
+		LAG::SurfaceSystems::GenerateNoiseSurface(m_Entity);
 	}
 	//TODO: Noise movement is incorrecct
 }

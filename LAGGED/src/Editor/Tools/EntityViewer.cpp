@@ -2,7 +2,6 @@
 
 #include "ECS/Entity.h"
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionComponentSetup.h"
 #include "ECS/Components/BasicComponents.h"
 
 #include "Core/Engine.h"
@@ -13,7 +12,9 @@
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
-		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), m_BrowserHeight(200.f)
+		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), 
+		m_SelectedEntity(nullptr),
+		m_BrowserHeight(200.f)
 	{
 	}
 
@@ -41,32 +42,29 @@ namespace LAG
 		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
 		ImGui::Text(totalEntities.c_str());
 
-		//Browser container
-		ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
-		scene->Loop<DefaultComponent>([&scene, &selectedEntity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
-			{
-				ImGui::PushID(entity.GetEntityID());
-				if (ImGui::Button(comp.visible ? "Hide" : "Show"))
-					comp.visible = !comp.visible;
+		CRITICAL("TEMPORARILY DISABLED");
 
-				ImGui::SameLine();
-				if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
-				{
-					if (selectedEntity.GetEntityID() != entity.GetEntityID())
-					{
-						//Unload the previously selected entity (if it's valid)
-						if (selectedEntity.IsValid())
-							GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::UNLOAD);
+		////Browser container
+		//ImGui::BeginChild("EntityList", ImVec2(0.f, m_BrowserHeight), ImGuiChildFlags_Border, ImGuiWindowFlags_None);
+		//scene->Loop<DefaultComponent>([&scene, &entity = m_SelectedEntity](Entity entity, DefaultComponent& comp)
+		//	{
+		//		ImGui::PushID(entity.GetEntityID());
+		//		if (ImGui::Button(comp.visible ? "Hide" : "Show"))
+		//			comp.visible = !comp.visible;
 
-						//Set new selected entity and load its widgets
-						selectedEntity = entity;
-						GetScene()->HandleComponentWidgets(&selectedEntity, Reflection::WidgetModes::LOAD);
-					}
-				}
-				ImGui::PopID();
-			});
+		//		ImGui::SameLine();
+		//		if (ImGui::Button(comp.name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
+		//		{
+		//			if (entity.GetEntityID() != entity.GetEntityID())
+		//			{
+		//				//TODO: Implement reflection widgets...
+		//				ImGui::Text("TODO: IMPLEMENT REFLECTION WIDGETS...");
+		//			}
+		//		}
+		//		ImGui::PopID();
+		//	});
 
-		ImGui::EndChild();
+		//ImGui::EndChild();
 
 		ImGui::InvisibleButton("SplitButton", ImVec2(-1.f, 10.0f));
 		if (ImGui::IsItemActive())
@@ -86,17 +84,17 @@ namespace LAG
 
 	void EntityViewer::RenderProperties()
 	{
-		if (m_SelectedEntity.IsValid())
+		if (m_SelectedEntity->IsValid())
 		{
 			if (ImGui::Button("Duplicate Entity"))
 			{
-				GetScene()->DuplicateEntity(m_SelectedEntity.GetEntityID());
+				GetScene()->DuplicateEntity(m_SelectedEntity->GetEntityID());
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Delete Entity"))
 			{
-				GetScene()->RemoveEntity(m_SelectedEntity.GetEntityID());
-				m_SelectedEntity = Entity();
+				GetScene()->RemoveEntity(m_SelectedEntity->GetEntityID());
+				m_SelectedEntity = nullptr;
 				return;
 			}
 
@@ -107,26 +105,17 @@ namespace LAG
 			{
 				ImGui::SeparatorText("Select a component");
 
-				//Loop through all components. Add them to the popup if the entity doesn't already use them. 
-				GetEngine().GetScene()->ComponentLoop([&](Component& comp)
-					{
-						if (!comp.ExistsOnEntity(m_SelectedEntity))
-							if (ImGui::Selectable(comp.GetDisplayName().c_str(), false))
-							{
-								INFO("Adding component with ID {0}...", comp.GetDisplayName());
-								comp.AddToEntity(m_SelectedEntity);
-							}
-					});
+				ImGui::Text("TODO: ADD LIST OF COMPONENTS HERE...");
+
 				ImGui::EndPopup();
 			}
 
-			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity.GetEntityID());
+			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity->GetEntityID());
 			ImGui::Text(selectedEntityDisplay.c_str());
 
 			ImGui::Text("Add new component by picking one from the list below.");
 
-			//Draw all component widgets
-			GetScene()->HandleComponentWidgets(&m_SelectedEntity, Reflection::WidgetModes::DRAW);
+			//TODO: ADD FUNCTIONALITY FOR DRAWING ENTITIES AND THEIR COMPONENTS
 		}
 		else ImGui::Text("Select an entity to view its properties");
 	}

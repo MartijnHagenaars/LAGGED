@@ -3,7 +3,11 @@
 
 #include "Platform/Resources/Shader.h"
 #include "Platform/Resources/Texture.h"
+#include "Platform/OpenGL/Renderer/GL_Buffers.h"
 
+#include "Core/Engine.h"
+
+#include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
@@ -15,17 +19,6 @@
 
 namespace LAG
 {
-	Surface::Surface() :
-		SurfaceBase()
-	{
-	}
-
-	Surface::Surface(const std::string& heightTexturePath) :
-		SurfaceBase()
-	{
-		ERROR("Constructor for loading height map from texture has not been implemented.");
-	}
-
 	void Surface::GenerateSurface(int width, int height)
 	{
 		//Check if sizes are valid
@@ -83,10 +76,10 @@ namespace LAG
 		GenerateSurface(procSurfaceComp.surfaceSubdivisions, procSurfaceComp.surfaceSubdivisions);
 	}
 
-	void Surface::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
+	void Surface::Render(EntityID objectEntity, EntityID cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
 		shader.Bind();
-		shader.SetMat4("a_ModelMat", transform.GetTransformMatrix());
+		shader.SetMat4("a_ModelMat", GetEngine().GetScene()->GetComponent<TransformComponent>(objectEntity)->GetTransformMatrix());
 		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntity));
 		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntity));
 
@@ -113,7 +106,7 @@ namespace LAG
 
 	bool Surface::Load()
 	{
-		if (IsLoaded())
+		if (m_Loaded)
 		{
 			WARNING("Tried to load a surface thats's already loaded");
 			return false;
@@ -131,18 +124,18 @@ namespace LAG
 
 		m_Buffer.Initialize(vertexBuffer, indexBuffer);
 
-		SetLoaded(true);
+		m_Loaded = true;
 		return true;
 	}
 
 	bool Surface::Unload()
 	{
-		if (!IsLoaded())
+		if (!m_Loaded)
 			return true;
 
 		m_Buffer.Shutdown();
 
-		SetLoaded(false);
+		m_Loaded = false;
 		return true;
 	}
 

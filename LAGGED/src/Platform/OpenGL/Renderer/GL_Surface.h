@@ -1,34 +1,31 @@
 #pragma once
-#include "Core/Resources/Surface.h"
 #include "glm/vec3.hpp"
+
+#include "Platform/Resources/Shader.h"
+#include "ECS/Scene.h"
+#include "ECS/Components/BasicComponents.h"
+#include "ECS/Components/LightComponent.h"
+
+#include "Platform/OpenGL/Renderer/GL_Buffers.h"
 
 namespace LAG
 {
 	struct ProceduralSurfaceComponent;
 
-	enum class SurfaceType
-	{
-		FLAT = 0,
-
-	};
-
 	class Texture;
-	class Surface : public SurfaceBase
+	class Surface
 	{
-	public:
-		Surface();
-		Surface(const std::string& heightTexturePath);
-		
+	public:		
 		//Load a height map from a texture
 		//TODO: Needs to be reworked
 		void GenerateHeightMapSurface(const std::string& heightTexturePath);
 		void GenerateNoiseSurface(const TransformComponent& transformComp, const ProceduralSurfaceComponent& procSurfaceComp);
 
-		virtual bool Load() override;
-		virtual bool Unload() override;
+		virtual bool Load();
+		virtual bool Unload();
 
+		void Render(EntityID objectEntity, EntityID cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights);
 
-		void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
 	private:
 		////Creates a vector of 2D noise data
 		//std::vector<float> GenerateNoise(int xStart, int yStart, int xSize, int ySize, float frequency, int seed = 0);
@@ -36,10 +33,11 @@ namespace LAG
 		//Generates the surface. Calculates vertices, indices and normals.
 		void GenerateSurface(int width, int height);
 
-
 		void CalculateVertices();
 		void CalculateIndices();
 		void CalculateNormals();
+
+		bool m_Loaded = false;
 
 		struct VertexData
 		{
@@ -58,5 +56,6 @@ namespace LAG
 		int m_HeightMapWidth = 0;
 		int m_HeightMapHeight = 0;
 
+		ArrayBuffer m_Buffer;
 	};
 }

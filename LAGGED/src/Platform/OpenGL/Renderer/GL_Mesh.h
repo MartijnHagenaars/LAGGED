@@ -12,8 +12,6 @@ namespace LAG
 	class Mesh
 	{
 	public: 
-		Mesh() = default;
-
 		bool Load(const std::string& path, tinygltf::Model& modelData, size_t meshIndex);
 		void Unload();
 

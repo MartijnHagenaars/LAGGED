@@ -1,9 +1,7 @@
 #include "Scene.h"
+#include "ECS/Entity.h"
 
 #include "Components/BasicComponents.h"
-
-#include "ImGui/imgui.h"
-#include "Meta/ReflectionComponentSetup.h"
 
 namespace LAG
 {
@@ -17,212 +15,190 @@ namespace LAG
 
 	Entity Scene::AddEntity()
 	{
-		entt::entity newEntity = m_Registry.create();
-		m_Registry.emplace<DefaultComponent>(newEntity, "New entity");
-		return Entity(newEntity, m_Registry);
+		EntityID newEntityID = ++s_EntityCounter;
+
+		auto entArchetype = m_EntityArchetypes.find(newEntityID);
+		if (entArchetype != m_EntityArchetypes.end())
+			ERROR("Entity with ID {} already exists in EnityArchetypes map.", newEntityID);
+
+		EntityRecord rec = {};
+		rec.index = 0;
+		rec.archetype = nullptr;
+		m_EntityArchetypes.insert({ newEntityID, rec });
+
+		return Entity(*this, newEntityID);
 	}
 
 	Entity Scene::AddEntity(const std::string& entityName)
 	{
-		entt::entity newEntity = m_Registry.create();
-		m_Registry.emplace<DefaultComponent>(newEntity, entityName);
-		return Entity(newEntity, m_Registry);
+		Entity newEntity = AddEntity();
+		newEntity.AddComponent<DefaultComponent>(entityName);
+		
+		return newEntity;
 	}
 
-	Entity Scene::DuplicateEntity(uint32_t entityID)
+	Entity Scene::DuplicateEntity(EntityID entityID)
 	{
-		Entity duplicateEntity = AddEntity();
-		Entity originalEntity = GetEntity(entityID);
+		//TODO: Implement function...
+		return Entity();
+	}
 
-		//Add the same component type to the duplicate entity
-		ComponentLoop([&](Component& comp)
-			{
-				if (comp.ExistsOnEntity(originalEntity))
-				{
-					comp.AddToEntity(duplicateEntity);
-				}
-			});
-
-		//Assign all the same values
-		for (const auto& it : m_Registry.storage())
+	void Scene::RemoveEntity(EntityID entityID)
+	{
+		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
+		if (entityRecordIt == m_EntityArchetypes.end())
 		{
-			entt::sparse_set& storageSet = it.second;
-			if (storageSet.contains(entt::entity(duplicateEntity.GetEntityID())))
-			{
-				//Get the component meta for this specific type and check if it's valid. 
-				entt::meta_type compMeta = entt::resolve(storageSet.type());
-				if (!compMeta)
-					continue;
-
-				entt::meta_any duplicateCompInstance = compMeta.from_void(storageSet.value(entt::entity(duplicateEntity.GetEntityID())));
-				if (duplicateCompInstance != nullptr)
-				{
-					//Only reflect the component if it has any reflected variables set up.
-					if (compMeta.data().end() - compMeta.data().begin() > 0)
-					{
-						for (const auto& metadataIt : compMeta.data())
-						{
-							const entt::meta_data& propData = metadataIt.second;
-
-							entt::meta_any originalCompInstance = compMeta.from_void(storageSet.value(entt::entity(originalEntity.GetEntityID())));
-							propData.set(duplicateCompInstance, propData.get(originalCompInstance));
-						}
-					}
-				}
-				else CRITICAL("Cannot duplicate component data. Has the component reflection been set up?");
-			}
+			ERROR("Tried to delete an entity with ID {}, which does not exist.", entityID);
+			return;
 		}
+		EntityRecord& entityRecord = entityRecordIt->second;
+		Archetype* entityArchetype = entityRecord.archetype;
 
+		if (entityArchetype)
+		{
+			for (int i = 0; i < entityArchetype->typeID.size(); i++)
+			{
+				ComponentID compID = entityArchetype->typeID[i];
+				ComponentData* compData = m_ComponentMap.at(compID);
+				compData->DestructData(&entityArchetype->compData[i][entityRecord.index * compData->size]);
+			}
 
-		//Update the name to indicate it's a copy
-		duplicateEntity.GetComponent<DefaultComponent>()->name = duplicateEntity.GetComponent<DefaultComponent>()->name + " - Copy";
-		return duplicateEntity;
+			ShrinkComponentBuffer(*entityArchetype, entityRecord);
+			RemoveEntityFromArchetype(entityID, *entityArchetype);
+		}
+		
+		m_EntityArchetypes.erase(entityID);
 	}
 
-	void Scene::RemoveEntity(uint32_t entityID)
+	bool Scene::DoesEntityExist(EntityID entityID)
 	{
-		entt::entity entity = static_cast<entt::entity>(entityID);
-		if (m_Registry.valid(entity))
-			m_Registry.destroy(entity);
-		else WARNING("Tried to remove an entity that is invalid.");
-	}
-
-	bool Scene::DoesEntityExist(uint32_t entityID)
-	{
-		return m_Registry.valid(static_cast<entt::entity>(entityID));
-	}
-
-	Entity Scene::GetEntity(uint32_t entityID)
-	{
-		return Entity(static_cast<entt::entity>(entityID), m_Registry);
+		return (m_EntityArchetypes.find(entityID) != m_EntityArchetypes.end());
 	}
 
 	size_t Scene::Count() const
 	{
-		return m_Registry.storage<entt::entity>()->size();
+		return m_EntityArchetypes.size();
 	}
 
 	void Scene::RemoveAll()
 	{
-		if (m_Registry.storage<entt::entity>().size() > 0)
-		{
-			for (const auto entity : m_Registry.storage<entt::entity>())
-				RemoveEntity(static_cast<uint32_t>(entity));
-		}
+		//TODO: Implement function...
 	}
 
 
-	///////////////////////////////////////////////////////////////
-	// Functionality for Entt Meta widgets, used in Editor Tools //
-	///////////////////////////////////////////////////////////////
+	// ======== ARCHETYPES ========
 
-	void Scene::HandleComponentWidgets(Entity* entity, Reflection::WidgetModes mode)
+	Archetype* Scene::CreateArchetype(const ArchetypeID& archetypeID)
 	{
-		for (const auto& it : m_Registry.storage())
+		Archetype* archetype = new Archetype();
+		archetype->typeID = archetypeID;
+
+		m_Archetypes.emplace_back(archetype);
+
+		for (int i = 0; i < archetypeID.size(); i++)
 		{
-			entt::sparse_set& storageSet = it.second;
-			if (storageSet.contains(entt::entity(entity->GetEntityID())))
+			archetype->compData.push_back(nullptr);
+			archetype->compDataSize.push_back(0);
+		}
+
+		return archetype;
+	}
+
+	Archetype* Scene::GetArchetype(const ArchetypeID& archetypeID)
+	{
+		for (auto* archetype : m_Archetypes)
+		{
+			if (archetype->typeID == archetypeID)
+				return archetype;
+		}
+
+		return nullptr;
+	}
+
+	// ======== HELPER FUNCTIONS ========
+
+	void Scene::RemoveEntityFromArchetype(EntityID entityID, Archetype& archetype)
+	{
+		int decrementStartingIndex = -1;
+		for (int i = 0; i < archetype.entityIDs.size(); i++)
+		{
+			if (decrementStartingIndex == -1 && archetype.entityIDs[i] == entityID)
+				decrementStartingIndex = i;
+
+			if (decrementStartingIndex != -1)
 			{
-				//Get the component meta for this specific type and check if it's valid. 
-				entt::meta_type compMeta = entt::resolve(storageSet.type());
-				if (compMeta)
+				EntityRecord& record = m_EntityArchetypes[archetype.entityIDs[i]];
+				record.index -= 1;
+			}
+		}
+		if (decrementStartingIndex != -1)
+			archetype.entityIDs.erase(archetype.entityIDs.begin() + decrementStartingIndex);
+	}
+
+	void Scene::ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord)
+	{
+		for (int typeIndex = 0; typeIndex < archetype.typeID.size(); typeIndex++)
+		{
+			const ComponentData* compData = m_ComponentMap.at(archetype.typeID[typeIndex]);
+
+			unsigned char* newData;
+			const size_t compDataSize = compData->size;
+			const size_t targetSize = (archetype.entityIDs.size() - 1) * compDataSize;
+
+			if (targetSize > 0)
+			{
+#ifdef DEBUG
+				//INFO("Archetype component buffer is too large. Shrinking buffer memory ({} -> {}) for ({})...",
+				//	archetype.compDataSize[typeIndex],
+				//	targetSize, archetype.debugName);
+#endif
+				newData = new unsigned char[targetSize];
+				archetype.compDataSize[typeIndex] = targetSize;
+
+				int offsetIndex = 0;
+				for (int entIndex = 0; entIndex < archetype.entityIDs.size(); entIndex++)
 				{
-					auto compElement = storageSet.value(entt::entity(entity->GetEntityID()));
-					entt::meta_any compInstance = compMeta.from_void(compElement);
-					if (compInstance != nullptr)
-					{
-						//Get the display name of the component
-						std::string compName;
-						entt::meta_prop compDisplayNameProp = compMeta.prop(Reflection::ComponentProperties::DISPLAY_NAME);
-						if (compDisplayNameProp)
-							compName = compDisplayNameProp.value() != nullptr ? compDisplayNameProp.value().cast<std::string>() : std::string(compMeta.info().name());
-						else compName = std::string(compMeta.info().name());
+					if (entIndex == entityRecord.index)
+						continue;
 
-						//Only reflect the component if it has any reflected variables set up.
-						if (compMeta.data().end() - compMeta.data().begin() > 0)
-						{
-							if (ImGui::CollapsingHeader(compName.c_str(), ImGuiTreeNodeFlags_None))
-							{
-								//Apply some nice formatting
-								const float spacingAmount = 16.f;
-								ImGui::PushID(compMeta.info().hash());
-								ImGui::Indent(spacingAmount);
-
-								//Now actually reflect the component
-								ReflectComponent(compMeta, compInstance, entity, mode);
-
-								//Reset formatting
-								ImGui::Unindent(spacingAmount);
-								ImGui::Dummy(ImVec2(spacingAmount, 0.f));
-								ImGui::PopID();
-							}
-						}
-					}
-					else
-					{
-						ImGui::SeparatorText(std::string(compMeta.info().name()).c_str());
-						ImGui::Text("Failed to load reflection data for component. Has the component reflection been set up?");
-					}
+					compData->MoveData(&archetype.compData[typeIndex][entIndex * compDataSize], &newData[offsetIndex * compDataSize]);
+					offsetIndex += 1;
 				}
 			}
-		}
-	}
-
-	bool Scene::ReflectComponent(entt::meta_type& compMeta, entt::meta_any& compInstance, Entity* entity, Reflection::WidgetModes mode)
-	{
-		for (const auto& it : compMeta.data())
-		{
-			const entt::meta_data& propData = it.second;
-			entt::meta_any propInstance, propInstanceCompare;
-			propInstanceCompare = propInstance = propData.get(compInstance);
-			ReflectMember(propData, propInstance, entity, mode);
-
-			//Check if the component has been modified. If so, (re)set the values
-			if (propInstance != propInstanceCompare)
-				propData.set(compInstance, propInstance);
-		}
-
-		return true;
-	}
-
-	void Scene::ReflectMember(const entt::meta_data& propData, entt::meta_any& propValues, Entity* entity, Reflection::WidgetModes mode)
-	{
-		//Check if the member needs to be hidden. If that's the case, we can return early.
-		entt::meta_prop hideMember = propData.prop(Reflection::VariableProperties::HIDE_IN_EDITOR);
-		if (hideMember && hideMember.value().cast<bool>() == true)
-			return;
-
-		//Get the (display) name of the member. If the member doesn't have a display name, use whatever is generated.
-		std::string memberDisplayName;
-		entt::meta_prop memberDisplayNameProp = propData.prop(Reflection::ComponentProperties::DISPLAY_NAME);
-		if (memberDisplayNameProp)
-			memberDisplayName = memberDisplayNameProp.value() != nullptr ? memberDisplayNameProp.value().cast<std::string>() : std::string(propData.type().info().name());
-		else memberDisplayName = "Undefined display name (" + std::string(propData.type().info().name()) + ")";
-
-		RenderMemberWidget(propValues, entity, memberDisplayName, mode);
-	}
-
-	void Scene::RenderMemberWidget(entt::meta_any& typeValues, Entity* entity, const std::string& propName, Reflection::WidgetModes mode)
-	{
-		if (typeValues.type().func(Reflection::HANDLE_WIDGET_TYPE_FUNC))
-		{
-			typeValues.type().func(Reflection::HANDLE_WIDGET_TYPE_FUNC).invoke<LAG::Entity&, entt::meta_any, const char*, const Reflection::WidgetModes&>(
-				entt::meta_handle(), *entity, entt::forward_as_meta(typeValues), propName.c_str(), mode
-			);
-		}
-		else
-			ImGui::Text(std::string("No meta inspect function detected for " + propName).c_str());
-	}
-
-	void Scene::ComponentLoop(std::function<void(Component& comp)> func)
-	{
-		for (auto&& [id, type] : entt::resolve())
-		{
-			if (type && type.prop(Reflection::ComponentProperties::Internal::IS_REFLECTED_COMPONENT))
+			else
 			{
-				Component component(type);
-				func(component);
+#ifdef DEBUG
+				//INFO("Deallocating component buffer ({} -> {}) for ({})...",
+				//	archetype.compDataSize[typeIndex],
+				//	0, archetype.debugName);
+#endif
+				newData = nullptr;
+				archetype.compDataSize[typeIndex] = 0;
 			}
+
+			delete[] archetype.compData[typeIndex];
+			archetype.compData[typeIndex] = newData;
 		}
+	}
+
+	//TODO: These names are really bad. newArchetype should not include "NEW" since it's just moving data.
+	// INFO log message is also super vague. It's not allocating more memory in some cases.
+	void Scene::ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& compData, int compIndex, size_t targetSize)
+	{
+#ifdef DEBUG
+		//INFO("Archetype component buffer is too small. Allocating more memory ({} -> {}) for ({})...",
+		//	archetype.compDataSize[compIndex],
+		//	targetSize, archetype.debugName);
+#endif
+		size_t newCompDataSize = compData.size;
+		archetype.compDataSize[compIndex] = targetSize;
+		unsigned char* newData = new unsigned char[archetype.compDataSize[compIndex]];
+		//If this archetype has entities, we need to loop through all entities and move their data from the old (smaller) to the new (larger) buffer
+		for (int entIndex = 0; entIndex < archetype.entityIDs.size(); entIndex++)
+			compData.MoveData(&archetype.compData[compIndex][entIndex * newCompDataSize], &newData[entIndex * newCompDataSize]);
+
+		//The data has been moved so we can delete the old buffer and replace it with the new one.
+		delete[] archetype.compData[compIndex];
+		archetype.compData[compIndex] = newData;
 	}
 }

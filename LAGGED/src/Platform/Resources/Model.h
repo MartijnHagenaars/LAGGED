@@ -1,9 +1,10 @@
 #pragma once
-#include "glm/vec3.hpp"
-#include <vector>
-
 #include "Core/Resources/Resource.h"
 #include "Platform/Resources/Buffer/Buffer.h"
+#include "ECS/TypeDefines.h"
+
+#include "glm/vec3.hpp"
+#include <vector>
 
 namespace tinygltf
 {
@@ -30,7 +31,7 @@ namespace LAG
 		explicit ModelBase(const HashedString& path) : Resource(path) {};
 		virtual ~ModelBase() {};
 
-		virtual void Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
+		virtual void Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 
 	protected:
 		tinygltf::Model* m_Model = nullptr;

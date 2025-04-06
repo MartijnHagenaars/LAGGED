@@ -1,25 +1,20 @@
 #include "Entity.h"
+#include "Scene.h"
 
 namespace LAG
 {
-	Entity::Entity(entt::entity entityID, entt::registry& registryPtr) :
-		m_EntityID(entityID), m_RegistryPtr(&registryPtr)
-	{
-
-	}
-
-	Entity::Entity(const Entity& entity) : 
-		m_EntityID(entity.m_EntityID), m_RegistryPtr(entity.m_RegistryPtr)
+	Entity::Entity(Scene& sceneRef, EntityID entityID) :
+		m_SceneRef(&sceneRef), m_ID(entityID)
 	{
 	}
 
 	bool Entity::IsValid()
 	{
-		return m_EntityID != entt::tombstone;
+		return m_ID != ENTITY_NULL;
 	}
 
-	uint32_t Entity::GetEntityID() const
+	EntityID Entity::GetEntityID() const
 	{
-		return static_cast<uint32_t>(m_EntityID);
+		return m_ID;
 	}
 }

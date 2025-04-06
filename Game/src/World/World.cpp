@@ -23,28 +23,28 @@ void World::Update()
 	if (!m_UseInfiniteTerrain && m_HasGeneratedTerrain)
 		return;
 
-	LAG::Entity cameraEntity = {};
-	LAG::GetEngine().GetScene()->Loop<LAG::CameraComponent>([&cameraEntity](LAG::Entity entity, LAG::CameraComponent& cameraComp)
+	LAG::EntityID camEntityID = LAG::ENTITY_NULL;
+	LAG::GetEngine().GetScene()->RunSystem<LAG::CameraComponent>([&camEntityID](LAG::EntityID entity, LAG::CameraComponent* cameraComp)
 		{
-			if(cameraComp.isActive)
-				cameraEntity = entity;
+			if (cameraComp->isActive)
+				camEntityID = entity;
 		});
 
-	if (!cameraEntity.IsValid())
+	if (camEntityID == LAG::ENTITY_NULL)
 	{
 		ERROR("Failed to find camera");
 		return;
 	}
 
 
-	LAG::TransformComponent* camTransform = cameraEntity.GetComponent<LAG::TransformComponent>();
+	LAG::TransformComponent* camTransform = LAG::GetEngine().GetScene()->GetComponent<LAG::TransformComponent>(camEntityID);
 	if (camTransform->GetPosition() != m_PrevCameraPos)
 	{
 		m_PrevCameraPos = camTransform->GetPosition();
 		m_UpdateChunks = true;
 	}
 
-	if(m_UpdateChunks)
+	if (m_UpdateChunks)
 	{
 		int xCamGridPos = static_cast<int>(camTransform->GetPosition().x / static_cast<float>(CHUNK_SIZE));
 		int zCamGridPos = static_cast<int>(camTransform->GetPosition().z / static_cast<float>(CHUNK_SIZE));
