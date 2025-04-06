@@ -24,7 +24,7 @@ namespace LAG
 		Entity AddEntity(const std::string& entityName);
 
 		void RemoveEntity(EntityID entityID);
-		Entity* DuplicateEntity(EntityID entityID);
+		Entity DuplicateEntity(EntityID entityID);
 
 		template<typename Comp, typename ...Args>
 		Comp* AddComponent(const EntityID entityID, Args&&... compArgs);

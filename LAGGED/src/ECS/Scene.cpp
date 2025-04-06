@@ -37,10 +37,10 @@ namespace LAG
 		return newEntity;
 	}
 
-	Entity* Scene::DuplicateEntity(EntityID entityID)
+	Entity Scene::DuplicateEntity(EntityID entityID)
 	{
 		//TODO: Implement function...
-		return nullptr;
+		return Entity();
 	}
 
 	void Scene::RemoveEntity(EntityID entityID)
