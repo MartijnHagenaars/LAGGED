@@ -50,8 +50,8 @@ namespace LAG
 
 	void ArrayBuffer::Initialize(VertexBuffer& vertexBuffer, IndexBuffer& indexBuffer)
 	{
-		m_VertexBuffer = new VertexBuffer(vertexBuffer);
-		m_IndexBuffer = new IndexBuffer(indexBuffer);
+		m_VertexBuffer = std::make_unique<VertexBuffer>(vertexBuffer);
+		m_IndexBuffer = std::make_unique<IndexBuffer>(indexBuffer);
 
 		LAG_GRAPHICS_CHECK(glCreateVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));

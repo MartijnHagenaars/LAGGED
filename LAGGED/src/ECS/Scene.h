@@ -58,35 +58,44 @@ namespace LAG
 		std::vector<EntityID> GetEntitiesWithComponents();
 
 	private:
+		struct EntityRecord;
+		struct ComponentData;
+
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
 		template<typename Comp>
 		static const ComponentID GetComponentID();
 
-		struct ComponentData;
 		template<typename Comp>
 		ComponentData* RegisterComponent();
+
+		void RemoveEntityFromArchetype(EntityID entityID, Archetype& archetype);
+		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);
+		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& componentData, int componentIndex, size_t targetSize);
 
 	private:
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
-
+		
 		// This vector stores all possible archetypes
 		std::vector<Archetype*> m_Archetypes;
 
-		struct ArchetypeRecord
+		struct EntityRecord
 		{
-			uint64_t index;
+			size_t index;
 			Archetype* archetype;
 		};
 		// This map stores all entities and the archetypes that they use.
-		std::unordered_map<EntityID, ArchetypeRecord> m_EntityArchetypes;
+		std::unordered_map<EntityID, EntityRecord> m_EntityArchetypes;
 
 		struct ComponentData
 		{
-			size_t size;
-			std::function<void(unsigned char* src, unsigned char* dest)> moveData;
+			size_t size = -1;
+
+			std::function<void(unsigned char* dest)> CreateObjectInMemory;
+			std::function<void(unsigned char* src, unsigned char* dest)> MoveData;
+			std::function<void(unsigned char* data)> DestructData;
 #ifdef DEBUG
 			std::string debugName;
 #endif

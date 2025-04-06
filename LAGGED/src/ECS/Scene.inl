@@ -18,12 +18,12 @@ namespace LAG
 		}
 		else compData = compDataIt->second;
 
-		const auto& entArchIt = m_EntityArchetypes.find(entityID);
-		if (entArchIt == m_EntityArchetypes.end())
+		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
+		if (entityRecordIt == m_EntityArchetypes.end())
 			CRITICAL("Failed to find Entity with ID {} in EntityArchetype lookup map.", entityID);
 
-		ArchetypeRecord& record = entArchIt->second;
-		Archetype* oldArchetype = record.archetype;
+		EntityRecord& entityRecord = entityRecordIt->second;
+		Archetype* oldArchetype = entityRecord.archetype;
 		Archetype* newArchetype = nullptr;
 		Comp* newComponent = nullptr;
 
@@ -47,29 +47,14 @@ namespace LAG
 #endif
 			}
 
-			uint64_t targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
+			size_t targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
 			if (newArchetype->compDataSize[0] <= targetSize)
 			{
-#ifdef DEBUG
-				INFO("Archetype component buffer is too small. Allocating more memory ({} -> {}) for ({})...",
-					newArchetype->compDataSize[0],
-					(newArchetype->compDataSize[0] * ARCHETYPE_ALLOC_GROWTH) + sizeof(Comp),
-					newArchetype->debugName
-				);
-#endif
-
-				newArchetype->compDataSize[0] = (newArchetype->compDataSize[0] * ARCHETYPE_ALLOC_GROWTH) + sizeof(Comp);
-				unsigned char* newDataBuffer = new unsigned char[newArchetype->compDataSize[0]];
-				for (int i = 0; i < newArchetype->entityIDs.size(); i++)
-				{
-					compData->moveData(&newArchetype->compData[0][i * sizeof(Comp)], &newDataBuffer[i * sizeof(Comp)]);
-				}
-				delete[] newArchetype->compData[0];
-				newArchetype->compData[0] = newDataBuffer;
+				ResizeAndReallocateComponentBuffer(*newArchetype, *compData, 0, targetSize);
 			}
 
 			// Construct a new Comp object (with the correct Args) and place it into the component data array
-			uint64_t compDataIndex = newArchetype->entityIDs.size() * sizeof(Comp);
+			size_t compDataIndex = newArchetype->entityIDs.size() * sizeof(Comp);
 			newComponent = new(&newArchetype->compData[0][compDataIndex])  Comp(std::forward<Args>(compArgs)...);
 		}
 		else
@@ -101,33 +86,19 @@ namespace LAG
 			// In the end, after everything has been moved, the new component is added. 
 			for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 			{
-				const ComponentID& compID = newArchetypeID[compIndex];
-				const ComponentData* newCompData = m_ComponentMap[compID];
-				const uint64_t newCompDataSize = newCompData->size;
+				const ComponentID compID = newArchetypeID[compIndex];
+				ComponentData* newCompData = m_ComponentMap.at(compID);
 
-				uint64_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
-				uint64_t newSize = currentSize + newCompDataSize;
+				size_t newCompDataSize = newCompData->size;
+				size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
+				size_t newSize = currentSize + newCompDataSize;
 
 				// If there is no more space left for a component in a archetype, allocate some more and move all the previous 
 				// component data from the old archetype buffer to the new one. 
 				if (newSize > newArchetype->compDataSize[compIndex])
 				{
-					const uint64_t targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
-#ifdef DEBUG
-					INFO("Archetype component buffer is too small. Allocating more memory ({} -> {}) for ({})...",
-						newArchetype->compDataSize[compIndex],
-						targetSize, newArchetype->debugName);
-#endif
-					newArchetype->compDataSize[compIndex] = targetSize;
-					unsigned char* newData = new unsigned char[newArchetype->compDataSize[compIndex]];
-					//If this archetype has entities, we need to loop through all entities and move their data from the old (smaller) to the new (larger) buffer
-					for (int entIndex = 0; entIndex < newArchetype->entityIDs.size(); entIndex++)
-					{
-						newCompData->moveData(&newArchetype->compData[compIndex][entIndex * newCompDataSize], &newData[entIndex * newCompDataSize]);
-					}
-					//The data has been moved so we can delete the old buffer and replace it with the new one.
-					delete[] newArchetype->compData[compIndex];
-					newArchetype->compData[compIndex] = newData;
+					size_t targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
+					ResizeAndReallocateComponentBuffer(*newArchetype, *newCompData, compIndex, targetSize);
 				}
 
 
@@ -141,7 +112,7 @@ namespace LAG
 					if (matchingIDs)
 					{
 						ComponentData* oldCompData = m_ComponentMap.at(oldArchetype->typeID[i]);
-						oldCompData->moveData(&oldArchetype->compData[i][record.index * oldCompData->size], &newArchetype->compData[compIndex][currentSize]);
+						oldCompData->MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompData->size], &newArchetype->compData[compIndex][currentSize]);
 						break;
 					}
 					else if (i == (oldArchetype->typeID.size() - 1) && !matchingIDs)
@@ -151,75 +122,21 @@ namespace LAG
 				}
 			}
 
-			// If a new component is added, the data buffer for the old archetype needs to be shrunk.
+			// If a new component is added, the data buffer 
+			// for the old archetype needs to be shrunk.
 			if (!oldArchetype->entityIDs.empty())
 			{
-				for (int typeIndex = 0; typeIndex < oldArchetype->typeID.size(); typeIndex++)
-				{
-					const ComponentData* oldCompData = m_ComponentMap.at(oldArchetype->typeID[typeIndex]);
-
-					unsigned char* newData;
-					const size_t oldCompDataSize = oldCompData->size;
-					const size_t targetSize = (oldArchetype->entityIDs.size() * oldCompDataSize) - oldCompDataSize;
-
-					if (targetSize > 0)
-					{
-#ifdef DEBUG
-						INFO("Archetype component buffer is too large. Shrinking buffer memory ({} -> {}) for ({})...",
-							newArchetype->compDataSize[typeIndex],
-							oldArchetype->compDataSize[typeIndex] - oldCompDataSize,
-							newArchetype->debugName);
-#endif
-						newData = new unsigned char[oldArchetype->compDataSize[typeIndex] - oldCompDataSize];
-						oldArchetype->compDataSize[typeIndex] -= oldCompDataSize;
-
-						int offsetIndex = 0;
-						for (int entIndex = 0; entIndex < oldArchetype->entityIDs.size(); entIndex++)
-						{
-							if (entIndex == record.index)
-								continue;
-
-							oldCompData->moveData(&oldArchetype->compData[typeIndex][entIndex * oldCompDataSize], &newData[offsetIndex * oldCompDataSize]);
-							offsetIndex += 1;
-						}
-					}
-					else
-					{
-#ifdef DEBUG
-						INFO("Deallocating component buffer ({} -> {}) for ({})...",
-							oldArchetype->compDataSize[typeIndex],
-							0, newArchetype->debugName);
-#endif
-						newData = nullptr;
-						oldArchetype->compDataSize[typeIndex] = 0;
-					}
-
-					delete[] oldArchetype->compData[typeIndex];
-					oldArchetype->compData[typeIndex] = newData;
-				}
-
-				int decrementStartingIndex = -1;
-				for (int i = 0; i < oldArchetype->entityIDs.size(); i++)
-				{
-					if (decrementStartingIndex == -1 && oldArchetype->entityIDs[i] == entityID)
-						decrementStartingIndex = i;
-
-					if (decrementStartingIndex != -1)
-					{
-						ArchetypeRecord& record = m_EntityArchetypes[oldArchetype->entityIDs[i]];
-						record.index -= 1;
-					}
-				}
-				if (decrementStartingIndex != -1)
-					oldArchetype->entityIDs.erase(oldArchetype->entityIDs.begin() + decrementStartingIndex);
+				ShrinkComponentBuffer(*oldArchetype, entityRecord);
+				RemoveEntityFromArchetype(entityID, *oldArchetype);
 			}
 		}
 
-		// Update the entity archetype record and add the EntityID to the archetype. 
+		// Update the entity archetype record 
+		// and add the EntityID to the archetype. 
 		newArchetype->entityIDs.push_back(entityID);
 
-		record.archetype = newArchetype;
-		record.index = newArchetype->entityIDs.size() - 1;
+		entityRecord.archetype = newArchetype;
+		entityRecord.index = newArchetype->entityIDs.size() - 1;
 		return newComponent;
 	}
 
@@ -233,12 +150,12 @@ namespace LAG
 			CRITICAL("Failed to remove component: Component {} is not registered.", typeid(Comp).name());
 		
 		const ComponentData* compDataPtr = compDataIt->second;
-		const auto& archRecordIt = m_EntityArchetypes.find(entityID);
-		if (archRecordIt == m_EntityArchetypes.end())
+		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
+		if (entityRecordIt == m_EntityArchetypes.end())
 			CRITICAL("Failed to remove component: Record for entity ({}) could not be found.", entityID);
 
-		ArchetypeRecord& archRecord = archRecordIt->second;
-		Archetype* oldArchetype = archRecord.archetype;
+		EntityRecord& entityRecord = entityRecordIt->second;
+		Archetype* oldArchetype = entityRecord.archetype;
 		// If oldArchetype is nullptr, it doesnt contain any components.
 		if (oldArchetype == nullptr)
 			return;
@@ -250,6 +167,68 @@ namespace LAG
 			WARNING("Failed to remove component: Entity ({}) does not contain {} component.", entityID, typeid(Comp).name());
 			return;
 		}
+
+		// Remove the old ComponentID and construct the new ArchetypeID
+		ArchetypeID newArchetypeID = oldArchetype->typeID;
+		newArchetypeID.erase(newArchetypeID.begin() + (archetypeIdIt - oldArchetype->typeID.begin()));
+		std::sort(newArchetypeID.begin(), newArchetypeID.end());
+
+		Archetype* newArchetype = GetArchetype(newArchetypeID);
+		if (!newArchetype)
+		{
+			newArchetype = CreateArchetype(newArchetypeID);
+#ifdef DEBUG
+			newArchetype->debugName = typeid(Comp).name();
+			printf("Info: Creating Archetype with %i components: (%s)\n", newArchetype->typeID.size(), newArchetype->debugName.c_str());
+#endif
+		}
+
+		for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
+		{
+			const ComponentID newCompID = newArchetypeID[compIndex];
+			ComponentData* newComp = m_ComponentMap.at(newCompID);
+
+			size_t newCompDataSize = newComp->size;
+			size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
+			size_t newSize = currentSize + newCompDataSize;
+
+			//If there is not enough space in the new archetype, 
+			// allocate some more memory and move the component data 
+			// from the previous archetype to the new one.
+			if (newSize > newArchetype->compDataSize[compIndex])
+			{
+				size_t targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
+				ResizeAndReallocateComponentBuffer(*newArchetype, *newComp, compIndex, targetSize);
+			}
+
+			newComp->CreateObjectInMemory(&newArchetype->compData[compIndex][currentSize]);
+
+			ArchetypeID oldArchetypeId = oldArchetype->typeID;
+			for (size_t i = 0; i < oldArchetype->typeID.size(); i++)
+			{
+				ComponentID oldCompId = oldArchetype->typeID[i];
+
+				if (oldCompId == newCompID)
+				{
+					size_t oldCompDataSize = m_ComponentMap.at(oldCompId)->size;
+					ComponentData* oldCompData = m_ComponentMap.at(oldCompId);
+
+					oldCompData->MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompDataSize], &newArchetype->compData[compIndex][currentSize]);
+
+					break;
+				}
+			}
+		}
+
+		if (!oldArchetype->entityIDs.empty())
+		{
+			ShrinkComponentBuffer(*oldArchetype, entityRecord);
+			RemoveEntityFromArchetype(entityID, *oldArchetype);
+		}
+
+		newArchetype->entityIDs.push_back(entityID);
+		entityRecord.index = newArchetype->entityIDs.size() - 1;
+		entityRecord.archetype = newArchetype;
 	}
 
 	template<typename Comp>
@@ -295,14 +274,14 @@ namespace LAG
 			{
 				for (const auto& entity : archetype->entityIDs)
 				{
-					const auto& archRecord = m_EntityArchetypes.find(entity);
-					if (archRecord == m_EntityArchetypes.end())
+					const auto& entityRecordIt = m_EntityArchetypes.find(entity);
+					if (entityRecordIt == m_EntityArchetypes.end())
 					{
-						CRITICAL("Invalid archetype record.");
+						CRITICAL("Invalid Entity record.");
 						return;
 					}
 
-					func(entity, (reinterpret_cast<Comps*>(&archetype->compData[GetSystemCompIndex(GetComponentID<Comps>(), archetype->typeID)][archRecord->second.index * sizeof(Comps)]))...);
+					func(entity, (reinterpret_cast<Comps*>(&archetype->compData[GetSystemCompIndex(GetComponentID<Comps>(), archetype->typeID)][entityRecordIt->second.index * sizeof(Comps)]))...);
 				}
 			}
 		}
@@ -351,8 +330,18 @@ namespace LAG
 		// Create and insert new data into the m_ComponentMap map
 		ComponentData* newCompData = new ComponentData;
 		newCompData->size = sizeof(Comp);
-		newCompData->moveData = [](unsigned char* src, unsigned char* dest)
-			{ new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
+		newCompData->CreateObjectInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
+		newCompData->MoveData = [](unsigned char* src, unsigned char* dest)
+			{ 
+				Comp* srcComp = reinterpret_cast<Comp*>(src);
+				new (&dest[0]) Comp(std::move(*srcComp));
+				srcComp->~Comp();
+			};
+		newCompData->DestructData = [](unsigned char* data)
+			{
+				Comp* comp = reinterpret_cast<Comp*>(data);
+				comp->~Comp(); 
+			};
 #ifdef DEBUG
 		newCompData->debugName = typeid(Comp).name();
 #endif

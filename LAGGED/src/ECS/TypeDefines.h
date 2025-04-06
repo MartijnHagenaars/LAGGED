@@ -4,7 +4,7 @@
 
 namespace LAG
 {
-	typedef uint64_t TypeID;
+	typedef size_t TypeID;
 
 	typedef TypeID ComponentID;
 	typedef std::vector<ComponentID> ArchetypeID;

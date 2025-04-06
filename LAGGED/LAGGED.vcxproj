@@ -160,7 +160,6 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Core\Resources\Shader.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
-    <ClInclude Include="src\Core\Resources\Surface.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
     <ClInclude Include="imgui\ImGui\imgui.h" />

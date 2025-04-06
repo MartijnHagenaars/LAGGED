@@ -16,6 +16,6 @@ namespace LAG
 		std::vector<EntityID> entityIDs;
 
 		std::vector<unsigned char*> compData;
-		std::vector<uint64_t> compDataSize;
+		std::vector<size_t> compDataSize;
 	};
 }

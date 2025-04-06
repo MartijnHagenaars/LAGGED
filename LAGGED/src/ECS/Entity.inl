@@ -12,7 +12,7 @@ namespace LAG
 	template<typename Comp>
 	inline void Entity::RemoveComponent()
 	{
-		return m_SceneRef->AddComponent<Comp>(m_ID);
+		m_SceneRef->RemoveComponent<Comp>(m_ID);
 	}
 
 	template<typename Comp>
@@ -44,7 +44,7 @@ namespace LAG
 		}
 
 		int dataOffset = 0;
-		const Scene::ArchetypeRecord& record = recordIt->second;
+		const Scene::EntityRecord& record = recordIt->second;
 		Archetype* archetype = record.archetype;
 
 		for (int i = 0; i < archetype->typeID.size(); i++)
