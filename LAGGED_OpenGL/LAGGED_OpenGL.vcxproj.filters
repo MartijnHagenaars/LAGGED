@@ -18,7 +18,7 @@
     <ClCompile Include="src\RenderBackend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Debug\DebugLine.cpp">
+    <ClCompile Include="src\Utility\DebugLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Resources\Texture.cpp">
@@ -35,13 +35,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Debug\DebugLine.h">
+    <ClInclude Include="src\Utility\DebugLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Debug\ErrorChecks.h">
+    <ClInclude Include="src\Utility\ErrorChecks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Debug\ErrorCodeLookup.h">
+    <ClInclude Include="src\Utility\ErrorCodeLookup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Resources\Texture.h">

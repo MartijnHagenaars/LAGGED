@@ -79,7 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Debug\DebugLine.cpp" />
+    <ClCompile Include="src\Utility\DebugLine.cpp" />
     <ClCompile Include="src\RenderBackend.cpp" />
     <ClCompile Include="src\Resources\Mesh.cpp" />
     <ClCompile Include="src\Resources\Model.cpp" />
@@ -87,9 +87,9 @@
     <ClCompile Include="src\Resources\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Debug\DebugLine.h" />
-    <ClInclude Include="src\Debug\ErrorChecks.h" />
-    <ClInclude Include="src\Debug\ErrorCodeLookup.h" />
+    <ClInclude Include="src\Utility\DebugLine.h" />
+    <ClInclude Include="src\Utility\ErrorChecks.h" />
+    <ClInclude Include="src\Utility\ErrorCodeLookup.h" />
     <ClInclude Include="src\Resources\Mesh.h" />
     <ClInclude Include="src\Resources\Model.h" />
     <ClInclude Include="src\Resources\Shader.h" />
