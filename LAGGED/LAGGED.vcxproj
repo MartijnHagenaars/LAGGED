@@ -136,7 +136,6 @@
     <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Platform\Resources\Shader.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\FileIO\FileWatch.h" />
@@ -157,7 +156,6 @@
     <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\Platform\Resources\Buffer\FrameBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorCodeLookup.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
@@ -188,10 +186,6 @@
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_ErrorChecks.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Model.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Texture.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Shader.h" />
     <ClInclude Include="src\Core\Input\Input.h" />
     <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
     <ClInclude Include="src\Platform\OpenGL\Window\GL_InputEnumConversion.h">
@@ -221,7 +215,6 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
@@ -299,9 +292,6 @@
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Model.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Texture.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Shader.cpp" />
     <ClCompile Include="src\Core\Input\Input.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Renderer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Window\GL_Window.cpp" />

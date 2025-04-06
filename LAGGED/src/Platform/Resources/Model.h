@@ -24,12 +24,12 @@ namespace LAG
 	class Entity;
 	struct LightComponent;
 	struct TransformComponent;
-	class ModelBase : public Resource
+	class Model : public Resource
 	{
 	public:
-		ModelBase() = delete;
-		explicit ModelBase(const HashedString& path) : Resource(path) {};
-		virtual ~ModelBase() {};
+		Model() = delete;
+		explicit Model(const HashedString& path) : Resource(path) {};
+		virtual ~Model() {};
 
 		virtual void Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) = 0;
 

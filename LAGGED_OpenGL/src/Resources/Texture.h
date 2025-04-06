@@ -3,6 +3,14 @@
 
 namespace LAG
 {
+	enum class TextureFormat
+	{
+		FORMAT_RGBA = 0,
+		FORMAT_RGB,
+		FORMAT_RG,
+		FORMAT_R
+	};
+
 	typedef unsigned int GLenum;
 	class Texture : public TextureBase
 	{
@@ -22,9 +30,13 @@ namespace LAG
 		bool Load() override;
 		bool Unload() override;
 
+		bool SetBuffer(const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format);
+
 		void Bind(size_t textureUnit) override;
 		void Unbind(size_t textureUnit)  override;
 
+		int GetWidth() const { return m_Width; }
+		int GetHeight() const { return m_Height; }
 		void* GetEditorHandle() override { return (void*)(intptr_t)m_ID; }
 
 	private:

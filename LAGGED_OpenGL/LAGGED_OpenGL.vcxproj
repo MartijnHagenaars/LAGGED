@@ -16,6 +16,7 @@
     <ProjectGuid>{80bcb240-305a-442e-887b-67b64e2fb0a6}</ProjectGuid>
     <RootNamespace>LAGGEDOpenGL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>OpenGL</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -78,7 +79,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Debug\DebugLine.cpp" />
     <ClCompile Include="src\RenderBackend.cpp" />
+    <ClCompile Include="src\Resources\Mesh.cpp" />
+    <ClCompile Include="src\Resources\Model.cpp" />
+    <ClCompile Include="src\Resources\Shader.cpp" />
+    <ClCompile Include="src\Resources\Texture.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Debug\DebugLine.h" />
+    <ClInclude Include="src\Debug\ErrorChecks.h" />
+    <ClInclude Include="src\Debug\ErrorCodeLookup.h" />
+    <ClInclude Include="src\Resources\Mesh.h" />
+    <ClInclude Include="src\Resources\Model.h" />
+    <ClInclude Include="src\Resources\Shader.h" />
+    <ClInclude Include="src\Resources\Texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -37,37 +37,6 @@
 
 namespace LAG
 {
-	Renderer::Renderer()
-	{
-	}
-
-	Renderer::~Renderer()
-	{
-	}
-
-	bool Renderer::Initialize()
-	{
-		//Create some essential shaders.
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
-
-		glEnable(GL_DEPTH_TEST);
-
-		LineTool::Initialize();
-
-		//Setup resize callback
-		GetWindow()->SetResizeCallBack(std::bind(&Renderer::OnResize, this, std::placeholders::_1, std::placeholders::_2));
-
-		return true;
-	}
-
-	bool Renderer::Shutdown()
-	{
-		LineTool::Shutdown();
-
-		return true;
-	}
-
 	void Renderer::DrawLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
 	{
 		m_LineRenderList.emplace_back(LineData{ p1, p2, color });
