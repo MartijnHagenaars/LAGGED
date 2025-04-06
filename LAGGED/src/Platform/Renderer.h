@@ -15,8 +15,6 @@ namespace LAG
 
 		void OnResize(unsigned int width, unsigned int height);
 
-		void SetPipelineState(int pipelineID);
-
 	private:
 		/// <summary>
 		/// Start of the ImGui frame
