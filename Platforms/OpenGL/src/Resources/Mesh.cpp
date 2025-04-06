@@ -1,16 +1,16 @@
-#include "GL_Mesh.h"
+#include "Mesh.h"
+
+#include <glm/vec2.hpp>
+#include <glm/vec3.hpp>
+#include <TinyGLTF/tiny_gltf.h>
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
-#include "Platform/Resources/Texture.h"
 
-#include "TinyGLTF/tiny_gltf.h"
+#include "Resources/Texture.h"
+
 #include "Utility/Logger.h"
-
 #include "Utility/HashedString.h"
-
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
 
 namespace LAG
 {

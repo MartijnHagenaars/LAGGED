@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
-#include "Platform/Resources/Buffer/Buffer.h"
+
+#include "Buffers/Buffers.h"
 
 namespace tinygltf
 {

@@ -1,6 +1,5 @@
 #pragma once
 #include "glm/mat4x4.hpp"
-#include "Platform/Resources/Buffer/FrameBuffer.h"
 
 namespace LAG
 {
@@ -28,7 +27,7 @@ namespace LAG
 		glm::mat4 projMat = glm::mat4(1.f);
 		CameraPerspectiveType perspectiveType = CameraPerspectiveType::PERSPECTIVE;
 		
-		FrameBuffer* framebuffer = new FrameBuffer();
+		//FrameBuffer* framebuffer = new FrameBuffer();
 
 	private:
 		static bool InitializeReflection();

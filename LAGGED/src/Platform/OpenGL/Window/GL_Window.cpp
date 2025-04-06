@@ -1,20 +1,16 @@
 #include "Platform/Window.h"
 
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_impl_glfw.h>
+#include <ImGui/imgui_impl_opengl3.h>
+#include <ImGuizmo/ImGuizmo.h>
+#include <ImGuiTheme.h>
+#include <GL/glew.h>
+
 #include "Core/Engine.h"
 #include "Utility/Logger.h"
 
-#include "GL/glew.h"
-
 #include "GL_InputEnumConversion.h"
-#include "Platform/OpenGL/Renderer/GL_ErrorCodeLookup.h"
-
-#include "Platform/Renderer.h"
-
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_impl_glfw.h"
-#include "ImGui/imgui_impl_opengl3.h"
-#include "ImGuizmo/ImGuizmo.h"
-#include "ImGuiTheme.h"
 
 namespace LAG
 {

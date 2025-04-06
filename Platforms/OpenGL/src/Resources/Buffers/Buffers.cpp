@@ -1,7 +1,8 @@
-#include "GL_Buffers.h"
+#include "Buffers.h"
 
-#include "GL/glew.h"
-#include "Platform/OpenGL/Renderer/GL_ErrorChecks.h"
+#include <GL/glew.h>
+
+#include "Utility/ErrorChecks.h"
 
 namespace LAG
 {

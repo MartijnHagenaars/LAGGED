@@ -9,7 +9,7 @@
 
 namespace LAG
 {
-	Shader::Shader(const HashedString& shaderPath) : ShaderBase(shaderPath)
+	Shader::Shader(const HashedString& shaderPath) : Resource(shaderPath)
 	{
 	}
 

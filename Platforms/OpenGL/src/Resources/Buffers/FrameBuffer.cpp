@@ -1,33 +1,21 @@
-#include "GL_FrameBuffer.h"
+#include "FrameBuffer.h"
+
+#include <GL/glew.h>
 
 #include "Core/Engine.h"
-#include "Platform/Window.h"
-#include "Editor/ToolsManager.h"
-
-#include "Platform/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
 
-#include "GL/glew.h"
-#include "GL_ErrorChecks.h"
+#include "Platform/Window.h"
+//#include "Editor/ToolsManager.h" //???
 
-#include "ImGui/imgui.h"
+#include "Resources/Shader.h"
 
+
+#include "Utility/ErrorChecks.h"
 #include "Utility/Logger.h"
 
 namespace LAG
 {
-	FrameBuffer::FrameBuffer() : FrameBufferBase()
-	{
-		if (!Initialize())
-			CRITICAL("Failed to create frame buffer.");
-	}
-
-	FrameBuffer::~FrameBuffer()
-	{
-		if (!Shutdown())
-			CRITICAL("Failed to shut down frame buffer.");
-	}
-
 	bool FrameBuffer::Initialize()
 	{
 		//First, create the quad for displaying the frame buffer
@@ -119,9 +107,10 @@ namespace LAG
 		glClearColor(0.7f, 0.f, 0.6f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 
-		//We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
-		if (GetToolsManager()->IsToolOpen("CamView"))
-			return;
+		//TODO: TOOLS MANAGER CODE NEEDS TO BE MOVED SOMEWHERE ELSE.
+		////We can return early if the viewport tool is open (as we'll be rendering to the viewport tool instead).
+		//if (GetToolsManager()->IsToolOpen("CamView"))
+		//	return;
 
 		//Bind VAO and Shader
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));

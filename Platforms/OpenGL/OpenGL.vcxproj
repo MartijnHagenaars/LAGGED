@@ -55,7 +55,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;PLATFORM_WINDOWS;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -72,7 +72,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>RELEASE;PLATFORM_WINDOWS;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
@@ -87,13 +87,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\RenderBackend.cpp" />
+    <ClCompile Include="src\Resources\Buffers\Buffers.cpp" />
+    <ClCompile Include="src\Resources\Buffers\FrameBuffer.cpp" />
     <ClCompile Include="src\Resources\Mesh.cpp" />
     <ClCompile Include="src\Resources\Model.cpp" />
     <ClCompile Include="src\Resources\Shader.cpp" />
     <ClCompile Include="src\Resources\Texture.cpp" />
     <ClCompile Include="src\Utility\DebugLine.cpp" />
+    <ClCompile Include="src\Resources\Surface.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Resources\Buffers\BufferLayout.h" />
+    <ClInclude Include="src\Resources\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Resources\Buffers\Buffers.h" />
+    <ClInclude Include="src\Resources\Buffers\GL_FrameBuffer.h" />
     <ClInclude Include="src\Resources\Mesh.h" />
     <ClInclude Include="src\Resources\Model.h" />
     <ClInclude Include="src\Resources\Shader.h" />
@@ -101,6 +108,7 @@
     <ClInclude Include="src\Utility\DebugLine.h" />
     <ClInclude Include="src\Utility\ErrorChecks.h" />
     <ClInclude Include="src\Utility\ErrorCodeLookup.h" />
+    <ClInclude Include="src\Resources\Surface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

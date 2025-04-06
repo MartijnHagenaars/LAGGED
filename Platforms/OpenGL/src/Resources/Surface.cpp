@@ -1,9 +1,4 @@
-#include "GL_Surface.h"
-#include "Utility/Logger.h"
-
-#include "Platform/Resources/Shader.h"
-#include "Platform/Resources/Texture.h"
-#include "Platform/OpenGL/Renderer/GL_Buffers.h"
+#include "Surface.h"
 
 #include "Core/Engine.h"
 
@@ -12,9 +7,13 @@
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/TerrainComponents.h"
-
 #include "ECS/Systems/CameraSystem.h"
 
+#include "Resources/Shader.h"
+#include "Resources/Texture.h"
+#include "Resources/Buffers/Buffers.h"
+
+#include "Utility/Logger.h"
 #include "Utility/Noise.h"
 
 namespace LAG
@@ -116,7 +115,7 @@ namespace LAG
 		vertexBuffer.SetVertexData(&m_VertexData.data()[0], m_VertexData.size() * sizeof(VertexData));
 		vertexBuffer.SetLayout(std::vector<BufferLayoutElement>{
 			BufferLayoutElement(BufferVariableType::Float3, false),	//Position
-			BufferLayoutElement(BufferVariableType::Float3, false)	//Normal
+				BufferLayoutElement(BufferVariableType::Float3, false)	//Normal
 		});
 
 		IndexBuffer indexBuffer;

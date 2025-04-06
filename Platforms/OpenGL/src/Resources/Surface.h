@@ -1,12 +1,12 @@
 #pragma once
 #include "glm/vec3.hpp"
 
-#include "Platform/Resources/Shader.h"
+#include "Resources/Shader.h"
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
 
-#include "Platform/OpenGL/Renderer/GL_Buffers.h"
+#include "Resources/Buffers/Buffers.h"
 
 namespace LAG
 {
@@ -15,7 +15,7 @@ namespace LAG
 	class Texture;
 	class Surface
 	{
-	public:		
+	public:
 		//Load a height map from a texture
 		//TODO: Needs to be reworked
 		void GenerateHeightMapSurface(const std::string& heightTexturePath);

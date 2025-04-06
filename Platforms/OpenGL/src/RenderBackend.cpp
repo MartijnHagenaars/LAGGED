@@ -5,6 +5,7 @@
 #include "Resources/Model.h"
 #include "Resources/Shader.h"
 #include "Resources/Texture.h"
+#include "Resources/Surface.h"
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
@@ -54,6 +55,26 @@ namespace LAG
 	void Renderer::DrawDebugLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
 	{
 		DebugLine::AddLineToQueue(p1, p2, color);
+	}
+
+	Model* Renderer::GetModel()
+	{
+		return nullptr;
+	}
+
+	Shader* Renderer::GetShader()
+	{
+		return nullptr;
+	}
+
+	Texture* Renderer::GetTexture()
+	{
+		return nullptr;
+	}
+
+	Surface Renderer::GetSurface()
+	{
+		return nullptr;
 	}
 
 	void Renderer::PresentFrame()

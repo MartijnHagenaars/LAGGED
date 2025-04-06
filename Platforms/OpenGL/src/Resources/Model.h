@@ -1,21 +1,26 @@
 #pragma once
-#include "Platform/Resources/Model.h"
+#include <glm/mat4x4.hpp>
+#include <glm/gtx/quaternion.hpp>
 
-#include "GL_Mesh.h"
-#include "glm/mat4x4.hpp"
-#include "glm/gtx/quaternion.hpp"
+#include "Mesh.h"
+
+#include "Core/Resources/Resource.h"
+#include "ECS/Entity.h"
+#include "ECS/Components/BasicComponents.h"
+#include "ECS/Components/LightComponent.h"
 
 namespace LAG
 {
+	class Shader;
 	class Entity;
-	class Model : public ModelBase
+	class Model : public Resource
 	{
 		friend class ResourceManager;
 	public:
 		Model() = delete;
 		explicit Model(const HashedString& path);
 
-		void Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights) override;
+		void Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights);
 
 	private:
 		bool Load() override;

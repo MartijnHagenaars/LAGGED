@@ -135,14 +135,9 @@
   <ItemGroup>
     <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
-    <ClInclude Include="src\Platform\Resources\Shader.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\FileIO\FileIO.h" />
     <ClInclude Include="src\FileIO\FileWatch.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Buffers.h" />
-    <ClInclude Include="src\Platform\Resources\Buffer\Buffer.h" />
-    <ClInclude Include="src\Platform\Resources\Buffer\BufferLayout.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_LineTool.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
@@ -155,9 +150,6 @@
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
     <ClInclude Include="src\Editor\Tools\Gizmo.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
-    <ClInclude Include="src\Platform\Resources\Buffer\FrameBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.h" />
-    <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Surface.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
     <ClInclude Include="imgui\ImGui\imgui.h" />
@@ -193,9 +185,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\Platform\RenderBackend.h" />
-    <ClInclude Include="src\Platform\Resources\Model.h" />
-    <ClInclude Include="src\Platform\Resources\Surface.h" />
-    <ClInclude Include="src\Platform\Resources\Texture.h" />
     <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
     <ClInclude Include="External\DirectX\d3dx12.h" />
@@ -204,7 +193,6 @@
     <ClInclude Include="src\Core\Defines.h" />
     <ClInclude Include="src\Core\ApplicationInterface.h" />
     <ClInclude Include="src\Core\EntryPoint.h" />
-    <ClInclude Include="src\Platform\Renderer.h" />
     <ClInclude Include="src\Platform\Window.h" />
     <ClInclude Include="src\Platform\Base\PlatformIncludes.h" />
     <ClInclude Include="src\Utility\HashedString.h" />
@@ -219,10 +207,7 @@
     <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\FileIO\FileWatch.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Buffers.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_LineTool.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
-    <ClCompile Include="src\Core\Resources\Texture.cpp" />
     <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
@@ -239,8 +224,6 @@
     <ClCompile Include="src\Editor\Tools\Gizmo.cpp" />
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\Platform\Base\Window.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_FrameBuffer.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Surface.cpp" />
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />
     <ClCompile Include="imgui\ImGui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">NotUsing</PrecompiledHeader>
@@ -293,7 +276,6 @@
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
     <ClCompile Include="src\Core\Input\Input.cpp" />
-    <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Renderer.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Window\GL_Window.cpp" />
     <ClCompile Include="src\Utility\Logger.cpp" />
     <ClCompile Include="src\Core\Engine.cpp" />

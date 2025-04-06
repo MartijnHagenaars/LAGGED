@@ -1,5 +1,4 @@
 #pragma once
-#include "Platform/Resources/Texture.h"
 
 namespace LAG
 {
@@ -12,7 +11,7 @@ namespace LAG
 	};
 
 	typedef unsigned int GLenum;
-	class Texture : public TextureBase
+	class Texture : public Resource
 	{
 		friend class Model;
 		friend class ResourceManager;
@@ -32,12 +31,12 @@ namespace LAG
 
 		bool SetBuffer(const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format);
 
-		void Bind(size_t textureUnit) override;
-		void Unbind(size_t textureUnit)  override;
+		void Bind(size_t textureUnit);
+		void Unbind(size_t textureUnit);
 
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }
-		void* GetEditorHandle() override { return (void*)(intptr_t)m_ID; }
+		void* GetEditorHandle() { return (void*)(intptr_t)m_ID; }
 
 	private:
 		struct TextureData
@@ -52,6 +51,15 @@ namespace LAG
 
 		GLenum ConvertFormatToGLEnum(TextureFormat format);
 		unsigned int m_ID = 0;
+
+		int m_Width = 0;
+		int m_Height = 0;
+		TextureFormat m_Format = TextureFormat::FORMAT_RGB;
+
+		bool m_LoadFromFile = false;
+
+		size_t m_BufferSize = -1;
+		const unsigned char* m_TempBuffer = nullptr;
 	};
 
 }

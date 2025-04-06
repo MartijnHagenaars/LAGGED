@@ -8,6 +8,7 @@ namespace LAG
 	class Model;
 	class Shader;
 	class Texture;
+	class Surface;
 	class Renderer
 	{
 	public:
@@ -20,6 +21,7 @@ namespace LAG
 		static Model* GetModel();
 		static Shader* GetShader();
 		static Texture* GetTexture();
+		static Surface GetSurface();
 
 	private:
 		void OnResize(unsigned int width, unsigned int height);

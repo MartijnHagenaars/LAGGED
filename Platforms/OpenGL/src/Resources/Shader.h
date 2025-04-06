@@ -1,9 +1,10 @@
 #pragma once
-#include "Platform/Resources/Shader.h"
+#include <glm/mat4x4.hpp>
+#include <string>
 
 namespace LAG
 {
-	class Shader : public ShaderBase
+	class Shader : public Resource
 	{
 		friend class ResourceManager;
 	public:
@@ -11,14 +12,14 @@ namespace LAG
 		explicit Shader(const HashedString& path);
 		~Shader() override;
 
-		void Bind() override;
-		void Unbind() override;
+		void Bind();
+		void Unbind();
 
-		void SetBool(const std::string& location, bool value) override;
-		void SetInt(const std::string& location, int value) override;
-		void SetFloat(const std::string& location, float value) override;
-		void SetVec3(const std::string& location, glm::vec3 value) override;
-		void SetMat4(const std::string& location, const glm::mat4& value) override;
+		void SetBool(const std::string& location, bool value);
+		void SetInt(const std::string& location, int value);
+		void SetFloat(const std::string& location, float value);
+		void SetVec3(const std::string& location, glm::vec3 value);
+		void SetMat4(const std::string& location, const glm::mat4& value);
 
 		bool Reload() override;
 	private:

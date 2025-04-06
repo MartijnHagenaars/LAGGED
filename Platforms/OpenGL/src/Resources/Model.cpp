@@ -1,37 +1,35 @@
-#include "GL_Model.h"
+#include "Model.h"
 
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define TINYGLTF_NOEXCEPTION
 #define JSON_NOEXCEPTION
-#include "TinyGLTF/tiny_gltf.h"
+#include <TinyGLTF/tiny_gltf.h>
+
+#include <GL/glew.h>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Core/Engine.h"
-#include "Utility/Logger.h"
-
-#include "GL_ErrorChecks.h"
-#include "Platform/Resources/Shader.h"
 #include "Core/Resources/ResourceManager.h"
-#include "Platform/Resources/Texture.h"
 
 #include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/CameraComponent.h"
-
 #include "ECS/Systems/CameraSystem.h"
 
-#include "GL/glew.h"
+#include "Resources/Shader.h"
+#include "Resources/Texture.h"
 
-#include "glm/gtx/quaternion.hpp"
-#include "glm/ext/matrix_transform.hpp"
-#include "glm/gtc/type_ptr.hpp" //make_vec3
-
+#include "Utility/Logger.h"
+#include "Utility/ErrorChecks.h"
 
 namespace LAG
 {
 	Model::Model(const HashedString& path) :
-		ModelBase(path)
+		Resource(path)
 	{
 	}
 
