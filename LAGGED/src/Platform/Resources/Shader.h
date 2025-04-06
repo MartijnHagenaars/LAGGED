@@ -32,10 +32,3 @@ namespace LAG
 		virtual bool Unload() = 0;
 	};
 }
-
-//Include the correct model header, based on the project configuration
-#ifdef PLATFORM_OPENGL
-#include "Platform/OpenGL/Renderer/GL_Shader.h"
-#elif PLATFORM_DIRECTX
-
-#endif

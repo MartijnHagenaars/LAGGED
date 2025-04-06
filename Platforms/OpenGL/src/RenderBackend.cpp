@@ -1,6 +1,10 @@
 #include "Platform/RenderBackend.h"
 
-#include "Debug/DebugLine.h"
+#include "Utility/DebugLine.h"
+
+#include "Resources/Model.h"
+#include "Resources/Shader.h"
+#include "Resources/Texture.h"
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
