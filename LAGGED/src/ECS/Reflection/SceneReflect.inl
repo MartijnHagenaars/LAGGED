@@ -5,18 +5,26 @@
 
 namespace LAG
 {
+	inline std::unordered_map<ComponentID, SceneReflect::ComponentClassProperties>& SceneReflect::GetComponentProperties()
+	{
+		static std::unordered_map<ComponentID, ComponentClassProperties> compProps;
+		return compProps;
+	}
+
 	template<typename Comp>
 	inline ComponentReflectionSetup SceneReflect::RegisterComponent()
 	{
 		static_assert(!std::is_fundamental<Comp>::value, "Component type cannot be a fundamental type.");
 		static_assert(std::is_default_constructible<Comp>::value, "Component type is not constructible.");
-
+		
+		auto& compProperties = GetComponentProperties();
 		ComponentID compID = Scene::GetComponentID<Comp>();
-		auto it = m_ComponentProperties.find(compID);
-		if (it != m_ComponentProperties.end())
+
+		auto it = compProperties.find(compID);
+		if (it != compProperties.end())
 			return ComponentReflectionSetup(it->second);
 
-		auto compPropIt = m_ComponentProperties.emplace(compID, ComponentClassProperties({})).first;
+		auto compPropIt = compProperties.emplace(compID, ComponentClassProperties({})).first;
 		SceneReflect::ComponentClassProperties& props = compPropIt->second;
 		return ComponentReflectionSetup(props);
 	}
@@ -26,9 +34,11 @@ namespace LAG
 	{
 		static_assert(std::is_member_object_pointer<decltype(var)>::value, "Type needs to be a non-static member object pointer.");
 
+		auto& compProperties = GetComponentProperties();
 		ComponentID compID = Scene::GetComponentID<Comp>();
-		auto compIt = m_ComponentProperties.find(compID);
-		if (compIt == m_ComponentProperties.end())
+
+		auto compIt = compProperties.find(compID);
+		if (compIt == compProperties.end())
 		{
 			LAG_ASSERT("Cannot register variable: variable already registered.");
 		}

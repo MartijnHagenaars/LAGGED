@@ -36,7 +36,7 @@ namespace LAG
 	VariableReflectionSetup& VariableReflectionSetup::SetDisplayName(const std::string& displayName)
 	{
 		m_Props.displayName = displayName;
-		CRITICAL("TODO: Implement"); return *this;
+		return *this;
 	}
 
 	VariableReflectionSetup& VariableReflectionSetup::SetHidden(bool isHidden)
@@ -50,5 +50,4 @@ namespace LAG
 		m_Props.isReadOnly = isReadOnly;
 		return *this;
 	}
-
 }

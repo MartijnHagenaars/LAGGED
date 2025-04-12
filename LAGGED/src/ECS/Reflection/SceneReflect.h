@@ -41,7 +41,9 @@ namespace LAG
 		};
 
 	private:
-		inline static std::unordered_map<ComponentID, ComponentClassProperties> m_ComponentProperties = {};
+		// Returns the map containing component properties
+		// Done through a getter function to avoid Static Initialization Order Fiasco
+		static std::unordered_map<ComponentID, SceneReflect::ComponentClassProperties>& GetComponentProperties();
 	};
 
 

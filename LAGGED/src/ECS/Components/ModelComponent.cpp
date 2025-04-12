@@ -1,12 +1,14 @@
 #include "ModelComponent.h"
+#include "ECS/Reflection/SceneReflect.h"
 
 namespace LAG
 {
 	bool ModelComponent::InitializeReflection()
 	{
-		//Reflection::ReflectionSystem<ModelComponent> setup;
-		//setup.RegisterComponent().SetDisplayName("Model Component").SetVisibleInEditor(true);
-		//setup.RegisterVariable<&ModelComponent::modelHandle>().SetDisplayName("Model");
+		SceneReflect refl;
+		refl.RegisterComponent<ModelComponent>().SetDisplayName("Model Component");
+
+		refl.RegisterVariable(&ModelComponent::modelHandle).SetDisplayName("Model");
 
 		return true;
 	}
