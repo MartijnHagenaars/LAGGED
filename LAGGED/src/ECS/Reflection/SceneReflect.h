@@ -20,12 +20,12 @@ namespace LAG
 
 		struct ComponentVariableProperties
 		{
-			int byteOffset = -1;
+			size_t byteOffset = -1;
 
 			// PROPERTIES
 
-			bool visibleInEditor = true;
-			bool readOnly = false;
+			bool isHidden = true;
+			bool isReadOnly = false;
 
 			std::string displayName;
 		};
@@ -36,7 +36,7 @@ namespace LAG
 
 			// PROPERTIES
 
-			bool visibleInEditor = true;
+			bool isHidden = true;
 			std::string displayName;
 		};
 
@@ -47,6 +47,7 @@ namespace LAG
 
 	class ComponentReflectionSetup
 	{
+		friend class SceneReflect;
 	public:
 		/// <summary>
 		/// Set the display name of the component in the editor.
@@ -62,13 +63,16 @@ namespace LAG
 		/// <returns>The current instance for chaining further configuration.</returns>
 		ComponentReflectionSetup& SetHidden(bool isHidden);
 
-		ComponentReflectionSetup() = delete;
-		ComponentReflectionSetup(SceneReflect::ComponentClassProperties* compProperties);
 	private:
+		ComponentReflectionSetup() = delete;
+		ComponentReflectionSetup(SceneReflect::ComponentClassProperties& compProperties);
+
+		SceneReflect::ComponentClassProperties& m_Props;
 	};
 
 	class VariableReflectionSetup
 	{
+		friend class SceneReflect;
 	public:
 		/// <summary>
 		/// Set the display name of the variable in the editor.
@@ -91,8 +95,11 @@ namespace LAG
 		/// <returns>The current instance for chaining further configuration.</returns>
 		VariableReflectionSetup& SetReadOnly(bool isReadOnly);
 
-		//private:
-		VariableReflectionSetup(SceneReflect::ComponentVariableProperties* varProperties);
+	private:
+		VariableReflectionSetup() = delete;
+		VariableReflectionSetup(SceneReflect::ComponentVariableProperties& varProperties);
+
+		SceneReflect::ComponentVariableProperties& m_Props;
 	};
 
 }

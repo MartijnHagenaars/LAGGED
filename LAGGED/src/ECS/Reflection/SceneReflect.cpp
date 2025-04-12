@@ -6,17 +6,20 @@ namespace LAG
 	// COMPONENT REFLECTION SETUP //
 	////////////////////////////////
 
-	ComponentReflectionSetup::ComponentReflectionSetup(SceneReflect::ComponentClassProperties* compProperties)
+	ComponentReflectionSetup::ComponentReflectionSetup(SceneReflect::ComponentClassProperties& compProperties) : 
+		m_Props(compProperties)
 	{
 	}
 
 	ComponentReflectionSetup& ComponentReflectionSetup::SetDisplayName(const std::string& displayName)
 	{
-		CRITICAL("TODO: Implement"); return *this;
+		m_Props.displayName = displayName;
+		return *this;
 	}
 	ComponentReflectionSetup& ComponentReflectionSetup::SetHidden(bool isHidden)
 	{
-		CRITICAL("TODO: Implement"); return *this;
+		m_Props.isHidden = isHidden;
+		return *this;
 	}
 
 
@@ -25,23 +28,27 @@ namespace LAG
 	// VARIABLE REFLECTION SETUP //
 	///////////////////////////////
 
-	VariableReflectionSetup::VariableReflectionSetup(SceneReflect::ComponentVariableProperties* varProperties)
+	VariableReflectionSetup::VariableReflectionSetup(SceneReflect::ComponentVariableProperties& varProperties) : 
+		m_Props(varProperties)
 	{
 	}
 
 	VariableReflectionSetup& VariableReflectionSetup::SetDisplayName(const std::string& displayName)
 	{
+		m_Props.displayName = displayName;
 		CRITICAL("TODO: Implement"); return *this;
 	}
 
 	VariableReflectionSetup& VariableReflectionSetup::SetHidden(bool isHidden)
 	{
-		CRITICAL("TODO: Implement"); return *this;
+		m_Props.isHidden = isHidden;
+		return *this;
 	}
 
 	VariableReflectionSetup& VariableReflectionSetup::SetReadOnly(bool isReadOnly)
 	{
-		CRITICAL("TODO: Implement"); return *this;
+		m_Props.isReadOnly = isReadOnly;
+		return *this;
 	}
 
 }
