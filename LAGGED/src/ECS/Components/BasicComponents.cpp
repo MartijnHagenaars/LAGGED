@@ -2,6 +2,7 @@
 
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
+#include "ECS/Reflection/SceneReflect.h"
 
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
@@ -59,7 +60,15 @@ const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
 
 bool LAG::TransformComponent::InitializeReflection()
 {
+	SceneReflect refl;
+	refl.RegisterComponent<TransformComponent>().SetDisplayName("Transform Component");
+	refl.RegisterVariable(&TransformComponent::m_Dirty).SetHidden(true).SetReadOnly(true);
+
+	//refl.RegisterComponent().SetDisplayName("Transform Component");
+	//refl.RegisterVariable(&TransformComponent::translation);
+
 	//Reflection::ReflectionSystem<TransformComponent> setup;
+
 	//setup.RegisterComponent().SetDisplayName("Transform Component").SetVisibleInEditor(true);
 
 	//setup.RegisterVariable<&TransformComponent::translation>().SetDisplayName("Translation");
