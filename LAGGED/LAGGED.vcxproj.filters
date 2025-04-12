@@ -57,11 +57,12 @@
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Platform\OpenGL\Renderer\GL_Mesh.cpp" />
+    <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
-    <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
+    <ClInclude Include="src\ECS\Reflection\ReflectionTypeWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
     <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="src\Platform\OpenGL\Renderer\GL_Mesh.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\ECS\Archetype.h" />
+    <ClInclude Include="src\ECS\Reflection\SceneReflect.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
@@ -143,5 +145,6 @@
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
     <None Include="src\ECS\Scene.inl" />
     <None Include="src\ECS\Entity.inl" />
+    <None Include="src\ECS\Reflection\SceneReflect.inl" />
   </ItemGroup>
 </Project>

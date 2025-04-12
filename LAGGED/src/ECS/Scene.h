@@ -16,6 +16,7 @@ namespace LAG
 	class Scene
 	{
 		friend class Entity;
+		friend class SceneReflect;
 	public: 
 		Scene();
 		~Scene();
