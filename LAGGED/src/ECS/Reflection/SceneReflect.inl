@@ -5,9 +5,9 @@
 
 namespace LAG
 {
-	inline std::unordered_map<ComponentID, SceneReflect::ComponentClassProperties>& SceneReflect::GetComponentProperties()
+	inline std::unordered_map<ComponentID, SceneReflect::ComponentClassData>& SceneReflect::GetComponentProperties()
 	{
-		static std::unordered_map<ComponentID, ComponentClassProperties> compProps;
+		static std::unordered_map<ComponentID, ComponentClassData> compProps;
 		return compProps;
 	}
 
@@ -24,8 +24,8 @@ namespace LAG
 		if (it != compProperties.end())
 			return ComponentReflectionSetup(it->second);
 
-		auto compPropIt = compProperties.emplace(compID, ComponentClassProperties({})).first;
-		SceneReflect::ComponentClassProperties& props = compPropIt->second;
+		auto compPropIt = compProperties.emplace(compID, ComponentClassData({})).first;
+		SceneReflect::ComponentClassData& props = compPropIt->second;
 		return ComponentReflectionSetup(props);
 	}
 
@@ -43,9 +43,9 @@ namespace LAG
 			LAG_ASSERT("Cannot register variable: variable already registered.");
 		}
 
-		auto& varVec = compIt->second.varProperties;
+		auto& varVec = compIt->second.vars;
 		size_t byteOffset = reinterpret_cast<size_t>(&(reinterpret_cast<Comp*>(0)->*var));
-		auto varIt = std::find_if(varVec.begin(), varVec.end(), [&byteOffset](ComponentVariableProperties& var) { return var.byteOffset == byteOffset; });
+		auto varIt = std::find_if(varVec.begin(), varVec.end(), [&byteOffset](ComponentVariableData& var) { return var.byteOffset == byteOffset; });
 
 		if (varIt != varVec.end())
 		{
@@ -53,8 +53,8 @@ namespace LAG
 			return VariableReflectionSetup(*varIt);
 		}
 
-		varVec.emplace_back(SceneReflect::ComponentVariableProperties());
-		SceneReflect::ComponentVariableProperties& varProps = varVec[varVec.size() - 1];
+		varVec.emplace_back(SceneReflect::ComponentVariableData());
+		SceneReflect::ComponentVariableData& varProps = varVec[varVec.size() - 1];
 
 		varProps.byteOffset = byteOffset;
 		return VariableReflectionSetup(varProps);

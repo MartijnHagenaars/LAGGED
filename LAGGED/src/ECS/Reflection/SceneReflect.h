@@ -18,32 +18,33 @@ namespace LAG
 		template <typename Comp, typename Var>
 		static VariableReflectionSetup RegisterVariable(Var Comp::* var);
 
-		struct ComponentVariableProperties
+		struct ComponentVariableData
 		{
 			size_t byteOffset = -1;
 
-			// PROPERTIES
-
-			bool isHidden = true;
-			bool isReadOnly = false;
-
-			std::string displayName;
+			struct Properties
+			{
+				bool isHidden = true;
+				bool isReadOnly = false;
+				std::string displayName;
+			} properties;
 		};
 
-		struct ComponentClassProperties
+		struct ComponentClassData
 		{
-			std::vector<ComponentVariableProperties> varProperties;
+			std::vector<ComponentVariableData> vars;
 
-			// PROPERTIES
-
-			bool isHidden = true;
-			std::string displayName;
+			struct Properties
+			{
+				bool isHidden = true;
+				std::string displayName;
+			} properties;
 		};
 
 	private:
 		// Returns the map containing component properties
 		// Done through a getter function to avoid Static Initialization Order Fiasco
-		static std::unordered_map<ComponentID, SceneReflect::ComponentClassProperties>& GetComponentProperties();
+		static std::unordered_map<ComponentID, SceneReflect::ComponentClassData>& GetComponentProperties();
 	};
 
 
@@ -67,9 +68,9 @@ namespace LAG
 
 	private:
 		ComponentReflectionSetup() = delete;
-		ComponentReflectionSetup(SceneReflect::ComponentClassProperties& compProperties);
+		ComponentReflectionSetup(SceneReflect::ComponentClassData& compProperties);
 
-		SceneReflect::ComponentClassProperties& m_Props;
+		SceneReflect::ComponentClassData& m_Data;
 	};
 
 	class VariableReflectionSetup
@@ -99,9 +100,9 @@ namespace LAG
 
 	private:
 		VariableReflectionSetup() = delete;
-		VariableReflectionSetup(SceneReflect::ComponentVariableProperties& varProperties);
+		VariableReflectionSetup(SceneReflect::ComponentVariableData& vars);
 
-		SceneReflect::ComponentVariableProperties& m_Props;
+		SceneReflect::ComponentVariableData& m_Data;
 	};
 
 }
