@@ -15,7 +15,7 @@ namespace LAG
 		SceneReflect refl;
 		refl.RegisterComponent<DefaultComponent>().SetDisplayName("General data");
 
-		refl.RegisterVariable(&DefaultComponent::name).SetDisplayName("Is Visible");
+		refl.RegisterVariable(&DefaultComponent::name).SetDisplayName("Name");
 		refl.RegisterVariable(&DefaultComponent::visible).SetDisplayName("Is Visible");
 
 		return true;

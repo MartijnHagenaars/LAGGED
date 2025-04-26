@@ -167,13 +167,16 @@ namespace LAG
 		for (const auto& entityID : renderEntities)
 		{
 			DefaultComponent* defPtr = GetScene()->GetComponent<DefaultComponent>(entityID);
+			if (!defPtr || !defPtr->visible)
+				continue;
+
 			TransformComponent* transformPtr = GetScene()->GetComponent<TransformComponent>(entityID);
 
 			ModelComponent* modelPtr = GetScene()->GetComponent<ModelComponent>(entityID);
 			if (modelPtr != nullptr)
 			{
 				//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
-				if (defPtr->visible && modelPtr->modelHandle.m_ModelLookup.GetValue() != 0)
+				if (modelPtr->modelHandle.m_ModelLookup.GetValue() != 0)
 				{
 					GetResourceManager()->GetResource<Model>(modelPtr->modelHandle.m_ModelLookup)->Render(
 						entityID, camEntityID,
@@ -185,15 +188,13 @@ namespace LAG
 			SurfaceComponent* surfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
 			if (surfacePtr)
 			{
-				if (defPtr->visible)
-					surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			}
 
 			ProceduralSurfaceComponent* procSurfacePtr = GetScene()->GetComponent<ProceduralSurfaceComponent>(entityID);
 			if (procSurfacePtr)
 			{
-				if (defPtr->visible)
-					procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
 			}
 		}
 
