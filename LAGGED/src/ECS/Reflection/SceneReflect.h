@@ -11,6 +11,7 @@ namespace LAG
 
 	class SceneReflect
 	{
+		friend class Entity;
 	public:
 		template<typename Comp>
 		static ComponentReflectionSetup RegisterComponent();

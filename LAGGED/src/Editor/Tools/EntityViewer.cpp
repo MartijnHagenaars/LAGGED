@@ -84,16 +84,16 @@ namespace LAG
 
 	void EntityViewer::RenderProperties()
 	{
-		if (m_SelectedEntity->IsValid())
+		if (m_SelectedEntity->Valid())
 		{
 			if (ImGui::Button("Duplicate Entity"))
 			{
-				GetScene()->DuplicateEntity(m_SelectedEntity->GetEntityID());
+				GetScene()->DuplicateEntity(m_SelectedEntity->ID());
 			}
 			ImGui::SameLine();
 			if (ImGui::Button("Delete Entity"))
 			{
-				GetScene()->RemoveEntity(m_SelectedEntity->GetEntityID());
+				GetScene()->RemoveEntity(m_SelectedEntity->ID());
 				m_SelectedEntity = nullptr;
 				return;
 			}
@@ -110,7 +110,7 @@ namespace LAG
 				ImGui::EndPopup();
 			}
 
-			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity->GetEntityID());
+			std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntity->ID());
 			ImGui::Text(selectedEntityDisplay.c_str());
 
 			ImGui::Text("Add new component by picking one from the list below.");

@@ -8,12 +8,12 @@ namespace LAG
 	{
 	}
 
-	bool Entity::IsValid()
+	bool Entity::Valid()
 	{
 		return m_ID != ENTITY_NULL;
 	}
 
-	EntityID Entity::GetEntityID() const
+	EntityID Entity::ID() const
 	{
 		return m_ID;
 	}

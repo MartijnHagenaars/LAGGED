@@ -76,6 +76,18 @@ void Game::Initialize()
 	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 50.f;
 
 	m_World = new World(12, true);
+	LAG::Scene* sc = LAG::GetEngine().GetScene();
+	
+
+	for (auto it = sc->begin(); it != sc->end(); it++)
+	{
+		INFO("Iterator: {}", *it);
+	}
+	INFO("=================");
+	for (auto it : *sc)
+	{
+		INFO("Iterator: {}", it);
+	}
 }
 
 void Game::Shutdown()

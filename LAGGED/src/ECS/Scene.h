@@ -62,6 +62,54 @@ namespace LAG
 		struct EntityRecord;
 		struct ComponentData;
 
+	public:
+		struct Iterator
+		{
+			using InnerIterator = std::unordered_map<EntityID, EntityRecord>::iterator;
+
+			Iterator(InnerIterator ptr)
+				: m_Ptr(ptr) {}
+
+			const EntityID& operator*() const { return m_Ptr->first; }
+			const EntityID* operator->() const { return &(m_Ptr->first); }
+
+			Iterator& operator++()
+			{
+				++m_Ptr;
+				return *this;
+			}
+
+			Iterator operator++(int)
+			{
+				Iterator temp = *this;
+				++(*this);
+				return temp;
+			}
+
+			Iterator& operator--()
+			{
+				--m_Ptr;
+				return *this;
+			}
+
+			Iterator operator--(int)
+			{
+				Iterator temp = *this;
+				--(*this);
+				return temp;
+			}
+
+			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; }
+			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
+
+		private:
+			InnerIterator m_Ptr;
+		};
+
+		Iterator begin() { return m_EntityArchetypes.empty() ? end() : Iterator(m_EntityArchetypes.begin()); }
+		Iterator end() { return Iterator(m_EntityArchetypes.end()); }
+
+	private:
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
