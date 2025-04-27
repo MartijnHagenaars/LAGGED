@@ -65,39 +65,19 @@ namespace LAG
 	public:
 		struct Iterator
 		{
+			using difference_type = std::ptrdiff_t;
+			using iterator_category = std::bidirectional_iterator_tag;
 			using InnerIterator = std::unordered_map<EntityID, EntityRecord>::iterator;
 
-			Iterator(InnerIterator ptr)
-				: m_Ptr(ptr) {}
+			Iterator(InnerIterator ptr);
 
-			const EntityID& operator*() const { return m_Ptr->first; }
-			const EntityID* operator->() const { return &(m_Ptr->first); }
+			const EntityID& operator*() const;
+			const EntityID* operator->() const;
 
-			Iterator& operator++()
-			{
-				++m_Ptr;
-				return *this;
-			}
-
-			Iterator operator++(int)
-			{
-				Iterator temp = *this;
-				++(*this);
-				return temp;
-			}
-
-			Iterator& operator--()
-			{
-				--m_Ptr;
-				return *this;
-			}
-
-			Iterator operator--(int)
-			{
-				Iterator temp = *this;
-				--(*this);
-				return temp;
-			}
+			Iterator& operator++();
+			Iterator operator++(int);
+			Iterator& operator--();
+			Iterator operator--(int);
 
 			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; }
 			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
@@ -106,8 +86,8 @@ namespace LAG
 			InnerIterator m_Ptr;
 		};
 
-		Iterator begin() { return m_EntityArchetypes.empty() ? end() : Iterator(m_EntityArchetypes.begin()); }
-		Iterator end() { return Iterator(m_EntityArchetypes.end()); }
+		Iterator begin();
+		Iterator end();
 
 	private:
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);

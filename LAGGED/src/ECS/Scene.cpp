@@ -201,4 +201,59 @@ namespace LAG
 		delete[] archetype.compData[compIndex];
 		archetype.compData[compIndex] = newData;
 	}
+
+
+	/////////////////////////////
+	// ITERATOR IMPLEMENTATION //
+	/////////////////////////////
+	
+	Scene::Iterator::Iterator(InnerIterator ptr)
+		: m_Ptr(ptr) 
+	{}
+
+	const EntityID& Scene::Iterator::operator*() const
+	{
+		return m_Ptr->first;
+	}
+
+	const EntityID* Scene::Iterator::operator->() const
+	{
+		return &(m_Ptr->first);
+	}
+
+	Scene::Iterator& Scene::Iterator::operator++()
+	{
+		++m_Ptr;
+		return *this;
+	}
+
+	Scene::Iterator Scene::Iterator::operator++(int)
+	{
+		Iterator temp = *this;
+		++(*this);
+		return temp;
+	}
+
+	Scene::Iterator& Scene::Iterator::operator--()
+	{
+		--m_Ptr;
+		return *this;
+	}
+
+	Scene::Iterator Scene::Iterator::operator--(int)
+	{
+		Iterator temp = *this;
+		--(*this);
+		return temp;
+	}
+
+	Scene::Iterator Scene::begin()
+	{
+		return m_EntityArchetypes.empty() ? end() : Iterator(m_EntityArchetypes.begin());
+	}
+
+	Scene::Iterator Scene::end()
+	{
+		return Iterator(m_EntityArchetypes.end());
+	}
 }
