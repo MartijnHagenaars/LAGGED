@@ -71,8 +71,8 @@ namespace LAG
 
 			Iterator(InnerIterator ptr);
 
-			const EntityID& operator*() const;
-			const EntityID* operator->() const;
+			Entity operator*() const;
+			Entity operator->() const;
 
 			Iterator& operator++();
 			Iterator operator++(int);

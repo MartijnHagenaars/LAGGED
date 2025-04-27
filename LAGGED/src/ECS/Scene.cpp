@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "ECS/Entity.h"
+#include "Core/Engine.h"
 
 #include "Components/BasicComponents.h"
 
@@ -211,14 +212,16 @@ namespace LAG
 		: m_Ptr(ptr) 
 	{}
 
-	const EntityID& Scene::Iterator::operator*() const
+	Entity Scene::Iterator::operator*() const
 	{
-		return m_Ptr->first;
+		//FIXME: Not a fan of using GetScene here. Maybe (someho
+		return Entity(*GetScene(), m_Ptr->first);
 	}
 
-	const EntityID* Scene::Iterator::operator->() const
+	Entity Scene::Iterator::operator->() const
 	{
-		return &(m_Ptr->first);
+		//FIXME: Not a fan of using GetScene here. Maybe (someho
+		return Entity(*GetScene(), m_Ptr->first);
 	}
 
 	Scene::Iterator& Scene::Iterator::operator++()

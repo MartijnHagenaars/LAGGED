@@ -11,6 +11,7 @@
 #include "Core/Resources/Model.h"
 
 #include "ECS/Scene.h"
+#include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/ModelComponent.h"
 #include "ECS/Components/CameraComponent.h"
@@ -78,15 +79,22 @@ void Game::Initialize()
 	m_World = new World(12, true);
 	LAG::Scene* sc = LAG::GetEngine().GetScene();
 	
-
-	for (auto it = sc->begin(); it != sc->end(); it++)
+	for (auto it = sc->begin(); it != sc->end(); ++it)
 	{
-		INFO("Iterator: {}", *it);
+		INFO("Iterator: {}", (*it).ID());
+		for (auto varIt = (*it).begin(); varIt != (*it).end(); ++varIt)
+		{
+			INFO("Disp name: {}", varIt->props.displayName);
+		}
 	}
 	INFO("=================");
 	for (auto it : *sc)
 	{
-		INFO("Iterator: {}", it);
+		INFO("Iterator: {}", it.ID());
+		for (auto varIt : it)
+		{
+			INFO("Disp name: {}", varIt->props.displayName);
+		}
 	}
 }
 
