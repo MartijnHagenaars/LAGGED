@@ -35,34 +35,13 @@ namespace LAG
 				m_IdPtr(ptr)
 			{}
 
-			SceneReflect::ComponentData* operator*() const { return &SceneReflect::GetComponentProperties().at(*m_IdPtr); }
-			SceneReflect::ComponentData* operator->() { return &SceneReflect::GetComponentProperties().at(*m_IdPtr); }
+			SceneReflect::ComponentData* operator*() const;
+			SceneReflect::ComponentData* operator->();
 
-			Iterator& operator++()
-			{
-				m_IdPtr++;
-				return *this;
-			}
-
-			Iterator operator++(int)
-			{
-				Iterator tempIt = *this;
-				++(*this);
-				return tempIt;
-			}
-
-			Iterator& operator--()
-			{
-				m_IdPtr--;
-				return *this;
-			}
-
-			Iterator operator--(int)
-			{
-				Iterator tempIt = *this;
-				--(*this);
-				return tempIt;
-			}
+			Iterator& operator++();
+			Iterator operator++(int);
+			Iterator& operator--();
+			Iterator operator--(int);
 
 			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_IdPtr == b.m_IdPtr; }
 			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_IdPtr != b.m_IdPtr; }
@@ -71,16 +50,8 @@ namespace LAG
 			ComponentID* m_IdPtr;
 		};
 
-		Iterator begin() 
-		{ 
-			ArchetypeID& archetype = m_SceneRef->m_EntityArchetypes.at(m_ID).archetype->typeID;
-			return archetype.empty() ? end() : Iterator(&archetype[0]);
-		}
-		Iterator end() 
-		{ 
-			ArchetypeID& archetype = m_SceneRef->m_EntityArchetypes.at(m_ID).archetype->typeID;
-			return archetype.empty() ? end() : Iterator(&archetype[archetype.size() - 1]);
-		}
+		Iterator begin();
+		Iterator end();
 
 	private:
 		friend class Scene;
