@@ -21,7 +21,7 @@ namespace LAG
 		static Model* GetModel();
 		static Shader* GetShader();
 		static Texture* GetTexture();
-		static Surface GetSurface();
+		static Surface* GetSurface();
 
 	private:
 		void OnResize(unsigned int width, unsigned int height);

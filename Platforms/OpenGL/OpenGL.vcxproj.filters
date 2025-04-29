@@ -68,16 +68,7 @@
     <ClInclude Include="src\Resources\Surface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Resources\Buffers\FrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resources\Buffers\BufferLayout.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="src\Resources\Buffers\GL_FrameBuffer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Resources\Buffers\Buffers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

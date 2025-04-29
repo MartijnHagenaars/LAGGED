@@ -1,4 +1,4 @@
-#include "FrameBuffer.h"
+#include "Platform/Resources/Buffers/FrameBuffer.h"
 
 #include <GL/glew.h>
 
@@ -6,10 +6,7 @@
 #include "Core/Resources/ResourceManager.h"
 
 #include "Platform/Window.h"
-//#include "Editor/ToolsManager.h" //???
-
-#include "Resources/Shader.h"
-
+#include "Platform/Resources/Shader.h"
 
 #include "Utility/ErrorChecks.h"
 #include "Utility/Logger.h"

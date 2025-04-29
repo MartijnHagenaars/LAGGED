@@ -1,4 +1,5 @@
 #pragma once
+#include "Core/Resources/Resource.h"
 
 namespace LAG
 {
@@ -50,7 +51,7 @@ namespace LAG
 		void FreeTextureData(TextureData& textureData);
 
 		GLenum ConvertFormatToGLEnum(TextureFormat format);
-		unsigned int m_ID = 0;
+		unsigned int m_ID = 0; //FIXME: Needs to be moved to platform-specific structure
 
 		int m_Width = 0;
 		int m_Height = 0;

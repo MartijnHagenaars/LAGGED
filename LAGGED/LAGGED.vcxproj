@@ -185,6 +185,14 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="src\Platform\RenderBackend.h" />
+    <ClInclude Include="src\Platform\Resources\Buffers\BufferLayout.h" />
+    <ClInclude Include="src\Platform\Resources\Buffers\Buffers.h" />
+    <ClInclude Include="src\Platform\Resources\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Platform\Resources\Mesh.h" />
+    <ClInclude Include="src\Platform\Resources\Model.h" />
+    <ClInclude Include="src\Platform\Resources\Shader.h" />
+    <ClInclude Include="src\Platform\Resources\Surface.h" />
+    <ClInclude Include="src\Platform\Resources\Texture.h" />
     <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
     <ClInclude Include="External\DirectX\d3dx12.h" />

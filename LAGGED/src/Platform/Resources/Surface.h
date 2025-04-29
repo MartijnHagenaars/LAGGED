@@ -1,12 +1,12 @@
 #pragma once
 #include "glm/vec3.hpp"
 
-#include "Resources/Shader.h"
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
 
-#include "Resources/Buffers/Buffers.h"
+#include "Platform/Resources/Shader.h"
+#include "Platform/Resources/Buffers/Buffers.h"
 
 namespace LAG
 {

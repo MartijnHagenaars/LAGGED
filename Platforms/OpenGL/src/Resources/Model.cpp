@@ -1,4 +1,4 @@
-#include "Model.h"
+#include "Platform/Resources/Model.h"
 
 #define TINYGLTF_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -20,8 +20,8 @@
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Systems/CameraSystem.h"
 
-#include "Resources/Shader.h"
-#include "Resources/Texture.h"
+#include "Platform/Resources/Shader.h"
+#include "Platform/Resources/Texture.h"
 
 #include "Utility/Logger.h"
 #include "Utility/ErrorChecks.h"
@@ -35,13 +35,7 @@ namespace LAG
 
 	bool Model::Load()
 	{
-		if (m_Model == nullptr)
-			m_Model = new tinygltf::Model();
-		else
-		{
-			ERROR("Model \"{0}\" already exists.", GetPath().GetString());
-			return false;
-		}
+		std::unique_ptr<tinygltf::Model> modelData;
 
 		tinygltf::TinyGLTF modelLoader;
 
@@ -56,9 +50,9 @@ namespace LAG
 		std::string errorMsg = "", warningMsg = "";
 
 		if (fileExtension.compare("glb") == 0)
-			loadSuccess = modelLoader.LoadBinaryFromFile(m_Model, &errorMsg, &warningMsg, filePath);
+			loadSuccess = modelLoader.LoadBinaryFromFile(modelData.get(), &errorMsg, &warningMsg, filePath);
 		else if (fileExtension.compare("gltf") == 0)
-			loadSuccess = modelLoader.LoadASCIIFromFile(m_Model, &errorMsg, &warningMsg, filePath);
+			loadSuccess = modelLoader.LoadASCIIFromFile(modelData.get(), &errorMsg, &warningMsg, filePath);
 		else return false;
 
 		//Check error messages
@@ -69,19 +63,19 @@ namespace LAG
 
 		std::string modelDirPath = std::filesystem::path(filePath).parent_path().string();
 
-		m_Meshes.resize(m_Model->meshes.size());
-		for (int i = 0; i < m_Model->meshes.size(); i++)
+		m_Meshes.resize(modelData->meshes.size());
+		for (int i = 0; i < modelData->meshes.size(); i++)
 		{
-			m_Meshes[i].Load(GetPath().GetString(), *m_Model, i);
+			m_Meshes[i].Load(GetPath().GetString(), *modelData, i);
 		}
 
-		m_Nodes.resize(m_Model->nodes.size());
-		for (int i = 0; i < m_Model->nodes.size(); i++)
+		m_Nodes.resize(modelData->nodes.size());
+		for (int i = 0; i < modelData->nodes.size(); i++)
 		{
 			Node& node = m_Nodes[i];
-			tinygltf::Node& gltfNode = m_Model->nodes[i];
+			tinygltf::Node& gltfNode = modelData->nodes[i];
 
-			int meshID = m_Model->nodes[i].mesh;
+			int meshID = modelData->nodes[i].mesh;
 			node.m_MeshID = meshID;
 			node.m_DebugName = gltfNode.name;
 
@@ -131,10 +125,6 @@ namespace LAG
 	{
 		for (auto& it : m_Meshes)
 			it.Unload();
-
-		if (m_Model != nullptr)
-			delete m_Model;
-		m_Model = nullptr;
 
 		return true;
 	}

@@ -97,9 +97,6 @@
     <ClCompile Include="src\Resources\Surface.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Resources\Buffers\BufferLayout.h" />
-    <ClInclude Include="src\Resources\Buffers\FrameBuffer.h" />
-    <ClInclude Include="src\Resources\Buffers\Buffers.h" />
     <ClInclude Include="src\Resources\Buffers\GL_FrameBuffer.h" />
     <ClInclude Include="src\Resources\Mesh.h" />
     <ClInclude Include="src\Resources\Model.h" />

@@ -5,6 +5,7 @@
 #include <glm/vec2.hpp>
 
 #include "Platform/RenderBackend.h"
+#include "Platform/Resources/Texture.h"
 
 namespace LAG
 {

@@ -2,10 +2,10 @@
 
 #include "Utility/DebugLine.h"
 
-#include "Resources/Model.h"
-#include "Resources/Shader.h"
-#include "Resources/Texture.h"
-#include "Resources/Surface.h"
+#include "Platform/Resources/Model.h"
+#include "Platform/Resources/Shader.h"
+#include "Platform/Resources/Texture.h"
+#include "Platform/Resources/Surface.h"
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
@@ -40,7 +40,8 @@ namespace LAG
 		DebugLine::Initialize();
 
 		//Setup resize callback
-		GetWindow()->SetResizeCallBack(std::bind(&Renderer::OnResize, this, std::placeholders::_1, std::placeholders::_2));
+		//GetWindow()->SetResizeCallBack(std::bind(&Renderer::OnResize, this, std::placeholders::_1, std::placeholders::_2));
+		GetWindow()->SetResizeCallBack(LAG::Renderer::OnResize);
 
 		return ErrResult::SUCCESS;
 	}
@@ -72,7 +73,7 @@ namespace LAG
 		return nullptr;
 	}
 
-	Surface Renderer::GetSurface()
+	Surface* Renderer::GetSurface()
 	{
 		return nullptr;
 	}
@@ -99,7 +100,7 @@ namespace LAG
 		if (camComp == nullptr)
 			LAG_ASSERT("Tried to get CameraComponent using Camera Entity ID, but failed to retrieve CameraComponent pointer.");
 
-		camComp->framebuffer->FrameStart(m_Properties.showWireframe);
+		camComp->frameBuffer->FrameStart(m_Properties.showWireframe);
 
 		//Get an active camera
 		CameraSystem::Update(camEntityID);
@@ -153,8 +154,9 @@ namespace LAG
 
 		DebugLine::PresentDebugLines();
 
-		camComp->framebuffer->FrameEnd();
+		camComp->frameBuffer->FrameEnd();
 
+		//FIXME:
 		//ImGuiFrameEnd();
 		m_RenderTime = m_RenderTimer.GetMilliseconds();
 	}
@@ -170,14 +172,8 @@ namespace LAG
 		if (!camComp)
 			CRITICAL("Attempting to get CameraComponent from Entity {}, but received nullptr.", camEntityID);
 
-		camComp->framebuffer->Resize(camComp->framebuffer->GetSize());
+		camComp->frameBuffer->Resize(camComp->frameBuffer->GetSize());
 		camComp->hasCameraDimensionChanged = true;
-	}
-
-
-	Model* LAG::GetModel()
-	{
-		return nullptr;
 	}
 
 }

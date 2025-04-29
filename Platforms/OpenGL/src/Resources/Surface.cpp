@@ -1,4 +1,4 @@
-#include "Surface.h"
+#include "Platform/Resources/Surface.h"
 
 #include "Core/Engine.h"
 
@@ -9,9 +9,9 @@
 #include "ECS/Components/TerrainComponents.h"
 #include "ECS/Systems/CameraSystem.h"
 
-#include "Resources/Shader.h"
-#include "Resources/Texture.h"
-#include "Resources/Buffers/Buffers.h"
+#include "Platform/Resources/Shader.h"
+#include "Platform/Resources/Texture.h"
+#include "Platform/Resources/Buffers/Buffers.h"
 
 #include "Utility/Logger.h"
 #include "Utility/Noise.h"

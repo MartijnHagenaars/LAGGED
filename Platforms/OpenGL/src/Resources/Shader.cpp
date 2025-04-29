@@ -1,11 +1,11 @@
-#include "GL_Shader.h"
+#include "Platform/Resources/Shader.h"
+
+#include <GL/glew.h>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
-
-#include "GL/glew.h"
-#include "glm/gtc/type_ptr.hpp"
-#include "GL_ErrorChecks.h"
+#include "Utility/ErrorChecks.h"
 
 namespace LAG
 {

@@ -11,11 +11,13 @@ namespace LAG
 		friend class ArrayBuffer;
 	public: 
 		void SetVertexData(const void* data, uint32_t size);
+		void SetLayout(const BufferLayout& layout) { m_BufferLayout = layout; }
 
 		void Bind();
 		void Unbind();
 
 	private:
+		//FIXME: Needs to be moved to a platform-specific structure.
 		unsigned int m_VBO = 0;
 
 		const void* m_VertexData = nullptr;
@@ -35,6 +37,7 @@ namespace LAG
 		size_t GetCount() const { return m_IndexData.size(); }
 
 	private:
+		//FIXME: Needs to be moved to a platform-specific structure.
 		unsigned int m_EBO = 0;
 
 		std::vector<uint32_t> m_IndexData;
@@ -51,6 +54,7 @@ namespace LAG
 	private:
 		int ConvertBufferVarTypeToGLType(BufferVariableType type);
 
+		//FIXME: Needs to be moved to a platform-specific structure.
 		unsigned int m_VAO = 0;
 
 		bool m_Initialized = false;

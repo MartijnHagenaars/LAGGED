@@ -33,6 +33,7 @@ namespace LAG
 
 		bool m_UseWindowSize = true;
 
+		//FIXME: The variables below need to be moved to a platform-specific structure.
 		unsigned int m_VBO = 0;
 		unsigned int m_EBO = 0;
 		unsigned int m_VAO = 0;

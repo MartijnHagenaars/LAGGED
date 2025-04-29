@@ -1,4 +1,4 @@
-#include "Mesh.h"
+#include "Platform/Resources/Mesh.h"
 
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
@@ -7,7 +7,7 @@
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
 
-#include "Resources/Texture.h"
+#include "Platform/Resources/Texture.h"
 
 #include "Utility/Logger.h"
 #include "Utility/HashedString.h"

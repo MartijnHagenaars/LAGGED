@@ -1,4 +1,4 @@
-#include "Buffers.h"
+#include "Platform/Resources/Buffers/Buffers.h"
 
 #include <GL/glew.h>
 

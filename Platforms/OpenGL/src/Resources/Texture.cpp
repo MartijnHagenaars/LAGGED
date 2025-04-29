@@ -1,9 +1,9 @@
-#include "GL_Texture.h"
+#include "Platform/Resources/Texture.h"
 #include "GL/glew.h"
 
 #include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
-#include "GL_ErrorChecks.h"
+#include "Utility/ErrorChecks.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -11,12 +11,12 @@
 namespace LAG
 {
 	Texture::Texture(const HashedString& path) :
-		TextureBase(path)
+		Resource(path)
 	{
 	}
 
 	Texture::Texture(const HashedString& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) : 
-		TextureBase(handle)
+		Resource(handle)
 	{
 		if (handle.GetString().empty())
 			ERROR("Empty handle used for texture.");

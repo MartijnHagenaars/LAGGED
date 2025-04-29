@@ -1,16 +1,16 @@
 #include "DebugLine.h"
 #include "ErrorChecks.h"
 
+#include <GL/glew.h>
+
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
-
-#include "Resources/Shader.h"
 
 #include "ECS/Entity.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Systems/CameraSystem.h"
 
-#include <GL/glew.h>
+#include "Platform/Resources/Shader.h"
 
 namespace LAG
 {

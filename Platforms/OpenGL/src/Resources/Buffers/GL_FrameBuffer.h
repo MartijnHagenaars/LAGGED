@@ -1,9 +1,9 @@
 #pragma once
-#include "Platform/Resources/Buffer/FrameBuffer.h"
+//#include "Platform/Resources/Buffer/FrameBuffer.h"
 
 namespace LAG
 {
-	class FrameBuffer : public FrameBufferBase
+	/*class FrameBuffer : public FrameBufferBase
 	{
 	public:
 		FrameBuffer();
@@ -29,7 +29,7 @@ namespace LAG
 		unsigned int m_FrameBuffer = 0;
 		unsigned int m_ColorBuffer = 0;
 		unsigned int m_DepthStencilBuffer = 0;
-	};
+	};*/
 }
 
 

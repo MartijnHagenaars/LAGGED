@@ -105,6 +105,14 @@
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\Platform\RenderBackend.h" />
+    <ClInclude Include="src\Platform\Resources\Mesh.h" />
+    <ClInclude Include="src\Platform\Resources\Model.h" />
+    <ClInclude Include="src\Platform\Resources\Shader.h" />
+    <ClInclude Include="src\Platform\Resources\Surface.h" />
+    <ClInclude Include="src\Platform\Resources\Texture.h" />
+    <ClInclude Include="src\Platform\Resources\Buffers\BufferLayout.h" />
+    <ClInclude Include="src\Platform\Resources\Buffers\Buffers.h" />
+    <ClInclude Include="src\Platform\Resources\Buffers\FrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />

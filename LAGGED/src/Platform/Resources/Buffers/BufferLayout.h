@@ -9,7 +9,7 @@ namespace LAG
 	{
 		BufferLayoutElement() = delete;
 		BufferLayoutElement(BufferVariableType type, bool isNormalized) :
-			type(type), isNormalized(isNormalized)
+			type(type), isNormalized(isNormalized), offset(0)
 		{}
 
 		BufferVariableType type;
