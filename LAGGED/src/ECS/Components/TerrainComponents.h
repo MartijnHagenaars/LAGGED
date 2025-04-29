@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Resources/ResourceHandles.h"
-#include "Platform/RenderBackend.h"
+#include "Platform/Resources/Surface.h"
 
 #include "Utility/Noise.h"
 
@@ -18,13 +18,13 @@ namespace LAG
 
 	struct ProceduralSurfaceComponent
 	{
-		Surface surface = {};
+		Surface surface;
 		int surfaceSubdivisions = 16;
 		glm::vec2 surfaceScale = glm::vec2(1.f);
 
-		TextureHandle surfaceTexture = {};
+		TextureHandle surfaceTexture;
 
-		Noise::Properties noiseProperties = {};
+		Noise::Properties noiseProperties;
 
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();

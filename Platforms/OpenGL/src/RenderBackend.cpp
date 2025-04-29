@@ -41,7 +41,8 @@ namespace LAG
 
 		//Setup resize callback
 		//GetWindow()->SetResizeCallBack(std::bind(&Renderer::OnResize, this, std::placeholders::_1, std::placeholders::_2));
-		GetWindow()->SetResizeCallBack(LAG::Renderer::OnResize);
+		//GetWindow()->SetResizeCallBack(std::bind(&LAG::Renderer::OnResize, this, std::placeholders::_1, std::placeholders::_2));
+		GetWindow()->SetResizeCallBack(&LAG::Renderer::OnResize);
 
 		return ErrResult::SUCCESS;
 	}

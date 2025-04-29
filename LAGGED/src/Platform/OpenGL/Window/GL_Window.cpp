@@ -10,6 +10,8 @@
 #include "Core/Engine.h"
 #include "Utility/Logger.h"
 
+#include "Platform/RenderBackend.h"
+
 #include "GL_InputEnumConversion.h"
 
 namespace LAG
@@ -30,8 +32,9 @@ namespace LAG
 		glEnable(GL_DEBUG_OUTPUT);
 		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
 			{
-				if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
-					ERROR("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
+				//FIXME: This entire file needs to be moved to the OpenGL project...
+				//if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
+				//	ERROR("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
 			}, 0);
 
 		return true;
@@ -59,7 +62,7 @@ namespace LAG
 	void Window::PresentFrame()
 	{
 		glfwMakeContextCurrent(m_Window);
-		GetRenderer()->Render();
+		GetRenderer()->PresentFrame();
 		glfwSwapBuffers(m_Window);
 	}
 
