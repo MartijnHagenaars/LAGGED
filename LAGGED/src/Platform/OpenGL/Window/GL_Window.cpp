@@ -28,15 +28,6 @@ namespace LAG
 			return false;
 		}
 
-		//Setup OpenGL debug message callback
-		glEnable(GL_DEBUG_OUTPUT);
-		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
-			{
-				//FIXME: This entire file needs to be moved to the OpenGL project...
-				//if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
-				//	ERROR("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
-			}, 0);
-
 		return true;
 	}
 

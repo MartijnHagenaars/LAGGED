@@ -1,6 +1,7 @@
 #include "Platform/RenderBackend.h"
 
 #include "Utility/DebugLine.h"
+#include "Utility/ErrorCodeLookup.h"
 
 #include "Platform/Resources/Model.h"
 #include "Platform/Resources/Shader.h"
@@ -40,6 +41,14 @@ namespace LAG
 
 		//Setup resize callback
 		GetWindow()->SetResizeCallBack(&LAG::Renderer::OnResize);
+
+		//Setup OpenGL debug message callback
+		glEnable(GL_DEBUG_OUTPUT);
+		glDebugMessageCallback([](GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+			{
+				if (severity != GL_DEBUG_SEVERITY_NOTIFICATION)
+					ERROR("OpenGL Error: {0} Type: {1}, Severity: {2}, Message: {3}", type == GL_DEBUG_TYPE_ERROR ? "** GL ERROR **" : "", ConvertErrorTypeToString(type), ConvertErrorSeverityToString(severity), message);
+			}, 0);
 
 		return ErrResult::SUCCESS;
 	}
