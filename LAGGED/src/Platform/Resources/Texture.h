@@ -37,7 +37,8 @@ namespace LAG
 
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }
-		void* GetEditorHandle() { return (void*)(intptr_t)m_ID; }
+
+		void* GetEditorHandle();
 
 	private:
 		struct TextureData
@@ -50,9 +51,6 @@ namespace LAG
 		bool LoadTextureData(TextureData& textureData, const std::string& path);
 		void FreeTextureData(TextureData& textureData);
 
-		GLenum ConvertFormatToGLEnum(TextureFormat format);
-		unsigned int m_ID = 0; //FIXME: Needs to be moved to platform-specific structure
-
 		int m_Width = 0;
 		int m_Height = 0;
 		TextureFormat m_Format = TextureFormat::FORMAT_RGB;
@@ -61,6 +59,8 @@ namespace LAG
 
 		size_t m_BufferSize = -1;
 		const unsigned char* m_TempBuffer = nullptr;
+
+		void* m_DataPtr = nullptr;
 	};
 
 }

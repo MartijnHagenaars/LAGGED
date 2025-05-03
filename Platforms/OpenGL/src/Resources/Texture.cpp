@@ -10,6 +10,11 @@
 
 namespace LAG
 {
+	struct GlTextureData
+	{
+		unsigned int m_ID = 0;
+	};
+
 	Texture::Texture(const HashedString& path) :
 		Resource(path)
 	{
@@ -30,6 +35,17 @@ namespace LAG
 
 	}
 
+	GLenum ConvertFormatToGLEnum(TextureFormat format)
+	{
+		switch (format)
+		{
+		default: case TextureFormat::FORMAT_RGB: return GL_RGB;
+		case TextureFormat::FORMAT_RGBA: return GL_RGBA;
+		case TextureFormat::FORMAT_RG: return GL_RG;
+		case TextureFormat::FORMAT_R: return GL_RED;
+		}
+	}
+
 	bool Texture::Load()
 	{
 		if (IsLoaded())
@@ -38,12 +54,15 @@ namespace LAG
 			return false;
 		}
 
+		m_DataPtr = new GlTextureData;
+		GlTextureData* textureData = static_cast<GlTextureData*>(m_DataPtr);
+
 		//Load from file
 		if (m_LoadFromFile && GetPath().GetString().length() > 0)
 		{
 			std::string filePath = GetPath().GetString();
 			//Check if the texture hasn't been loaded yet. 
-			if (m_ID != 0)
+			if (textureData->m_ID != 0)
 			{
 				WARNING("Texture \"{0}\" has already been loaded.", filePath);
 				return false;
@@ -66,7 +85,7 @@ namespace LAG
 			m_Height = texData.height;
 
 			//Create GL texture
-			LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
+			LAG_GRAPHICS_CHECK(glGenTextures(1, &textureData->m_ID));
 			LAG_GRAPHICS_CHECK(Bind(0));
 
 			//Apply image data
@@ -78,7 +97,7 @@ namespace LAG
 		else if (!m_LoadFromFile && m_TempBuffer)
 		{
 			//Create GL texture
-			LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
+			LAG_GRAPHICS_CHECK(glGenTextures(1, &textureData->m_ID));
 			LAG_GRAPHICS_CHECK(Bind(0));
 
 			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_UNSIGNED_BYTE, m_TempBuffer));
@@ -108,7 +127,10 @@ namespace LAG
 
 	bool Texture::Unload()
 	{
-		glDeleteTextures(1, &m_ID);
+		glDeleteTextures(1, &static_cast<GlTextureData*>(m_DataPtr)->m_ID);
+		delete m_DataPtr;
+		m_DataPtr = nullptr;
+
 		SetLoaded(false);
 		return true;
 	}
@@ -169,7 +191,7 @@ namespace LAG
 	void Texture::Bind(size_t textureUnit)
 	{
 		LAG_GRAPHICS_CHECK(glActiveTexture(GetTextureUnit(textureUnit));)
-		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, m_ID));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, static_cast<GlTextureData*>(m_DataPtr)->m_ID));
 	}
 
 	void Texture::Unbind(size_t textureUnit)
@@ -204,15 +226,8 @@ namespace LAG
 		}
 	}
 
-	GLenum Texture::ConvertFormatToGLEnum(TextureFormat format)
+	void* Texture::GetEditorHandle()
 	{
-		switch (format)
-		{
-		default: case TextureFormat::FORMAT_RGB: return GL_RGB;
-		case TextureFormat::FORMAT_RGBA: return GL_RGBA;
-		case TextureFormat::FORMAT_RG: return GL_RG;
-		case TextureFormat::FORMAT_R: return GL_RED;
-		}
+		return (void*)(intptr_t)(static_cast<GlTextureData*>(m_DataPtr)->m_ID);
 	}
-
 }
