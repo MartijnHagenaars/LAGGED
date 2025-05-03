@@ -30,7 +30,8 @@ namespace LAG
 		glm::mat4 projMat = glm::mat4(1.f);
 		CameraPerspectiveType perspectiveType = CameraPerspectiveType::PERSPECTIVE;
 		
-		std::unique_ptr<FrameBuffer> frameBuffer;
+		//FIXME: Potentially really dangerous... Should we maybe store rendering objects (like frame buffers) in some sort of rendering resource manager?
+		std::unique_ptr<FrameBuffer> frameBuffer = std::make_unique<FrameBuffer>();
 
 	private:
 		static bool InitializeReflection();

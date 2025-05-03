@@ -13,6 +13,18 @@
 
 namespace LAG
 {
+	FrameBuffer::FrameBuffer()
+	{
+		if (!Initialize())
+			CRITICAL("Failed to create frame buffer.");
+	}
+
+	FrameBuffer::~FrameBuffer()
+	{
+		if (!Shutdown())
+			CRITICAL("Failed to shut down frame buffer.");
+	}
+
 	bool FrameBuffer::Initialize()
 	{
 		//First, create the quad for displaying the frame buffer

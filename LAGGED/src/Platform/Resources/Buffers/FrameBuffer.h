@@ -12,6 +12,9 @@ namespace LAG
 	class FrameBuffer
 	{
 	public:
+		FrameBuffer();
+		~FrameBuffer();
+
 		bool Initialize();
 		bool Shutdown();
 
