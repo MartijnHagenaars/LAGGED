@@ -9,6 +9,14 @@
 
 namespace LAG
 {
+	struct GlShaderData
+	{
+		unsigned int m_ProgramID = 0;
+
+		unsigned int m_VertexID = 0;
+		unsigned int m_PixelID = 0;
+	};
+
 	Shader::Shader(const HashedString& shaderPath) : Resource(shaderPath)
 	{
 	}
@@ -28,12 +36,15 @@ namespace LAG
 		//If not, we don't compile the shader.
 		if (!m_VertexSource.empty() && !m_PixelSource.empty())
 		{
-			m_VertexID = CompileShader(m_VertexSource, GL_VERTEX_SHADER);
-			m_PixelID = CompileShader(m_PixelSource, GL_FRAGMENT_SHADER);
-			if (m_VertexID == 0 || m_PixelID == 0)
+			m_DataPtr = new GlShaderData;
+			GlShaderData* shaderData = static_cast<GlShaderData*>(m_DataPtr);
+
+			shaderData->m_VertexID = CompileShader(m_VertexSource, GL_VERTEX_SHADER);
+			shaderData->m_PixelID = CompileShader(m_PixelSource, GL_FRAGMENT_SHADER);
+			if (shaderData->m_VertexID == 0 || shaderData->m_PixelID == 0)
 				return false;
 
-			m_ProgramID = MakeProgram();
+			shaderData->m_ProgramID = MakeProgram();
 			CleanUpCompiledShaders();
 			return true;
 		}
@@ -47,14 +58,16 @@ namespace LAG
 	bool Shader::Unload()
 	{
 		Unbind();
-		LAG_GRAPHICS_CHECK(glDeleteProgram(m_ProgramID));
+		LAG_GRAPHICS_CHECK(glDeleteProgram(static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID));
+		delete m_DataPtr;
+		m_DataPtr = nullptr;
 
 		return true;
 	}
 
 	bool Shader::Reload()
 	{
-		unsigned int prevProgramID = m_ProgramID;
+		unsigned int prevProgramID = static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID;
 
 		//Check if we can load the new shader files.
 		if (!Load())
@@ -100,10 +113,10 @@ namespace LAG
 	unsigned int Shader::MakeProgram()
 	{
 		unsigned int programID = glCreateProgram();
-
+		GlShaderData* shaderData = static_cast<GlShaderData*>(m_DataPtr);
 		//Attach the vertex and pixel shader. After that, link the newly created program.
-		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_VertexID));
-		LAG_GRAPHICS_CHECK(glAttachShader(programID, m_PixelID));
+		LAG_GRAPHICS_CHECK(glAttachShader(programID, shaderData->m_VertexID));
+		LAG_GRAPHICS_CHECK(glAttachShader(programID, shaderData->m_PixelID));
 
 		LAG_GRAPHICS_CHECK(glLinkProgram(programID));
 
@@ -127,19 +140,20 @@ namespace LAG
 	void Shader::CleanUpCompiledShaders()
 	{
 		//Since there might be some left-over memory after trying to (re)compile shaders, we want to ensure that everything is deleted properly.
+		GlShaderData* shaderData = static_cast<GlShaderData*>(m_DataPtr);
 
-		if (m_VertexID != 0)
-			LAG_GRAPHICS_CHECK(glDeleteShader(m_VertexID));
-		m_VertexID = 0;
+		if (shaderData->m_VertexID != 0)
+			LAG_GRAPHICS_CHECK(glDeleteShader(shaderData->m_VertexID));
+		shaderData->m_VertexID = 0;
 
-		if (m_PixelID != 0)
-			LAG_GRAPHICS_CHECK(glDeleteShader(m_PixelID));
-		m_PixelID = 0;
+		if (shaderData->m_PixelID != 0)
+			LAG_GRAPHICS_CHECK(glDeleteShader(shaderData->m_PixelID));
+		shaderData->m_PixelID = 0;
 	}
 
 	void Shader::Bind()
 	{
-		LAG_GRAPHICS_CHECK(glUseProgram(m_ProgramID));
+		LAG_GRAPHICS_CHECK(glUseProgram(static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID));
 	}
 
 	void Shader::Unbind()
@@ -149,27 +163,27 @@ namespace LAG
 
 	void Shader::SetBool(const std::string& location, bool value)
 	{
-		LAG_GRAPHICS_CHECK(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
+		LAG_GRAPHICS_CHECK(glUniform1i(glGetUniformLocation(static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID, location.c_str()), value));
 	}
 
 	void Shader::SetInt(const std::string& location, int value)
 	{
-		LAG_GRAPHICS_CHECK(glUniform1i(glGetUniformLocation(m_ProgramID, location.c_str()), value));
+		LAG_GRAPHICS_CHECK(glUniform1i(glGetUniformLocation(static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID, location.c_str()), value));
 	}
 
 	void Shader::SetFloat(const std::string& location, float value)
 	{
-		LAG_GRAPHICS_CHECK(glUniform1f(glGetUniformLocation(m_ProgramID, location.c_str()), value));
+		LAG_GRAPHICS_CHECK(glUniform1f(glGetUniformLocation(static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID, location.c_str()), value));
 	}
 
 	void Shader::SetVec3(const std::string& location, glm::vec3 value)
 	{
-		LAG_GRAPHICS_CHECK(glUniform3f(glGetUniformLocation(m_ProgramID, location.c_str()), value.x, value.y, value.z));
+		LAG_GRAPHICS_CHECK(glUniform3f(glGetUniformLocation(static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID, location.c_str()), value.x, value.y, value.z));
 	}
 
 	void Shader::SetMat4(const std::string& location, const glm::mat4& value)
 	{
-		LAG_GRAPHICS_CHECK(glUniformMatrix4fv(glGetUniformLocation(m_ProgramID, location.c_str()), 1, GL_FALSE, glm::value_ptr(value[0])));
+		LAG_GRAPHICS_CHECK(glUniformMatrix4fv(glGetUniformLocation(static_cast<GlShaderData*>(m_DataPtr)->m_ProgramID, location.c_str()), 1, GL_FALSE, glm::value_ptr(value[0])));
 	}
 
 }

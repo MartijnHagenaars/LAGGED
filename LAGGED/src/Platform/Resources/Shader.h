@@ -33,11 +33,7 @@ namespace LAG
 		
 		void CleanUpCompiledShaders();
 
-		//FIXME: The three variables below need to be moved to platform-specific structure.
-		unsigned int m_ProgramID = 0; 
-
-		unsigned int m_VertexID = 0;
-		unsigned int m_PixelID = 0;
+		void* m_DataPtr = nullptr;
 	};
 
 }
