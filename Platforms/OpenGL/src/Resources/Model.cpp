@@ -35,7 +35,7 @@ namespace LAG
 
 	bool Model::Load()
 	{
-		std::unique_ptr<tinygltf::Model> modelData;
+		std::unique_ptr<tinygltf::Model> modelData = std::make_unique<tinygltf::Model>();
 
 		tinygltf::TinyGLTF modelLoader;
 
