@@ -17,10 +17,9 @@ namespace LAG
 		void Unbind();
 
 	private:
-		//FIXME: Needs to be moved to a platform-specific structure.
-		unsigned int m_VBO = 0;
+		void* m_DataPtr = nullptr;
+		const void* m_Buffer = nullptr;
 
-		const void* m_VertexData = nullptr;
 		uint32_t m_VertexDataSize = 0;
 		BufferLayout m_BufferLayout;
 	};
@@ -37,8 +36,7 @@ namespace LAG
 		size_t GetCount() const { return m_IndexData.size(); }
 
 	private:
-		//FIXME: Needs to be moved to a platform-specific structure.
-		unsigned int m_EBO = 0;
+		void* m_DataPtr = nullptr;
 
 		std::vector<uint32_t> m_IndexData;
 	};
@@ -54,8 +52,7 @@ namespace LAG
 	private:
 		int ConvertBufferVarTypeToGLType(BufferVariableType type);
 
-		//FIXME: Needs to be moved to a platform-specific structure.
-		unsigned int m_VAO = 0;
+		void* m_DataPtr = nullptr;
 
 		bool m_Initialized = false;
 		std::unique_ptr<VertexBuffer> m_VertexBuffer;
