@@ -125,12 +125,18 @@ namespace LAG
 		{
 			GlVertexData* vertexData = static_cast<GlVertexData*>(m_VertexBuffer->m_DataPtr);
 			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &vertexData->m_VBO));
+			delete m_VertexBuffer->m_DataPtr;
+			m_VertexBuffer->m_DataPtr = nullptr;
 
 			GlIndexData* indexData = static_cast<GlIndexData*>(m_IndexBuffer->m_DataPtr);
 			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &indexData->m_EBO));
+			delete m_IndexBuffer->m_DataPtr;
+			m_IndexBuffer->m_DataPtr = nullptr;
 
 			GlArrayData* arrayData = static_cast<GlArrayData*>(m_DataPtr);
 			LAG_GRAPHICS_CHECK(glDeleteVertexArrays(1, &arrayData->m_VAO));
+			delete m_DataPtr;
+			m_DataPtr = nullptr;
 
 			m_Initialized = false;
 		}
