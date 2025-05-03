@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{129C2ED6-0FDF-4757-A832-5C406059A0FD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "LAGGED\LAGGED.vcxproj", "{C4B46334-7FEC-4381-B040-E80490FEB70C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{488C7DE8-907C-4B5B-A1BC-E8247B301982} = {488C7DE8-907C-4B5B-A1BC-E8247B301982}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{DAE4554C-5429-4775-B6B5-30A93765359C}"
 EndProject

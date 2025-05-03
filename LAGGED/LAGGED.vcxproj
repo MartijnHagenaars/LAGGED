@@ -87,8 +87,8 @@
       <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(ProjectDir)res"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>FastNoise.lib;glfw3_mt.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)External\OpenGL\GLEW\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FastNoise.lib;glfw3_mt.lib;OpenGL.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)Build\OpenGL\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
       <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoise.dll" "$(SolutionDir)\Build\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
@@ -125,8 +125,8 @@
       <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(ProjectDir)res"</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)External\OpenGL\GLEW\lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>FastNoiseD.lib;glfw3_mt.lib;glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)Build\OpenGL\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FastNoiseD.lib;glfw3_mt.lib;OpenGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PreBuildEvent>
       <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoiseD.dll" "$(SolutionDir)\Build\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>

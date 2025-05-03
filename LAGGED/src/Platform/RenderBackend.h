@@ -35,7 +35,7 @@ namespace LAG
 			bool useLighting = true;
 			bool showWireframe = false;
 		};
-		static RenderProperties m_Properties;
+		inline static RenderProperties m_Properties;
 
 		//Variables for calculating the time it takes to render
 		static inline LAG::Timer m_RenderTimer;

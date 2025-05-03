@@ -11,7 +11,6 @@
 #include "Core/Resources/ResourceManager.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/CameraComponent.h"

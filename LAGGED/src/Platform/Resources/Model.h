@@ -12,7 +12,6 @@
 namespace LAG
 {
 	class Shader;
-	class Entity;
 	class Model : public Resource
 	{
 		friend class ResourceManager;
