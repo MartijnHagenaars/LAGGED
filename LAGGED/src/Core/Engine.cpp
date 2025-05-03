@@ -113,24 +113,37 @@ namespace LAG
 	{
 		INFO("Shutting down engine...");
 
-		if (m_Application != nullptr)
+		if (m_Application)
 		{
 			m_Application->Shutdown();
 			delete m_Application;
 		}
 		m_Application = nullptr;
 
-		if (m_ToolsManager != nullptr)
+		if (m_ToolsManager)
+		{
 			m_ToolsManager->Shutdown();
-		delete m_ToolsManager;
+			delete m_ToolsManager;
+		}
+		m_ToolsManager = nullptr;
 
-		m_Renderer->Shutdown();
-		delete m_Renderer;
+		if(m_Scene)
+			delete m_Scene;
+		m_Scene = nullptr;
 
 		if (m_ResourceManager != nullptr)
+		{
 			m_ResourceManager->Clear();
-		delete m_ResourceManager;
+			delete m_ResourceManager;
+		}
 		m_ResourceManager = nullptr;
+
+		if (m_Renderer)
+		{
+			m_Renderer->Shutdown();
+			delete m_Renderer;
+		}
+		m_Renderer = nullptr;
 
 		m_Window->Shutdown();
 		delete m_Window;
