@@ -10,17 +10,17 @@ namespace LAG
 
 	struct GlVertexData
 	{
-		unsigned int m_VBO = 0;
+		unsigned int VBO = 0;
 	};
 
 	struct GlIndexData
 	{
-		unsigned int m_EBO = 0;
+		unsigned int EBO = 0;
 	};
 
 	struct GlArrayData
 	{
-		unsigned int m_VAO = 0;
+		unsigned int VAO = 0;
 	};
 
 	//Vertex buffer
@@ -33,7 +33,7 @@ namespace LAG
 
 	void VertexBuffer::Bind()
 	{
-		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, static_cast<GlVertexData*>(m_DataPtr)->m_VBO));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, static_cast<GlVertexData*>(m_DataPtr)->VBO));
 	}
 
 	void VertexBuffer::Unbind()
@@ -55,7 +55,7 @@ namespace LAG
 
 	void IndexBuffer::Bind()
 	{
-		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<GlIndexData*>(m_DataPtr)->m_EBO));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, static_cast<GlIndexData*>(m_DataPtr)->EBO));
 	}
 
 	void IndexBuffer::Unbind()
@@ -75,23 +75,23 @@ namespace LAG
 		m_DataPtr = new GlArrayData;
 		GlArrayData* arrayData = static_cast<GlArrayData*>(m_DataPtr);
 
-		LAG_GRAPHICS_CHECK(glCreateVertexArrays(1, &arrayData->m_VAO));
-		LAG_GRAPHICS_CHECK(glBindVertexArray(arrayData->m_VAO));
+		LAG_GRAPHICS_CHECK(glCreateVertexArrays(1, &arrayData->VAO));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(arrayData->VAO));
 
 		//Setup vertex buffer
 		m_VertexBuffer->m_DataPtr = new GlVertexData;
 		GlVertexData* vertexData = static_cast<GlVertexData*>(m_VertexBuffer->m_DataPtr);
 
-		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &vertexData->m_VBO));
-		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, vertexData->m_VBO));
+		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &vertexData->VBO));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ARRAY_BUFFER, vertexData->VBO));
 		LAG_GRAPHICS_CHECK(glBufferData(GL_ARRAY_BUFFER, m_VertexBuffer->m_VertexDataSize, m_VertexBuffer->m_Buffer, GL_STATIC_DRAW));
 
 		//Setup index buffer
 		m_IndexBuffer->m_DataPtr = new GlIndexData;
 		GlIndexData* indexData = static_cast<GlIndexData*>(m_IndexBuffer->m_DataPtr);
 
-		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &indexData->m_EBO));
-		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData->m_EBO));
+		LAG_GRAPHICS_CHECK(glCreateBuffers(1, &indexData->EBO));
+		LAG_GRAPHICS_CHECK(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexData->EBO));
 		LAG_GRAPHICS_CHECK(glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer->m_IndexData.size() * sizeof(uint32_t), &m_IndexBuffer->m_IndexData.data()[0], GL_STATIC_DRAW));
 
 		//Setup buffer layout
@@ -124,17 +124,17 @@ namespace LAG
 		if (m_Initialized)
 		{
 			GlVertexData* vertexData = static_cast<GlVertexData*>(m_VertexBuffer->m_DataPtr);
-			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &vertexData->m_VBO));
+			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &vertexData->VBO));
 			delete m_VertexBuffer->m_DataPtr;
 			m_VertexBuffer->m_DataPtr = nullptr;
 
 			GlIndexData* indexData = static_cast<GlIndexData*>(m_IndexBuffer->m_DataPtr);
-			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &indexData->m_EBO));
+			LAG_GRAPHICS_CHECK(glDeleteBuffers(1, &indexData->EBO));
 			delete m_IndexBuffer->m_DataPtr;
 			m_IndexBuffer->m_DataPtr = nullptr;
 
 			GlArrayData* arrayData = static_cast<GlArrayData*>(m_DataPtr);
-			LAG_GRAPHICS_CHECK(glDeleteVertexArrays(1, &arrayData->m_VAO));
+			LAG_GRAPHICS_CHECK(glDeleteVertexArrays(1, &arrayData->VAO));
 			delete m_DataPtr;
 			m_DataPtr = nullptr;
 
@@ -151,7 +151,7 @@ namespace LAG
 			return;
 		}
 
-		LAG_GRAPHICS_CHECK(glBindVertexArray(static_cast<GlArrayData*>(m_DataPtr)->m_VAO));
+		LAG_GRAPHICS_CHECK(glBindVertexArray(static_cast<GlArrayData*>(m_DataPtr)->VAO));
 		LAG_GRAPHICS_CHECK(glDrawElements(GL_TRIANGLES, static_cast<int>(m_IndexBuffer->GetCount()), GL_UNSIGNED_INT, 0));
 	}
 

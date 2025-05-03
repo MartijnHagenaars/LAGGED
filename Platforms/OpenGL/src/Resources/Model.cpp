@@ -96,7 +96,7 @@ namespace LAG
 			if (!gltfNode.rotation.empty())
 			{
 				const auto& rotation = gltfNode.rotation;
-				transformMat = transformMat * glm::toMat4(glm::quat(rotation[3], rotation[0], rotation[1], rotation[2]));
+				transformMat = transformMat * glm::toMat4(glm::quat((float)rotation[3], (float)rotation[0], (float)rotation[1], (float)rotation[2]));
 			}
 			else transformMat = transformMat * glm::toMat4(glm::identity<glm::quat>());
 

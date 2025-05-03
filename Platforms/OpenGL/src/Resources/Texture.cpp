@@ -12,7 +12,7 @@ namespace LAG
 {
 	struct GlTextureData
 	{
-		unsigned int m_ID = 0;
+		unsigned int id = 0;
 	};
 
 	Texture::Texture(const HashedString& path) :
@@ -62,7 +62,7 @@ namespace LAG
 		{
 			std::string filePath = GetPath().GetString();
 			//Check if the texture hasn't been loaded yet. 
-			if (textureData->m_ID != 0)
+			if (textureData->id != 0)
 			{
 				WARNING("Texture \"{0}\" has already been loaded.", filePath);
 				return false;
@@ -85,7 +85,7 @@ namespace LAG
 			m_Height = texData.height;
 
 			//Create GL texture
-			LAG_GRAPHICS_CHECK(glGenTextures(1, &textureData->m_ID));
+			LAG_GRAPHICS_CHECK(glGenTextures(1, &textureData->id));
 			LAG_GRAPHICS_CHECK(Bind(0));
 
 			//Apply image data
@@ -97,7 +97,7 @@ namespace LAG
 		else if (!m_LoadFromFile && m_TempBuffer)
 		{
 			//Create GL texture
-			LAG_GRAPHICS_CHECK(glGenTextures(1, &textureData->m_ID));
+			LAG_GRAPHICS_CHECK(glGenTextures(1, &textureData->id));
 			LAG_GRAPHICS_CHECK(Bind(0));
 
 			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_UNSIGNED_BYTE, m_TempBuffer));
@@ -127,7 +127,7 @@ namespace LAG
 
 	bool Texture::Unload()
 	{
-		glDeleteTextures(1, &static_cast<GlTextureData*>(m_DataPtr)->m_ID);
+		glDeleteTextures(1, &static_cast<GlTextureData*>(m_DataPtr)->id);
 		delete m_DataPtr;
 		m_DataPtr = nullptr;
 
@@ -191,7 +191,7 @@ namespace LAG
 	void Texture::Bind(size_t textureUnit)
 	{
 		LAG_GRAPHICS_CHECK(glActiveTexture(GetTextureUnit(textureUnit));)
-		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, static_cast<GlTextureData*>(m_DataPtr)->m_ID));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, static_cast<GlTextureData*>(m_DataPtr)->id));
 	}
 
 	void Texture::Unbind(size_t textureUnit)
@@ -228,6 +228,6 @@ namespace LAG
 
 	void* Texture::GetEditorHandle()
 	{
-		return (void*)(intptr_t)(static_cast<GlTextureData*>(m_DataPtr)->m_ID);
+		return (void*)(intptr_t)(static_cast<GlTextureData*>(m_DataPtr)->id);
 	}
 }
