@@ -91,7 +91,8 @@
       <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)Build\OpenGL\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
     </Lib>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoise.dll" "$(SolutionDir)\Build\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">
@@ -129,7 +130,8 @@
       <AdditionalDependencies>FastNoiseD.lib;glfw3_mt.lib;OpenGL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoiseD.dll" "$(SolutionDir)\Build\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -69,8 +69,7 @@
       <AdditionalDependencies>Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoiseD.dll" "$(SolutionDir)Build\$(ProjectName)\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">
@@ -94,6 +93,9 @@
       <AdditionalLibraryDirectories>$(SolutionDir)Build\Engine\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoise.dll" "$(SolutionDir)Build\$(ProjectName)\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\World\Chunk.h" />
