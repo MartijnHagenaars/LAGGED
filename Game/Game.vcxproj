@@ -71,6 +71,9 @@
     <PreBuildEvent>
       <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoiseD.dll" "$(SolutionDir)Build\$(ProjectName)\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(SolutionDir)LAGGED\res"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">
     <ClCompile>
@@ -96,6 +99,9 @@
     <PreBuildEvent>
       <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoise.dll" "$(SolutionDir)Build\$(ProjectName)\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
     </PreBuildEvent>
+    <PostBuildEvent>
+      <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(SolutionDir)LAGGED\res"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\World\Chunk.h" />

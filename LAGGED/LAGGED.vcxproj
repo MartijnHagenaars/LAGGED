@@ -84,7 +84,8 @@
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(ProjectDir)res"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>FastNoise.lib;glfw3_mt.lib;OpenGL.lib</AdditionalDependencies>
@@ -123,7 +124,8 @@
       <ShaderModel>6.0</ShaderModel>
     </FxCompile>
     <PostBuildEvent>
-      <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(ProjectDir)res"</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)External\FastNoise2\lib;$(SolutionDir)External\OpenGL\GLFW\lib;$(SolutionDir)Build\OpenGL\$(Platform)\$(Configuration)\</AdditionalLibraryDirectories>
