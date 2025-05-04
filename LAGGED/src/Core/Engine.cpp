@@ -89,6 +89,7 @@ namespace LAG
 
 		m_ToolsManager = new ToolsManager();
 		m_ToolsManager->Initialize();
+		m_Renderer->RegisterImGuiRenderCallback(std::bind(&ToolsManager::PresentEditor, m_ToolsManager));
 
 		//Add some input actions that'll be used by the engine and the editor. 
 		Input::AddInputAction(Input::InputType::LAG_W, HashedString("cameraMoveForward"));

@@ -109,25 +109,10 @@ namespace LAG
 		glfwMakeContextCurrent(prePlatformUpdateContext);
 	}
 
-	void DrawOptionsWindow()
-	{
-		ImGui::Begin("Render options");
-
-		ImGui::Text("LAGGED Renderer");
-		ImGui::Text(std::string("FPS: " + std::to_string(GetEngine().GetFPS())).c_str());
-
-		ImGui::End();
-	}
-
 	void Renderer::PresentFrame()
 	{
 		//Start timer for measuring render time
 		m_RenderTimer.ResetTimer();
-
-		ImGuiFrameStart();
-
-		//Render ImGui editor windows
-		DrawOptionsWindow();
 
 		//First render pass using custom frame buffer
 		EntityID camEntityID = CameraSystem::GetActiveCameraEntityID();
@@ -194,7 +179,14 @@ namespace LAG
 
 		camComp->frameBuffer->FrameEnd();
 
+
+		ImGuiFrameStart();
+		for (int i = 0; i < m_ImGuiRenderCallbacks.size(); i++)
+		{
+			m_ImGuiRenderCallbacks[i]();
+		}
 		ImGuiFrameEnd();
+
 		m_RenderTime = m_RenderTimer.GetMilliseconds();
 	}
 
@@ -211,6 +203,12 @@ namespace LAG
 
 		camComp->frameBuffer->Resize(camComp->frameBuffer->GetSize());
 		camComp->hasCameraDimensionChanged = true;
+	}
+
+	void Renderer::RegisterImGuiRenderCallback(std::function<void()> func)
+	{
+		if (func)
+			m_ImGuiRenderCallbacks.emplace_back(func);
 	}
 
 }

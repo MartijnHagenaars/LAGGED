@@ -1,7 +1,10 @@
 #pragma once
 #include "Core/Defines.h"
 #include "Utility/Timer.h"
+
 #include <glm/vec3.hpp>
+#include <functional>
+#include <vector>
 
 namespace LAG
 {
@@ -28,6 +31,8 @@ namespace LAG
 		// In the future, windows (be it the app window or an editor window) should trigger this themselves.
 		static void OnResize(unsigned int width, unsigned int height);
 
+		static void RegisterImGuiRenderCallback(std::function<void()> func);
+
 	private:
 
 		struct RenderProperties
@@ -40,5 +45,7 @@ namespace LAG
 		//Variables for calculating the time it takes to render
 		static inline LAG::Timer m_RenderTimer;
 		static inline float m_RenderTime = 0.f;
+
+		static inline std::vector<std::function<void()>> m_ImGuiRenderCallbacks;
 	};
 }
