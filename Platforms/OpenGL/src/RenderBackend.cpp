@@ -27,6 +27,11 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+#include "../imgui/ImGui/imgui.h"
+#include "../imgui/ImGui/imgui_impl_glfw.h"
+#include "../imgui/ImGui/imgui_impl_opengl3.h"
+#include "../imgui/ImGuizmo/ImGuizmo.h"
+
 namespace LAG
 {
 	ErrResult Renderer::Initialize()
@@ -85,18 +90,44 @@ namespace LAG
 		return nullptr;
 	}
 
+	void ImGuiFrameStart()
+	{
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		ImGuizmo::BeginFrame();
+	}
+
+	void ImGuiFrameEnd()
+	{
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+		GLFWwindow* prePlatformUpdateContext = glfwGetCurrentContext();
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+		glfwMakeContextCurrent(prePlatformUpdateContext);
+	}
+
+	void DrawOptionsWindow()
+	{
+		ImGui::Begin("Render options");
+
+		ImGui::Text("LAGGED Renderer");
+		ImGui::Text(std::string("FPS: " + std::to_string(GetEngine().GetFPS())).c_str());
+
+		ImGui::End();
+	}
+
 	void Renderer::PresentFrame()
 	{
 		//Start timer for measuring render time
 		m_RenderTimer.ResetTimer();
 
-		//// Begin of ImGui rendering
-		//ImGuiFrameStart();
+		ImGuiFrameStart();
 
-		////Render ImGui editor windows
-		//DrawOptionsWindow();
-
-		//GetToolsManager()->Render();
+		//Render ImGui editor windows
+		DrawOptionsWindow();
 
 		//First render pass using custom frame buffer
 		EntityID camEntityID = CameraSystem::GetActiveCameraEntityID();
@@ -163,8 +194,7 @@ namespace LAG
 
 		camComp->frameBuffer->FrameEnd();
 
-		//FIXME:
-		//ImGuiFrameEnd();
+		ImGuiFrameEnd();
 		m_RenderTime = m_RenderTimer.GetMilliseconds();
 	}
 
