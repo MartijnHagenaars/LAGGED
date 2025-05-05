@@ -1,6 +1,7 @@
 #pragma once
-#include "Core/Resources/Surface.h"
+
 #include "Core/Resources/ResourceHandles.h"
+#include "Platform/OpenGL/Renderer/GL_Surface.h" //TODO: THIS SHOULD NOT BE INCLUDED LIKE THIS. NEEDS TO BE A GENERAL SURFACE CLASS
 
 #include "Utility/Noise.h"
 

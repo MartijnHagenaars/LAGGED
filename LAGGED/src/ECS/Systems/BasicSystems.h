@@ -7,9 +7,4 @@ namespace LAG
 	{
 		void UpdateBasicSystems();
 	}
-
-	namespace SinWaveSystem
-	{
-		void Update(Entity* entity);
-	}
 }

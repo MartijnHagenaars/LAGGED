@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include "entt/entt.hpp"
 #include "ImGui/imgui.h"
 
 #include "glm/vec3.hpp"

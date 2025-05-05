@@ -2,7 +2,6 @@
 
 #include "Core/Engine.h"
 #include "ECS/Scene.h"
-#include "ECS/Meta/ReflectionComponentSetup.h"
 
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtx/matrix_decompose.hpp"
@@ -10,10 +9,11 @@
 
 bool LAG::DefaultComponent::InitializeReflection()
 {
-	Reflection::ReflectionSystem<DefaultComponent> setup;
-	setup.RegisterComponent().SetDisplayName("General data").SetVisibleInEditor(true);
-	setup.RegisterVariable<&DefaultComponent::visible>().SetDisplayName("Is Visible").SetHidden(false);
-	setup.RegisterVariable<&DefaultComponent::name>().SetDisplayName("Name");
+	//Reflection::ReflectionSystem<DefaultComponent> setup;
+	//setup.RegisterComponent().SetDisplayName("General data").SetVisibleInEditor(true);
+	//setup.RegisterVariable<&DefaultComponent::visible>().SetDisplayName("Is Visible").SetHidden(false);
+	//setup.RegisterVariable<&DefaultComponent::name>().SetDisplayName("Name");
+
 	return true;
 }
 
@@ -59,12 +59,12 @@ const glm::mat4& LAG::TransformComponent::GetTransformMatrix()
 
 bool LAG::TransformComponent::InitializeReflection()
 {
-	Reflection::ReflectionSystem<TransformComponent> setup;
-	setup.RegisterComponent().SetDisplayName("Transform Component").SetVisibleInEditor(true);
+	//Reflection::ReflectionSystem<TransformComponent> setup;
+	//setup.RegisterComponent().SetDisplayName("Transform Component").SetVisibleInEditor(true);
 
-	setup.RegisterVariable<&TransformComponent::translation>().SetDisplayName("Translation");
-	setup.RegisterVariable<&TransformComponent::rotation>().SetDisplayName("Rotation");
-	setup.RegisterVariable<&TransformComponent::scale>().SetDisplayName("Scale");
+	//setup.RegisterVariable<&TransformComponent::translation>().SetDisplayName("Translation");
+	//setup.RegisterVariable<&TransformComponent::rotation>().SetDisplayName("Rotation");
+	//setup.RegisterVariable<&TransformComponent::scale>().SetDisplayName("Scale");
 
 	return true;
 }
