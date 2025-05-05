@@ -70,26 +70,6 @@ namespace LAG
 		DebugLine::AddLineToQueue(p1, p2, color);
 	}
 
-	Model* Renderer::GetModel()
-	{
-		return nullptr;
-	}
-
-	Shader* Renderer::GetShader()
-	{
-		return nullptr;
-	}
-
-	Texture* Renderer::GetTexture()
-	{
-		return nullptr;
-	}
-
-	Surface* Renderer::GetSurface()
-	{
-		return nullptr;
-	}
-
 	void ImGuiFrameStart()
 	{
 		ImGui_ImplOpenGL3_NewFrame();

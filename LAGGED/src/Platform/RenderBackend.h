@@ -19,12 +19,8 @@ namespace LAG
 		static ErrResult Shutdown();
 
 		static void PresentFrame();
-		static void DrawDebugLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color);
 
-		static Model* GetModel();
-		static Shader* GetShader();
-		static Texture* GetTexture();
-		static Surface* GetSurface();
+		static void DrawDebugLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color);
 
 		// TODO: This is currently public, which shouldn't be the case.
 		// But this is currently necessary to get the window resizing to work. 
