@@ -24,7 +24,7 @@ namespace LAG
 		virtual bool Load();
 		virtual bool Unload();
 
-		void Render(EntityID objectEntity, EntityID cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights);
+		void Render(EntityID objectEntity, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights);
 
 	private:
 		////Creates a vector of 2D noise data

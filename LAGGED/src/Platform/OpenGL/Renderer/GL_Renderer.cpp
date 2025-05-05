@@ -35,8 +35,14 @@
 #include "Utility/Timer.h"
 #include "Editor/ToolsManager.h"
 
+#include "GL_Cubemap.h"
+#include "GL_Skybox.h"
+
 namespace LAG
 {
+	static Cubemap* skyCubemap = nullptr;
+	static Skybox* skybox = nullptr;
+
 	Renderer::Renderer()
 	{
 	}
@@ -50,6 +56,14 @@ namespace LAG
 		//Create some essential shaders.
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
+		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
+
+		//skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Desert");
+		skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Sky_2k");
+		skyCubemap->Load();
+
+		skybox = new Skybox();
+		skybox->Load();
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -141,14 +155,25 @@ namespace LAG
 		if (camEntityID == ENTITY_NULL)
 			LAG_ASSERT("Camera Entity ID is nullptr.");
 
+		CameraSystem::Update(camEntityID);
 		CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(camEntityID);
 		if(camComp == nullptr)
 			LAG_ASSERT("Tried to get CameraComponent using Camera Entity ID, but failed to retrieve CameraComponent pointer.");
 
 		camComp->framebuffer->FrameStart(m_ShowWireframe);
 
-		//Get an active camera
-		CameraSystem::Update(camEntityID);
+
+		//Temp skybox code
+		{
+			//TODO: Skybox is rendering black / without a texture. What is causing this?
+			Shader* skyShader = GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
+			skyShader->Bind();
+
+			glm::mat4 skyboxViewMat = glm::mat4(glm::mat3(camComp->viewMat));
+			skyShader->SetMat4("a_ViewMat", skyboxViewMat);
+			skyShader->SetMat4("a_ProjMat", camComp->projMat);
+			skybox->Render(*skyCubemap);
+		}
 
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
