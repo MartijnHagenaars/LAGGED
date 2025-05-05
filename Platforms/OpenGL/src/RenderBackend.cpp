@@ -27,10 +27,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "../imgui/ImGui/imgui.h"
-#include "../imgui/ImGui/imgui_impl_glfw.h"
-#include "../imgui/ImGui/imgui_impl_opengl3.h"
-#include "../imgui/ImGuizmo/ImGuizmo.h"
+#include <../imgui/ImGui/imgui.h>
+#include <../imgui/ImGui/imgui_impl_glfw.h>
+#include <../imgui/ImGui/imgui_impl_opengl3.h>
+#include <../imgui/ImGuizmo/ImGuizmo.h>
 
 namespace LAG
 {

@@ -52,12 +52,3 @@
 	#include <shellapi.h>
 
 #endif // PLATFORM_WINDOWS
-
-//If we're using DirectX, include all the DirectX headers
-#ifdef PLATFORM_DIRECTX
-
-#endif
-
-#ifdef PLATFORM_OPENGL
-
-#endif

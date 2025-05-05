@@ -1,7 +1,9 @@
 #include "Platform/Window.h"
-#include "Utility/Logger.h"
 
-#include "GLFW/glfw3.h"
+#include "Utility/Logger.h"
+#include "Utility/InputEnumConversion.h"
+
+#include <GLFW/glfw3.h>
 
 namespace LAG
 {
@@ -36,18 +38,15 @@ namespace LAG
 		glfwMakeContextCurrent(m_Window);
 		glfwSwapInterval(1);
 
-		PlatformInitialize();
-
-		//Not sure if necessary
 		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);
 		pressedButtonIDs.reserve(8);
 
+		// Now run platform-specific init functions
+		PlatformInitialize();
 		ImGuiInitialize();
 
-
-
-		//Window is ready to be used! Mark as open!
+		// Window is ready to be used! Mark as open!
 		m_IsOpen = true;
 		return true;
 	}
@@ -55,6 +54,8 @@ namespace LAG
 	void Window::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
+		glfwTerminate();
+
 		m_IsOpen = false;
 	}
 
@@ -99,6 +100,50 @@ namespace LAG
 			});
 
 		return true;
+	}
+
+	bool Window::CheckButtonPress(const Input::InputActionData& inputType, bool onlyDetectSinglePress)
+	{
+		// Detect if the button is being processed. Store the result in the buttonState varaible.
+		int buttonState = 0;
+		Input::InputDeviceType deviceType = GetInputDeviceType(inputType.type);
+
+		if (deviceType == Input::InputDeviceType::LAG_UNKNOWN)
+			return false;
+		else if (deviceType == Input::InputDeviceType::LAG_KEYBOARD)
+		{
+			int buttonType = ConvertLAGInputToGLFWInput(inputType.type);
+			buttonState = glfwGetKey(m_Window, buttonType);
+		}
+		else if (deviceType == Input::InputDeviceType::LAG_MOUSE)
+		{
+			buttonState = glfwGetMouseButton(m_Window, GLFW_MOUSE_BUTTON_LEFT);
+		}
+
+		// Process the input if it's being pressed
+		if (buttonState > 0)
+		{
+			if (onlyDetectSinglePress)
+			{
+				if (pressedButtonIDs.find(inputType.actionID) == pressedButtonIDs.end())
+					pressedButtonIDs.emplace(inputType.actionID);
+				else return false;
+			}
+
+			return true;
+		}
+
+		return false;
+	}
+
+	void Window::GetMousePosition(float& xPos, float& yPos)
+	{
+		double xPosD = 0.f, yPosD = 0.f;
+
+		//Since glfwGetCursorPos only works with doubles, we need to cast it back to floats.
+		glfwGetCursorPos(m_Window, &xPosD, &yPosD);
+		xPos = static_cast<float>(xPosD);
+		yPos = static_cast<float>(yPosD);
 	}
 	
 	void Window::SetWindowTitle(const char* windowTitle)
