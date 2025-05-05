@@ -35,7 +35,6 @@
     <ClCompile Include="src\Core\Input\Input.cpp" />
     <ClCompile Include="src\Utility\Logger.cpp" />
     <ClCompile Include="src\Core\Engine.cpp" />
-    <ClCompile Include="src\Platform\Base\ExceptionBase.cpp" />
     <ClCompile Include="src\Utility\Noise.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\Utility\UniqueID.cpp" />
@@ -83,7 +82,6 @@
     <ClInclude Include="src\Utility\Logger.h" />
     <ClInclude Include="External\DirectX\d3dx12.h" />
     <ClInclude Include="src\Core\Engine.h" />
-    <ClInclude Include="src\Platform\Base\ExceptionBase.h" />
     <ClInclude Include="src\Core\Defines.h" />
     <ClInclude Include="src\Core\ApplicationInterface.h" />
     <ClInclude Include="src\Core\EntryPoint.h" />

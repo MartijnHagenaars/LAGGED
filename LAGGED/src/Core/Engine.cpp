@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "Platform/Base/ExceptionBase.h"
 #include "Utility/Timer.h"
 
 #include "Resources/ResourceManager.h"
