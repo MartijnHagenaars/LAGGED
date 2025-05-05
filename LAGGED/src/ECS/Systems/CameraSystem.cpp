@@ -17,9 +17,39 @@
 
 namespace LAG::CameraSystem
 {
-	void Update(Entity* entity)
+	void CalculateViewMatrix(CameraComponent& cam, TransformComponent& transform)
 	{
-		CameraComponent* camera = entity->GetComponent<CameraComponent>();
+		cam.viewMat = glm::mat4(1.f);
+		cam.viewMat = glm::rotate(cam.viewMat, transform.GetRotation().x, glm::vec3(1.f, 0.f, 0.f));
+		cam.viewMat = glm::rotate(cam.viewMat, transform.GetRotation().y, glm::vec3(0.f, 1.f, 0.f));
+		cam.viewMat = glm::rotate(cam.viewMat, transform.GetRotation().z, glm::vec3(0.f, 0.f, 1.f));
+		cam.viewMat = glm::translate(cam.viewMat, transform.GetPosition());
+
+		cam.forwardVector = glm::vec3(transform.GetTransformMatrix()[0][2], transform.GetTransformMatrix()[1][2], transform.GetTransformMatrix()[2][2]);
+		cam.rightVector = glm::vec3(transform.GetTransformMatrix()[0][0], transform.GetTransformMatrix()[1][0], transform.GetTransformMatrix()[2][0]);
+
+		cam.hasCameraMoved = false;
+	}
+
+	void CalculateProjMatrix(CameraComponent& cam, TransformComponent& transform)
+	{
+		cam.projMat = glm::mat4(1.f);
+		float aspectRatio = static_cast<float>(cam.framebuffer->GetSize().x) / cam.framebuffer->GetSize().y;
+		cam.projMat = glm::perspective(glm::radians(cam.fov), aspectRatio, 0.1f, 100000.f);
+		cam.hasCameraDimensionChanged = false;
+	}
+
+	void Update(EntityID entityID)
+	{
+		if (entityID == ENTITY_NULL)
+		{
+			CRITICAL("Camera Entity ID is nullptr.");
+			return;
+		}
+
+		CameraComponent* camera = GetEngine().GetScene()->GetComponent<CameraComponent>(entityID);
+		if (!camera)
+			LAG_ASSERT("Camera Entity ID does not contain CameraComponent.");
 
 		//Only update active cameras
 		if (!camera->isActive)
@@ -28,7 +58,10 @@ namespace LAG::CameraSystem
 		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
 		float cameraRotationSpeed = 1.f * camera->rotationSpeed * GetEngine().GetDeltaTime();
 
-		TransformComponent* transform = entity->GetComponent<TransformComponent>();
+		TransformComponent* transform = GetEngine().GetScene()->GetComponent<TransformComponent>(entityID);
+		if (!transform)
+			CRITICAL("Camera Entity ID does not contain TransformComponent.");
+
 		glm::vec3 camPosAdjustment = glm::vec3(0.f);
 		if (Input::IsActionPressed(HashedString("cameraMoveForward")))
 			camPosAdjustment += camera->forwardVector * cameraMovementSpeed;
@@ -65,83 +98,60 @@ namespace LAG::CameraSystem
 			camera->hasCameraMoved = true;
 		}
 		
+
+		if (camera->hasCameraMoved)
+		{
+			CalculateViewMatrix(*camera, *transform);
+			camera->hasCameraMoved = false;
+		}
+
+		if (camera->hasCameraDimensionChanged)
+		{
+			CalculateProjMatrix(*camera, *transform);
+			camera->hasCameraDimensionChanged = false;
+		}
 	}
 
-	void SetActiveCameraEntity(Entity* entity)
+	EntityID GetActiveCameraEntityID()
 	{
-		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
-			{
-				if (entity->GetEntityID() == cameraEntity.GetEntityID())
-					cameraComp.isActive = true;
-				else cameraComp.isActive = false;
-			});
-	}
-
-	CameraComponent* GetActiveCameraComponent()
-	{
-		return GetActiveCameraEntity().GetComponent<CameraComponent>();
-	}
-
-	Entity GetActiveCameraEntity()
-	{
-		Entity entity = {};
-		GetScene()->Loop<CameraComponent>([&entity](Entity cameraEntity, CameraComponent& cameraComp)
-			{
-				if (cameraComp.isActive && cameraEntity.IsValid())
-					entity = cameraEntity;
-				else cameraComp.isActive = false;
-			});
-
-		if (!entity.IsValid())
+		std::vector<EntityID> camEntities = GetScene()->GetEntitiesWithComponents<CameraComponent>();
+		if (camEntities.empty())
+		{
 			WARNING("Failed to find active camera in GetActiveCameraEntity()");
-		return entity;
-	}
+			return ENTITY_NULL;
+		}
+		
+		for (const auto& id : camEntities)
+		{
+			CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(id);
+			if (camComp != nullptr && camComp->isActive)
+				return id;
+		}
 
-	void ResizeCameraBuffers()
-	{
-		GetScene()->Loop<CameraComponent>([](Entity cameraEntity, CameraComponent& cameraComp)
-			{
-				cameraComp.framebuffer->Resize(cameraComp.framebuffer->GetSize());
-				cameraComp.hasCameraDimensionChanged = true;
-			});
+		return ENTITY_NULL;
 	}
 	
-	glm::mat4 CalculateViewMat(Entity* entity)
+	/*glm::mat4 CalculateViewMat(EntityID entityID)
 	{
-		CameraComponent* camera = entity->GetComponent<CameraComponent>();
-		TransformComponent* transform = entity->GetComponent<TransformComponent>();
+		CameraComponent* camera = GetScene()->GetComponent<CameraComponent>(entityID);
+		TransformComponent* transform = GetScene()->GetComponent<TransformComponent>(entityID);
 		if (camera == nullptr || transform == nullptr)
 			return glm::mat4(0.f);
 
 		if (camera->hasCameraMoved)
 		{
-			camera->viewMat = glm::mat4(1.f);
-			camera->viewMat = glm::rotate(camera->viewMat, transform->GetRotation().x, glm::vec3(1.f, 0.f, 0.f));
-			camera->viewMat = glm::rotate(camera->viewMat, transform->GetRotation().y, glm::vec3(0.f, 1.f, 0.f));
-			camera->viewMat = glm::rotate(camera->viewMat, transform->GetRotation().z, glm::vec3(0.f, 0.f, 1.f));
-			camera->viewMat = glm::translate(camera->viewMat, transform->GetPosition());
 
-			//Thanks to this post for helping fix forward- and right vector calculations
-			//  https://stackoverflow.com/questions/50081475/opengl-local-up-and-right-from-matrix-4x4
-			camera->forwardVector = glm::vec3(transform->GetTransformMatrix()[0][2], transform->GetTransformMatrix()[1][2], transform->GetTransformMatrix()[2][2]);
-			camera->rightVector = glm::vec3(transform->GetTransformMatrix()[0][0], transform->GetTransformMatrix()[1][0], transform->GetTransformMatrix()[2][0]);
-
-			camera->hasCameraMoved = false;
 		}
 
 		return camera->viewMat;
 	}
 
-	glm::mat4 CalculateProjMat(Entity* entity)
+	glm::mat4 CalculateProjMat(EntityID entityID)
 	{
-		CameraComponent* camera = entity->GetComponent<CameraComponent>();
+		CameraComponent* camera = GetScene()->GetComponent<CameraComponent>(entityID);
 		if (!camera->hasCameraDimensionChanged)
 			return camera->projMat;
 
-		camera->projMat = glm::mat4(1.f);
-		float aspectRatio = static_cast<float>(camera->framebuffer->GetSize().x) / camera->framebuffer->GetSize().y;
-		camera->projMat = glm::perspective(glm::radians(camera->fov), aspectRatio, 0.1f, 100000.f);
-		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;
-	}
+	}*/
 }

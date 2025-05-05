@@ -44,10 +44,11 @@ namespace LAG
 
 	void LineTool::DrawLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
 	{
-		Entity camEntity = CameraSystem::GetActiveCameraEntity();
+		EntityID camEntityID = CameraSystem::GetActiveCameraEntityID();
+		CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(camEntityID);
 
 		m_LineShader->Bind();
-		m_LineShader->SetMat4("a_MVP", CameraSystem::CalculateProjMat(&camEntity) * CameraSystem::CalculateViewMat(&camEntity));
+		m_LineShader->SetMat4("a_MVP", camComp->projMat * camComp->viewMat);
 		m_LineShader->SetVec3("a_LineColor", color);
 
 		LAG_GRAPHICS_CHECK(glBindVertexArray(m_VAO));

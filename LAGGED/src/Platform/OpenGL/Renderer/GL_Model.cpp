@@ -159,11 +159,13 @@ namespace LAG
 
 	}
 
-	void LAG::Model::Render(TransformComponent& transform, Entity* cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
+	void LAG::Model::Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
+		CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(cameraEntityID);
+
 		shader.Bind();
-		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntity));
-		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntity));
+		shader.SetMat4("a_ProjMat", camComp->projMat);
+		shader.SetMat4("a_ViewMat", camComp->viewMat);
 
 		if (lights.size() > 0)
 		{
@@ -182,7 +184,10 @@ namespace LAG
 		else shader.SetBool("a_UseLight", false);
 
 		if (!m_Nodes.empty())
-			UpdateTransformHierarchies(transform.GetTransformMatrix());
+		{
+			TransformComponent* objectTransformPtr = GetScene()->GetComponent<TransformComponent>(objectEntityID);
+			UpdateTransformHierarchies(objectTransformPtr->GetTransformMatrix());
+		}
 
 		for (const auto& node : m_Nodes)
 		{
