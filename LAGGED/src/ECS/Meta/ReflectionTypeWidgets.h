@@ -6,16 +6,14 @@
 
 #include "ECS/Entity.h"
 #include "Core/Engine.h"
-#include "Core/Resources/Model.h"
-#include "Core/Resources/Texture.h"
 #include "Core/Resources/ResourceHandles.h"
 #include "Core/Resources/ResourceManager.h"
 
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/TerrainComponents.h"
-
 #include "ECS/Systems/TerrainSystems.h"
 
+#include "Platform/RenderBackend.h"
 #include "Utility/Noise.h"
 
 namespace LAG

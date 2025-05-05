@@ -8,8 +8,8 @@
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
-#include "Core/Resources/Shader.h"
-#include "Core/Resources/Model.h"
+#include "Platform/Resources/Shader.h"
+#include "Platform/Resources/Model.h"
 
 namespace LAG
 {

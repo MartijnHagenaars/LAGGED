@@ -27,7 +27,7 @@ namespace LAG
 		/// </summary>
 		void Shutdown();
 
-		void Render();
+		void PresentEditor();
 
 		/// <summary>
 		/// Check if a tool is open. Uses the internal tool name for lookup. 

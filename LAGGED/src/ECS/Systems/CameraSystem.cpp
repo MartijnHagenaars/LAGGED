@@ -1,19 +1,17 @@
 #include "CameraSystem.h"
 
+#include <glm/ext/matrix_transform.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <ImGui/imgui.h>
+
 #include "Core/Engine.h"
+#include "Core/Input/Input.h"
 #include "Platform/Window.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
-
-#include "Core/Input/Input.h"
-
 #include "ECS/Components/BasicComponents.h"
-#include "glm/ext/matrix_transform.hpp"
-#include <glm/ext/matrix_clip_space.hpp>
-
-#include "ImGui/imgui.h"
 
 namespace LAG::CameraSystem
 {
@@ -130,7 +128,7 @@ namespace LAG::CameraSystem
 			return camera->projMat;
 
 		camera->projMat = glm::mat4(1.f);
-		float aspectRatio = static_cast<float>(camera->framebuffer->GetSize().x) / camera->framebuffer->GetSize().y;
+		float aspectRatio = static_cast<float>(camera->frameBuffer->GetSize().x) / camera->frameBuffer->GetSize().y;
 		camera->projMat = glm::perspective(glm::radians(camera->fov), aspectRatio, 0.1f, 100000.f);
 		camera->hasCameraDimensionChanged = false;
 		return camera->projMat;

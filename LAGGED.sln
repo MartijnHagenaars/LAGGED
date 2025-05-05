@@ -6,6 +6,13 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Game", "Game\Game.vcxproj", "{129C2ED6-0FDF-4757-A832-5C406059A0FD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Engine", "LAGGED\LAGGED.vcxproj", "{C4B46334-7FEC-4381-B040-E80490FEB70C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{488C7DE8-907C-4B5B-A1BC-E8247B301982} = {488C7DE8-907C-4B5B-A1BC-E8247B301982}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{DAE4554C-5429-4775-B6B5-30A93765359C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OpenGL", "Platforms\OpenGL\OpenGL.vcxproj", "{488C7DE8-907C-4B5B-A1BC-E8247B301982}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,17 +20,24 @@ Global
 		OpenGL_Release|x64 = OpenGL_Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x64.ActiveCfg = OpenGL_Debug|x64
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x64.Build.0 = OpenGL_Debug|x64
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x64.ActiveCfg = OpenGL_Release|x64
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x64.Build.0 = OpenGL_Release|x64
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Debug|x64.ActiveCfg = OpenGL_Debug|x64
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Debug|x64.Build.0 = OpenGL_Debug|x64
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Release|x64.ActiveCfg = OpenGL_Release|x64
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Release|x64.Build.0 = OpenGL_Release|x64
+		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x64.ActiveCfg = OpenGL_Debug|x64
+		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x64.Build.0 = OpenGL_Debug|x64
+		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x64.ActiveCfg = OpenGL_Release|x64
+		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x64.Build.0 = OpenGL_Release|x64
+		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Debug|x64.ActiveCfg = OpenGL_Debug|x64
+		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Debug|x64.Build.0 = OpenGL_Debug|x64
+		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Release|x64.ActiveCfg = OpenGL_Release|x64
+		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Release|x64.Build.0 = OpenGL_Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{488C7DE8-907C-4B5B-A1BC-E8247B301982} = {DAE4554C-5429-4775-B6B5-30A93765359C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A0F11189-A473-49E9-B01D-52EBB603A3E6}
