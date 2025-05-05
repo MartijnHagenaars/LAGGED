@@ -8,8 +8,8 @@
 #include "Platform/Window.h"
 #include "Platform/Resources/Shader.h"
 
-#include "Utility/ErrorChecks.h"
 #include "Utility/Logger.h"
+#include "Utility/GL_ErrorChecks.h"
 
 namespace LAG
 {

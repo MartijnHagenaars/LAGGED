@@ -2,7 +2,7 @@
 
 #include <GL/glew.h>
 
-#include "Utility/ErrorChecks.h"
+#include "Utility/GL_ErrorChecks.h"
 
 namespace LAG
 {

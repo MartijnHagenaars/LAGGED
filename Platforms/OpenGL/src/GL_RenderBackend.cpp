@@ -1,7 +1,7 @@
 #include "Platform/RenderBackend.h"
 
-#include "Utility/DebugLine.h"
-#include "Utility/ErrorCodeLookup.h"
+#include "Utility/GL_DebugLine.h"
+#include "Utility/GL_ErrorCodeLookup.h"
 
 #include "Platform/Resources/Model.h"
 #include "Platform/Resources/Shader.h"

@@ -5,7 +5,7 @@
 
 #include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
-#include "Utility/ErrorChecks.h"
+#include "Utility/GL_ErrorChecks.h"
 
 namespace LAG
 {

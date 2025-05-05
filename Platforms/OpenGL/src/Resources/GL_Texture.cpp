@@ -3,7 +3,7 @@
 
 #include "FileIO/FileIO.h"
 #include "Utility/Logger.h"
-#include "Utility/ErrorChecks.h"
+#include "Utility/GL_ErrorChecks.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

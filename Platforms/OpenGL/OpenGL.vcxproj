@@ -96,15 +96,15 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\RenderBackend.cpp" />
-    <ClCompile Include="src\Resources\Buffers\Buffers.cpp" />
-    <ClCompile Include="src\Resources\Buffers\FrameBuffer.cpp" />
-    <ClCompile Include="src\Resources\Mesh.cpp" />
-    <ClCompile Include="src\Resources\Model.cpp" />
-    <ClCompile Include="src\Resources\Shader.cpp" />
-    <ClCompile Include="src\Resources\Texture.cpp" />
-    <ClCompile Include="src\Utility\DebugLine.cpp" />
-    <ClCompile Include="src\Resources\Surface.cpp" />
+    <ClCompile Include="src\GL_RenderBackend.cpp" />
+    <ClCompile Include="src\Resources\Buffers\GL_Buffers.cpp" />
+    <ClCompile Include="src\Resources\Buffers\GL_FrameBuffer.cpp" />
+    <ClCompile Include="src\Resources\GL_Mesh.cpp" />
+    <ClCompile Include="src\Resources\GL_Model.cpp" />
+    <ClCompile Include="src\Resources\GL_Shader.cpp" />
+    <ClCompile Include="src\Resources\GL_Texture.cpp" />
+    <ClCompile Include="src\Utility\GL_DebugLine.cpp" />
+    <ClCompile Include="src\Resources\GL_Surface.cpp" />
     <ClCompile Include="src\GL_Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -112,9 +112,9 @@
     <ClInclude Include="src\Resources\Model.h" />
     <ClInclude Include="src\Resources\Shader.h" />
     <ClInclude Include="src\Resources\Texture.h" />
-    <ClInclude Include="src\Utility\DebugLine.h" />
-    <ClInclude Include="src\Utility\ErrorChecks.h" />
-    <ClInclude Include="src\Utility\ErrorCodeLookup.h" />
+    <ClInclude Include="src\Utility\GL_DebugLine.h" />
+    <ClInclude Include="src\Utility\GL_ErrorChecks.h" />
+    <ClInclude Include="src\Utility\GL_ErrorCodeLookup.h" />
     <ClInclude Include="src\Resources\Surface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

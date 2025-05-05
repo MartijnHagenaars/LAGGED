@@ -15,31 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Utility\DebugLine.cpp">
+    <ClCompile Include="src\Utility\GL_DebugLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\RenderBackend.cpp">
+    <ClCompile Include="src\GL_RenderBackend.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources\Mesh.cpp">
+    <ClCompile Include="src\Resources\GL_Mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources\Model.cpp">
+    <ClCompile Include="src\Resources\GL_Model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources\Shader.cpp">
+    <ClCompile Include="src\Resources\GL_Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources\Texture.cpp">
+    <ClCompile Include="src\Resources\GL_Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources\Surface.cpp">
+    <ClCompile Include="src\Resources\GL_Surface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources\Buffers\Buffers.cpp">
+    <ClCompile Include="src\Resources\Buffers\GL_Buffers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Resources\Buffers\FrameBuffer.cpp">
+    <ClCompile Include="src\Resources\Buffers\GL_FrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\GL_Window.cpp">
@@ -47,13 +47,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Utility\DebugLine.h">
+    <ClInclude Include="src\Utility\GL_DebugLine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\ErrorChecks.h">
+    <ClInclude Include="src\Utility\GL_ErrorChecks.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utility\ErrorCodeLookup.h">
+    <ClInclude Include="src\Utility\GL_ErrorCodeLookup.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Resources\Mesh.h">

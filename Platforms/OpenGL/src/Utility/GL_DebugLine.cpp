@@ -1,5 +1,5 @@
-#include "DebugLine.h"
-#include "ErrorChecks.h"
+#include "GL_DebugLine.h"
+#include "GL_ErrorChecks.h"
 
 #include <GL/glew.h>
 
