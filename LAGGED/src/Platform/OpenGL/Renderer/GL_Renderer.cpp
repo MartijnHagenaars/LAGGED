@@ -58,7 +58,8 @@ namespace LAG
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
 
-		skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Desert");
+		//skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Desert");
+		skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Sky_2k");
 		skyCubemap->Load();
 
 		skybox = new Skybox();
