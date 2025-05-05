@@ -40,7 +40,7 @@ namespace LAG
 		}
 	}
 
-	void ToolsManager::Render()
+	void ToolsManager::PresentEditor()
 	{
 		BeginDockSpace();
 		

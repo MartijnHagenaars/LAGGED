@@ -1,8 +1,11 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "Core/Resources/Texture.h"
-#include "glm/vec2.hpp"
+
+#include <glm/vec2.hpp>
+
+#include "Platform/RenderBackend.h"
+#include "Platform/Resources/Texture.h"
 
 namespace LAG
 {
@@ -20,7 +23,7 @@ namespace LAG
 			std::string m_NodeTreeString =
 				"GQANAAIAAAC4HoU+BwAAuB4lQACF61E/ASQAAgAAABwAARkADQACAAAAuB4FQP//AAAAj8I1QQB7FK4+AQ0AAgAAAMP1qED//wAAAJqZmT4AcT0KPwAAAABA";
 
-			Texture m_PreviewTexture;
+			//Texture m_PreviewTexture;
 		};
 
 		struct GeneratedData

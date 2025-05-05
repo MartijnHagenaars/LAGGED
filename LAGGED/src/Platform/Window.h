@@ -43,9 +43,10 @@ namespace LAG
 		Window& operator=(Window& other) = delete;
 
 		bool Initialize();
+		void Shutdown();
+
 		bool PlatformInitialize();
 		bool ImGuiInitialize();
-		void Shutdown();
 
 		void Update();
 

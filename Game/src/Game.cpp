@@ -4,11 +4,11 @@
 #include "Core/Input/Input.h"
 
 #include "Core/Engine.h"
-#include "Platform/Renderer.h"
-
 #include "Core/Memory/ResourcePtr.h"
 #include "Core/Resources/ResourceManager.h"
-#include "Core/Resources/Model.h"
+
+#include "Platform/RenderBackend.h"
+#include "Platform/Resources/Model.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Entity.h"
