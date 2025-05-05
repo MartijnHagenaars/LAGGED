@@ -17,33 +17,21 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		OpenGL_Debug|x64 = OpenGL_Debug|x64
-		OpenGL_Debug|x86 = OpenGL_Debug|x86
 		OpenGL_Release|x64 = OpenGL_Release|x64
-		OpenGL_Release|x86 = OpenGL_Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Debug|x64.ActiveCfg = OpenGL_Debug|x64
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Debug|x64.Build.0 = OpenGL_Debug|x64
-		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Debug|x86.ActiveCfg = OpenGL_Debug|x64
-		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Debug|x86.Build.0 = OpenGL_Debug|x64
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Release|x64.ActiveCfg = OpenGL_Release|x64
 		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Release|x64.Build.0 = OpenGL_Release|x64
-		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Release|x86.ActiveCfg = OpenGL_Release|x64
-		{129C2ED6-0FDF-4757-A832-5C406059A0FD}.OpenGL_Release|x86.Build.0 = OpenGL_Release|x64
 		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x64.ActiveCfg = OpenGL_Debug|x64
 		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x64.Build.0 = OpenGL_Debug|x64
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x86.ActiveCfg = OpenGL_Debug|x64
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Debug|x86.Build.0 = OpenGL_Debug|x64
 		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x64.ActiveCfg = OpenGL_Release|x64
 		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x64.Build.0 = OpenGL_Release|x64
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x86.ActiveCfg = OpenGL_Release|x64
-		{C4B46334-7FEC-4381-B040-E80490FEB70C}.OpenGL_Release|x86.Build.0 = OpenGL_Release|x64
 		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Debug|x64.ActiveCfg = OpenGL_Debug|x64
 		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Debug|x64.Build.0 = OpenGL_Debug|x64
-		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Debug|x86.ActiveCfg = OpenGL_Debug|x64
 		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Release|x64.ActiveCfg = OpenGL_Release|x64
 		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Release|x64.Build.0 = OpenGL_Release|x64
-		{488C7DE8-907C-4B5B-A1BC-E8247B301982}.OpenGL_Release|x86.ActiveCfg = OpenGL_Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
