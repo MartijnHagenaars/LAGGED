@@ -16,6 +16,7 @@ namespace LAG
 	class Scene
 	{
 		friend class Entity;
+		friend class SceneReflect;
 	public: 
 		Scene();
 		~Scene();
@@ -61,6 +62,34 @@ namespace LAG
 		struct EntityRecord;
 		struct ComponentData;
 
+	public:
+		struct Iterator
+		{
+			using difference_type = std::ptrdiff_t;
+			using iterator_category = std::bidirectional_iterator_tag;
+			using InnerIterator = std::unordered_map<EntityID, EntityRecord>::iterator;
+
+			Iterator(InnerIterator ptr);
+
+			Entity operator*() const;
+			Entity operator->() const;
+
+			Iterator& operator++();
+			Iterator operator++(int);
+			Iterator& operator--();
+			Iterator operator--(int);
+
+			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; }
+			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
+
+		private:
+			InnerIterator m_Ptr;
+		};
+
+		Iterator begin();
+		Iterator end();
+
+	private:
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 

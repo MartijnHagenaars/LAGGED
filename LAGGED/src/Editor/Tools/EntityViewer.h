@@ -8,16 +8,14 @@ namespace LAG
 	{
 	public: 
 		EntityViewer();
-		~EntityViewer();
 
 		void Render() override; 
-
-		//Entity GetSelectedEntity() const { return m_SelectedEntity; }
 
 	private:
 		void RenderProperties();
 
-		Entity* m_SelectedEntity;
+		EntityID m_SelectedEntityID;
+
 		float m_BrowserHeight = 0;
 
 		char m_NewEntityName[128];
