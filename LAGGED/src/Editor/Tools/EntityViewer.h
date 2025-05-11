@@ -16,8 +16,6 @@ namespace LAG
 
 		EntityID m_SelectedEntityID;
 
-		float m_BrowserHeight = 0;
-
 		char m_NewEntityName[128];
 	};
 }

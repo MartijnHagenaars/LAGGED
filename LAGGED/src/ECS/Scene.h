@@ -27,6 +27,8 @@ namespace LAG
 		void RemoveEntity(EntityID entityID);
 		Entity DuplicateEntity(EntityID entityID);
 
+		Entity GetEntity(EntityID entityID);
+
 		template<typename Comp, typename ...Args>
 		Comp* AddComponent(const EntityID entityID, Args&&... compArgs);
 

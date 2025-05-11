@@ -72,6 +72,11 @@ namespace LAG
 		m_EntityArchetypes.erase(entityID);
 	}
 
+	Entity Scene::GetEntity(EntityID entityID)
+	{
+		return Entity(*this, entityID);
+	}
+
 	bool Scene::DoesEntityExist(EntityID entityID)
 	{
 		return (m_EntityArchetypes.find(entityID) != m_EntityArchetypes.end());
