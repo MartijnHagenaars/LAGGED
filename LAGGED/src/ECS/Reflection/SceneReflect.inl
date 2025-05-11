@@ -25,8 +25,10 @@ namespace LAG
 			return ComponentReflectionSetup(it->second);
 
 		auto compPropIt = compProperties.emplace(compID, ComponentData({})).first;
-		SceneReflect::ComponentData& props = compPropIt->second;
-		return ComponentReflectionSetup(props);
+		SceneReflect::ComponentData& compData = compPropIt->second;
+		compData.props.displayName = typeid(Comp).name();
+
+		return ComponentReflectionSetup(compData);
 	}
 
 	template<typename Comp, typename Var>
@@ -54,9 +56,10 @@ namespace LAG
 		}
 
 		varVec.emplace_back(SceneReflect::VariableData());
-		SceneReflect::VariableData& varProps = varVec[varVec.size() - 1];
+		SceneReflect::VariableData& varData = varVec[varVec.size() - 1];
+		varData.props.displayName = typeid(Var).name();
+		varData.byteOffset = byteOffset;
 
-		varProps.byteOffset = byteOffset;
-		return VariableReflectionSetup(varProps);
+		return VariableReflectionSetup(varData);
 	}
 }

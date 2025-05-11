@@ -114,6 +114,21 @@ namespace LAG
 		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
 		ImGui::Text(selectedEntityDisplay.c_str());
 
-		ImGui::Text("Add new component by picking one from the list below.");
+		for (auto varIt : entity)
+		{
+			const auto& properties = varIt->props;
+			if (properties.isHidden)
+			{
+				continue;
+			}
+
+
+			if (ImGui::CollapsingHeader(properties.displayName.c_str(), ImGuiTreeNodeFlags_None))
+			{
+				EditorGui::Indent indent;
+
+				ImGui::Text("Hello there!");
+			}
+		}
 	}
 }

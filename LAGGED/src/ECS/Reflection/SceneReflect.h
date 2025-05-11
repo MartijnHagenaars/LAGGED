@@ -25,7 +25,7 @@ namespace LAG
 
 			struct Properties
 			{
-				bool isHidden = true;
+				bool isHidden = false;
 				bool isReadOnly = false;
 				std::string displayName;
 			} props;
@@ -37,7 +37,7 @@ namespace LAG
 
 			struct Properties
 			{
-				bool isHidden = true;
+				bool isHidden = false;
 				std::string displayName;
 			} props;
 		};
