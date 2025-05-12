@@ -5,20 +5,14 @@
 
 namespace LAG
 {
-	inline std::unordered_map<ComponentID, SceneReflect::ComponentData>& SceneReflect::GetComponentProperties()
-	{
-		static std::unordered_map<ComponentID, ComponentData> compProps;
-		return compProps;
-	}
-
 	template<typename Comp>
 	inline ComponentReflectionSetup SceneReflect::RegisterComponent()
 	{
 		static_assert(!std::is_fundamental<Comp>::value, "Component type cannot be a fundamental type.");
 		static_assert(std::is_default_constructible<Comp>::value, "Component type is not constructible.");
 		
-		auto& compProperties = GetComponentProperties();
 		ComponentID compID = Scene::GetComponentID<Comp>();
+		auto& compProperties = SceneReflect::Get().GetComponentProperties();
 
 		auto it = compProperties.find(compID);
 		if (it != compProperties.end())
@@ -36,8 +30,8 @@ namespace LAG
 	{
 		static_assert(std::is_member_object_pointer<decltype(var)>::value, "Type needs to be a non-static member object pointer.");
 
-		auto& compProperties = GetComponentProperties();
 		ComponentID compID = Scene::GetComponentID<Comp>();
+		auto& compProperties = SceneReflect::Get().GetComponentProperties();
 
 		auto compIt = compProperties.find(compID);
 		if (compIt == compProperties.end())

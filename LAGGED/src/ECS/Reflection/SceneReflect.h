@@ -13,11 +13,15 @@ namespace LAG
 	{
 		friend class Entity;
 	public:
+		~SceneReflect() = default;
+
+		static SceneReflect& Get();
+
 		template<typename Comp>
-		static ComponentReflectionSetup RegisterComponent();
+		ComponentReflectionSetup RegisterComponent();
 
 		template <typename Comp, typename Var>
-		static VariableReflectionSetup RegisterVariable(Var Comp::* var);
+		VariableReflectionSetup RegisterVariable(Var Comp::* var);
 
 		struct VariableData
 		{
@@ -43,9 +47,14 @@ namespace LAG
 		};
 
 	private:
+		SceneReflect() = default;
+
+		std::unordered_map<ComponentID, SceneReflect::ComponentData>& GetComponentProperties();
+
+	private:
 		// Returns the map containing component properties
 		// Done through a getter function to avoid Static Initialization Order Fiasco
-		static std::unordered_map<ComponentID, SceneReflect::ComponentData>& GetComponentProperties();
+		std::unordered_map<ComponentID, SceneReflect::ComponentData> m_CompProperties;
 	};
 
 

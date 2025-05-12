@@ -104,6 +104,8 @@ namespace LAG
 
 		if (ImGui::BeginPopup("AddComponentPopup"))
 		{
+			// TODO: ITERATE OVER ALL COMPONENTS
+
 			ImGui::SeparatorText("Select a component");
 
 			ImGui::Text("TODO: ADD LIST OF COMPONENTS HERE...");

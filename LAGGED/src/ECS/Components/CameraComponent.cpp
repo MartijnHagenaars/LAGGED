@@ -8,7 +8,7 @@ namespace LAG
 {
     bool CameraComponent::InitializeReflection()
     {
-        SceneReflect refl;
+        SceneReflect& refl = SceneReflect::Get();
         refl.RegisterComponent<CameraComponent>().SetDisplayName("Camera Component");
 
         refl.RegisterVariable(&CameraComponent::isActive).SetDisplayName("Is active?");

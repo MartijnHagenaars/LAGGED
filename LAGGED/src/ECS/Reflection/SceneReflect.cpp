@@ -50,4 +50,15 @@ namespace LAG
 		m_Data.props.isReadOnly = isReadOnly;
 		return *this;
 	}
+
+	SceneReflect& SceneReflect::Get()
+	{
+		static SceneReflect sceneReflect;
+		return sceneReflect;
+	}
+
+	std::unordered_map<ComponentID, SceneReflect::ComponentData>& SceneReflect::GetComponentProperties()
+	{
+		return m_CompProperties;
+	}
 }

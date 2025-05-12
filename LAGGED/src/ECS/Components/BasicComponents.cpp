@@ -12,7 +12,7 @@ namespace LAG
 {
 	bool DefaultComponent::InitializeReflection()
 	{
-		SceneReflect refl;
+		SceneReflect& refl = SceneReflect::Get();
 		refl.RegisterComponent<DefaultComponent>().SetDisplayName("General data");
 
 		refl.RegisterVariable(&DefaultComponent::name).SetDisplayName("Name");
@@ -63,7 +63,7 @@ namespace LAG
 
 	bool TransformComponent::InitializeReflection()
 	{
-		SceneReflect refl;
+		SceneReflect& refl = SceneReflect::Get();
 		refl.RegisterComponent<TransformComponent>().SetDisplayName("Transform Component");
 
 		refl.RegisterVariable(&TransformComponent::translation).SetDisplayName("Translation");

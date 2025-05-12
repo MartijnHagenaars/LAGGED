@@ -25,12 +25,12 @@ namespace LAG
 
 	SceneReflect::ComponentData* LAG::Entity::Iterator::operator*() const
 	{
-		return &SceneReflect::GetComponentProperties().at(*m_IdPtr);
+		return &SceneReflect::Get().GetComponentProperties().at(*m_IdPtr);
 	}
 
 	SceneReflect::ComponentData* LAG::Entity::Iterator::operator->()
 	{
-		return &SceneReflect::GetComponentProperties().at(*m_IdPtr);
+		return &SceneReflect::Get().GetComponentProperties().at(*m_IdPtr);
 	}
 
 	Entity::Iterator& Entity::Iterator::operator++()
