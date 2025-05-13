@@ -61,4 +61,60 @@ namespace LAG
 	{
 		return m_CompProperties;
 	}
+
+
+	/////////////////////////////
+	// ITERATOR IMPLEMENTATION //
+	/////////////////////////////
+
+	SceneReflect::Iterator::Iterator(InnerIterator pIt, SceneReflect* pParent) : 
+		m_pIt(pIt), m_pParent(pParent)
+	{
+	}
+
+	SceneReflect::ComponentData* SceneReflect::Iterator::operator*() const
+	{
+		return &m_pIt->second;
+	}
+
+	SceneReflect::ComponentData& SceneReflect::Iterator::operator->() const
+	{
+		return m_pIt->second;
+	}
+
+	SceneReflect::Iterator& SceneReflect::Iterator::operator++()
+	{
+		m_pIt++;
+		return *this;
+	}
+
+	SceneReflect::Iterator SceneReflect::Iterator::operator++(int)
+	{
+		Iterator tempIt = *this;
+		++(*this);
+		return tempIt;
+	}
+
+	SceneReflect::Iterator& SceneReflect::Iterator::operator--()
+	{
+		m_pIt--;
+		return *this;
+	}
+
+	SceneReflect::Iterator SceneReflect::Iterator::operator--(int)
+	{
+		Iterator tempIt = *this;
+		--(*this);
+		return tempIt;
+	}
+
+	SceneReflect::Iterator SceneReflect::begin()
+	{
+		return Iterator(m_CompProperties.begin(), this);
+	}
+
+	SceneReflect::Iterator SceneReflect::end()
+	{
+		return Iterator(m_CompProperties.end(), this);
+	}
 }

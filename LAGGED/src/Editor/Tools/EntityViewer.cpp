@@ -104,12 +104,14 @@ namespace LAG
 
 		if (ImGui::BeginPopup("AddComponentPopup"))
 		{
-			// TODO: ITERATE OVER ALL COMPONENTS
-
 			ImGui::SeparatorText("Select a component");
-
-			ImGui::Text("TODO: ADD LIST OF COMPONENTS HERE...");
-
+			for (auto it : SceneReflect::Get())
+			{
+				if (ImGui::Button(it->props.displayName.c_str()))
+				{
+					INFO("Add {} to Entity {}", it->props.displayName, m_SelectedEntityID);
+				}
+			}
 			ImGui::EndPopup();
 		}
 

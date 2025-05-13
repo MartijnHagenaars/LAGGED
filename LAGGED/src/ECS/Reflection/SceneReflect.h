@@ -46,6 +46,35 @@ namespace LAG
 			} props;
 		};
 
+	public:
+		//FIXME: Fully implement iterator...
+		struct Iterator
+		{
+			using difference_type = std::ptrdiff_t;
+			using iterator_category = std::bidirectional_iterator_tag;
+			using InnerIterator = std::unordered_map<ComponentID, SceneReflect::ComponentData>::iterator;
+
+			Iterator(InnerIterator pIt, SceneReflect* pParent);
+
+			SceneReflect::ComponentData* operator*() const;
+			SceneReflect::ComponentData& operator->() const;
+
+			Iterator& operator++();
+			Iterator operator++(int);
+			Iterator& operator--();
+			Iterator operator--(int);
+
+			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_pIt == b.m_pIt; }
+			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_pIt != b.m_pIt; }
+
+		private:
+			InnerIterator m_pIt;
+			SceneReflect* m_pParent = nullptr;
+		};
+
+		Iterator begin();
+		Iterator end();
+
 	private:
 		SceneReflect() = default;
 
