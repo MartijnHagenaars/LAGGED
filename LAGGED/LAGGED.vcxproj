@@ -137,6 +137,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Core\FileIO\FileIO.h" />
+    <ClInclude Include="src\Core\FileIO\FileWatch.h" />
     <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />

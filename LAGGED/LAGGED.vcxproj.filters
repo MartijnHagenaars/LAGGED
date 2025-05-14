@@ -41,10 +41,11 @@
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Window.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
-    <ClCompile Include="src\FileIO\FileWatch.cpp" />
-    <ClCompile Include="src\FileIO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Core\FileIO\FileWatch.cpp" />
+    <ClCompile Include="src\Utility\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -110,6 +111,8 @@
     <ClInclude Include="src\Platform\Resources\Buffers\BufferLayout.h" />
     <ClInclude Include="src\Platform\Resources\Buffers\Buffers.h" />
     <ClInclude Include="src\Platform\Resources\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Core\FileIO\FileIO.h" />
+    <ClInclude Include="src\Core\FileIO\FileWatch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
