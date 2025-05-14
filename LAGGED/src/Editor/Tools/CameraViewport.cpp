@@ -1,7 +1,7 @@
 #include "CameraViewport.h"
 
 #include "Core/Engine.h"
-#include "Platform/Renderer.h"
+#include "Platform/RenderBackend.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Systems/CameraSystem.h"
@@ -41,22 +41,22 @@ namespace LAG
 
 			m_ViewportSize = winSize;
 			cameraComp->hasCameraDimensionChanged = true;
-			cameraComp->framebuffer->Resize(m_ViewportSize);
-			cameraComp->framebuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
+			cameraComp->frameBuffer->Resize(m_ViewportSize);
+			cameraComp->frameBuffer->UseWindowSize(false); //TODO: Set window resize back to true when disabled
 
-			GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
+			GetRenderer()->OnResize(cameraComp->frameBuffer->GetSize().x, cameraComp->frameBuffer->GetSize().y);
 		}
 
 		ImGui::PopStyleVar();
-		ImGui::Image(cameraComp->framebuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
+		ImGui::Image(cameraComp->frameBuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
 		ImGui::End();
 
 		if (m_IsOpen != isWindowOpen)
 		{
 			isWindowOpen = m_IsOpen;
-			cameraComp->framebuffer->UseWindowSize(!m_IsOpen);
-			cameraComp->framebuffer->Resize(m_ViewportSize);
-			GetRenderer()->OnResize(cameraComp->framebuffer->GetSize().x, cameraComp->framebuffer->GetSize().y);
+			cameraComp->frameBuffer->UseWindowSize(!m_IsOpen);
+			cameraComp->frameBuffer->Resize(m_ViewportSize);
+			GetRenderer()->OnResize(cameraComp->frameBuffer->GetSize().x, cameraComp->frameBuffer->GetSize().y);
 		}
 	}
 

@@ -11,21 +11,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <VCProjectVersion>16.0</VCProjectVersion>
+    <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{129c2ed6-0fdf-4757-a832-5c406059a0fd}</ProjectGuid>
-    <RootNamespace>Game</RootNamespace>
+    <ProjectGuid>{488c7de8-907c-4b5b-a1bc-e8247b301982}</ProjectGuid>
+    <RootNamespace>OpenGL</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -36,10 +36,10 @@
   </ImportGroup>
   <ImportGroup Label="Shared">
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'" Label="PropertySheets">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'" Label="PropertySheets">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
@@ -55,25 +55,21 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PLATFORM_OPENGL;DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;PLATFORM_WINDOWS;PLATFORM_OPENGL;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src\;$(SolutionDir)Game\src\;$(SolutionDir)External\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(SolutionDir)LAGGED\src;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Build\Engine\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoiseD.dll" "$(SolutionDir)Build\$(ProjectName)\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(SolutionDir)LAGGED\res"</Command>
-    </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\OpenGL\GLEW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">
     <ClCompile>
@@ -81,11 +77,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>PLATFORM_OPENGL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>RELEASE;PLATFORM_WINDOWS;PLATFORM_OPENGL;GLEW_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>$(SolutionDir)LAGGED\src\;$(SolutionDir)Game\src\;$(SolutionDir)External\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)src;$(SolutionDir)LAGGED\src;$(SolutionDir)External;$(SolutionDir)External\stb;$(SolutionDir)External\OpenGL\GLFW\include;$(SolutionDir)External\OpenGL\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -93,31 +89,37 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)Build\Engine\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Engine.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PreBuildEvent>
-      <Command>xcopy "$(SolutionDir)External\FastNoise2\bin\FastNoise.dll" "$(SolutionDir)Build\$(ProjectName)\$(Platform)\$(Configuration)\" /c /d /i /e /y</Command>
-    </PreBuildEvent>
-    <PostBuildEvent>
-      <Command>IF NOT EXIST "$(OutDir)res" mklink /J "$(OutDir)res" "$(SolutionDir)LAGGED\res"</Command>
-    </PostBuildEvent>
+    <Lib>
+      <AdditionalDependencies>glew32s.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)External\OpenGL\GLEW\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\World\Chunk.h" />
-    <ClInclude Include="src\Game.h" />
-    <ClInclude Include="src\World\ChunkKey.h" />
-    <ClInclude Include="src\World\World.h" />
+    <ClCompile Include="src\GL_RenderBackend.cpp" />
+    <ClCompile Include="src\Resources\Buffers\GL_Buffers.cpp" />
+    <ClCompile Include="src\Resources\Buffers\GL_FrameBuffer.cpp" />
+    <ClCompile Include="src\Resources\GL_Cubemap.cpp" />
+    <ClCompile Include="src\Resources\GL_Mesh.cpp" />
+    <ClCompile Include="src\Resources\GL_Model.cpp" />
+    <ClCompile Include="src\Resources\GL_Shader.cpp" />
+    <ClCompile Include="src\Resources\GL_Skybox.cpp" />
+    <ClCompile Include="src\Resources\GL_Texture.cpp" />
+    <ClCompile Include="src\Utility\GL_DebugLine.cpp" />
+    <ClCompile Include="src\Resources\GL_Surface.cpp" />
+    <ClCompile Include="src\GL_Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\World\Chunk.cpp" />
-    <ClCompile Include="src\Game.cpp" />
-    <ClCompile Include="src\World\World.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LAGGED\LAGGED.vcxproj">
-      <Project>{c4b46334-7fec-4381-b040-e80490feb70c}</Project>
-    </ProjectReference>
+    <ClInclude Include="src\Resources\GL_Cubemap.h" />
+    <ClInclude Include="src\Resources\GL_Skybox.h" />
+    <ClInclude Include="src\Resources\Mesh.h" />
+    <ClInclude Include="src\Resources\Model.h" />
+    <ClInclude Include="src\Resources\Shader.h" />
+    <ClInclude Include="src\Resources\Texture.h" />
+    <ClInclude Include="src\Utility\GL_DebugLine.h" />
+    <ClInclude Include="src\Utility\GL_ErrorChecks.h" />
+    <ClInclude Include="src\Utility\GL_ErrorCodeLookup.h" />
+    <ClInclude Include="src\Resources\Surface.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

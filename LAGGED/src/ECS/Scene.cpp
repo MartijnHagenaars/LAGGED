@@ -11,6 +11,7 @@ namespace LAG
 
 	Scene::~Scene()
 	{
+		RemoveAll();
 	}
 
 	Entity Scene::AddEntity()
@@ -82,7 +83,12 @@ namespace LAG
 
 	void Scene::RemoveAll()
 	{
-		//TODO: Implement function...
+		for (auto it = m_EntityArchetypes.begin(); it != m_EntityArchetypes.end(); )
+		{
+			RemoveEntity(it++->first);
+		}
+
+		m_EntityArchetypes.clear();
 	}
 
 

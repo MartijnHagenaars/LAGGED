@@ -8,7 +8,7 @@
 #ifdef DEBUG
 #define LAG_ASSERT(AssertMessage) { CRITICAL("Assertion called on line {0} in file {1}: {2}", __LINE__, __FILE__, AssertMessage); __debugbreak(); }
 #else
-#define LAG_ASSERT(AssertMessage)
+#define LAG_ASSERT(AssertMessage) {}
 #endif
 
 #ifdef DEBUG
@@ -16,3 +16,13 @@
 #else
 #define DEBUG_OPERATION(x)
 #endif
+
+namespace LAG
+{
+	enum class ErrResult
+	{
+		SUCCESS = 0,
+		ERR_INIT_FAIL,
+		ERR_UNDEFINED
+	};
+}

@@ -10,5 +10,8 @@ namespace LAG
 		void Update(EntityID entityID);
 
 		EntityID GetActiveCameraEntityID();
+
+		glm::mat4 CalculateViewMat(EntityID entityID);
+		glm::mat4 CalculateProjMat(EntityID entityID);
 	}
 }
