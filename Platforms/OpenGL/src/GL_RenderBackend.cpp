@@ -37,6 +37,7 @@
 
 namespace LAG
 {
+	// FIXME: Move these object ptrs somewhere else...
 	static Cubemap* skyCubemap = nullptr;
 	static Skybox* skybox = nullptr;
 

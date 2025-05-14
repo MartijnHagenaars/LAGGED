@@ -14,10 +14,10 @@ namespace LAG
 	{
 		enum class TextureFormat
 		{
-			FORMAT_RGBA = 0,
-			FORMAT_RGB,
+			FORMAT_R = 1,
 			FORMAT_RG,
-			FORMAT_R
+			FORMAT_RGB,
+			FORMAT_RGBA
 		};
 
 		GLenum ConvertFormatToGLEnum(TextureFormat format)
