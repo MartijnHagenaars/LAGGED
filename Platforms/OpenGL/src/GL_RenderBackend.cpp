@@ -33,7 +33,7 @@
 #include <../imgui/ImGuizmo/ImGuizmo.h>
 
 #include "Resources/GL_Skybox.h"
-#include "Resources/GL_Cubemap.h"
+#include "Platform/Resources/Cubemap.h"
 
 namespace LAG
 {
@@ -46,10 +46,8 @@ namespace LAG
 		//Create some essential shaders.
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
 
-		//skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Desert");
-		skyCubemap = new Cubemap(FileIO::Directory::Assets, "Cubemaps/Sky_2k");
+		skyCubemap = new Cubemap(HashedString("res/Assets/Cubemaps/Sky_2k"));
 		skyCubemap->Load();
 
 		skybox = new Skybox();

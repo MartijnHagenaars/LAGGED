@@ -1,4 +1,4 @@
-#include "GL_Cubemap.h"
+#include "Platform/Resources/Cubemap.h"
 
 #include <array>
 
@@ -7,30 +7,15 @@
 
 #include "Utility/GL_ErrorChecks.h"
 #include "Utility/Logger.h"
+#include "Utility/TextureUtility.h"
+
 
 namespace LAG
 {
-	namespace TempWorkaround
+	struct GlCubemapData
 	{
-		enum class TextureFormat
-		{
-			FORMAT_R = 1,
-			FORMAT_RG,
-			FORMAT_RGB,
-			FORMAT_RGBA
-		};
-
-		GLenum ConvertFormatToGLEnum(TextureFormat format)
-		{
-			switch (format)
-			{
-			default: case TextureFormat::FORMAT_RGB: return GL_RGB;
-			case TextureFormat::FORMAT_RGBA: return GL_RGBA;
-			case TextureFormat::FORMAT_RG: return GL_RG;
-			case TextureFormat::FORMAT_R: return GL_RED;
-			}
-		}
-	}
+		unsigned int id = 0;
+	};
 
 	struct CubemapFaces
 	{
@@ -48,40 +33,44 @@ namespace LAG
 		{"nz.png", GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}
 	} };
 
-	Cubemap::Cubemap(const FileIO::Directory& dir, const std::string& path)
+	Cubemap::Cubemap(const HashedString& path) :
+		Resource(path)
 	{
-		m_Directory = FileIO::GetPath(dir, path);
 	}
 
 	bool Cubemap::Load()
 	{
-		if (!FileIO::IsValid(m_Directory))
+		const std::string& pathStr = GetPath().GetString();
+		if (!FileIO::IsValid(GetPath().GetString()))
 		{
-			CRITICAL("Cannot load cubemap: directory {} is invalid.", m_Directory);
+			CRITICAL("Cannot load cubemap: directory {} is invalid.", pathStr);
 			return false;
 		}
 
+		m_DataPtr = new GlCubemapData;
+		GlCubemapData* data = static_cast<GlCubemapData*>(m_DataPtr);
+
 		//Create cubemap
-		LAG_GRAPHICS_CHECK(glGenTextures(1, &m_ID));
-		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_CUBE_MAP, m_ID));
+		LAG_GRAPHICS_CHECK(glGenTextures(1, &data->id));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_CUBE_MAP, data->id));
 
 		//Load all the data for the six faces
-		const auto& files = FileIO::GetAllFilesInDirectory(m_Directory);
+		const auto& files = FileIO::GetAllFilesInDirectory(pathStr);
 		for (const auto& face : cubemapFaceData)
 		{
 			auto it = std::find_if(files.begin(), files.end(), [&face](std::string p) { return p.find(face.fileName) != std::string::npos; });
 			if (it == files.end())
-				CRITICAL("No cubemap texture found for {} in directory {}.", face.fileName, m_Directory);
+				CRITICAL("No cubemap texture found for {}.", pathStr);
 
 			int width, height, channel;
 			unsigned char* faceData = stbi_load(it->c_str(), &width, &height, &channel, 0);
 			if (faceData == nullptr)
 			{
-				CRITICAL("Failed to load cubemap data for face {} in directory {}.", face.fileName, m_Directory);
+				CRITICAL("Failed to load cubemap data for face {}.", pathStr);
 				stbi_image_free(faceData);
 			}
 
-			GLenum formatEnum = TempWorkaround::ConvertFormatToGLEnum(TempWorkaround::TextureFormat(channel));
+			GLenum formatEnum = ConvertFormatToGLEnum(TextureFormat(channel));
 			LAG_GRAPHICS_CHECK(glTexImage2D(face.targetID, 0, formatEnum, width, height, 0, formatEnum, GL_UNSIGNED_BYTE, faceData));
 
 			stbi_image_free(faceData);
@@ -97,14 +86,15 @@ namespace LAG
 		return true;
 	}
 
-	void Cubemap::Unload()
+	bool Cubemap::Unload()
 	{
-		LAG_GRAPHICS_CHECK(glDeleteTextures(1, &m_ID));
+		LAG_GRAPHICS_CHECK(glDeleteTextures(1, &static_cast<GlCubemapData*>(m_DataPtr)->id));
+		return true;
 	}
 
 	void Cubemap::Bind()
 	{
-		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_CUBE_MAP, m_ID));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_CUBE_MAP, static_cast<GlCubemapData*>(m_DataPtr)->id));
 	}
 
 	void Cubemap::Unbind()

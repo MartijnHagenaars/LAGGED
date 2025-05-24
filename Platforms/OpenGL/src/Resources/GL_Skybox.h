@@ -1,5 +1,5 @@
 #pragma once
-#include "GL_Cubemap.h"
+#include "Platform/Resources/Cubemap.h"
 #include "Platform/Resources/Buffers/Buffers.h"
 
 namespace LAG

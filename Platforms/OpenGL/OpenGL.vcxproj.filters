@@ -77,10 +77,10 @@
     <ClInclude Include="src\Resources\Surface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Resources\GL_Cubemap.h">
+    <ClInclude Include="src\Resources\GL_Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Resources\GL_Skybox.h">
+    <ClInclude Include="src\Utility\TextureUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

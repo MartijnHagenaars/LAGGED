@@ -110,7 +110,6 @@
     <ClCompile Include="src\GL_Window.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Resources\GL_Cubemap.h" />
     <ClInclude Include="src\Resources\GL_Skybox.h" />
     <ClInclude Include="src\Resources\Mesh.h" />
     <ClInclude Include="src\Resources\Model.h" />
@@ -120,6 +119,7 @@
     <ClInclude Include="src\Utility\GL_ErrorChecks.h" />
     <ClInclude Include="src\Utility\GL_ErrorCodeLookup.h" />
     <ClInclude Include="src\Resources\Surface.h" />
+    <ClInclude Include="src\Utility\TextureUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

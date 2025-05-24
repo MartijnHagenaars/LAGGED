@@ -4,6 +4,7 @@
 #include "Core/FileIO/FileIO.h"
 #include "Utility/Logger.h"
 #include "Utility/GL_ErrorChecks.h"
+#include "Utility/TextureUtility.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -32,18 +33,6 @@ namespace LAG
 
 	Texture::~Texture()
 	{
-
-	}
-
-	GLenum ConvertFormatToGLEnum(TextureFormat format)
-	{
-		switch (format)
-		{
-		default: case TextureFormat::FORMAT_RGB: return GL_RGB;
-		case TextureFormat::FORMAT_RGBA: return GL_RGBA;
-		case TextureFormat::FORMAT_RG: return GL_RG;
-		case TextureFormat::FORMAT_R: return GL_RED;
-		}
 	}
 
 	bool Texture::Load()

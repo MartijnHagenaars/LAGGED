@@ -4,11 +4,17 @@
 #include <GL/glew.h>
 #include <glm/vec3.hpp>
 
+#include "Core/Engine.h"
+#include "Core/Resources/ResourceManager.h"
+#include "Platform/Resources/Shader.h"
+
 
 namespace LAG
 {
 	void Skybox::Load()
 	{
+		//Generate the cube used for the skybox
+
 		std::vector<glm::vec3> vertices =
 		{
 			{-1.0f, -1.0f, -1.0f},
@@ -38,6 +44,9 @@ namespace LAG
 		IndexBuffer ib;
 		ib.SetIndexData(indices);
 		m_Buffer.Initialize(vb, ib);
+
+		// Create the skybox shader
+		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
 	}
 
 	void Skybox::Unload()
