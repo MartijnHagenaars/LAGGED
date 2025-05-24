@@ -40,7 +40,12 @@ namespace LAG
 
 	bool FileIO::IsValid(Directory directory, const std::string& path)
 	{
-		return std::filesystem::exists(GetPath(directory, path));
+		return IsValid(GetPath(directory, path));
+	}
+
+	bool FileIO::IsValid(const std::string& path)
+	{
+		return std::filesystem::exists(path);
 	}
 
 	std::string FileIO::GetPath(Directory dir)
@@ -48,6 +53,7 @@ namespace LAG
 		switch (dir)
 		{
 		case Directory::Root: return "/";
+		case Directory::Assets: return "res/Assets/";
 		case Directory::Models: return "res/Assets/Models/";
 		case Directory::Shaders: return "res/Shaders/OpenGL/";
 		case Directory::Saves: return "res/Saves";
@@ -63,26 +69,31 @@ namespace LAG
 		return std::string(GetPath(dir) + path);
 	}
 
-	std::vector<std::string> FileIO::GetAllFilesInDirectory(Directory dir, const std::string& path, bool useRelativePath)
+	std::vector<std::string> FileIO::GetAllFilesInDirectory(const std::string& path, bool useRelativePath)
 	{
-		if (!IsValid(dir, path))
+		if (!IsValid(path))
 		{
-			CRITICAL("Cannot get all files in directory: path ({0}) is incorrect.", GetPath(dir, path));
+			CRITICAL("Cannot get all files in directory: path ({0}) is incorrect.", path);
 			return std::vector<std::string>();
 		}
 
 		std::vector<std::string> files;
-		for (const auto& it : std::filesystem::directory_iterator(GetPath(dir, path)))
+		for (const auto& it : std::filesystem::directory_iterator(path))
 			if (!it.is_directory())
 				if (useRelativePath)
 				{
 					const std::string& path = it.path().string();
-					files.emplace_back(path.substr(GetPath(dir).length(), path.length()));
+					files.emplace_back(it.path().string());
 				}
 				else
 					files.emplace_back(it.path().string());
 
 		return files;
+	}
+
+	std::vector<std::string> FileIO::GetAllFilesInDirectory(Directory dir, const std::string& path, bool useRelativePath)
+	{
+		return GetAllFilesInDirectory(GetPath(dir, path), useRelativePath);
 	}
 
 	std::vector<std::string> FileIO::GetAllSubDirectories(Directory dir, const std::string& path, bool useRelativePath)

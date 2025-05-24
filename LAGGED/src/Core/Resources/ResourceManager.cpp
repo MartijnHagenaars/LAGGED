@@ -10,6 +10,12 @@ namespace LAG
 		Clear();
 	}
 
+	bool ResourceManager::Contains(const HashedString& path)
+	{
+		auto resource = m_Resources.find(path.GetValue());
+		return (resource != m_Resources.end());
+	}
+
 	void ResourceManager::Clear()
 	{
 		if (m_Resources.empty())

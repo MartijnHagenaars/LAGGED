@@ -73,7 +73,6 @@ namespace LAG::CameraSystem
 			transform->SetRotation(transform->GetRotation() + camRotAdjustment);
 			camera->hasCameraMoved = true;
 		}
-		
 	}
 
 	EntityID GetActiveCameraEntityID()
@@ -84,7 +83,7 @@ namespace LAG::CameraSystem
 			WARNING("Failed to find active camera in GetActiveCameraEntity()");
 			return ENTITY_NULL;
 		}
-		
+
 		for (const auto& id : camEntities)
 		{
 			CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(id);
@@ -94,7 +93,7 @@ namespace LAG::CameraSystem
 
 		return ENTITY_NULL;
 	}
-	
+
 	glm::mat4 CalculateViewMat(EntityID entityID)
 	{
 		CameraComponent* camera = GetScene()->GetComponent<CameraComponent>(entityID);

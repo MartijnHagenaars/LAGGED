@@ -1,17 +1,9 @@
 #pragma once
+#include "Platform/Defines.h"
 #include "Core/Resources/Resource.h"
 
 namespace LAG
 {
-	enum class TextureFormat
-	{
-		FORMAT_RGBA = 0,
-		FORMAT_RGB,
-		FORMAT_RG,
-		FORMAT_R
-	};
-
-	typedef unsigned int GLenum;
 	class Texture : public Resource
 	{
 		friend class Model;

@@ -44,6 +44,7 @@
     <ClCompile Include="src\Core\IO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
+    <ClCompile Include="src\Utility\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -106,6 +107,9 @@
     <ClInclude Include="src\Platform\Resources\Buffers\BufferLayout.h" />
     <ClInclude Include="src\Platform\Resources\Buffers\Buffers.h" />
     <ClInclude Include="src\Platform\Resources\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Platform\Resources\Cubemap.h" />
+    <ClInclude Include="src\Platform\Defines.h" />
+    <ClInclude Include="src\Platform\Resources\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
@@ -116,6 +120,8 @@
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.pixel.glsl" />
     <None Include="src\ECS\Scene.inl" />
     <None Include="src\ECS\Entity.inl" />
   </ItemGroup>

@@ -4,6 +4,7 @@
 #include "Core/IO/FileIO.h"
 #include "Utility/Logger.h"
 #include "Utility/GL_ErrorChecks.h"
+#include "Utility/TextureUtility.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -20,30 +21,18 @@ namespace LAG
 	{
 	}
 
-	Texture::Texture(const HashedString& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) : 
+	Texture::Texture(const HashedString& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) :
 		Resource(handle)
 	{
 		if (handle.GetString().empty())
 			ERROR("Empty handle used for texture.");
 
-		if(!SetBuffer(buffer, bufferSize, width, height, format))
+		if (!SetBuffer(buffer, bufferSize, width, height, format))
 			CRITICAL("Failed to set texture buffer.");
 	}
 
 	Texture::~Texture()
 	{
-
-	}
-
-	GLenum ConvertFormatToGLEnum(TextureFormat format)
-	{
-		switch (format)
-		{
-		default: case TextureFormat::FORMAT_RGB: return GL_RGB;
-		case TextureFormat::FORMAT_RGBA: return GL_RGBA;
-		case TextureFormat::FORMAT_RG: return GL_RG;
-		case TextureFormat::FORMAT_R: return GL_RED;
-		}
 	}
 
 	bool Texture::Load()
@@ -103,7 +92,7 @@ namespace LAG
 			LAG_GRAPHICS_CHECK(glTexImage2D(GL_TEXTURE_2D, 0, ConvertFormatToGLEnum(m_Format), m_Width, m_Height, 0, ConvertFormatToGLEnum(m_Format), GL_UNSIGNED_BYTE, m_TempBuffer));
 			LAG_GRAPHICS_CHECK(glGenerateMipmap(GL_TEXTURE_2D));
 		}
-		else 
+		else
 		{
 			ERROR("Trying to load invalid texture.");
 			return false;
@@ -113,7 +102,7 @@ namespace LAG
 		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
 		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 		LAG_GRAPHICS_CHECK(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
-		
+
 		//Swizzle the texture if only the red channel is used. This prevents textures from looking red and instead grayscales them
 		if (m_Format == TextureFormat::FORMAT_R)
 		{
@@ -190,7 +179,7 @@ namespace LAG
 
 	void Texture::Bind(size_t textureUnit)
 	{
-		LAG_GRAPHICS_CHECK(glActiveTexture(GetTextureUnit(textureUnit));)
+		LAG_GRAPHICS_CHECK(glActiveTexture(GetTextureUnit(textureUnit)));
 		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, static_cast<GlTextureData*>(m_DataPtr)->id));
 	}
 
@@ -201,8 +190,6 @@ namespace LAG
 
 	bool Texture::LoadTextureData(TextureData& texData, const std::string& path)
 	{
-		//Load image data
-		
 		stbi_set_flip_vertically_on_load(true);
 		texData.data = stbi_load(path.c_str(), &texData.width, &texData.height, &texData.channels, 0);
 		if (texData.data == nullptr)

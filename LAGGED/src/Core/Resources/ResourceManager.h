@@ -67,6 +67,8 @@ namespace LAG
 			return GetResource<T>(path.GetValue());
 		}
 
+		bool Contains(const HashedString& path);
+
 		template<typename T>
 		std::vector<HashedString> GetResourceNames() const
 		{
@@ -81,7 +83,6 @@ namespace LAG
 			}
 			return nameVec;
 		}
-
 
 		void Clear();
 

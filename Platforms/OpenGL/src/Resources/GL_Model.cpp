@@ -149,9 +149,11 @@ namespace LAG
 
 	void LAG::Model::Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
+		CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(cameraEntityID);
+
 		shader.Bind();
-		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntityID));
-		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntityID));
+		shader.SetMat4("a_ProjMat", camComp->projMat);
+		shader.SetMat4("a_ViewMat", camComp->viewMat);
 
 		if (lights.size() > 0)
 		{

@@ -75,12 +75,14 @@ namespace LAG
 		GenerateSurface(procSurfaceComp.surfaceSubdivisions, procSurfaceComp.surfaceSubdivisions);
 	}
 
-	void Surface::Render(EntityID objectEntity, EntityID cameraEntity, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
+	void Surface::Render(EntityID objectEntity, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights)
 	{
+		CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(cameraEntityID);
+
 		shader.Bind();
 		shader.SetMat4("a_ModelMat", GetEngine().GetScene()->GetComponent<TransformComponent>(objectEntity)->GetTransformMatrix());
-		shader.SetMat4("a_ViewMat", CameraSystem::CalculateViewMat(cameraEntity));
-		shader.SetMat4("a_ProjMat", CameraSystem::CalculateProjMat(cameraEntity));
+		shader.SetMat4("a_ViewMat", camComp->viewMat);
+		shader.SetMat4("a_ProjMat", camComp->projMat);
 
 		//TODO: The way lights are currently handled isn't that good and should be revisited in the future.
 		if (lights.size() > 0)

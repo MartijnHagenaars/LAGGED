@@ -13,6 +13,7 @@ namespace LAG
 		enum class Directory
 		{
 			Root,
+			Assets,
 			Models,
 			Shaders,
 			Saves,
@@ -31,6 +32,13 @@ namespace LAG
 		static bool IsValid(Directory directory, const std::string& path);
 
 		/// <summary>
+		/// Check if a file path is valid.
+		/// </summary>
+		/// <param name="path">Relative path to the file.</param>
+		/// <returns>Returns true when file path is valid.</returns>
+		static bool IsValid(const std::string& path);
+
+		/// <summary>
 		/// Returns the path of the directory enum
 		/// </summary>
 		static std::string GetPath(Directory dir);
@@ -43,6 +51,7 @@ namespace LAG
 		/// <returns>A string containing both the directory path and the relative path.</returns>
 		static std::string GetPath(Directory dir, const std::string& path);
 
+		static std::vector<std::string> GetAllFilesInDirectory(const std::string& path, bool useRelativePath = true);
 		static std::vector<std::string> GetAllFilesInDirectory(Directory dir, const std::string& path, bool useRelativePath = true);
 
 		static std::vector<std::string> GetAllSubDirectories(Directory dir, const std::string& path, bool useRelativePath = true);
