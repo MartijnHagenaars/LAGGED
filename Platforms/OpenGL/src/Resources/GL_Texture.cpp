@@ -179,8 +179,8 @@ namespace LAG
 
 	void Texture::Bind(size_t textureUnit)
 	{
-		LAG_GRAPHICS_CHECK(glActiveTexture(GetTextureUnit(textureUnit));)
-			LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, static_cast<GlTextureData*>(m_DataPtr)->id));
+		LAG_GRAPHICS_CHECK(glActiveTexture(GetTextureUnit(textureUnit)));
+		LAG_GRAPHICS_CHECK(glBindTexture(GL_TEXTURE_2D, static_cast<GlTextureData*>(m_DataPtr)->id));
 	}
 
 	void Texture::Unbind(size_t textureUnit)
@@ -190,8 +190,6 @@ namespace LAG
 
 	bool Texture::LoadTextureData(TextureData& texData, const std::string& path)
 	{
-		//Load image data
-
 		stbi_set_flip_vertically_on_load(true);
 		texData.data = stbi_load(path.c_str(), &texData.width, &texData.height, &texData.channels, 0);
 		if (texData.data == nullptr)

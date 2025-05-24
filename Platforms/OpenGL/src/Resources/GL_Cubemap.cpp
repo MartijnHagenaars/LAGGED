@@ -89,6 +89,10 @@ namespace LAG
 	bool Cubemap::Unload()
 	{
 		LAG_GRAPHICS_CHECK(glDeleteTextures(1, &static_cast<GlCubemapData*>(m_DataPtr)->id));
+		if (m_DataPtr)
+			delete m_DataPtr;
+		m_DataPtr = nullptr;
+
 		return true;
 	}
 
