@@ -1,15 +1,24 @@
 #include "Platform/RenderBackend.h"
 
-#include "Utility/GL_DebugLine.h"
-#include "Utility/GL_ErrorCodeLookup.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <../imgui/ImGui/imgui.h>
+#include <../imgui/ImGui/imgui_impl_glfw.h>
+#include <../imgui/ImGui/imgui_impl_opengl3.h>
+#include <../imgui/ImGuizmo/ImGuizmo.h>
+
+#include "Core/Engine.h"
+#include "Core/Resources/ResourceManager.h"
 
 #include "Platform/Resources/Model.h"
 #include "Platform/Resources/Shader.h"
 #include "Platform/Resources/Texture.h"
 #include "Platform/Resources/Surface.h"
+#include "Platform/Resources/Skybox.h"
+#include "Platform/Resources/Cubemap.h"
 
-#include "Core/Engine.h"
-#include "Core/Resources/ResourceManager.h"
+#include "Platform/Window.h"
+#include "Platform/Resources/Shader.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
@@ -20,20 +29,8 @@
 #include "ECS/Systems/BasicSystems.h"
 #include "ECS/Systems/CameraSystem.h"
 
-
-#include "Platform/Window.h"
-#include "Platform/Resources/Shader.h"
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include <../imgui/ImGui/imgui.h>
-#include <../imgui/ImGui/imgui_impl_glfw.h>
-#include <../imgui/ImGui/imgui_impl_opengl3.h>
-#include <../imgui/ImGuizmo/ImGuizmo.h>
-
-#include "Resources/GL_Skybox.h"
-#include "Platform/Resources/Cubemap.h"
+#include "Utility/GL_DebugLine.h"
+#include "Utility/GL_ErrorCodeLookup.h"
 
 namespace LAG
 {
@@ -78,6 +75,16 @@ namespace LAG
 		return ErrResult::SUCCESS;
 	}
 
+	void LAG::Renderer::SetSkyboxCubemap(const HashedString& path)
+	{
+		if (!m_Skybox)
+		{
+			m_Skybox = new Skybox;
+			m_Skybox->Load();
+		}
+		m_Skybox->SetCubemap(path);
+	}
+
 	void Renderer::DrawDebugLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
 	{
 		DebugLine::AddLineToQueue(p1, p2, color);
@@ -119,18 +126,7 @@ namespace LAG
 
 		camComp->frameBuffer->FrameStart(m_Properties.showWireframe);
 
-
-		//Temp skybox code
-		{
-			//TODO: Skybox is rendering black / without a texture. What is causing this?
-			Shader* skyShader = GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
-			skyShader->Bind();
-
-			glm::mat4 skyboxViewMat = glm::mat4(glm::mat3(camComp->viewMat));
-			skyShader->SetMat4("a_ViewMat", skyboxViewMat);
-			skyShader->SetMat4("a_ProjMat", camComp->projMat);
-			skybox->Render(*skyCubemap);
-		}
+		skybox->Render(camEntityID);
 
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights

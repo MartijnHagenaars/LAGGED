@@ -1,4 +1,4 @@
-#include "GL_Skybox.h"
+#include "Platform/Resources/Skybox.h"
 
 #include <vector>
 #include <GL/glew.h>
@@ -6,11 +6,17 @@
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
+#include "ECS/Scene.h"
+#include "ECS/Entity.h" //FIXME: This include directive shouldn't be necessary
+#include "ECS/Components/CameraComponent.h"
+
 #include "Platform/Resources/Shader.h"
 
 
 namespace LAG
 {
+	const HashedString skyboxShader = HashedString("res/Shaders/OpenGL/Skybox");
+
 	void Skybox::Load()
 	{
 		//Generate the cube used for the skybox
@@ -54,15 +60,36 @@ namespace LAG
 		m_Buffer.Shutdown();
 	}
 
-	void Skybox::Render(Cubemap& cubemap)
+	void Skybox::SetCubemap(const HashedString& path)
 	{
-		//Disable writing to the depth buffer so that skybox depth is not added to the buffer
+		ResourceManager* pResources = GetResourceManager();
+		if (!pResources->Contains(path))
+			GetResourceManager()->AddResource<Cubemap>(path);
+
+		m_Cubemap = pResources->GetResource<Cubemap>(path);
+	}
+
+	void Skybox::Render(EntityID camEntityID)
+	{
+		Shader* pShader = GetResourceManager()->GetResource<Shader>(skyboxShader.GetValue());
+		CameraComponent* pCamera = GetScene()->GetComponent<CameraComponent>(camEntityID);
+
+		if (!pShader || !pCamera || !m_Cubemap)
+		{
+			CRITICAL("Failed to render skybox: invalid pointer.");
+			return;
+		}
+
 		glDepthMask(false);
 
-		cubemap.Bind();
+		glm::mat4 skyboxViewMat = glm::mat4(glm::mat3(pCamera->viewMat));
+		pShader->Bind();
+		pShader->SetMat4("a_ViewMat", skyboxViewMat);
+		pShader->SetMat4("a_ProjMat", pCamera->projMat);
+
+		m_Cubemap->Bind();
 		m_Buffer.Render();
 
 		glDepthMask(true);
 	}
-
 }

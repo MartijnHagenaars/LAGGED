@@ -15,7 +15,6 @@ namespace LAG
 		bool Load() override;
 		bool Unload() override;
 
-
 		void Bind();
 		void Unbind();
 

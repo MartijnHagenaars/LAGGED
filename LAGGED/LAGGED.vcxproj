@@ -185,6 +185,7 @@
     <ClInclude Include="src\Core\Input\Input.h" />
     <ClInclude Include="src\Platform\Defines.h" />
     <ClInclude Include="src\Platform\Resources\Cubemap.h" />
+    <ClInclude Include="src\Platform\Resources\Skybox.h" />
     <ClInclude Include="src\Platform\Utility\InputEnumConversion.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>

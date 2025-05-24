@@ -109,6 +109,7 @@
     <ClInclude Include="src\Platform\Resources\Buffers\FrameBuffer.h" />
     <ClInclude Include="src\Platform\Resources\Cubemap.h" />
     <ClInclude Include="src\Platform\Defines.h" />
+    <ClInclude Include="src\Platform\Resources\Skybox.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
