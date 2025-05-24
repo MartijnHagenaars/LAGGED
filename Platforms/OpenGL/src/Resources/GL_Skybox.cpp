@@ -80,16 +80,14 @@ namespace LAG
 			return;
 		}
 
-		glDepthMask(false);
-
 		glm::mat4 skyboxViewMat = glm::mat4(glm::mat3(pCamera->viewMat));
 		pShader->Bind();
 		pShader->SetMat4("a_ViewMat", skyboxViewMat);
 		pShader->SetMat4("a_ProjMat", pCamera->projMat);
 
+		glDepthFunc(GL_LEQUAL);
 		m_Cubemap->Bind();
 		m_Buffer.Render();
-
-		glDepthMask(true);
+		glDepthFunc(GL_LESS);
 	}
 }

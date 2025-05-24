@@ -10,5 +10,5 @@ uniform mat4 a_ProjMat;
 void main()
 {
 	texCoord = a_Position;
-	gl_Position = a_ProjMat * a_ViewMat * vec4(a_Position, 1.0);
+	gl_Position = (a_ProjMat * a_ViewMat * vec4(a_Position, 1.0)).xyww;
 }
