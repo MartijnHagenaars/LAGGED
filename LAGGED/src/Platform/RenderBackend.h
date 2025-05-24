@@ -1,17 +1,16 @@
 #pragma once
 #include "Core/Defines.h"
-#include "Utility/Timer.h"
 
 #include <glm/vec3.hpp>
 #include <functional>
 #include <vector>
 
+#include "Utility/HashedString.h"
+#include "Utility/Timer.h"
+
 namespace LAG
 {
-	class Model;
-	class Shader;
-	class Texture;
-	class Surface;
+	class Skybox;
 	class Renderer
 	{
 	public:
@@ -20,6 +19,7 @@ namespace LAG
 
 		static void PresentFrame();
 
+		static void SetSkyboxCubemap(const HashedString& path);
 		static void DrawDebugLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color);
 
 		// TODO: This is currently public, which shouldn't be the case.
@@ -30,7 +30,6 @@ namespace LAG
 		static void RegisterImGuiRenderCallback(std::function<void()> func);
 
 	private:
-
 		struct RenderProperties
 		{
 			bool useLighting = true;
@@ -41,6 +40,8 @@ namespace LAG
 		//Variables for calculating the time it takes to render
 		static inline LAG::Timer m_RenderTimer;
 		static inline float m_RenderTime = 0.f;
+
+		static inline Skybox* m_Skybox = nullptr;
 
 		static inline std::vector<std::function<void()>> m_ImGuiRenderCallbacks;
 	};

@@ -37,14 +37,14 @@
     <ClCompile Include="src\Core\Engine.cpp" />
     <ClCompile Include="src\Utility\Noise.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
-    <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Window.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
-    <ClCompile Include="src\FileIO\FileWatch.cpp" />
-    <ClCompile Include="src\FileIO\FileIO.cpp" />
+    <ClCompile Include="src\Core\IO\FileWatch.cpp" />
+    <ClCompile Include="src\Core\IO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
+    <ClCompile Include="src\Utility\stb_image.cpp" />
     <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
     <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
     <ClCompile Include="src\ECS\Components\EditorComponent.cpp" />
@@ -79,9 +79,7 @@
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
     <ClInclude Include="src\Core\Input\Input.h" />
-    <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
     <ClInclude Include="src\Platform\Utility\InputEnumConversion.h" />
-    <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
     <ClInclude Include="External\DirectX\d3dx12.h" />
     <ClInclude Include="src\Core\Engine.h" />
@@ -93,13 +91,12 @@
     <ClInclude Include="src\Utility\HashedString.h" />
     <ClInclude Include="src\Utility\Noise.h" />
     <ClInclude Include="src\Utility\Timer.h" />
-    <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
-    <ClInclude Include="src\FileIO\FileWatch.h" />
-    <ClInclude Include="src\FileIO\FileIO.h" />
+    <ClInclude Include="src\Core\IO\FileWatch.h" />
+    <ClInclude Include="src\Core\IO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
@@ -114,6 +111,9 @@
     <ClInclude Include="src\Platform\Resources\Buffers\BufferLayout.h" />
     <ClInclude Include="src\Platform\Resources\Buffers\Buffers.h" />
     <ClInclude Include="src\Platform\Resources\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Platform\Resources\Cubemap.h" />
+    <ClInclude Include="src\Platform\Defines.h" />
+    <ClInclude Include="src\Platform\Resources\Skybox.h" />
     <ClInclude Include="src\ECS\Components\EditorComponent.h" />
     <ClInclude Include="src\Editor\UI\EditorGuiHelper.h" />
   </ItemGroup>
@@ -126,6 +126,8 @@
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\LineRender.pixel.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
+    <None Include="res\Shaders\OpenGL\Skybox.pixel.glsl" />
     <None Include="src\ECS\Scene.inl" />
     <None Include="src\ECS\Entity.inl" />
     <None Include="src\ECS\Reflection\SceneReflect.inl" />

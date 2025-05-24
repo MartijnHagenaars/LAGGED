@@ -1,15 +1,24 @@
 #include "Platform/RenderBackend.h"
 
-#include "Utility/GL_DebugLine.h"
-#include "Utility/GL_ErrorCodeLookup.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <../imgui/ImGui/imgui.h>
+#include <../imgui/ImGui/imgui_impl_glfw.h>
+#include <../imgui/ImGui/imgui_impl_opengl3.h>
+#include <../imgui/ImGuizmo/ImGuizmo.h>
+
+#include "Core/Engine.h"
+#include "Core/Resources/ResourceManager.h"
 
 #include "Platform/Resources/Model.h"
 #include "Platform/Resources/Shader.h"
 #include "Platform/Resources/Texture.h"
 #include "Platform/Resources/Surface.h"
+#include "Platform/Resources/Skybox.h"
+#include "Platform/Resources/Cubemap.h"
 
-#include "Core/Engine.h"
-#include "Core/Resources/ResourceManager.h"
+#include "Platform/Window.h"
+#include "Platform/Resources/Shader.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
@@ -20,17 +29,8 @@
 #include "ECS/Systems/BasicSystems.h"
 #include "ECS/Systems/CameraSystem.h"
 
-
-#include "Platform/Window.h"
-#include "Platform/Resources/Shader.h"
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include <../imgui/ImGui/imgui.h>
-#include <../imgui/ImGui/imgui_impl_glfw.h>
-#include <../imgui/ImGui/imgui_impl_opengl3.h>
-#include <../imgui/ImGuizmo/ImGuizmo.h>
+#include "Utility/GL_DebugLine.h"
+#include "Utility/GL_ErrorCodeLookup.h"
 
 namespace LAG
 {
@@ -61,8 +61,21 @@ namespace LAG
 	ErrResult Renderer::Shutdown()
 	{
 		DebugLine::Shutdown();
+		if (m_Skybox)
+			delete m_Skybox;
+		m_Skybox = nullptr;
 
 		return ErrResult::SUCCESS;
+	}
+
+	void LAG::Renderer::SetSkyboxCubemap(const HashedString& path)
+	{
+		if (!m_Skybox)
+		{
+			m_Skybox = new Skybox;
+			m_Skybox->Load();
+		}
+		m_Skybox->SetCubemap(path);
 	}
 
 	void Renderer::DrawDebugLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
@@ -99,14 +112,12 @@ namespace LAG
 		if (camEntityID == ENTITY_NULL)
 			LAG_ASSERT("Camera Entity ID is nullptr.");
 
+		CameraSystem::Update(camEntityID);
 		CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(camEntityID);
 		if (camComp == nullptr)
 			LAG_ASSERT("Tried to get CameraComponent using Camera Entity ID, but failed to retrieve CameraComponent pointer.");
 
 		camComp->frameBuffer->FrameStart(m_Properties.showWireframe);
-
-		//Get an active camera
-		CameraSystem::Update(camEntityID);
 
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
@@ -156,6 +167,7 @@ namespace LAG
 			}
 		}
 
+		m_Skybox->Render(camEntityID);
 		DebugLine::PresentDebugLines();
 
 		camComp->frameBuffer->FrameEnd();

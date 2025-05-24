@@ -99,9 +99,11 @@
     <ClCompile Include="src\GL_RenderBackend.cpp" />
     <ClCompile Include="src\Resources\Buffers\GL_Buffers.cpp" />
     <ClCompile Include="src\Resources\Buffers\GL_FrameBuffer.cpp" />
+    <ClCompile Include="src\Resources\GL_Cubemap.cpp" />
     <ClCompile Include="src\Resources\GL_Mesh.cpp" />
     <ClCompile Include="src\Resources\GL_Model.cpp" />
     <ClCompile Include="src\Resources\GL_Shader.cpp" />
+    <ClCompile Include="src\Resources\GL_Skybox.cpp" />
     <ClCompile Include="src\Resources\GL_Texture.cpp" />
     <ClCompile Include="src\Utility\GL_DebugLine.cpp" />
     <ClCompile Include="src\Resources\GL_Surface.cpp" />
@@ -116,6 +118,7 @@
     <ClInclude Include="src\Utility\GL_ErrorChecks.h" />
     <ClInclude Include="src\Utility\GL_ErrorCodeLookup.h" />
     <ClInclude Include="src\Resources\Surface.h" />
+    <ClInclude Include="src\Utility\TextureUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
