@@ -16,7 +16,7 @@ namespace LAG
 	}
 
 	template<typename Comp>
-	inline bool Entity::HasComponent()
+	inline bool Entity::HasComponent() const
 	{
 		const auto& recordIt = m_SceneRef->m_EntityArchetypes.find(m_ID);
 		if (recordIt == m_SceneRef->m_EntityArchetypes.end())
@@ -28,7 +28,7 @@ namespace LAG
 	}
 
 	template<typename Comp>
-	inline Comp* Entity::GetComponent()
+	inline Comp* Entity::GetComponent() const
 	{
 		if (m_ID == ENTITY_NULL)
 		{
