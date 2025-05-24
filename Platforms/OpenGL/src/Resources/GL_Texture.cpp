@@ -1,7 +1,7 @@
 #include "Platform/Resources/Texture.h"
 #include "GL/glew.h"
 
-#include "IO/FileIO.h"
+#include "Core/IO/FileIO.h"
 #include "Utility/Logger.h"
 #include "Utility/GL_ErrorChecks.h"
 

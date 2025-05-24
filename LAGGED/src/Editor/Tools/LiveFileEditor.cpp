@@ -1,15 +1,15 @@
 #include "LiveFileEditor.h"
 
-#include "Utility/Logger.h"
-#include "IO/FileIO.h"
-#include "IO/FileWatch.h"
+#include "Core/Engine.h"
+#include "Core/IO/FileIO.h"
+#include "Core/IO/FileWatch.h"
 
 #include "ImGui/imgui.h"
 
-#include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
 #include "Platform/Resources/Shader.h"
 #include "Platform/Resources/Model.h"
+#include "Utility/Logger.h"
 
 namespace LAG
 {

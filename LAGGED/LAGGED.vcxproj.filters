@@ -40,8 +40,8 @@
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Platform\Window.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
-    <ClCompile Include="src\IO\FileWatch.cpp" />
-    <ClCompile Include="src\IO\FileIO.cpp" />
+    <ClCompile Include="src\Core\IO\FileWatch.cpp" />
+    <ClCompile Include="src\Core\IO\FileIO.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
   </ItemGroup>
@@ -91,8 +91,8 @@
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
-    <ClInclude Include="src\IO\FileWatch.h" />
-    <ClInclude Include="src\IO\FileIO.h" />
+    <ClInclude Include="src\Core\IO\FileWatch.h" />
+    <ClInclude Include="src\Core\IO\FileIO.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
