@@ -4,7 +4,6 @@
 #include "Core/Input/Input.h"
 
 #include "Core/Engine.h"
-#include "Core/Memory/ResourcePtr.h"
 #include "Core/Resources/ResourceManager.h"
 
 #include "Platform/RenderBackend.h"

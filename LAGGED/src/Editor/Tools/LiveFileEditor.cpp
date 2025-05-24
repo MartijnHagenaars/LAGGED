@@ -1,8 +1,8 @@
 #include "LiveFileEditor.h"
 
 #include "Utility/Logger.h"
-#include "FileIO/FileIO.h"
-#include "FileIO/FileWatch.h"
+#include "IO/FileIO.h"
+#include "IO/FileWatch.h"
 
 #include "ImGui/imgui.h"
 
