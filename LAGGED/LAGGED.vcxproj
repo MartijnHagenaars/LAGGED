@@ -137,13 +137,11 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Core\FileIO\FileIO.h" />
-    <ClInclude Include="src\Core\FileIO\FileWatch.h" />
     <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
-    <ClInclude Include="src\FileIO\FileIO.h" />
-    <ClInclude Include="src\FileIO\FileWatch.h" />
+    <ClInclude Include="src\Core\IO\FileIO.h" />
+    <ClInclude Include="src\Core\IO\FileWatch.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
@@ -185,7 +183,6 @@
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
     <ClInclude Include="src\Core\Input\Input.h" />
-    <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
     <ClInclude Include="src\Platform\Defines.h" />
     <ClInclude Include="src\Platform\Resources\Cubemap.h" />
     <ClInclude Include="src\Platform\Utility\InputEnumConversion.h">
@@ -201,7 +198,6 @@
     <ClInclude Include="src\Platform\Resources\Shader.h" />
     <ClInclude Include="src\Platform\Resources\Surface.h" />
     <ClInclude Include="src\Platform\Resources\Texture.h" />
-    <ClInclude Include="src\Utility\Clamp.h" />
     <ClInclude Include="src\Utility\Logger.h" />
     <ClInclude Include="External\DirectX\d3dx12.h" />
     <ClInclude Include="src\Core\Engine.h" />
@@ -214,13 +210,12 @@
     <ClInclude Include="src\Utility\Noise.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\Utility\Timer.h" />
-    <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
-    <ClCompile Include="src\Core\FileIO\FileIO.cpp" />
-    <ClCompile Include="src\Core\FileIO\FileWatch.cpp" />
+    <ClCompile Include="src\Core\IO\FileIO.cpp" />
+    <ClCompile Include="src\Core\IO\FileWatch.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
     <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
@@ -295,7 +290,6 @@
     <ClCompile Include="src\Core\Engine.cpp" />
     <ClCompile Include="src\Utility\Noise.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
-    <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Utility\stb_image.cpp" />
   </ItemGroup>

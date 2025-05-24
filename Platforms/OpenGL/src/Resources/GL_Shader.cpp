@@ -3,7 +3,7 @@
 #include <GL/glew.h>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "Core/FileIO/FileIO.h"
+#include "Core/IO/FileIO.h"
 #include "Utility/Logger.h"
 #include "Utility/GL_ErrorChecks.h"
 

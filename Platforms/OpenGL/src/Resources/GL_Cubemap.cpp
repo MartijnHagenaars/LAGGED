@@ -5,11 +5,10 @@
 #include <GL/glew.h>
 #include <stb/stb_image.h>
 
-#include "Core/FileIO/FileIO.h"
+#include "Core/IO/FileIO.h"
 #include "Utility/GL_ErrorChecks.h"
 #include "Utility/Logger.h"
 #include "Utility/TextureUtility.h"
-
 
 namespace LAG
 {
