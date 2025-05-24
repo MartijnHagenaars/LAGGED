@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Resources/Resource.h"
 #include "Platform/Defines.h"
-#include "Core/FileIO/FileIO.h"
 
 namespace LAG
 {
