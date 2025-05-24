@@ -73,7 +73,6 @@ namespace LAG::CameraSystem
 			transform->SetRotation(transform->GetRotation() + camRotAdjustment);
 			camera->hasCameraMoved = true;
 		}
-
 	}
 
 	EntityID GetActiveCameraEntityID()

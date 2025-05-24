@@ -84,7 +84,6 @@ namespace LAG
 				{
 					const std::string& path = it.path().string();
 					files.emplace_back(it.path().string());
-					//files.emplace_back(path.substr(GetPath(dir).length(), path.length()));
 				}
 				else
 					files.emplace_back(it.path().string());

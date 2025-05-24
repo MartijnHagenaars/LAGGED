@@ -34,21 +34,11 @@
 
 namespace LAG
 {
-	// FIXME: Move these object ptrs somewhere else...
-	static Cubemap* skyCubemap = nullptr;
-	static Skybox* skybox = nullptr;
-
 	ErrResult Renderer::Initialize()
 	{
 		//Create some essential shaders.
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
 		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
-
-		skyCubemap = new Cubemap(HashedString("res/Assets/Cubemaps/Sky_2k"));
-		skyCubemap->Load();
-
-		skybox = new Skybox();
-		skybox->Load();
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -71,6 +61,9 @@ namespace LAG
 	ErrResult Renderer::Shutdown()
 	{
 		DebugLine::Shutdown();
+		if (m_Skybox)
+			delete m_Skybox;
+		m_Skybox = nullptr;
 
 		return ErrResult::SUCCESS;
 	}
@@ -173,7 +166,7 @@ namespace LAG
 			}
 		}
 
-		skybox->Render(camEntityID);
+		m_Skybox->Render(camEntityID);
 		DebugLine::PresentDebugLines();
 
 		camComp->frameBuffer->FrameEnd();
