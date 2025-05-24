@@ -183,7 +183,6 @@
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
     <ClInclude Include="src\Platform\Base\Renderer\ResourceLoadingIncludes.h" />
     <ClInclude Include="src\Core\Input\Input.h" />
-    <ClInclude Include="src\Core\Memory\ResourcePtr.h" />
     <ClInclude Include="src\Platform\Utility\InputEnumConversion.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">false</ExcludedFromBuild>
@@ -210,7 +209,6 @@
     <ClInclude Include="src\Utility\Noise.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\Utility\Timer.h" />
-    <ClInclude Include="src\Utility\UniqueID.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
@@ -291,7 +289,6 @@
     <ClCompile Include="src\Core\Engine.cpp" />
     <ClCompile Include="src\Utility\Noise.cpp" />
     <ClCompile Include="src\Utility\Timer.cpp" />
-    <ClCompile Include="src\Utility\UniqueID.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
   </ItemGroup>
   <ItemGroup>
