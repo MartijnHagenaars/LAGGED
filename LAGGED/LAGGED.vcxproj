@@ -140,8 +140,8 @@
     <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
-    <ClInclude Include="src\FileIO\FileIO.h" />
-    <ClInclude Include="src\FileIO\FileWatch.h" />
+    <ClInclude Include="src\IO\FileIO.h" />
+    <ClInclude Include="src\IO\FileWatch.h" />
     <ClInclude Include="imgui\ImGuiTheme.h" />
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
@@ -213,8 +213,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
-    <ClCompile Include="src\FileIO\FileIO.cpp" />
-    <ClCompile Include="src\FileIO\FileWatch.cpp" />
+    <ClCompile Include="src\IO\FileIO.cpp" />
+    <ClCompile Include="src\IO\FileWatch.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Editor\Tools\CameraViewport.cpp" />
     <ClCompile Include="src\Editor\Tools\ImGuiTools.cpp" />
