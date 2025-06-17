@@ -119,6 +119,7 @@ namespace LAG
 
 		camComp->frameBuffer->FrameStart(m_Properties.showWireframe);
 
+#if 1
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
 		std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
@@ -168,6 +169,7 @@ namespace LAG
 
 		m_Skybox->Render(camEntityID);
 		DebugLine::PresentDebugLines();
+#endif
 
 		camComp->frameBuffer->FrameEnd();
 

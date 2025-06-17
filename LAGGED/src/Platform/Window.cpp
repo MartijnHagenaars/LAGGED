@@ -36,7 +36,9 @@ namespace LAG
 
 		glfwSetWindowUserPointer(m_Window, this);
 		glfwMakeContextCurrent(m_Window);
-		glfwSwapInterval(1);
+
+		int useSwapInterval = static_cast<int>(m_UseVSync);
+		glfwSwapInterval(useSwapInterval);
 
 		glfwSetInputMode(m_Window, GLFW_STICKY_KEYS, GLFW_TRUE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_FALSE);

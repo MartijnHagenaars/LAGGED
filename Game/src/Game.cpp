@@ -20,6 +20,8 @@
 
 #include "World/World.h"
 
+#include "Utility/Profiler.h"
+
 ENTRY_APP(Game)
 
 Game::Game()
@@ -84,5 +86,15 @@ void Game::Shutdown()
 
 void Game::Update()
 {
-	m_World->Update();
+	LAG_PROFILE();
+
+	//m_World->Update();
+
+	LAG::Scene* scene = LAG::GetEngine().GetScene();
+	scene->RunSystem<LAG::TransformComponent, LAG::ModelComponent>([](LAG::EntityID id, LAG::TransformComponent* transform, LAG::ModelComponent* model) 
+		{
+			const glm::vec3& currPos = transform->GetPosition();
+			transform->SetPosition(glm::vec3(currPos.x, currPos.y + 0.01f, currPos.z));
+		}
+	);
 }
