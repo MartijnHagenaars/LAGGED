@@ -13,6 +13,7 @@
 #include "Tools/ImGuiTools.h"
 #include "Tools/CameraViewport.h"
 #include "Tools/LiveFileEditor.h"
+#include "Tools/ProfilerViewer.h"
 
 namespace LAG
 {
@@ -29,6 +30,7 @@ namespace LAG
 		m_Tools.push_back(new ImGuiStyleEditor());
 		m_Tools.push_back(new CameraViewport());
 		m_Tools.push_back(new LiveFileEditor());
+		m_Tools.push_back(new ProfilerViewer());
 	}
 
 	void ToolsManager::Shutdown()
