@@ -119,7 +119,7 @@ namespace LAG
 
 		camComp->frameBuffer->FrameStart(m_Properties.showWireframe);
 
-#if 1
+#if 0
 		//Get some lights
 		//TODO: Should be redone. Doesn't allow for more than three lights
 		std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
@@ -168,9 +168,36 @@ namespace LAG
 		}
 
 		m_Skybox->Render(camEntityID);
-		DebugLine::PresentDebugLines();
-#endif
+#else
+		//Get some lights
+//TODO: Should be redone. Doesn't allow for more than three lights
+		std::vector<std::pair<TransformComponent*, LightComponent*>> lights;
+		if (true)
+		{
+			lights.reserve(3);
+			GetScene()->RunSystem<LightComponent, TransformComponent>([&lights](EntityID entity, LightComponent* lightComp, TransformComponent* lightTransformComp)
+				{
+					if (lights.size() < TOTAL_POINT_LIGHTS)
+						lights.push_back({ lightTransformComp, lightComp });
+				});
+		}
 
+		//Render all meshes
+		GetScene()->RunSystem<ModelComponent, TransformComponent>([&camEntityID, &lights](EntityID entity, ModelComponent* meshComp, TransformComponent* transformComp)
+			{
+				DefaultComponent* defComp = GetScene()->GetComponent<DefaultComponent>(entity);
+				//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
+				if (defComp->visible && meshComp->modelHandle.m_ModelLookup.GetValue() != 0)
+				{
+					GetResourceManager()->GetResource<Model>(meshComp->modelHandle.m_ModelLookup)->Render(
+						entity, camEntityID,
+						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
+						lights);
+				}
+			});
+
+#endif
+		DebugLine::PresentDebugLines();
 		camComp->frameBuffer->FrameEnd();
 
 
