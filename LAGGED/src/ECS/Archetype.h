@@ -17,5 +17,7 @@ namespace LAG
 
 		std::vector<unsigned char*> compData;
 		std::vector<size_t> compDataSize;
+
+		std::unordered_map<ComponentID, size_t> systemCompIndices;
 	};
 }

@@ -105,6 +105,7 @@ namespace LAG
 		{
 			archetype->compData.push_back(nullptr);
 			archetype->compDataSize.push_back(0);
+			archetype->systemCompIndices.emplace(archetypeID[i], i);
 		}
 
 		return archetype;

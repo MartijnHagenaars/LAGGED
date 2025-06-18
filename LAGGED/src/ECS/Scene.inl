@@ -246,24 +246,6 @@ namespace LAG
 	template<typename ...Comps>
 	inline void Scene::RunSystem(std::function<void(EntityID, Comps*...)> func)
 	{
-		if (func == nullptr)
-		{
-			CRITICAL("Function pointer in RunSystem is invalid.");
-			return;
-		}
-
-		//Consider moving this into a private function in Scene class
-		const auto& GetSystemCompIndex =
-			[](ComponentID compID, const std::vector<EntityID>& entityIDs)
-			{
-				for (int i = 0; i < entityIDs.size(); i++)
-					if (compID == entityIDs[i])
-						return i;
-
-				CRITICAL("Failed to get System Component Index: No ComponentID matches {}.", compID);
-				return -1;
-			};
-
 		//Create key
 		ArchetypeID archetypeID = { { GetComponentID<Comps>()... } };
 		std::sort(archetypeID.begin(), archetypeID.end());
@@ -281,7 +263,11 @@ namespace LAG
 						return;
 					}
 
-					func(entity, (reinterpret_cast<Comps*>(&archetype->compData[GetSystemCompIndex(GetComponentID<Comps>(), archetype->typeID)][entityRecordIt->second.index * sizeof(Comps)]))...);
+					func(entity, 
+						(reinterpret_cast<Comps*>(
+							&archetype->compData
+							[archetype->systemCompIndices[GetComponentID<Comps>()]]
+							[entityRecordIt->second.index * sizeof(Comps)]))...);
 				}
 			}
 		}
