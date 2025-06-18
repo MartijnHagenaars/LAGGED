@@ -47,10 +47,12 @@ namespace LAG
 #endif
 			}
 
+			//size_t targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
 			size_t targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
 			if (newArchetype->compDataSize[0] <= targetSize)
 			{
-				ResizeAndReallocateComponentBuffer(*newArchetype, *compData, 0, targetSize);
+				size_t newSize = (newArchetype->compDataSize[0] * ARCHETYPE_ALLOC_GROWTH) + sizeof(Comp);
+				ResizeAndReallocateComponentBuffer(*newArchetype, *compData, 0, newSize);
 			}
 
 			// Construct a new Comp object (with the correct Args) and place it into the component data array
@@ -126,7 +128,7 @@ namespace LAG
 			// for the old archetype needs to be shrunk.
 			if (!oldArchetype->entityIDs.empty())
 			{
-				ShrinkComponentBuffer(*oldArchetype, entityRecord);
+				//ShrinkComponentBuffer(*oldArchetype, entityRecord);
 				RemoveEntityFromArchetype(entityID, *oldArchetype);
 			}
 		}
