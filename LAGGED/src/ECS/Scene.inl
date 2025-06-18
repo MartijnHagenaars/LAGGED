@@ -248,9 +248,13 @@ namespace LAG
 	template<typename ...Comps>
 	inline void Scene::RunSystem(std::function<void(EntityID, Comps*...)> func)
 	{
-		//Create key
-		ArchetypeID archetypeID = { { GetComponentID<Comps>()... } };
-		std::sort(archetypeID.begin(), archetypeID.end());
+		// Create the archetypeID key. This is only executed once for this specific template type...
+		static const ArchetypeID archetypeID = []()
+		{
+			ArchetypeID id = { { GetComponentID<Comps>()... } };
+			std::sort(id.begin(), id.end());
+			return id;
+		}();
 
 		for (Archetype* archetype : m_Archetypes)
 		{
