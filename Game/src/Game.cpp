@@ -50,9 +50,6 @@ namespace LAG
 		float forceX = 0.0f;
 		float forceY = 0.0f;
 		float forceZ = 0.0f;
-
-
-		float data[5120];
 	};
 
 	struct AudioComponent
@@ -62,9 +59,6 @@ namespace LAG
 		bool loop = false;
 		float volume = 1.f;
 		float attenuation = 1.f;
-
-
-		float data[5120];
 	};
 
 	struct EnemyComponent
@@ -136,7 +130,7 @@ void Game::Initialize()
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	const int TOTAL_DIMENSION = 50;
+	const int TOTAL_DIMENSION = 500;
 	srand(3);
 
 	LAG::Scene* scene = LAG::GetScene();
