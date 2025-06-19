@@ -70,6 +70,14 @@ namespace LAG
 		float anger;
 		float strength;
 	};
+
+	struct EditorComponent
+	{
+		bool visible;
+		bool canEdit;
+		float outline = 1.f;
+		std::string editorName;
+	};
 }
 
 Game::Game()
@@ -130,7 +138,7 @@ void Game::Initialize()
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	const int TOTAL_DIMENSION = 500;
+	const int TOTAL_DIMENSION = 1000;
 	srand(3);
 
 	LAG::Scene* scene = LAG::GetScene();
@@ -148,15 +156,18 @@ void Game::Initialize()
 			entity.AddComponent<LAG::TransformComponent>();
 			//entity.AddComponent<LAG::ModelComponent>("res/Assets/Models/Cube/Cube.gltf");
 
+			if(x < 2)
+				entity.AddComponent<LAG::EditorComponent>()->editorName = "Test";
+
 			if (x > withAudio)
 				entity.AddComponent<LAG::AudioComponent>();
 			if (x > withPhysics)
 				entity.AddComponent<LAG::PhysicsComponent>();
 
 			if (enemyIndex == x)
-				entity.AddComponent<LAG::EnemyComponent>();
+				entity.AddComponent<LAG::EnemyComponent>()->name = "John";
 			if (inputIndex == x)
-				entity.AddComponent<LAG::InputComponent>();
+				entity.AddComponent<LAG::InputComponent>()->leftStickX = 12.5f;
 		}
 	}
 }
@@ -165,35 +176,63 @@ void Game::Shutdown()
 {
 }
 
-void Game::Update()
+void RunAllSystems()
 {
-	LAG_PROFILE();
-
-	//m_World->Update();
-
 	LAG::Scene* scene = LAG::GetEngine().GetScene();
-	scene->RunSystem<LAG::TransformComponent, LAG::ModelComponent>([](LAG::EntityID id, LAG::TransformComponent* transform, LAG::ModelComponent* model) 
+	scene->RunSystem<LAG::TransformComponent, LAG::ModelComponent>([](LAG::EntityID id, LAG::TransformComponent* transform, LAG::ModelComponent* model)
 		{
 			const glm::vec3& currPos = transform->GetPosition();
 			transform->SetPosition(glm::vec3(currPos.x, currPos.y + 0.01f, currPos.z));
 		}
 	);
 
-	scene->RunSystem<LAG::TransformComponent, LAG::ModelComponent, LAG::PhysicsComponent, LAG::EnemyComponent>(
+	scene->RunSystem<LAG::TransformComponent, LAG::PhysicsComponent, LAG::EnemyComponent>(
 		[](
 			LAG::EntityID entity,
-			LAG::TransformComponent* transform, LAG::ModelComponent* model,
+			LAG::TransformComponent* transform,
 			LAG::PhysicsComponent* physics, LAG::EnemyComponent* enemy)
 		{
 			enemy->strength += 0.1f;
 		});
 
-	scene->RunSystem<LAG::TransformComponent, LAG::ModelComponent, LAG::AudioComponent, LAG::InputComponent>(
+	scene->RunSystem<LAG::TransformComponent, LAG::AudioComponent, LAG::InputComponent>(
 		[](
 			LAG::EntityID entity,
-			LAG::TransformComponent* transform, LAG::ModelComponent* model,
+			LAG::TransformComponent* transform,
 			LAG::AudioComponent* audio, LAG::InputComponent* input)
 		{
 			input->leftStickX += 0.1f;
 		});
+
+	scene->RunSystem<LAG::TransformComponent, LAG::AudioComponent, LAG::PhysicsComponent, LAG::EditorComponent>(
+		[](
+			LAG::EntityID entity,
+			LAG::TransformComponent* transform,
+			LAG::AudioComponent* audio, LAG::PhysicsComponent* physics, LAG::EditorComponent* editor)
+		{
+			audio->attenuation += 0.1f;
+			physics->forceX += 0.2f;
+			editor->outline += 0.3;
+		});
+}
+
+void Game::Update()
+{
+	LAG_PROFILE();
+
+	//0.76ms: 40 systems on 1mil entities
+
+	//m_World->Update();
+	RunAllSystems();
+	RunAllSystems();
+	RunAllSystems();
+	RunAllSystems();
+	RunAllSystems();
+
+	RunAllSystems();
+	RunAllSystems();
+	RunAllSystems();
+	RunAllSystems();
+	RunAllSystems();
+
 }
