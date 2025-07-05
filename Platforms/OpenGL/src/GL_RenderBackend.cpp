@@ -104,6 +104,8 @@ namespace LAG
 
 	void Renderer::PresentFrame()
 	{
+		LAG_PROFILE();
+
 		//Start timer for measuring render time
 		m_RenderTimer.ResetTimer();
 

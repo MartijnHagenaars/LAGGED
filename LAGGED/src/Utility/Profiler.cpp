@@ -46,10 +46,28 @@ namespace LAG
 			rec.average = rec.average / static_cast<float>(rec.history.size());
 		}
 
-		for (auto& it : m_ProfilerRecords)
+		if (ImGui::BeginTable("records", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
 		{
-			ProfilerRecord& rec = it.second;
-			ImGui::LabelText(it.first.c_str(), "%fms, %i samples", rec.average, rec.history.size());
+			// Display headers so we can inspect their interaction with borders.
+			// (Headers are not the main purpose of this section of the demo, so we are not elaborating on them too much. See other sections for details)
+
+			ImGui::TableSetupColumn("Name");
+			ImGui::TableSetupColumn("Avg. time");
+			ImGui::TableSetupColumn("Samples");
+			ImGui::TableHeadersRow();
+
+			for (auto& it : m_ProfilerRecords)
+			{
+				ProfilerRecord& rec = it.second;
+				ImGui::TableNextRow();
+				ImGui::TableSetColumnIndex(0);
+				ImGui::Text("%s", it.first.c_str());
+				ImGui::TableSetColumnIndex(1);
+				ImGui::Text("%fms", rec.average);
+				ImGui::TableSetColumnIndex(2);
+				ImGui::Text("%i", rec.history.size());
+			}
+			ImGui::EndTable();
 		}
 
 		ImGui::End();

@@ -36,7 +36,7 @@ namespace LAG
 			std::deque<float> history;
 		};
 
-		static inline std::unordered_map < std::string, ProfilerRecord> m_ProfilerRecords;
+		static inline std::unordered_map<std::string, ProfilerRecord> m_ProfilerRecords;
 	};
 
 	class ScopedProfiler
