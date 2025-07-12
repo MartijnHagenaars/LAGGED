@@ -327,7 +327,6 @@ namespace LAG
 			{ 
 				Comp* srcComp = reinterpret_cast<Comp*>(src);
 				new (&dest[0]) Comp(std::move(*srcComp));
-				srcComp->~Comp();
 			};
 		newCompData->DestructData = [](unsigned char* data)
 			{
