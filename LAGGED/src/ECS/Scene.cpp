@@ -57,50 +57,43 @@ namespace LAG
 
 		if (archetype)
 		{
+			int entityIndex = -1;
+			for (int i = archetype->entityIDs.size() - 1; i >= 0; i--)
 			{
-				int entityIndex = -1;
-				for (int i = archetype->entityIDs.size() - 1; i >= 0; i--)
+				if (archetype->entityIDs[i] == entityID)
 				{
-					if (archetype->entityIDs[i] == entityID)
-					{
-						entityIndex = i;
-						break;
-					}
-				}
-
-				if (entityIndex != -1)
-				{
-					int endIndex = archetype->entityIDs.size() - 1;
-					int originalIdCopy = archetype->entityIDs[entityIndex];
-
-					EntityRecord& record = m_EntityArchetypes[archetype->entityIDs[entityIndex]];
-					record.index = entityIndex;
-
-					archetype->entityIDs[entityIndex] = archetype->entityIDs[endIndex];
-					archetype->entityIDs[endIndex] = originalIdCopy;
-					m_EntityArchetypes[archetype->entityIDs[entityIndex]].index = entityIndex;
-
-					for (int i = 0; i < archetype->typeID.size(); i++)
-					{
-						ComponentID compID = archetype->typeID[i];
-						ComponentData* compData = m_ComponentMap.at(compID);
-
-						// This seems to be correct. Hope this doesn't cause any memory leaks!!
-						compData->DestructData(&archetype->compData[i][entityRecord.index * compData->size]);
-						compData->MoveData(
-							&archetype->compData[i][endIndex * compData->size],
-							&archetype->compData[i][entityRecord.index * compData->size]);
-					}
-
-					archetype->entityIDs.erase(archetype->entityIDs.begin() + endIndex);
-
+					entityIndex = i;
+					break;
 				}
 			}
 
-			//ShrinkComponentBuffer(*entityArchetype, entityRecord);
-			//RemoveEntityFromArchetype(entityID, *entityArchetype);
+			if (entityIndex != -1)
+			{
+				int endIndex = archetype->entityIDs.size() - 1;
+				EntityID originalIdCopy = archetype->entityIDs[entityIndex];
+
+				EntityRecord& record = m_EntityArchetypes[archetype->entityIDs[entityIndex]];
+				record.index = entityIndex;
+
+				archetype->entityIDs[entityIndex] = archetype->entityIDs[endIndex];
+				archetype->entityIDs[endIndex] = originalIdCopy;
+				m_EntityArchetypes[archetype->entityIDs[entityIndex]].index = entityIndex;
+
+				for (int i = 0; i < archetype->typeID.size(); i++)
+				{
+					ComponentID compID = archetype->typeID[i];
+					ComponentData* compData = m_ComponentMap.at(compID);
+
+					compData->DestructData(&archetype->compData[i][entityRecord.index * compData->size]);
+					compData->MoveData(
+						&archetype->compData[i][endIndex * compData->size],
+						&archetype->compData[i][entityRecord.index * compData->size]);
+				}
+				archetype->entityIDs.erase(archetype->entityIDs.begin() + endIndex);
+
+			}
 		}
-		
+
 		m_EntityArchetypes.erase(entityID);
 	}
 
