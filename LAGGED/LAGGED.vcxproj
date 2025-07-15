@@ -137,6 +137,8 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
+    <ClInclude Include="src\Utility\Profiler.h" />
     <ClInclude Include="src\Editor\UI\EditorGuiHelper.h" />
     <ClInclude Include="src\ECS\Components\EditorComponent.h" />
     <ClInclude Include="src\ECS\Reflection\SceneReflect.h" />
@@ -217,6 +219,9 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\ToolBase.cpp" />
+    <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
+    <ClCompile Include="src\Utility\Profiler.cpp" />
     <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
     <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />

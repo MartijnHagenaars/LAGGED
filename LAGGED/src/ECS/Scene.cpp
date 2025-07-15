@@ -54,21 +54,47 @@ namespace LAG
 			return;
 		}
 		EntityRecord& entityRecord = entityRecordIt->second;
-		Archetype* entityArchetype = entityRecord.archetype;
+		Archetype* archetype = entityRecord.archetype;
 
-		if (entityArchetype)
+		if (archetype)
 		{
-			for (int i = 0; i < entityArchetype->typeID.size(); i++)
+			int entityIndex = -1;
+			for (int i = archetype->entityIDs.size() - 1; i >= 0; i--)
 			{
-				ComponentID compID = entityArchetype->typeID[i];
-				ComponentData* compData = m_ComponentMap.at(compID);
-				compData->DestructData(&entityArchetype->compData[i][entityRecord.index * compData->size]);
+				if (archetype->entityIDs[i] == entityID)
+				{
+					entityIndex = i;
+					break;
+				}
 			}
 
-			ShrinkComponentBuffer(*entityArchetype, entityRecord);
-			RemoveEntityFromArchetype(entityID, *entityArchetype);
+			if (entityIndex != -1)
+			{
+				int endIndex = archetype->entityIDs.size() - 1;
+				EntityID originalIdCopy = archetype->entityIDs[entityIndex];
+
+				EntityRecord& record = m_EntityArchetypes[archetype->entityIDs[entityIndex]];
+				record.index = entityIndex;
+
+				archetype->entityIDs[entityIndex] = archetype->entityIDs[endIndex];
+				archetype->entityIDs[endIndex] = originalIdCopy;
+				m_EntityArchetypes[archetype->entityIDs[entityIndex]].index = entityIndex;
+
+				for (int i = 0; i < archetype->typeID.size(); i++)
+				{
+					ComponentID compID = archetype->typeID[i];
+					ComponentData* compData = m_ComponentMap.at(compID);
+
+					compData->DestructData(&archetype->compData[i][entityRecord.index * compData->size]);
+					compData->MoveData(
+						&archetype->compData[i][endIndex * compData->size],
+						&archetype->compData[i][entityRecord.index * compData->size]);
+				}
+				archetype->entityIDs.erase(archetype->entityIDs.begin() + endIndex);
+
+			}
 		}
-		
+
 		m_EntityArchetypes.erase(entityID);
 	}
 
@@ -111,6 +137,7 @@ namespace LAG
 		{
 			archetype->compData.push_back(nullptr);
 			archetype->compDataSize.push_back(0);
+			archetype->systemCompIndices.emplace(archetypeID[i], i);
 		}
 
 		return archetype;
@@ -131,20 +158,30 @@ namespace LAG
 
 	void Scene::RemoveEntityFromArchetype(EntityID entityID, Archetype& archetype)
 	{
-		int decrementStartingIndex = -1;
-		for (int i = 0; i < archetype.entityIDs.size(); i++)
+		int entityIndex = -1;
+		for (int i = archetype.entityIDs.size() - 1; i >= 0; i--)
 		{
-			if (decrementStartingIndex == -1 && archetype.entityIDs[i] == entityID)
-				decrementStartingIndex = i;
-
-			if (decrementStartingIndex != -1)
+			if (archetype.entityIDs[i] == entityID)
 			{
-				EntityRecord& record = m_EntityArchetypes[archetype.entityIDs[i]];
-				record.index -= 1;
+				entityIndex = i;
+				break;
 			}
 		}
-		if (decrementStartingIndex != -1)
-			archetype.entityIDs.erase(archetype.entityIDs.begin() + decrementStartingIndex);
+
+		if (entityIndex != -1)
+		{
+			int endIndex = archetype.entityIDs.size() - 1;
+			int originalIdCopy = archetype.entityIDs[entityIndex];
+
+			EntityRecord& record = m_EntityArchetypes[archetype.entityIDs[entityIndex]];
+			record.index = entityIndex;
+
+			archetype.entityIDs[entityIndex] = archetype.entityIDs[endIndex];
+			archetype.entityIDs[endIndex] = originalIdCopy;
+			archetype.entityIDs.erase(archetype.entityIDs.begin() + endIndex);
+
+		}
+
 	}
 
 	void Scene::ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord)

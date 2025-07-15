@@ -45,6 +45,9 @@
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Utility\stb_image.cpp" />
+    <ClCompile Include="src\Utility\Profiler.cpp" />
+    <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
+    <ClCompile Include="src\Editor\ToolBase.cpp" />
     <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
     <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
     <ClCompile Include="src\ECS\Components\EditorComponent.cpp" />
@@ -114,6 +117,8 @@
     <ClInclude Include="src\Platform\Resources\Cubemap.h" />
     <ClInclude Include="src\Platform\Defines.h" />
     <ClInclude Include="src\Platform\Resources\Skybox.h" />
+    <ClInclude Include="src\Utility\Profiler.h" />
+    <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
     <ClInclude Include="src\ECS\Components\EditorComponent.h" />
     <ClInclude Include="src\Editor\UI\EditorGuiHelper.h" />
   </ItemGroup>

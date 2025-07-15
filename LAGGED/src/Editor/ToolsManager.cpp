@@ -13,6 +13,7 @@
 #include "Tools/ImGuiTools.h"
 #include "Tools/CameraViewport.h"
 #include "Tools/LiveFileEditor.h"
+#include "Tools/ProfilerViewer.h"
 
 namespace LAG
 {
@@ -29,6 +30,7 @@ namespace LAG
 		m_Tools.push_back(new ImGuiStyleEditor());
 		m_Tools.push_back(new CameraViewport());
 		m_Tools.push_back(new LiveFileEditor());
+		m_Tools.push_back(new ProfilerViewer());
 	}
 
 	void ToolsManager::Shutdown()
@@ -93,8 +95,15 @@ namespace LAG
 
 
 		for (int i = 0; i < m_Tools.size(); i++)
-			if (m_Tools[i]->IsOpen())
-				m_Tools[i]->Render();
+		{
+			ToolBase* tool = m_Tools[i];
+			if (tool->IsOpen())
+			{
+				tool->WindowBegin();
+				tool->Render();
+				tool->WindowEnd();
+			}
+		}
 
 		////TODO: This has to be fully reworked. This is not good. 
 		//Entity cameraEntity = CameraSystem::GetActiveCameraEntity();

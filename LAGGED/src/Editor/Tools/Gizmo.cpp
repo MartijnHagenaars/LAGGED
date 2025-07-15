@@ -106,8 +106,6 @@ namespace LAG
 
 	void Gizmo::Render()
 	{
-		ImGui::Begin("Gizmo Properties", &m_IsOpen);
-
 		ImGui::Checkbox("Enable Gizmo", &m_UseGizmo);
 
 		ImGui::SeparatorText("Operation");
@@ -129,7 +127,5 @@ namespace LAG
 		}
 		else
 			ImGui::DragFloat3("Snap Scale", &m_SnapScale[0], 0.1f, 0.f, 32.f, "%.2f");
-
-		ImGui::End();
 	}
 }

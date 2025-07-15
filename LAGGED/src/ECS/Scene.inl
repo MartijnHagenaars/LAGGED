@@ -47,10 +47,12 @@ namespace LAG
 #endif
 			}
 
+			//size_t targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
 			size_t targetSize = (newArchetype->entityIDs.size() * sizeof(Comp)) + sizeof(Comp);
 			if (newArchetype->compDataSize[0] <= targetSize)
 			{
-				ResizeAndReallocateComponentBuffer(*newArchetype, *compData, 0, targetSize);
+				size_t newSize = (newArchetype->compDataSize[0] * ARCHETYPE_ALLOC_GROWTH) + sizeof(Comp);
+				ResizeAndReallocateComponentBuffer(*newArchetype, *compData, 0, newSize);
 			}
 
 			// Construct a new Comp object (with the correct Args) and place it into the component data array
@@ -126,7 +128,7 @@ namespace LAG
 			// for the old archetype needs to be shrunk.
 			if (!oldArchetype->entityIDs.empty())
 			{
-				ShrinkComponentBuffer(*oldArchetype, entityRecord);
+				//ShrinkComponentBuffer(*oldArchetype, entityRecord);
 				RemoveEntityFromArchetype(entityID, *oldArchetype);
 			}
 		}
@@ -246,27 +248,13 @@ namespace LAG
 	template<typename ...Comps>
 	inline void Scene::RunSystem(std::function<void(EntityID, Comps*...)> func)
 	{
-		if (func == nullptr)
+		// Create the archetypeID key. This is only executed once for this specific template type...
+		static const ArchetypeID archetypeID = []()
 		{
-			CRITICAL("Function pointer in RunSystem is invalid.");
-			return;
-		}
-
-		//Consider moving this into a private function in Scene class
-		const auto& GetSystemCompIndex =
-			[](ComponentID compID, const std::vector<EntityID>& entityIDs)
-			{
-				for (int i = 0; i < entityIDs.size(); i++)
-					if (compID == entityIDs[i])
-						return i;
-
-				CRITICAL("Failed to get System Component Index: No ComponentID matches {}.", compID);
-				return -1;
-			};
-
-		//Create key
-		ArchetypeID archetypeID = { { GetComponentID<Comps>()... } };
-		std::sort(archetypeID.begin(), archetypeID.end());
+			ArchetypeID id = { { GetComponentID<Comps>()... } };
+			std::sort(id.begin(), id.end());
+			return id;
+		}();
 
 		for (Archetype* archetype : m_Archetypes)
 		{
@@ -275,13 +263,19 @@ namespace LAG
 				for (const auto& entity : archetype->entityIDs)
 				{
 					const auto& entityRecordIt = m_EntityArchetypes.find(entity);
+#ifdef DEBUG
 					if (entityRecordIt == m_EntityArchetypes.end())
 					{
 						CRITICAL("Invalid Entity record.");
 						return;
 					}
+#endif
 
-					func(entity, (reinterpret_cast<Comps*>(&archetype->compData[GetSystemCompIndex(GetComponentID<Comps>(), archetype->typeID)][entityRecordIt->second.index * sizeof(Comps)]))...);
+					func(entity, 
+						(reinterpret_cast<Comps*>(
+							&archetype->compData
+							[archetype->systemCompIndices[GetComponentID<Comps>()]]
+							[entityRecordIt->second.index * sizeof(Comps)]))...);
 				}
 			}
 		}
@@ -335,7 +329,6 @@ namespace LAG
 			{ 
 				Comp* srcComp = reinterpret_cast<Comp*>(src);
 				new (&dest[0]) Comp(std::move(*srcComp));
-				srcComp->~Comp();
 			};
 		newCompData->DestructData = [](unsigned char* data)
 			{

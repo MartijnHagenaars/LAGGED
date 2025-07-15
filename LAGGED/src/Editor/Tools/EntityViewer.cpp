@@ -14,7 +14,7 @@
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
-		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"),
+		ToolBase(ToolType::LEVEL, "Entity Editor", "EntView"), 
 		m_SelectedEntityID(ENTITY_NULL)
 	{
 		memset(m_NewEntityName, 0, sizeof(m_NewEntityName));
@@ -22,8 +22,6 @@ namespace LAG
 
 	void EntityViewer::Render()
 	{
-		ImGui::Begin("Entity Editor", &m_IsOpen);
-
 		Scene* scene = GetEngine().GetScene();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
@@ -69,9 +67,8 @@ namespace LAG
 
 		RenderProperties();
 
-
+		ImGui::EndChild();
 		ImGui::PopStyleVar();
-		ImGui::End();
 	}
 
 	void EntityViewer::RenderProperties()
