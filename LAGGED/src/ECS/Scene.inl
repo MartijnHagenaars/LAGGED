@@ -263,11 +263,13 @@ namespace LAG
 				for (const auto& entity : archetype->entityIDs)
 				{
 					const auto& entityRecordIt = m_EntityArchetypes.find(entity);
+#ifdef DEBUG
 					if (entityRecordIt == m_EntityArchetypes.end())
 					{
 						CRITICAL("Invalid Entity record.");
 						return;
 					}
+#endif
 
 					func(entity, 
 						(reinterpret_cast<Comps*>(
