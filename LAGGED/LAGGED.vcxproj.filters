@@ -45,6 +45,9 @@
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\ECS\Components\ModelComponent.cpp" />
     <ClCompile Include="src\Utility\stb_image.cpp" />
+    <ClCompile Include="src\Utility\Profiler.cpp" />
+    <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
+    <ClCompile Include="src\Editor\ToolBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -110,6 +113,8 @@
     <ClInclude Include="src\Platform\Resources\Cubemap.h" />
     <ClInclude Include="src\Platform\Defines.h" />
     <ClInclude Include="src\Platform\Resources\Skybox.h" />
+    <ClInclude Include="src\Utility\Profiler.h" />
+    <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />

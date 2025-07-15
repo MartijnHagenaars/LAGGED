@@ -18,6 +18,8 @@
 
 #include "ECS/Systems/TerrainSystems.h"
 
+#include "Utility/Profiler.h"
+
 #include "World/World.h"
 
 ENTRY_APP(Game)
@@ -45,7 +47,7 @@ void Game::Initialize()
 	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
 	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, 0.f));
-	ent1.AddComponent<LAG::TransformComponent>()->SetScale (glm::vec3(1.f));
+	ent1.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(1.f));
 	//ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/ChessGame/ABeautifulGame.gltf");
 	ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
 	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
@@ -84,5 +86,7 @@ void Game::Shutdown()
 
 void Game::Update()
 {
+	LAG_PROFILE();
+
 	m_World->Update();
 }

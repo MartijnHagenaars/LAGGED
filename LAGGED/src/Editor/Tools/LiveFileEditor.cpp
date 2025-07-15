@@ -24,8 +24,6 @@ namespace LAG
 
 	void LiveFileEditor::Render()
 	{
-		ImGui::Begin(GetDisplayName().c_str(), &m_IsOpen);
-
 		bool isEnabled = FileWatch::IsEnabled();
 		if (ImGui::Checkbox("Enable file watch", &isEnabled))
 			FileWatch::EnableFileWatch(isEnabled);
@@ -34,7 +32,6 @@ namespace LAG
 		if (!isEnabled)
 		{
 			ImGui::Text("Turn on the file watch to enable live editing of files.");
-			ImGui::End();
 			return;
 		}
 
@@ -57,8 +54,6 @@ namespace LAG
 				else
 					ERROR("Failed to reload shader: {0}", file);
 			});
-
-		ImGui::End();
 	}
 
 	void RenderDirectories(FileIO::Directory dir, const std::string& displayName, std::function<void(const std::string&)> callbackFunction, const std::string& relPath)

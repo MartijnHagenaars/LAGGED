@@ -27,8 +27,8 @@ namespace LAG
 
 		void SetResizeCallBack(std::function<void(uint32_t, uint32_t)> resizeCallback) { m_ResizeCallbackFunc = resizeCallback; }
 
-		void SetWindowTitle(const char* windowTitle);
-		const char* GetWindowName() const { return m_WindowTitle; }
+		void SetWindowTitle(const std::string& windowTitle);
+		std::string GetWindowName() const { return m_WindowTitle; }
 
 		bool IsOpen() const { return m_IsOpen; }
 		void Close() { m_IsOpen = false; }
@@ -51,7 +51,7 @@ namespace LAG
 		void Update();
 
 		//Window property values
-		const char* m_WindowTitle;
+		std::string m_WindowTitle;
 		uint32_t m_WindowWidth, m_WindowHeight;
 		bool m_IsFullscreen;
 		bool m_UseVSync;

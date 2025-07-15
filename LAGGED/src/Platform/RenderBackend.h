@@ -5,6 +5,7 @@
 #include <functional>
 #include <vector>
 
+#include "Utility/Profiler.h"
 #include "Utility/HashedString.h"
 #include "Utility/Timer.h"
 

@@ -21,9 +21,6 @@ namespace LAG
 
 	void CameraViewport::Render()
 	{
-		ImGui::Begin(GetInternalName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-
 		EntityID camEntityID = CameraSystem::GetActiveCameraEntityID();
 		CameraComponent* cameraComp = GetEngine().GetScene()->GetComponent<CameraComponent>(camEntityID);
 		if (!cameraComp)
@@ -47,9 +44,7 @@ namespace LAG
 			GetRenderer()->OnResize(cameraComp->frameBuffer->GetSize().x, cameraComp->frameBuffer->GetSize().y);
 		}
 
-		ImGui::PopStyleVar();
 		ImGui::Image(cameraComp->frameBuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
-		ImGui::End();
 
 		if (m_IsOpen != isWindowOpen)
 		{
