@@ -25,8 +25,11 @@ namespace LAG
 			return false;
 		}
 
+#ifdef DEBUG
+		m_WindowTitle.append(" [DEBUG]");
+#endif
 		//Create the window. 
-		m_Window = glfwCreateWindow(m_WindowWidth, m_WindowHeight, m_WindowTitle, NULL, NULL);
+		m_Window = glfwCreateWindow(m_WindowWidth, m_WindowHeight, m_WindowTitle.c_str(), NULL, NULL);
 		if (m_Window == nullptr)
 		{
 			CRITICAL("Failed to create GLFW window");
@@ -148,9 +151,9 @@ namespace LAG
 		yPos = static_cast<float>(yPosD);
 	}
 	
-	void Window::SetWindowTitle(const char* windowTitle)
+	void Window::SetWindowTitle(const std::string& windowTitle)
 	{
 		m_WindowTitle = windowTitle;
-		glfwSetWindowTitle(m_Window, m_WindowTitle);
+		glfwSetWindowTitle(m_Window, m_WindowTitle.c_str());
 	}
 }
