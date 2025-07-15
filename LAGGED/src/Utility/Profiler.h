@@ -24,10 +24,10 @@ namespace LAG
 
 		struct ProfilerRecord
 		{
-			timePoint	timeStart;
-			timePoint	timeEnd;
-			timeSpan	timeSpan;
-			float		average = 0.0f;
+			timePoint timeStart;
+			timePoint timeEnd;
+			timeSpan timeSpan;
+			float average = 0.0f;
 
 			std::deque<float> history;
 		};
