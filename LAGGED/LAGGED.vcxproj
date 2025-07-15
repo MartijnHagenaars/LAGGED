@@ -216,6 +216,7 @@
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Editor\ToolBase.cpp" />
     <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
     <ClCompile Include="src\Utility\Profiler.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />

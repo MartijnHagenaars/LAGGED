@@ -1,5 +1,6 @@
 #pragma once
 #include "Editor/ToolBase.h"
+#include <vector>
 
 namespace LAG
 {
@@ -9,8 +10,5 @@ namespace LAG
 		ProfilerViewer();
 
 		void Render() override;
-
-	private:
-
 	};
 }

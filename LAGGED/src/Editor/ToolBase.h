@@ -15,13 +15,13 @@ namespace LAG
 	{
 	public:
 		ToolBase() = delete;
-		ToolBase(ToolType type, const std::string& displayName, const std::string& internalName) : 
-			m_Type(type), m_IsOpen(false), 
-			m_DisplayName(displayName), m_InternalName(internalName) 
-		{};
-		virtual ~ToolBase() {};
+		ToolBase(ToolType type, const std::string& displayName, const std::string& internalName);
+		virtual ~ToolBase() = default;
 
 		virtual void Render() = 0;
+
+		virtual void WindowBegin();
+		virtual void WindowEnd();
 
 		virtual void OnOpen() {};
 		virtual void OnClose() {};

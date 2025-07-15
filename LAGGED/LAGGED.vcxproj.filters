@@ -47,6 +47,7 @@
     <ClCompile Include="src\Utility\stb_image.cpp" />
     <ClCompile Include="src\Utility\Profiler.cpp" />
     <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
+    <ClCompile Include="src\Editor\ToolBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />

@@ -10,19 +10,15 @@ namespace LAG
 {
 	class Profiler
 	{
-		struct ProfilerRecord;
 		friend class ScopedProfiler;
 	public:
-		static const std::unordered_map < std::string, ProfilerRecord>& GetProfilerRecords();
+		struct ProfilerRecord;
 
-		// FIXME: ImGui code should NOT be handled here, 
-		// It's fine for now, but needs to be cleaned up soon.
-		static void OnImGui();
-	private:
-		static void StartScopedProfiler(const std::string& lookup);
-		static void EndScopedProfiler(const std::string& lookup);
+		static const std::unordered_map<std::string, ProfilerRecord>& GetRecords();
 
-	private:
+		static void CalculateAverages();
+
+	public:
 		using timePoint = std::chrono::time_point<std::chrono::steady_clock>;
 		using timeSpan = std::chrono::nanoseconds;
 
@@ -36,7 +32,11 @@ namespace LAG
 			std::deque<float> history;
 		};
 
-		static inline std::unordered_map<std::string, ProfilerRecord> m_ProfilerRecords;
+	private:
+		static void StartScopedProfiler(const std::string& lookup);
+		static void EndScopedProfiler(const std::string& lookup);
+
+		static inline std::unordered_map<std::string, ProfilerRecord> m_Records;
 	};
 
 	class ScopedProfiler

@@ -1,42 +1,22 @@
 #include "Profiler.h"
 
-// FIXME: PROFILER.CPP SHOULD NOT CONTAIN ANY IMGUI CODE.
-// NEEDS TO BE (RE)MOVED AT SOME POINT. 
-#include <ImGui/imgui.h>
-
 namespace LAG
 {
-	const std::unordered_map<std::string, Profiler::ProfilerRecord>& Profiler::GetProfilerRecords()
+	const size_t MAX_PROFILE_HISTORY = 64;
+
+	const std::unordered_map<std::string, Profiler::ProfilerRecord>& Profiler::GetRecords()
 	{
-		return m_ProfilerRecords;
-	}
-	void Profiler::StartScopedProfiler(const std::string& lookup)
-	{
-		m_ProfilerRecords[lookup].timeStart = std::chrono::high_resolution_clock::now();
+		return m_Records;
 	}
 
-	void Profiler::EndScopedProfiler(const std::string& lookup)
+	void Profiler::CalculateAverages()
 	{
-		auto& entry = m_ProfilerRecords[lookup];
-
-		entry.timeEnd = std::chrono::high_resolution_clock::now();
-		entry.timeSpan += entry.timeEnd - entry.timeStart;
-	}
-
-	void Profiler::OnImGui()
-	{
-		ImGui::Begin("Profiler");
-
-		for (auto& it : m_ProfilerRecords)
+		for (auto& it : m_Records)
 		{
 			ProfilerRecord& rec = it.second;
 
-
-			//float timeDuration = static_cast<float>((static_cast<double>(rec.timeSpan.count()) / 1'000'000.f));
-			float timeDuration = std::chrono::duration<float, std::milli>(rec.timeSpan).count();
-
-			rec.history.push_back(timeDuration);
-			if (rec.history.size() > 100)
+			rec.history.push_back(std::chrono::duration<float, std::milli>(rec.timeSpan).count());
+			if (rec.history.size() > MAX_PROFILE_HISTORY)
 				rec.history.pop_front();
 
 			rec.average = 0.f;
@@ -46,36 +26,23 @@ namespace LAG
 			rec.average = rec.average / static_cast<float>(rec.history.size());
 		}
 
-		if (ImGui::BeginTable("records", 3, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg))
-		{
-			// Display headers so we can inspect their interaction with borders.
-			// (Headers are not the main purpose of this section of the demo, so we are not elaborating on them too much. See other sections for details)
-
-			ImGui::TableSetupColumn("Name");
-			ImGui::TableSetupColumn("Avg. time");
-			ImGui::TableSetupColumn("Samples");
-			ImGui::TableHeadersRow();
-
-			for (auto& it : m_ProfilerRecords)
-			{
-				ProfilerRecord& rec = it.second;
-				ImGui::TableNextRow();
-				ImGui::TableSetColumnIndex(0);
-				ImGui::Text("%s", it.first.c_str());
-				ImGui::TableSetColumnIndex(1);
-				ImGui::Text("%fms", rec.average);
-				ImGui::TableSetColumnIndex(2);
-				ImGui::Text("%i", rec.history.size());
-			}
-			ImGui::EndTable();
-		}
-
-		ImGui::End();
-
-		for (auto& it : m_ProfilerRecords)
+		for (auto& it : m_Records)
 		{
 			it.second.timeSpan = std::chrono::nanoseconds::zero();
 		}
+	}
+
+	void Profiler::StartScopedProfiler(const std::string& lookup)
+	{
+		m_Records[lookup].timeStart = std::chrono::high_resolution_clock::now();
+	}
+
+	void Profiler::EndScopedProfiler(const std::string& lookup)
+	{
+		auto& entry = m_Records[lookup];
+
+		entry.timeEnd = std::chrono::high_resolution_clock::now();
+		entry.timeSpan += entry.timeEnd - entry.timeStart;
 	}
 
 

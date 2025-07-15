@@ -95,8 +95,15 @@ namespace LAG
 
 
 		for (int i = 0; i < m_Tools.size(); i++)
-			if (m_Tools[i]->IsOpen())
-				m_Tools[i]->Render();
+		{
+			ToolBase* tool = m_Tools[i];
+			if (tool->IsOpen())
+			{
+				tool->WindowBegin();
+				tool->Render();
+				tool->WindowEnd();
+			}
+		}
 
 		////TODO: This has to be fully reworked. This is not good. 
 		//Entity cameraEntity = CameraSystem::GetActiveCameraEntity();

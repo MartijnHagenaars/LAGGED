@@ -12,7 +12,7 @@
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
-		ToolBase(ToolType::LEVEL, "Entity Editor", "EntityViewer"), 
+		ToolBase(ToolType::LEVEL, "Entity Editor", "EntView"), 
 		m_SelectedEntity(nullptr),
 		m_BrowserHeight(200.f)
 	{
@@ -24,8 +24,6 @@ namespace LAG
 
 	void EntityViewer::Render()
 	{
-		ImGui::Begin("Entity Editor", &m_IsOpen);
-
 		Scene* scene = GetEngine().GetScene();
 
 		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
@@ -78,8 +76,6 @@ namespace LAG
 
 		ImGui::EndChild();
 		ImGui::PopStyleVar();
-
-		ImGui::End();
 	}
 
 	void EntityViewer::RenderProperties()
