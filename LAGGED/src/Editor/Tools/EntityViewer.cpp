@@ -62,12 +62,11 @@ namespace LAG
 
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();
+			ImGui::EndChild();
 		}
-		ImGui::EndChild();
 
 		RenderProperties();
 
-		ImGui::EndChild();
 		ImGui::PopStyleVar();
 	}
 
