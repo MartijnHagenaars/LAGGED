@@ -83,10 +83,11 @@ void Game::Initialize()
 	
 	for (auto it = sc->begin(); it != sc->end(); ++it)
 	{
-		INFO("Iterator: {}", (*it).ID());
-		for (auto varIt = (*it).begin(); varIt != (*it).end(); ++varIt)
+		auto entIt = (*it);
+		INFO("Entity ID: {}", entIt.ID());
+		for (auto compIt = entIt.begin(); compIt != entIt.end(); ++compIt)
 		{
-			INFO("Disp name: {}", varIt->props.displayName);
+			INFO("Entity {} -> Component name: {}", entIt.ID(), compIt->props.displayName);
 		}
 	}
 	INFO("=================");

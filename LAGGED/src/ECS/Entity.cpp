@@ -30,7 +30,19 @@ namespace LAG
 
 	SceneReflect::ComponentData* LAG::Entity::Iterator::operator->()
 	{
+#ifdef DEBUG
+		auto& compProps = SceneReflect::Get().GetComponentProperties();
+		const auto& propIt = compProps.find(*m_IdPtr);
+		if (propIt != compProps.end())
+			return &propIt->second;
+		else
+		{
+			CRITICAL("Tried to access ComponentData for component that isn't registerd.");
+			return nullptr;
+		}
+#else
 		return &SceneReflect::Get().GetComponentProperties().at(*m_IdPtr);
+#endif
 	}
 
 	Entity::Iterator& Entity::Iterator::operator++()
@@ -68,6 +80,6 @@ namespace LAG
 	Entity::Iterator Entity::end()
 	{
 		ArchetypeID& archetype = m_SceneRef->m_EntityArchetypes.at(m_ID).archetype->typeID;
-		return archetype.empty() ? end() : Iterator(&archetype[archetype.size() - 1]);
+		return archetype.empty() ? end() : Iterator(&archetype[archetype.size() - 1] + 1);
 	}
 }
