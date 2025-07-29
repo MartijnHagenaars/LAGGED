@@ -75,4 +75,18 @@ namespace LAG
 		return true;
 	}
 
+	bool SinWaveComponent::InitializeReflection()
+	{
+		SceneReflect& refl = SceneReflect::Get();
+		refl.RegisterComponent<SinWaveComponent>().SetDisplayName("Sinwave Component");
+
+		refl.RegisterVariable(&SinWaveComponent::amplitude).SetDisplayName("Amplitude");
+		refl.RegisterVariable(&SinWaveComponent::frequency).SetDisplayName("Frequency");
+
+		refl.RegisterVariable(&SinWaveComponent::time).SetHidden(true);
+		refl.RegisterVariable(&SinWaveComponent::sinValue).SetHidden(true);
+
+		return true;
+	}
+
 }

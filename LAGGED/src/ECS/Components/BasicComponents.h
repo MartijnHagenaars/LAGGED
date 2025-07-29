@@ -62,5 +62,8 @@ namespace LAG
 
 		float amplitude = 1.f;
 		float frequency = 1.f;
+
+		static bool InitializeReflection();
+		static inline bool m_ReflectionState = InitializeReflection();
 	};
 }
