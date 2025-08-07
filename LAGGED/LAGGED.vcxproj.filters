@@ -48,11 +48,14 @@
     <ClCompile Include="src\Utility\Profiler.cpp" />
     <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
     <ClCompile Include="src\Editor\ToolBase.cpp" />
+    <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
+    <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
+    <ClCompile Include="src\ECS\Components\EditorComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
-    <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
+    <ClInclude Include="src\ECS\Reflection\ReflectionTypeWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
     <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
@@ -101,6 +104,7 @@
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\ECS\Archetype.h" />
+    <ClInclude Include="src\ECS\Reflection\SceneReflect.h" />
     <ClInclude Include="src\Platform\RenderBackend.h" />
     <ClInclude Include="src\Platform\Resources\Mesh.h" />
     <ClInclude Include="src\Platform\Resources\Model.h" />
@@ -115,6 +119,8 @@
     <ClInclude Include="src\Platform\Resources\Skybox.h" />
     <ClInclude Include="src\Utility\Profiler.h" />
     <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
+    <ClInclude Include="src\ECS\Components\EditorComponent.h" />
+    <ClInclude Include="src\Editor\UI\EditorGuiHelper.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
@@ -129,5 +135,6 @@
     <None Include="res\Shaders\OpenGL\Skybox.pixel.glsl" />
     <None Include="src\ECS\Scene.inl" />
     <None Include="src\ECS\Entity.inl" />
+    <None Include="src\ECS\Reflection\SceneReflect.inl" />
   </ItemGroup>
 </Project>

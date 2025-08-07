@@ -1,5 +1,8 @@
 #pragma once
 #include "ECS/Scene.h"
+#include <memory>
+
+#include "ECS/Reflection/SceneReflect.h"
 
 namespace LAG
 {
@@ -17,14 +20,38 @@ namespace LAG
 		void RemoveComponent();
 
 		template<typename Comp>
-		bool HasComponent();
+		bool HasComponent() const;
 
 		template<typename Comp>
-		Comp* GetComponent();
+		Comp* GetComponent() const;
 
-		bool IsValid();
+		bool Valid() const;
 
-		EntityID GetEntityID() const;
+		EntityID ID() const;
+
+		struct Iterator
+		{
+			Iterator(ComponentID* ptr) :
+				m_IdPtr(ptr)
+			{}
+
+			SceneReflect::ComponentData* operator*() const;
+			SceneReflect::ComponentData* operator->();
+
+			Iterator& operator++();
+			Iterator operator++(int);
+			Iterator& operator--();
+			Iterator operator--(int);
+
+			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_IdPtr == b.m_IdPtr; }
+			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_IdPtr != b.m_IdPtr; }
+
+		private:
+			ComponentID* m_IdPtr;
+		};
+
+		Iterator begin();
+		Iterator end();
 
 	private:
 		friend class Scene;

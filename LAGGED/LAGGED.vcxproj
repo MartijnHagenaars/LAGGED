@@ -139,6 +139,9 @@
   <ItemGroup>
     <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
     <ClInclude Include="src\Utility\Profiler.h" />
+    <ClInclude Include="src\Editor\UI\EditorGuiHelper.h" />
+    <ClInclude Include="src\ECS\Components\EditorComponent.h" />
+    <ClInclude Include="src\ECS\Reflection\SceneReflect.h" />
     <ClInclude Include="src\ECS\Archetype.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
@@ -149,7 +152,7 @@
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
-    <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
+    <ClInclude Include="src\ECS\Reflection\ReflectionTypeWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
     <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
@@ -219,6 +222,8 @@
     <ClCompile Include="src\Editor\ToolBase.cpp" />
     <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
     <ClCompile Include="src\Utility\Profiler.cpp" />
+    <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
+    <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\Core\IO\FileIO.cpp" />
     <ClCompile Include="src\Core\IO\FileWatch.cpp" />
@@ -329,6 +334,7 @@
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
     <None Include="src\ECS\Entity.inl" />
+    <None Include="src\ECS\Reflection\SceneReflect.inl" />
     <None Include="src\ECS\Scene.inl" />
   </ItemGroup>
   <ItemGroup>

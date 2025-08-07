@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "ECS/Entity.h"
+#include "Core/Engine.h"
 
 #include "Components/BasicComponents.h"
 
@@ -95,6 +96,11 @@ namespace LAG
 		}
 
 		m_EntityArchetypes.erase(entityID);
+	}
+
+	Entity Scene::GetEntity(EntityID entityID)
+	{
+		return Entity(*this, entityID);
 	}
 
 	bool Scene::DoesEntityExist(EntityID entityID)
@@ -243,5 +249,62 @@ namespace LAG
 		//The data has been moved so we can delete the old buffer and replace it with the new one.
 		delete[] archetype.compData[compIndex];
 		archetype.compData[compIndex] = newData;
+	}
+
+
+	/////////////////////////////
+	// ITERATOR IMPLEMENTATION //
+	/////////////////////////////
+	
+	Scene::Iterator::Iterator(InnerIterator ptr)
+		: m_Ptr(ptr) 
+	{}
+
+	Entity Scene::Iterator::operator*() const
+	{
+		//FIXME: Not a fan of using GetScene here. Maybe (someho
+		return Entity(*GetScene(), m_Ptr->first);
+	}
+
+	Entity Scene::Iterator::operator->() const
+	{
+		//FIXME: Not a fan of using GetScene here. Maybe (someho
+		return Entity(*GetScene(), m_Ptr->first);
+	}
+
+	Scene::Iterator& Scene::Iterator::operator++()
+	{
+		++m_Ptr;
+		return *this;
+	}
+
+	Scene::Iterator Scene::Iterator::operator++(int)
+	{
+		Iterator temp = *this;
+		++(*this);
+		return temp;
+	}
+
+	Scene::Iterator& Scene::Iterator::operator--()
+	{
+		--m_Ptr;
+		return *this;
+	}
+
+	Scene::Iterator Scene::Iterator::operator--(int)
+	{
+		Iterator temp = *this;
+		--(*this);
+		return temp;
+	}
+
+	Scene::Iterator Scene::begin()
+	{
+		return m_EntityArchetypes.empty() ? end() : Iterator(m_EntityArchetypes.begin());
+	}
+
+	Scene::Iterator Scene::end()
+	{
+		return Iterator(m_EntityArchetypes.end());
 	}
 }

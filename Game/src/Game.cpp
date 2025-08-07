@@ -10,6 +10,7 @@
 #include "Platform/Resources/Model.h"
 
 #include "ECS/Scene.h"
+#include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/ModelComponent.h"
 #include "ECS/Components/CameraComponent.h"
@@ -78,6 +79,26 @@ void Game::Initialize()
 	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 50.f;
 
 	m_World = new World(12, true);
+	LAG::Scene* sc = LAG::GetEngine().GetScene();
+	
+	for (auto it = sc->begin(); it != sc->end(); ++it)
+	{
+		auto entIt = (*it);
+		INFO("Entity ID: {}", entIt.ID());
+		for (auto compIt = entIt.begin(); compIt != entIt.end(); ++compIt)
+		{
+			INFO("Entity {} -> Component name: {}", entIt.ID(), compIt->props.displayName);
+		}
+	}
+	INFO("=================");
+	for (auto it : *sc)
+	{
+		INFO("Iterator: {}", it.ID());
+		for (auto varIt : it)
+		{
+			INFO("Disp name: {}", varIt->props.displayName);
+		}
+	}
 }
 
 void Game::Shutdown()

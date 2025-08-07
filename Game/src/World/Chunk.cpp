@@ -9,7 +9,7 @@
 
 void Chunk::Load(const glm::vec2& position)
 {
-	if (!m_Entity.IsValid())
+	if (!m_Entity.Valid())
 	{
 		std::string entityName = "Terrain (" + std::to_string(static_cast<int>(position.x)) + ", " + std::to_string(static_cast<int>(position.y)) + ")";
 		m_Entity = LAG::GetScene()->AddEntity(entityName);
@@ -33,11 +33,11 @@ void Chunk::Load(const glm::vec2& position)
 
 void Chunk::Unload()
 {
-	if (m_Entity.IsValid())
+	if (m_Entity.Valid())
 	{
 		//TODO: The user should not have to do this. There should be some sort of function in the entity object that gets all components and checks if they have unload functions.
 		//		If they do, the Unload function is called.
 		m_Entity.GetComponent<LAG::ProceduralSurfaceComponent>()->surface.Unload();
-		LAG::GetScene()->RemoveEntity(m_Entity.GetEntityID());
+		LAG::GetScene()->RemoveEntity(m_Entity.ID());
 	}
 }

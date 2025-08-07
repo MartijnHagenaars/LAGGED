@@ -108,7 +108,7 @@ namespace LAG
 		////TODO: This has to be fully reworked. This is not good. 
 		//Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
 		//Entity targetEntity = Entity(); //TODO: Implement properly...
-		//if (cameraEntity.IsValid() && targetEntity.IsValid())
+		//if (cameraEntity.Valid() && targetEntity.Valid())
 		//{
 		//	m_TempGizmoPtr->BeginWindow();
 		//	m_TempGizmoPtr->SetCameraEntity(&cameraEntity);

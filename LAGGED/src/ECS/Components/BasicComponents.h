@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
-#include "glm/vec3.hpp"
-#include "glm/mat4x4.hpp"
+
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
 
 namespace LAG
 {
@@ -61,5 +62,8 @@ namespace LAG
 
 		float amplitude = 1.f;
 		float frequency = 1.f;
+
+		static bool InitializeReflection();
+		static inline bool m_ReflectionState = InitializeReflection();
 	};
 }
