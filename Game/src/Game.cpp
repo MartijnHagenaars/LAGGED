@@ -94,9 +94,14 @@ void Game::Initialize()
 	for (auto it : *sc)
 	{
 		INFO("Iterator: {}", it.ID());
-		for (auto varIt : it)
+		for (auto compIt : it)
 		{
-			INFO("Disp name: {}", varIt->props.displayName);
+			INFO("Disp name: {}", compIt->props.displayName);
+			for (auto varIt : compIt->vars)
+			{
+				INFO("	> Disp name: {}", varIt.props.displayName);
+				bool we = varIt.Get<bool>();
+			}
 		}
 	}
 }
