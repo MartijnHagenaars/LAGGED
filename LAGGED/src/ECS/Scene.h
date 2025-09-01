@@ -22,30 +22,32 @@ namespace LAG
 		~Scene();
 
 		Entity AddEntity();
-		Entity AddEntity(const std::string& entityName);
+		
+		//TODO: Consider removing this + the automatic adding of the DefaultComponent. I might want to handle this some other way.
+		Entity AddEntity(const std::string& name);
 
-		void RemoveEntity(EntityID entityID);
-		Entity DuplicateEntity(EntityID entityID);
+		void RemoveEntity(EntityID id);
+		Entity DuplicateEntity(EntityID id);
 
-		Entity GetEntity(EntityID entityID);
+		Entity GetEntity(EntityID id);
 
 		template<typename Comp, typename ...Args>
-		Comp* AddComponent(const EntityID entityID, Args&&... compArgs);
+		Comp* AddComponent(const EntityID id, Args&&... compArgs);
 
 		template<typename Comp>
-		void RemoveComponent(const EntityID entityID);
+		void RemoveComponent(const EntityID id);
 
 		template<typename Comp>
-		bool HasComponent(const EntityID& entityID);
+		bool HasComponent(const EntityID& id);
 
 		template<typename Comp>
-		Comp* GetComponent(const EntityID& entityID);
+		Comp* GetComponent(const EntityID& id);
 
 		/// <summary>
 		/// Checks whether an entity with a specific ID exists.
 		/// </summary>
 		/// <returns>Returns true if an entity with EntityID exists.</returns>
-		bool DoesEntityExist(EntityID entityID);
+		bool DoesEntityExist(EntityID id);
 
 		/// <summary>
 		/// Return the number of active entities
@@ -101,7 +103,7 @@ namespace LAG
 		template<typename Comp>
 		ComponentData* RegisterComponent();
 
-		void RemoveEntityFromArchetype(EntityID entityID, Archetype& archetype);
+		void RemoveEntityFromArchetype(EntityID id, Archetype& archetype);
 		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);
 		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& componentData, int componentIndex, size_t targetSize);
 

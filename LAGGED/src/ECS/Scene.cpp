@@ -17,40 +17,40 @@ namespace LAG
 
 	Entity Scene::AddEntity()
 	{
-		EntityID newEntityID = ++s_EntityCounter;
+		EntityID newId = ++s_EntityCounter;
 
-		auto entArchetype = m_EntityArchetypes.find(newEntityID);
+		auto entArchetype = m_EntityArchetypes.find(newId);
 		if (entArchetype != m_EntityArchetypes.end())
-			ERROR("Entity with ID {} already exists in EnityArchetypes map.", newEntityID);
+			ERROR("Entity with ID {} already exists in EnityArchetypes map.", newId);
 
 		EntityRecord rec = {};
 		rec.index = 0;
 		rec.archetype = nullptr;
-		m_EntityArchetypes.insert({ newEntityID, rec });
+		m_EntityArchetypes.insert({ newId, rec });
 
-		return Entity(*this, newEntityID);
+		return Entity(*this, newId);
 	}
 
-	Entity Scene::AddEntity(const std::string& entityName)
+	Entity Scene::AddEntity(const std::string& name)
 	{
 		Entity newEntity = AddEntity();
-		newEntity.AddComponent<DefaultComponent>(entityName);
+		newEntity.AddComponent<DefaultComponent>(name);
 		
 		return newEntity;
 	}
 
-	Entity Scene::DuplicateEntity(EntityID entityID)
+	Entity Scene::DuplicateEntity(EntityID id)
 	{
 		//TODO: Implement function...
 		return Entity();
 	}
 
-	void Scene::RemoveEntity(EntityID entityID)
+	void Scene::RemoveEntity(EntityID id)
 	{
-		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
+		const auto& entityRecordIt = m_EntityArchetypes.find(id);
 		if (entityRecordIt == m_EntityArchetypes.end())
 		{
-			ERROR("Tried to delete an entity with ID {}, which does not exist.", entityID);
+			ERROR("Tried to delete an entity with ID {}, which does not exist.", id);
 			return;
 		}
 		EntityRecord& entityRecord = entityRecordIt->second;
@@ -61,7 +61,7 @@ namespace LAG
 			int entityIndex = -1;
 			for (int i = archetype->entityIDs.size() - 1; i >= 0; i--)
 			{
-				if (archetype->entityIDs[i] == entityID)
+				if (archetype->entityIDs[i] == id)
 				{
 					entityIndex = i;
 					break;
@@ -71,13 +71,13 @@ namespace LAG
 			if (entityIndex != -1)
 			{
 				int endIndex = archetype->entityIDs.size() - 1;
-				EntityID originalIdCopy = archetype->entityIDs[entityIndex];
+				EntityID ogIdCopy = archetype->entityIDs[entityIndex];
 
 				EntityRecord& record = m_EntityArchetypes[archetype->entityIDs[entityIndex]];
 				record.index = entityIndex;
 
 				archetype->entityIDs[entityIndex] = archetype->entityIDs[endIndex];
-				archetype->entityIDs[endIndex] = originalIdCopy;
+				archetype->entityIDs[endIndex] = ogIdCopy;
 				m_EntityArchetypes[archetype->entityIDs[entityIndex]].index = entityIndex;
 
 				for (int i = 0; i < archetype->typeID.size(); i++)
@@ -95,17 +95,17 @@ namespace LAG
 			}
 		}
 
-		m_EntityArchetypes.erase(entityID);
+		m_EntityArchetypes.erase(id);
 	}
 
-	Entity Scene::GetEntity(EntityID entityID)
+	Entity Scene::GetEntity(EntityID id)
 	{
-		return Entity(*this, entityID);
+		return Entity(*this, id);
 	}
 
-	bool Scene::DoesEntityExist(EntityID entityID)
+	bool Scene::DoesEntityExist(EntityID id)
 	{
-		return (m_EntityArchetypes.find(entityID) != m_EntityArchetypes.end());
+		return (m_EntityArchetypes.find(id) != m_EntityArchetypes.end());
 	}
 
 	size_t Scene::Count() const
@@ -156,12 +156,12 @@ namespace LAG
 
 	// ======== HELPER FUNCTIONS ========
 
-	void Scene::RemoveEntityFromArchetype(EntityID entityID, Archetype& archetype)
+	void Scene::RemoveEntityFromArchetype(EntityID id, Archetype& archetype)
 	{
 		int entityIndex = -1;
 		for (int i = archetype.entityIDs.size() - 1; i >= 0; i--)
 		{
-			if (archetype.entityIDs[i] == entityID)
+			if (archetype.entityIDs[i] == id)
 			{
 				entityIndex = i;
 				break;
@@ -171,13 +171,13 @@ namespace LAG
 		if (entityIndex != -1)
 		{
 			int endIndex = archetype.entityIDs.size() - 1;
-			int originalIdCopy = archetype.entityIDs[entityIndex];
+			int ogIdCopy = archetype.entityIDs[entityIndex];
 
 			EntityRecord& record = m_EntityArchetypes[archetype.entityIDs[entityIndex]];
 			record.index = entityIndex;
 
 			archetype.entityIDs[entityIndex] = archetype.entityIDs[endIndex];
-			archetype.entityIDs[endIndex] = originalIdCopy;
+			archetype.entityIDs[endIndex] = ogIdCopy;
 			archetype.entityIDs.erase(archetype.entityIDs.begin() + endIndex);
 
 		}
