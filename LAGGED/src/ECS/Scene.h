@@ -17,6 +17,8 @@ namespace LAG
 	{
 		friend class Entity;
 		friend class SceneReflect;
+
+		class ArchetypeRange;
 	public:
 		Scene();
 		~Scene();
@@ -67,8 +69,6 @@ namespace LAG
 		template<typename ...Comps>
 		std::vector<EntityID> QueryEntities();
 
-
-		class ArchetypeRange;
 		/// <summary>
 		/// Returns a range of archetypes
 		/// </summary>
