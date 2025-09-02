@@ -52,7 +52,7 @@ namespace LAG
 		/// <summary>
 		/// Return the number of active entities
 		/// </summary>
-		size_t Count() const;
+		TypeID Count() const;
 
 		void RemoveAll();
 

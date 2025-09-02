@@ -4,6 +4,8 @@
 
 #include "ECS/Reflection/SceneReflect.h"
 
+// TODO: CONSIDER REMOVING THE ENTITY CLASS. IT'S MOSTLY UNUSED.
+
 namespace LAG
 {
 	class Scene;

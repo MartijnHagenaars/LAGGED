@@ -108,7 +108,7 @@ namespace LAG
 		return (m_EntityArchetypes.find(id) != m_EntityArchetypes.end());
 	}
 
-	size_t Scene::Count() const
+	TypeID Scene::Count() const
 	{
 		return m_EntityArchetypes.size();
 	}
@@ -250,4 +250,9 @@ namespace LAG
 		delete[] archetype.compData[compIndex];
 		archetype.compData[compIndex] = newData;
 	}
+
+	
+	/////////////////////////////
+	// ITERATOR IMPLEMENTATION //
+	/////////////////////////////
 }
