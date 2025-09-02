@@ -24,7 +24,7 @@ void World::Update()
 		return;
 
 	LAG::EntityID camEntityID = LAG::ENTITY_NULL;
-	LAG::GetEngine().GetScene()->RunSystem<LAG::CameraComponent>([&camEntityID](LAG::EntityID entity, LAG::CameraComponent* cameraComp)
+	LAG::GetEngine().GetScene()->ForEach<LAG::CameraComponent>([&camEntityID](LAG::EntityID entity, LAG::CameraComponent* cameraComp)
 		{
 			if (cameraComp->isActive)
 				camEntityID = entity;

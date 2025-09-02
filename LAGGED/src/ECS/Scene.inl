@@ -246,7 +246,8 @@ namespace LAG
 	}
 
 	template<typename ...Comps>
-	inline void Scene::RunSystem(std::function<void(EntityID, Comps*...)> func)
+	typename std::enable_if<(sizeof...(Comps) > 0), void>::type
+	inline Scene::ForEach(std::function<void(EntityID, Comps*...)> func)
 	{
 		// Create the archetypeID key. This is only executed once for this specific template type...
 		static const ArchetypeID archetypeID = []()
@@ -282,7 +283,18 @@ namespace LAG
 	}
 
 	template<typename ...Comps>
-	inline std::vector<EntityID> Scene::GetEntitiesWithComponents()
+	typename std::enable_if<(sizeof...(Comps) == 0), void>::type
+	inline Scene::ForEach(std::function<void(EntityID)> func)
+	{
+		for (Archetype* archetype : m_Archetypes)
+		{
+			for (EntityID entID : archetype->entityIDs)
+				func(entID);
+		}
+	}
+
+	template<typename ...Comps>
+	inline std::vector<EntityID> Scene::QueryEntities()
 	{
 		//Create key
 		ArchetypeID archetypeID = { { GetComponentID<Comps>()... } };

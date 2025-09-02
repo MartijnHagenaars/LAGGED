@@ -42,23 +42,23 @@ namespace LAG
 		{
 			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1);
 			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
-			for (const auto& entIt : *scene)
-			{
-				ImGui::PushID(entIt.ID());
+			//for (const auto& entIt : *scene)
+			//{
+			//	ImGui::PushID(entIt.ID());
 
-				// FIXME: THIS WILL CAUSE A CRASH IF ENTITY DOESNT HAVE DEFAULTCOMPONENT.
-				DefaultComponent* defaultComp = entIt.GetComponent<DefaultComponent>();
-				if (ImGui::Button(defaultComp->visible ? "Hide" : "Show"))
-					defaultComp->visible = !defaultComp->visible;
+			//	// FIXME: THIS WILL CAUSE A CRASH IF ENTITY DOESNT HAVE DEFAULTCOMPONENT.
+			//	DefaultComponent* defaultComp = entIt.GetComponent<DefaultComponent>();
+			//	if (ImGui::Button(defaultComp->visible ? "Hide" : "Show"))
+			//		defaultComp->visible = !defaultComp->visible;
 
-				ImGui::SameLine();
-				if (ImGui::Button(defaultComp->name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
-				{
-					if (m_SelectedEntityID != entIt.ID())
-						m_SelectedEntityID = entIt.ID();
-				}
-				ImGui::PopID();
-			}
+			//	ImGui::SameLine();
+			//	if (ImGui::Button(defaultComp->name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
+			//	{
+			//		if (m_SelectedEntityID != entIt.ID())
+			//			m_SelectedEntityID = entIt.ID();
+			//	}
+			//	ImGui::PopID();
+			//}
 
 			ImGui::PopStyleColor();
 			ImGui::PopStyleVar();

@@ -17,12 +17,12 @@ namespace LAG
 	{
 		friend class Entity;
 		friend class SceneReflect;
-	public: 
+	public:
 		Scene();
 		~Scene();
 
 		Entity AddEntity();
-		
+
 		//TODO: Consider removing this + the automatic adding of the DefaultComponent. I might want to handle this some other way.
 		Entity AddEntity(const std::string& name);
 
@@ -57,43 +57,21 @@ namespace LAG
 		void RemoveAll();
 
 		template<typename ...Comps>
-		void RunSystem(std::function<void(EntityID, Comps*...)> func);
+		typename std::enable_if<(sizeof...(Comps) > 0), void>::type
+		ForEach(std::function<void(EntityID, Comps*...)> func);
 
 		template<typename ...Comps>
-		std::vector<EntityID> GetEntitiesWithComponents();
+		typename std::enable_if<(sizeof...(Comps) == 0), void>::type
+		ForEach(std::function<void(EntityID)> func);
+
+		template<typename ...Comps>
+		std::vector<EntityID> QueryEntities();
 
 	private:
+		// Forward declaring some stuff that we'll need later...
 		struct EntityRecord;
 		struct ComponentData;
 
-	public:
-		struct Iterator
-		{
-			using difference_type = std::ptrdiff_t;
-			using iterator_category = std::bidirectional_iterator_tag;
-			using InnerIterator = std::unordered_map<EntityID, EntityRecord>::iterator;
-
-			Iterator(InnerIterator ptr);
-
-			Entity operator*() const;
-			Entity operator->() const;
-
-			Iterator& operator++();
-			Iterator operator++(int);
-			Iterator& operator--();
-			Iterator operator--(int);
-
-			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; }
-			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
-
-		private:
-			InnerIterator m_Ptr;
-		};
-
-		Iterator begin();
-		Iterator end();
-
-	private:
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
@@ -110,7 +88,7 @@ namespace LAG
 	private:
 		static inline EntityID s_EntityCounter = 0;
 		static inline ComponentID s_ComponentCounter = 0;
-		
+
 		// This vector stores all possible archetypes
 		std::vector<Archetype*> m_Archetypes;
 

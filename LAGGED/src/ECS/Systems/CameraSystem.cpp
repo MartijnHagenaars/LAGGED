@@ -77,7 +77,7 @@ namespace LAG::CameraSystem
 
 	EntityID GetActiveCameraEntityID()
 	{
-		std::vector<EntityID> camEntities = GetScene()->GetEntitiesWithComponents<CameraComponent>();
+		std::vector<EntityID> camEntities = GetScene()->QueryEntities<CameraComponent>();
 		if (camEntities.empty())
 		{
 			WARNING("Failed to find active camera in GetActiveCameraEntity()");

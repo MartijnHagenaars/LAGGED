@@ -127,14 +127,14 @@ namespace LAG
 		if (m_Properties.useLighting)
 		{
 			lights.reserve(3);
-			GetScene()->RunSystem<LightComponent, TransformComponent>([&lights](EntityID entity, LightComponent* lightComp, TransformComponent* lightTransformComp)
+			GetScene()->ForEach<LightComponent, TransformComponent>([&lights](EntityID entity, LightComponent* lightComp, TransformComponent* lightTransformComp)
 				{
 					if (lights.size() < TOTAL_POINT_LIGHTS)
 						lights.push_back({ lightTransformComp, lightComp });
 				});
 		}
 
-		const auto& renderEntities = GetScene()->GetEntitiesWithComponents<TransformComponent>();
+		const auto& renderEntities = GetScene()->QueryEntities<TransformComponent>();
 		for (const auto& entityID : renderEntities)
 		{
 			DefaultComponent* defPtr = GetScene()->GetComponent<DefaultComponent>(entityID);

@@ -78,32 +78,20 @@ void Game::Initialize()
 	ent5.GetComponent<LAG::TransformComponent>()->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
 	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 50.f;
 
+	LAG::GetEngine().GetScene()->AddEntity("Empty Entity");
+
 	m_World = new World(12, true);
 	LAG::Scene* sc = LAG::GetEngine().GetScene();
-	
-	for (auto it = sc->begin(); it != sc->end(); ++it)
-	{
-		auto entIt = (*it);
-		INFO("Entity ID: {}", entIt.ID());
-		for (auto compIt = entIt.begin(); compIt != entIt.end(); ++compIt)
+
+	sc->ForEach<LAG::TransformComponent>([](LAG::EntityID entID, LAG::TransformComponent* transformCmp)
 		{
-			INFO("Entity {} -> Component name: {}", entIt.ID(), compIt->props.displayName);
-		}
-	}
-	INFO("=================");
-	for (auto it : *sc)
-	{
-		INFO("Iterator: {}", it.ID());
-		for (auto compIt : it)
+			INFO("TransformComponent ForEach - {}", entID);
+		});
+
+	sc->ForEach<>([](LAG::EntityID entID)
 		{
-			INFO("Disp name: {}", compIt->props.displayName);
-			for (auto varIt : compIt->vars)
-			{
-				INFO("	> Disp name: {}", varIt.props.displayName);
-				bool we = varIt.Get<bool>();
-			}
-		}
-	}
+			INFO("Undefined ForEach - {}", entID);
+		});
 }
 
 void Game::Shutdown()
