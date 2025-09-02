@@ -103,7 +103,7 @@ namespace LAG
 		return Entity(*this, id);
 	}
 
-	bool Scene::DoesEntityExist(EntityID id)
+	bool Scene::IsValid(EntityID id)
 	{
 		return (m_EntityArchetypes.find(id) != m_EntityArchetypes.end());
 	}
@@ -121,6 +121,11 @@ namespace LAG
 		}
 
 		m_EntityArchetypes.clear();
+	}
+
+	Scene::ArchetypeRange Scene::Range()
+	{
+		return ArchetypeRange(m_Archetypes);
 	}
 
 
@@ -251,8 +256,46 @@ namespace LAG
 		archetype.compData[compIndex] = newData;
 	}
 
-	
+
 	/////////////////////////////
 	// ITERATOR IMPLEMENTATION //
 	/////////////////////////////
+
+	Scene::ArchetypeRange::ArchetypeRange(ArchContainer& container) : 
+		m_Container(container)
+	{}
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::begin() const { return ArchetypeRange::Iterator(m_Container.begin()); }
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::end() const { return Iterator(m_Container.end()); }
+
+
+	Scene::ArchetypeRange::Iterator::Iterator(InnerIterator it)
+		: m_Ptr(it) 
+	{}
+	Archetype &Scene::ArchetypeRange::Iterator::operator*() const { return **m_Ptr; }
+	Archetype* Scene::ArchetypeRange::Iterator::operator->() const { return *m_Ptr;	}
+
+	Scene::ArchetypeRange::Iterator& Scene::ArchetypeRange::Iterator::operator++()
+	{
+		++m_Ptr;
+		return *this;
+	}
+	Scene::ArchetypeRange::Iterator& Scene::ArchetypeRange::Iterator::operator--()
+	{
+		--m_Ptr;
+		return *this;
+	}
+
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::Iterator::operator++(int)
+	{
+		Iterator temp = *this;
+		++(*this);
+		return temp;
+	}
+
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::Iterator::operator--(int)
+	{
+		Iterator temp = *this;
+		--(*this);
+		return temp;
+	}
 }

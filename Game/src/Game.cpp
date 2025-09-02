@@ -92,6 +92,11 @@ void Game::Initialize()
 		{
 			INFO("Undefined ForEach - {}", entID);
 		});
+
+	for (auto it : sc->Range())
+	{
+		INFO("Undefined some shit - ", );
+	}
 }
 
 void Game::Shutdown()

@@ -47,7 +47,7 @@ namespace LAG
 		/// Checks whether an entity with a specific ID exists.
 		/// </summary>
 		/// <returns>Returns true if an entity with EntityID exists.</returns>
-		bool DoesEntityExist(EntityID id);
+		bool IsValid(EntityID id);
 
 		/// <summary>
 		/// Return the number of active entities
@@ -66,6 +66,51 @@ namespace LAG
 
 		template<typename ...Comps>
 		std::vector<EntityID> QueryEntities();
+
+
+		class ArchetypeRange;
+		/// <summary>
+		/// Returns a range of archetypes
+		/// </summary>
+		ArchetypeRange Range();
+
+	private:
+		class ArchetypeRange 
+		{
+			using ArchContainer = std::vector<Archetype*>;
+			class Iterator 
+			{
+			public:
+				using difference_type = std::ptrdiff_t;
+				using iterator_category = std::bidirectional_iterator_tag;
+				using InnerIterator = std::vector<Archetype*>::iterator;
+
+				explicit Iterator(InnerIterator it);
+
+				Archetype &operator*() const;
+				Archetype *operator->() const;
+
+				Iterator& operator++();
+				Iterator& operator--();
+				Iterator operator++(int);
+				Iterator operator--(int);
+
+				friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; }
+				friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
+
+			private:
+				InnerIterator m_Ptr;
+			};
+
+		public:
+			explicit ArchetypeRange(ArchContainer& container);
+
+			Iterator begin() const;
+			Iterator end() const;
+
+		private:
+			ArchContainer& m_Container;
+		};
 
 	private:
 		// Forward declaring some stuff that we'll need later...
