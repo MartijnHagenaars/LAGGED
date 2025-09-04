@@ -8,7 +8,7 @@ namespace LAG
     bool SurfaceComponent::InitializeReflection()
     {
         SceneReflect& refl = SceneReflect::Get();
-        refl.RegisterComponent<SurfaceComponent>().SetDisplayName("Model Component");
+        refl.Register<SurfaceComponent>().SetDisplayName("Model Component");
         refl.RegisterVariable(&SurfaceComponent::surfaceTexture).SetDisplayName("Texture");
 
         return true;
@@ -17,7 +17,7 @@ namespace LAG
     bool ProceduralSurfaceComponent::InitializeReflection()
     {
         SceneReflect& refl = SceneReflect::Get();
-        refl.RegisterComponent<ProceduralSurfaceComponent>().SetDisplayName("Procedural Surface Component");
+        refl.Register<ProceduralSurfaceComponent>().SetDisplayName("Procedural Surface Component");
 
         refl.RegisterVariable(&ProceduralSurfaceComponent::surfaceSubdivisions).SetDisplayName("Subdivision");
         refl.RegisterVariable(&ProceduralSurfaceComponent::noiseProperties).SetDisplayName("Noise properties");

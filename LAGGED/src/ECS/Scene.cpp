@@ -58,8 +58,8 @@ namespace LAG
 
 		if (archetype)
 		{
-			int entityIndex = -1;
-			for (int i = archetype->entityIDs.size() - 1; i >= 0; i--)
+			size_t entityIndex = -1;
+			for (size_t i = archetype->entityIDs.size() - 1; i >= 0; i--)
 			{
 				if (archetype->entityIDs[i] == id)
 				{
@@ -70,7 +70,7 @@ namespace LAG
 
 			if (entityIndex != -1)
 			{
-				int endIndex = archetype->entityIDs.size() - 1;
+				size_t endIndex = archetype->entityIDs.size() - 1;
 				EntityID ogIdCopy = archetype->entityIDs[entityIndex];
 
 				EntityRecord& record = m_EntityArchetypes[archetype->entityIDs[entityIndex]];
@@ -125,7 +125,7 @@ namespace LAG
 
 	Scene::ArchetypeRange Scene::Range()
 	{
-		return ArchetypeRange(m_Archetypes);
+		return ArchetypeRange(*this, m_Archetypes);
 	}
 
 
@@ -163,8 +163,8 @@ namespace LAG
 
 	void Scene::RemoveEntityFromArchetype(EntityID id, Archetype& archetype)
 	{
-		int entityIndex = -1;
-		for (int i = archetype.entityIDs.size() - 1; i >= 0; i--)
+		size_t entityIndex = -1;
+		for (size_t i = archetype.entityIDs.size() - 1; i >= 0; i--)
 		{
 			if (archetype.entityIDs[i] == id)
 			{
@@ -175,8 +175,8 @@ namespace LAG
 
 		if (entityIndex != -1)
 		{
-			int endIndex = archetype.entityIDs.size() - 1;
-			int ogIdCopy = archetype.entityIDs[entityIndex];
+			size_t endIndex = archetype.entityIDs.size() - 1;
+			size_t ogIdCopy = archetype.entityIDs[entityIndex];
 
 			EntityRecord& record = m_EntityArchetypes[archetype.entityIDs[entityIndex]];
 			record.index = entityIndex;
@@ -261,18 +261,19 @@ namespace LAG
 	// ITERATOR IMPLEMENTATION //
 	/////////////////////////////
 
-	Scene::ArchetypeRange::ArchetypeRange(ArchContainer& container) : 
-		m_Container(container)
+	Scene::ArchetypeRange::ArchetypeRange(Scene& scene, ArchContainer& container) :
+		m_Scene(scene), m_Container(container)
 	{}
-	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::begin() const { return ArchetypeRange::Iterator(m_Container.begin()); }
-	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::end() const { return Iterator(m_Container.end()); }
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::begin() const { return ArchetypeRange::Iterator(m_Scene, m_Container.begin()); }
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::end() const { return Iterator(m_Scene, m_Container.end()); }
 
 
-	Scene::ArchetypeRange::Iterator::Iterator(InnerIterator it)
-		: m_Ptr(it) 
+	Scene::ArchetypeRange::Iterator::Iterator(Scene& scene, InnerIterator it)
+		: m_Scene(scene), m_Ptr(it) 
 	{}
-	Archetype &Scene::ArchetypeRange::Iterator::operator*() const { return **m_Ptr; }
-	Archetype* Scene::ArchetypeRange::Iterator::operator->() const { return *m_Ptr;	}
+
+	ArchetypeView Scene::ArchetypeRange::Iterator::operator*() const { return ArchetypeView(m_Scene, **m_Ptr); }
+	ArchetypeView Scene::ArchetypeRange::Iterator::operator->() const { return ArchetypeView(m_Scene, **m_Ptr); }
 
 	Scene::ArchetypeRange::Iterator& Scene::ArchetypeRange::Iterator::operator++()
 	{

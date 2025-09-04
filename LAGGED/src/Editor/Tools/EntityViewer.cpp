@@ -9,8 +9,6 @@
 #include <ImGui/imgui.h>
 #include "Editor/UI/EditorGuiHelper.h"
 
-#include "ECS/Components/BasicComponents.h"
-
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
@@ -100,21 +98,23 @@ namespace LAG
 
 		if (ImGui::BeginPopup("AddComponentPopup"))
 		{
-			ImGui::SeparatorText("Select a component");
-			for (auto it : SceneReflect::Get())
-			{
-				if (ImGui::Button(it->props.displayName.c_str()))
-				{
-					INFO("Add {} to Entity {}", it->props.displayName, m_SelectedEntityID);
-				}
-			}
-			ImGui::EndPopup();
+			// TODO: RE-IMPLEMENT THIS!!! >:( 
+
+			//ImGui::SeparatorText("Select a component");
+			//for (auto it : SceneReflect::Get())
+			//{
+			//	if (ImGui::Button(it->props.displayName.c_str()))
+			//	{
+			//		INFO("Add {} to Entity {}", it->props.displayName, m_SelectedEntityID);
+			//	}
+			//}
+			//ImGui::EndPopup();
 		}
 
 		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
 		ImGui::Text(selectedEntityDisplay.c_str());
 
-		for (auto varIt : entity)
+		/*for (auto varIt : entity)
 		{
 			const auto& properties = varIt->props;
 			if (properties.isHidden)
@@ -129,6 +129,6 @@ namespace LAG
 
 				ImGui::Text("Hello there!");
 			}
-		}
+		}*/
 	}
 }

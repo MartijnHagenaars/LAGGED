@@ -18,12 +18,12 @@ namespace LAG
 		static SceneReflect& Get();
 
 		template<typename Comp>
-		ComponentReflectionSetup RegisterComponent();
+		ComponentReflectionSetup Register();
 
 		template <typename Comp, typename Var>
 		VariableReflectionSetup RegisterVariable(Var Comp::* var);
 
-		struct VariableData
+		struct VariableReflectionData
 		{
 			size_t byteOffset = -1;
 
@@ -35,9 +35,9 @@ namespace LAG
 			} props;
 		};
 
-		struct ComponentData
+		struct ComponentReflectionData
 		{
-			std::vector<VariableData> vars;
+			std::vector<VariableReflectionData> vars;
 
 			struct Properties
 			{
@@ -46,46 +46,16 @@ namespace LAG
 			} props;
 		};
 
-	public:
-		//FIXME: Fully implement iterator...
-		struct Iterator
-		{
-			using difference_type = std::ptrdiff_t;
-			using iterator_category = std::bidirectional_iterator_tag;
-			using InnerIterator = std::unordered_map<ComponentID, SceneReflect::ComponentData>::iterator;
-
-			Iterator(InnerIterator pIt, SceneReflect* pParent);
-
-			SceneReflect::ComponentData* operator*() const;
-			SceneReflect::ComponentData& operator->() const;
-
-			Iterator& operator++();
-			Iterator operator++(int);
-			Iterator& operator--();
-			Iterator operator--(int);
-
-			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_pIt == b.m_pIt; }
-			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_pIt != b.m_pIt; }
-
-		private:
-			InnerIterator m_pIt;
-			SceneReflect* m_pParent = nullptr;
-		};
-
-		Iterator begin();
-		Iterator end();
-
 	private:
 		SceneReflect() = default;
 
-		std::unordered_map<ComponentID, SceneReflect::ComponentData>& GetComponentProperties();
+		std::unordered_map<ComponentID, SceneReflect::ComponentReflectionData>& GetComponentProperties();
 
 	private:
 		// Returns the map containing component properties
 		// Done through a getter function to avoid Static Initialization Order Fiasco
-		std::unordered_map<ComponentID, SceneReflect::ComponentData> m_CompProperties;
+		std::unordered_map<ComponentID, SceneReflect::ComponentReflectionData> m_CompProperties;
 	};
-
 
 	class ComponentReflectionSetup
 	{
@@ -107,9 +77,9 @@ namespace LAG
 
 	private:
 		ComponentReflectionSetup() = delete;
-		ComponentReflectionSetup(SceneReflect::ComponentData& compProperties);
+		ComponentReflectionSetup(SceneReflect::ComponentReflectionData& compProperties);
 
-		SceneReflect::ComponentData& m_Data;
+		SceneReflect::ComponentReflectionData& m_Data;
 	};
 
 	class VariableReflectionSetup
@@ -139,9 +109,9 @@ namespace LAG
 
 	private:
 		VariableReflectionSetup() = delete;
-		VariableReflectionSetup(SceneReflect::VariableData& vars);
+		VariableReflectionSetup(SceneReflect::VariableReflectionData& vars);
 
-		SceneReflect::VariableData& m_Data;
+		SceneReflect::VariableReflectionData& m_Data;
 	};
 
 }

@@ -1,8 +1,9 @@
 #pragma once
-#include <functional>
 #include <algorithm>
+#include <functional>
 
-#include "Archetype.h"
+#include "Containers.h"
+#include "TypeDefines.h"
 #include "Utility/Logger.h"
 
 namespace LAG
@@ -15,10 +16,8 @@ namespace LAG
 	class Entity;
 	class Scene
 	{
-		friend class Entity;
-		friend class SceneReflect;
-
 		class ArchetypeRange;
+		friend class ArchetypeView;
 	public:
 		Scene();
 		~Scene();
@@ -69,6 +68,9 @@ namespace LAG
 		template<typename ...Comps>
 		std::vector<EntityID> QueryEntities();
 
+		template<typename Comp>
+		static const ComponentID GetComponentID();
+
 		/// <summary>
 		/// Returns a range of archetypes
 		/// </summary>
@@ -83,12 +85,12 @@ namespace LAG
 			public:
 				using difference_type = std::ptrdiff_t;
 				using iterator_category = std::bidirectional_iterator_tag;
-				using InnerIterator = std::vector<Archetype*>::iterator;
+				using InnerIterator = ArchContainer::iterator;
 
-				explicit Iterator(InnerIterator it);
+				explicit Iterator(Scene& scene, InnerIterator it);
 
-				Archetype &operator*() const;
-				Archetype *operator->() const;
+				ArchetypeView operator*() const;
+				ArchetypeView operator->() const;
 
 				Iterator& operator++();
 				Iterator& operator--();
@@ -99,29 +101,28 @@ namespace LAG
 				friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
 
 			private:
+				Scene& m_Scene;
 				InnerIterator m_Ptr;
 			};
 
 		public:
-			explicit ArchetypeRange(ArchContainer& container);
+			explicit ArchetypeRange(Scene& scene, ArchContainer& container);
 
 			Iterator begin() const;
 			Iterator end() const;
 
 		private:
+			Scene& m_Scene;
 			ArchContainer& m_Container;
 		};
 
 	private:
 		// Forward declaring some stuff that we'll need later...
+		// TODO: Maybe move this to the Containers header?
 		struct EntityRecord;
-		struct ComponentData;
 
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
-
-		template<typename Comp>
-		static const ComponentID GetComponentID();
 
 		template<typename Comp>
 		ComponentData* RegisterComponent();
@@ -145,19 +146,9 @@ namespace LAG
 		// This map stores all entities and the archetypes that they use.
 		std::unordered_map<EntityID, EntityRecord> m_EntityArchetypes;
 
-		struct ComponentData
-		{
-			size_t size = -1;
-
-			std::function<void(unsigned char* dest)> CreateObjectInMemory;
-			std::function<void(unsigned char* src, unsigned char* dest)> MoveData;
-			std::function<void(unsigned char* data)> DestructData;
-#ifdef DEBUG
-			std::string debugName;
-#endif
-		};
 		// This map links all ComponentIDs to the correct ComponentData struct. 
 		// The ComponentData struct contains useful information / functions for managing component data.
+		// TODO: This could, in the future, be moved to some "global" Scene class. 
 		std::unordered_map<ComponentID, ComponentData*> m_ComponentMap;
 
 	};

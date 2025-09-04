@@ -8,7 +8,7 @@ namespace LAG
     bool LightComponent::InitializeReflection()
     {
         SceneReflect& refl = SceneReflect::Get();
-        refl.RegisterComponent<LightComponent>().SetDisplayName("Light Component");
+        refl.Register<LightComponent>().SetDisplayName("Light Component");
 
         refl.RegisterVariable(&LightComponent::lightColor).SetDisplayName("Color");
         refl.RegisterVariable(&LightComponent::lightIntensity).SetDisplayName("Intensity");

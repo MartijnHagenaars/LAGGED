@@ -13,7 +13,7 @@ namespace LAG
 	bool DefaultComponent::InitializeReflection()
 	{
 		SceneReflect& refl = SceneReflect::Get();
-		refl.RegisterComponent<DefaultComponent>().SetDisplayName("General data");
+		refl.Register<DefaultComponent>().SetDisplayName("General data");
 
 		refl.RegisterVariable(&DefaultComponent::name).SetDisplayName("Name");
 		refl.RegisterVariable(&DefaultComponent::visible).SetDisplayName("Is Visible");
@@ -64,7 +64,7 @@ namespace LAG
 	bool TransformComponent::InitializeReflection()
 	{
 		SceneReflect& refl = SceneReflect::Get();
-		refl.RegisterComponent<TransformComponent>().SetDisplayName("Transform Component");
+		refl.Register<TransformComponent>().SetDisplayName("Transform Component");
 
 		refl.RegisterVariable(&TransformComponent::translation).SetDisplayName("Translation");
 		refl.RegisterVariable(&TransformComponent::rotation).SetDisplayName("Rotation");
@@ -78,7 +78,7 @@ namespace LAG
 	bool SinWaveComponent::InitializeReflection()
 	{
 		SceneReflect& refl = SceneReflect::Get();
-		refl.RegisterComponent<SinWaveComponent>().SetDisplayName("Sinwave Component");
+		refl.Register<SinWaveComponent>().SetDisplayName("Sinwave Component");
 
 		refl.RegisterVariable(&SinWaveComponent::amplitude).SetDisplayName("Amplitude");
 		refl.RegisterVariable(&SinWaveComponent::frequency).SetDisplayName("Frequency");

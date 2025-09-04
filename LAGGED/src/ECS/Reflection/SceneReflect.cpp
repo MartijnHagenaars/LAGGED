@@ -6,7 +6,7 @@ namespace LAG
 	// COMPONENT REFLECTION SETUP //
 	////////////////////////////////
 
-	ComponentReflectionSetup::ComponentReflectionSetup(SceneReflect::ComponentData& compProperties) : 
+	ComponentReflectionSetup::ComponentReflectionSetup(SceneReflect::ComponentReflectionData& compProperties) : 
 		m_Data(compProperties)
 	{
 	}
@@ -28,7 +28,7 @@ namespace LAG
 	// VARIABLE REFLECTION SETUP //
 	///////////////////////////////
 
-	VariableReflectionSetup::VariableReflectionSetup(SceneReflect::VariableData& vars) :
+	VariableReflectionSetup::VariableReflectionSetup(SceneReflect::VariableReflectionData& vars) :
 		m_Data(vars)
 	{
 	}
@@ -57,64 +57,8 @@ namespace LAG
 		return sceneReflect;
 	}
 
-	std::unordered_map<ComponentID, SceneReflect::ComponentData>& SceneReflect::GetComponentProperties()
+	std::unordered_map<ComponentID, SceneReflect::ComponentReflectionData>& SceneReflect::GetComponentProperties()
 	{
 		return m_CompProperties;
-	}
-
-
-	/////////////////////////////
-	// ITERATOR IMPLEMENTATION //
-	/////////////////////////////
-
-	SceneReflect::Iterator::Iterator(InnerIterator pIt, SceneReflect* pParent) : 
-		m_pIt(pIt), m_pParent(pParent)
-	{
-	}
-
-	SceneReflect::ComponentData* SceneReflect::Iterator::operator*() const
-	{
-		return &m_pIt->second;
-	}
-
-	SceneReflect::ComponentData& SceneReflect::Iterator::operator->() const
-	{
-		return m_pIt->second;
-	}
-
-	SceneReflect::Iterator& SceneReflect::Iterator::operator++()
-	{
-		m_pIt++;
-		return *this;
-	}
-
-	SceneReflect::Iterator SceneReflect::Iterator::operator++(int)
-	{
-		Iterator tempIt = *this;
-		++(*this);
-		return tempIt;
-	}
-
-	SceneReflect::Iterator& SceneReflect::Iterator::operator--()
-	{
-		m_pIt--;
-		return *this;
-	}
-
-	SceneReflect::Iterator SceneReflect::Iterator::operator--(int)
-	{
-		Iterator tempIt = *this;
-		--(*this);
-		return tempIt;
-	}
-
-	SceneReflect::Iterator SceneReflect::begin()
-	{
-		return Iterator(m_CompProperties.begin(), this);
-	}
-
-	SceneReflect::Iterator SceneReflect::end()
-	{
-		return Iterator(m_CompProperties.end(), this);
 	}
 }

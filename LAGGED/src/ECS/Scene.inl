@@ -150,7 +150,7 @@ namespace LAG
 		const auto& compDataIt = m_ComponentMap.find(compID);
 		if (compDataIt == m_ComponentMap.end())
 			CRITICAL("Failed to remove component: Component {} is not registered.", typeid(Comp).name());
-		
+
 		const ComponentData* compDataPtr = compDataIt->second;
 		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
 		if (entityRecordIt == m_EntityArchetypes.end())
@@ -278,15 +278,15 @@ namespace LAG
 
 	template<typename ...Comps>
 	typename std::enable_if<(sizeof...(Comps) > 0), void>::type
-	inline Scene::ForEach(std::function<void(EntityID, Comps*...)> func)
+		inline Scene::ForEach(std::function<void(EntityID, Comps*...)> func)
 	{
 		// Create the archetypeID key. This is only executed once for this specific template type...
 		static const ArchetypeID archetypeID = []()
-		{
-			ArchetypeID id = { { GetComponentID<Comps>()... } };
-			std::sort(id.begin(), id.end());
-			return id;
-		}();
+			{
+				ArchetypeID id = { { GetComponentID<Comps>()... } };
+				std::sort(id.begin(), id.end());
+				return id;
+			}();
 
 		for (Archetype* archetype : m_Archetypes)
 		{
@@ -303,7 +303,7 @@ namespace LAG
 					}
 #endif
 
-					func(entity, 
+					func(entity,
 						(reinterpret_cast<Comps*>(
 							&archetype->compData
 							[archetype->systemCompIndices[GetComponentID<Comps>()]]
@@ -315,7 +315,7 @@ namespace LAG
 
 	template<typename ...Comps>
 	typename std::enable_if<(sizeof...(Comps) == 0), void>::type
-	inline Scene::ForEach(std::function<void(EntityID)> func)
+		inline Scene::ForEach(std::function<void(EntityID)> func)
 	{
 		for (Archetype* archetype : m_Archetypes)
 		{
@@ -355,7 +355,7 @@ namespace LAG
 	}
 
 	template<typename Comp>
-	inline Scene::ComponentData* Scene::RegisterComponent()
+	inline ComponentData* Scene::RegisterComponent()
 	{
 		ComponentID compID = GetComponentID<Comp>();
 
@@ -369,14 +369,14 @@ namespace LAG
 		newCompData->size = sizeof(Comp);
 		newCompData->CreateObjectInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
 		newCompData->MoveData = [](unsigned char* src, unsigned char* dest)
-			{ 
+			{
 				Comp* srcComp = reinterpret_cast<Comp*>(src);
 				new (&dest[0]) Comp(std::move(*srcComp));
 			};
 		newCompData->DestructData = [](unsigned char* data)
 			{
 				Comp* comp = reinterpret_cast<Comp*>(data);
-				comp->~Comp(); 
+				comp->~Comp();
 			};
 #ifdef DEBUG
 		newCompData->debugName = typeid(Comp).name();

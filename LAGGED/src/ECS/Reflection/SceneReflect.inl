@@ -6,7 +6,7 @@
 namespace LAG
 {
 	template<typename Comp>
-	inline ComponentReflectionSetup SceneReflect::RegisterComponent()
+	inline ComponentReflectionSetup SceneReflect::Register()
 	{
 		static_assert(!std::is_fundamental<Comp>::value, "Component type cannot be a fundamental type.");
 		static_assert(std::is_default_constructible<Comp>::value, "Component type is not constructible.");
@@ -18,8 +18,8 @@ namespace LAG
 		if (it != compProperties.end())
 			return ComponentReflectionSetup(it->second);
 
-		auto compPropIt = compProperties.emplace(compID, ComponentData({})).first;
-		SceneReflect::ComponentData& compData = compPropIt->second;
+		auto compPropIt = compProperties.emplace(compID, ComponentReflectionData({})).first;
+		SceneReflect::ComponentReflectionData& compData = compPropIt->second;
 		compData.props.displayName = typeid(Comp).name();
 
 		return ComponentReflectionSetup(compData);
@@ -41,7 +41,7 @@ namespace LAG
 
 		auto& varVec = compIt->second.vars;
 		size_t byteOffset = reinterpret_cast<size_t>(&(reinterpret_cast<Comp*>(0)->*var));
-		auto varIt = std::find_if(varVec.begin(), varVec.end(), [&byteOffset](VariableData& var) { return var.byteOffset == byteOffset; });
+		auto varIt = std::find_if(varVec.begin(), varVec.end(), [&byteOffset](VariableReflectionData& var) { return var.byteOffset == byteOffset; });
 
 		if (varIt != varVec.end())
 		{
@@ -49,8 +49,8 @@ namespace LAG
 			return VariableReflectionSetup(*varIt);
 		}
 
-		varVec.emplace_back(SceneReflect::VariableData());
-		SceneReflect::VariableData& varData = varVec[varVec.size() - 1];
+		varVec.emplace_back(SceneReflect::VariableReflectionData());
+		SceneReflect::VariableReflectionData& varData = varVec[varVec.size() - 1];
 		varData.props.displayName = typeid(Var).name();
 		varData.byteOffset = byteOffset;
 

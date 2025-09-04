@@ -93,9 +93,18 @@ void Game::Initialize()
 			INFO("Undefined ForEach - {}", entID);
 		});
 
-	for (auto it : sc->Range())
+	LAG::EntityID reflEntityID = ent5.ID();
+	for (LAG::ArchetypeView archIt : sc->Range())
 	{
-		INFO("Undefined some shit - ", );
+		if (archIt.Contains(reflEntityID))
+		{
+			for (auto compIt : archIt.Types())
+			{
+				// TODO: This is currently not returning the correct data.
+				//		 Some sort of ComponentView needs to be implemented for this.
+				INFO("Debug name - {}", compIt.debugName);
+			}
+		}
 	}
 }
 

@@ -31,30 +31,6 @@ namespace LAG
 
 		EntityID ID() const;
 
-		struct Iterator
-		{
-			Iterator(ComponentID* ptr) :
-				m_IdPtr(ptr)
-			{}
-
-			SceneReflect::ComponentData* operator*() const;
-			SceneReflect::ComponentData* operator->();
-
-			Iterator& operator++();
-			Iterator operator++(int);
-			Iterator& operator--();
-			Iterator operator--(int);
-
-			friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_IdPtr == b.m_IdPtr; }
-			friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_IdPtr != b.m_IdPtr; }
-
-		private:
-			ComponentID* m_IdPtr;
-		};
-
-		Iterator begin();
-		Iterator end();
-
 	private:
 		friend class Scene;
 		Entity(Scene& sceneRef, EntityID entityID);
