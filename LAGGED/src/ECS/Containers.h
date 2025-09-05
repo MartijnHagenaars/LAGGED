@@ -38,6 +38,7 @@ namespace LAG
 
 	// Proxy class for Archetype
 	class Scene;
+	class ComponentView;
 	class ArchetypeView
 	{
 		class ComponentRange;
@@ -46,7 +47,6 @@ namespace LAG
 		ArchetypeView(Scene& scene, Archetype& archetype);
 
 	public:
-		// GPT: THIS SHOULD RETURN THE ITERATOR TO ITERATE OVER ALL THE COMPONENT INFORMATION!
 		ComponentRange Types();
 
 		bool Contains(EntityID id) const;
@@ -54,18 +54,19 @@ namespace LAG
 	private:
 		class ComponentRange
 		{
-			using CompContainer = std::unordered_map<ComponentID, ComponentData*>;
+			using CompIdContainer = std::vector<ComponentID>;
+			using CompDataContainer = std::unordered_map<ComponentID, ComponentData*>;
 			class Iterator
 			{
 			public:
 				using difference_type = std::ptrdiff_t;
 				using iterator_category = std::bidirectional_iterator_tag;
-				using InnerIterator = CompContainer::iterator;
+				using InnerIterator = CompIdContainer::iterator;
 
-				explicit Iterator(InnerIterator it);
+				explicit Iterator(InnerIterator it, CompDataContainer& compData);
 
-				ComponentData& operator*() const;
-				ComponentData* operator->() const;
+				ComponentView operator*() const;
+				ComponentView operator->() const;
 
 				Iterator& operator++();
 				Iterator& operator--();
@@ -77,19 +78,35 @@ namespace LAG
 
 			private:
 				InnerIterator m_Ptr;
+				CompDataContainer& m_ComponentData;
 			};
 
 		public:
-			explicit ComponentRange(CompContainer& container);
+			ComponentRange() = delete;
+			ComponentRange(CompIdContainer& idContainer, CompDataContainer& dataContainer);
 
-			Iterator begin() const { return Iterator(m_Container.begin()); }
-			Iterator end() const { return Iterator(m_Container.end()); }
+			Iterator begin() const { return Iterator(m_IdContainer.begin(), m_DataContainer); }
+			Iterator end() const { return Iterator(m_IdContainer.end(), m_DataContainer); }
 
 		private:
-			CompContainer& m_Container;
+			CompIdContainer& m_IdContainer;
+			CompDataContainer& m_DataContainer;
 		};
 
 		Scene& m_Scene;
 		Archetype& m_Archetype;
+	};
+
+	class ComponentView
+	{
+	public: 
+		ComponentView() = delete;
+		ComponentView(ComponentData& compData);
+
+		size_t Size() const { return m_ComponentData.size; }
+		const std::string_view Name() const { return m_ComponentData.debugName; }
+
+	private:
+		ComponentData& m_ComponentData;
 	};
 }

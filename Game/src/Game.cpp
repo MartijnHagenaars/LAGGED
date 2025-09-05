@@ -102,7 +102,8 @@ void Game::Initialize()
 			{
 				// TODO: This is currently not returning the correct data.
 				//		 Some sort of ComponentView needs to be implemented for this.
-				INFO("Debug name - {}", compIt.debugName);
+				//INFO("Debug name - {}", compIt.debugName);
+				INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
 			}
 		}
 	}
