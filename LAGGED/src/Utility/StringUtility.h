@@ -41,6 +41,13 @@ namespace LAG
 			return variable;
 		}
 
+		// Specialization for std::string_view
+		template<>
+		inline std::string ConvertToString<std::string_view>(std::string_view variable)
+		{
+			return std::string(variable);
+		}
+
 		// Specialization for const char*
 		template<>
 		inline std::string ConvertToString<const char*>(const char* variable)
