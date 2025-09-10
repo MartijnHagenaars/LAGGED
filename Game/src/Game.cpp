@@ -98,11 +98,11 @@ void Game::Initialize()
 	{
 		if (archIt.Contains(reflEntityID))
 		{
-			for (auto compIt : archIt.Types())
+			for (LAG::ComponentView compIt : archIt.Types())
 			{
-				// TODO: This is currently not returning the correct data.
-				//		 Some sort of ComponentView needs to be implemented for this.
-				//INFO("Debug name - {}", compIt.debugName);
+				auto data = compIt.GetVoid(reflEntityID);
+				std::any dataAny = compIt.ToAny(data);
+				LAG::DefaultComponent* defComp = std::any_cast<LAG::DefaultComponent*>(dataAny);
 				INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
 			}
 		}

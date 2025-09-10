@@ -18,6 +18,7 @@ namespace LAG
 	{
 		class ArchetypeRange;
 		friend class ArchetypeView;
+		friend class ComponentView;
 	public:
 		Scene();
 		~Scene();
@@ -149,6 +150,7 @@ namespace LAG
 		// This map links all ComponentIDs to the correct ComponentData struct. 
 		// The ComponentData struct contains useful information / functions for managing component data.
 		// TODO: This could, in the future, be moved to some "global" Scene class. 
+		//		 Maybe turned into a static? 
 		std::unordered_map<ComponentID, ComponentData*> m_ComponentMap;
 
 	};

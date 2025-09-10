@@ -368,16 +368,8 @@ namespace LAG
 		ComponentData* newCompData = new ComponentData;
 		newCompData->size = sizeof(Comp);
 		newCompData->CreateObjectInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
-		newCompData->MoveData = [](unsigned char* src, unsigned char* dest)
-			{
-				Comp* srcComp = reinterpret_cast<Comp*>(src);
-				new (&dest[0]) Comp(std::move(*srcComp));
-			};
-		newCompData->DestructData = [](unsigned char* data)
-			{
-				Comp* comp = reinterpret_cast<Comp*>(data);
-				comp->~Comp();
-			};
+		newCompData->MoveData = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
+		newCompData->DestructData = [](unsigned char* data) { reinterpret_cast<Comp*>(data)->~Comp(); };
 #ifdef DEBUG
 		newCompData->debugName = typeid(Comp).name();
 #endif

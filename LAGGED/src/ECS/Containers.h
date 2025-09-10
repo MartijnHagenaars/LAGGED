@@ -1,5 +1,6 @@
 #pragma once
 
+#include <any>
 #include <functional>
 #include <string>
 #include <unordered_map>
@@ -28,9 +29,13 @@ namespace LAG
 	{
 		size_t size = -1;
 
+		// TODO: Should I swap std::function with a function pointer? Measure performance difference!
+
 		std::function<void(unsigned char* dest)> CreateObjectInMemory;
 		std::function<void(unsigned char* src, unsigned char* dest)> MoveData;
 		std::function<void(unsigned char* data)> DestructData;
+		//std::function<std::any(void* data)> VoidToAny;
+		std::any(*VoidToAny)(void*) = nullptr;
 #ifdef DEBUG
 		std::string debugName;
 #endif
@@ -63,7 +68,7 @@ namespace LAG
 				using iterator_category = std::bidirectional_iterator_tag;
 				using InnerIterator = CompIdContainer::iterator;
 
-				explicit Iterator(InnerIterator it, CompDataContainer& compData);
+				explicit Iterator(Scene& scene, InnerIterator it, CompDataContainer& compData);
 
 				ComponentView operator*() const;
 				ComponentView operator->() const;
@@ -77,18 +82,20 @@ namespace LAG
 				friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
 
 			private:
+				Scene& m_Scene;
 				InnerIterator m_Ptr;
 				CompDataContainer& m_ComponentData;
 			};
 
 		public:
 			ComponentRange() = delete;
-			ComponentRange(CompIdContainer& idContainer, CompDataContainer& dataContainer);
+			ComponentRange(Scene& scene, CompIdContainer& idContainer, CompDataContainer& dataContainer);
 
-			Iterator begin() const { return Iterator(m_IdContainer.begin(), m_DataContainer); }
-			Iterator end() const { return Iterator(m_IdContainer.end(), m_DataContainer); }
+			Iterator begin() const { return Iterator(m_Scene, m_IdContainer.begin(), m_DataContainer); }
+			Iterator end() const { return Iterator(m_Scene, m_IdContainer.end(), m_DataContainer); }
 
 		private:
+			Scene& m_Scene;
 			CompIdContainer& m_IdContainer;
 			CompDataContainer& m_DataContainer;
 		};
@@ -101,12 +108,17 @@ namespace LAG
 	{
 	public: 
 		ComponentView() = delete;
-		ComponentView(ComponentData& compData);
+		ComponentView(Scene& scene, ComponentID id, ComponentData& compData);
+
+		void* GetVoid(EntityID id);
+		std::any ToAny(void* data);
 
 		size_t Size() const { return m_ComponentData.size; }
 		const std::string_view Name() const { return m_ComponentData.debugName; }
 
 	private:
+		Scene& m_Scene;
+		ComponentID m_ID;
 		ComponentData& m_ComponentData;
 	};
 }
