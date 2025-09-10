@@ -60,7 +60,6 @@ namespace LAG
 		class ComponentRange
 		{
 			using CompIdContainer = std::vector<ComponentID>;
-			using CompDataContainer = std::unordered_map<ComponentID, ComponentData*>;
 			class Iterator
 			{
 			public:
@@ -68,7 +67,7 @@ namespace LAG
 				using iterator_category = std::bidirectional_iterator_tag;
 				using InnerIterator = CompIdContainer::iterator;
 
-				explicit Iterator(Scene& scene, InnerIterator it, CompDataContainer& compData);
+				explicit Iterator(Scene& scene, InnerIterator it);
 
 				ComponentView operator*() const;
 				ComponentView operator->() const;
@@ -84,20 +83,18 @@ namespace LAG
 			private:
 				Scene& m_Scene;
 				InnerIterator m_Ptr;
-				CompDataContainer& m_ComponentData;
 			};
 
 		public:
 			ComponentRange() = delete;
-			ComponentRange(Scene& scene, CompIdContainer& idContainer, CompDataContainer& dataContainer);
+			ComponentRange(Scene& scene, CompIdContainer& idContainer);
 
-			Iterator begin() const { return Iterator(m_Scene, m_IdContainer.begin(), m_DataContainer); }
-			Iterator end() const { return Iterator(m_Scene, m_IdContainer.end(), m_DataContainer); }
+			Iterator begin() const { return Iterator(m_Scene, m_IdContainer.begin()); }
+			Iterator end() const { return Iterator(m_Scene, m_IdContainer.end()); }
 
 		private:
 			Scene& m_Scene;
 			CompIdContainer& m_IdContainer;
-			CompDataContainer& m_DataContainer;
 		};
 
 		Scene& m_Scene;

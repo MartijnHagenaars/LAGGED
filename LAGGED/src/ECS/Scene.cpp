@@ -83,7 +83,7 @@ namespace LAG
 				for (int i = 0; i < archetype->typeID.size(); i++)
 				{
 					ComponentID compID = archetype->typeID[i];
-					ComponentData* compData = m_ComponentMap.at(compID);
+					ComponentData* compData = s_ComponentMap.at(compID);
 
 					compData->DestructData(&archetype->compData[i][entityRecord.index * compData->size]);
 					compData->MoveData(
@@ -193,7 +193,7 @@ namespace LAG
 	{
 		for (int typeIndex = 0; typeIndex < archetype.typeID.size(); typeIndex++)
 		{
-			const ComponentData* compData = m_ComponentMap.at(archetype.typeID[typeIndex]);
+			const ComponentData* compData = s_ComponentMap.at(archetype.typeID[typeIndex]);
 
 			unsigned char* newData;
 			const size_t compDataSize = compData->size;

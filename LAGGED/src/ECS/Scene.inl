@@ -10,13 +10,15 @@ namespace LAG
 		ComponentData* compData = nullptr;
 		const ComponentID newCompID = GetComponentID<Comp>();
 
-		const auto& compDataIt = m_ComponentMap.find(newCompID);
-		if (compDataIt == m_ComponentMap.end())
+		// Get the component data structure.
+		if (auto compDataIt = s_ComponentMap.find(newCompID); compDataIt != s_ComponentMap.end())
+			compData = compDataIt->second;
+		else 
 		{
+			// Register component in the case it hasn't been done yet.
 			compData = RegisterComponent<Comp>();
-			INFO("Component {} not registered. Registering with ID {}...", typeid(Comp).name(), newCompID);
+			WARNING("Registering component {} (ID: {}) at runtime.", typeid(Comp).name(), newCompID);
 		}
-		else compData = compDataIt->second;
 
 		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
 		if (entityRecordIt == m_EntityArchetypes.end())
@@ -89,7 +91,7 @@ namespace LAG
 			for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 			{
 				const ComponentID compID = newArchetypeID[compIndex];
-				ComponentData* newCompData = m_ComponentMap.at(compID);
+				ComponentData* newCompData = s_ComponentMap.at(compID);
 
 				size_t newCompDataSize = newCompData->size;
 				size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
@@ -113,7 +115,7 @@ namespace LAG
 					bool matchingIDs = (oldCompID == compID);
 					if (matchingIDs)
 					{
-						ComponentData* oldCompData = m_ComponentMap.at(oldArchetype->typeID[i]);
+						ComponentData* oldCompData = s_ComponentMap.at(oldArchetype->typeID[i]);
 						oldCompData->MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompData->size], &newArchetype->compData[compIndex][currentSize]);
 						break;
 					}
@@ -147,8 +149,8 @@ namespace LAG
 	{
 		const ComponentID compID = GetComponentID<Comp>();
 
-		const auto& compDataIt = m_ComponentMap.find(compID);
-		if (compDataIt == m_ComponentMap.end())
+		const auto& compDataIt = s_ComponentMap.find(compID);
+		if (compDataIt == s_ComponentMap.end())
 			CRITICAL("Failed to remove component: Component {} is not registered.", typeid(Comp).name());
 
 		const ComponentData* compDataPtr = compDataIt->second;
@@ -188,7 +190,7 @@ namespace LAG
 		for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 		{
 			const ComponentID newCompID = newArchetypeID[compIndex];
-			ComponentData* newComp = m_ComponentMap.at(newCompID);
+			ComponentData* newComp = s_ComponentMap.at(newCompID);
 
 			size_t newCompDataSize = newComp->size;
 			size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
@@ -212,8 +214,8 @@ namespace LAG
 
 				if (oldCompId == newCompID)
 				{
-					size_t oldCompDataSize = m_ComponentMap.at(oldCompId)->size;
-					ComponentData* oldCompData = m_ComponentMap.at(oldCompId);
+					size_t oldCompDataSize = s_ComponentMap.at(oldCompId)->size;
+					ComponentData* oldCompData = s_ComponentMap.at(oldCompId);
 
 					oldCompData->MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompDataSize], &newArchetype->compData[compIndex][currentSize]);
 
@@ -360,11 +362,11 @@ namespace LAG
 		ComponentID compID = GetComponentID<Comp>();
 
 		//Check if component has already been registered. 
-		const auto& compDataIt = m_ComponentMap.find(compID);
-		if (compDataIt != m_ComponentMap.end())
+		const auto& compDataIt = s_ComponentMap.find(compID);
+		if (compDataIt != s_ComponentMap.end())
 			return compDataIt->second;
 
-		// Create and insert new data into the m_ComponentMap map
+		// Create and insert new data into the s_ComponentMap map
 		ComponentData* newCompData = new ComponentData;
 		newCompData->size = sizeof(Comp);
 		newCompData->CreateObjectInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
@@ -374,7 +376,7 @@ namespace LAG
 		newCompData->debugName = typeid(Comp).name();
 #endif
 
-		m_ComponentMap.insert({ compID, newCompData });
+		s_ComponentMap.insert({ compID, newCompData });
 		return newCompData;
 	}
 }

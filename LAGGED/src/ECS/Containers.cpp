@@ -20,11 +20,11 @@ namespace LAG
 
 	ArchetypeView::ComponentRange ArchetypeView::Types()
 	{
-		return ArchetypeView::ComponentRange(m_Scene, m_Archetype.typeID, m_Scene.m_ComponentMap);
+		return ArchetypeView::ComponentRange(m_Scene, m_Archetype.typeID);
 	}
 
-	ArchetypeView::ComponentRange::ComponentRange(Scene& scene, CompIdContainer& idContainer, CompDataContainer& dataContainer) :
-		m_Scene(scene), m_IdContainer(idContainer), m_DataContainer(dataContainer)
+	ArchetypeView::ComponentRange::ComponentRange(Scene& scene, CompIdContainer& idContainer) :
+		m_Scene(scene), m_IdContainer(idContainer)
 	{
 	}
 
@@ -33,12 +33,12 @@ namespace LAG
 	// Component Range Iterator implementations //
 	//////////////////////////////////////////////
 
-	ArchetypeView::ComponentRange::Iterator::Iterator(Scene& scene, InnerIterator it, CompDataContainer& compData) :
-		m_Scene(scene), m_Ptr(it), m_ComponentData(compData)
+	ArchetypeView::ComponentRange::Iterator::Iterator(Scene& scene, InnerIterator it) :
+		m_Scene(scene), m_Ptr(it)
 	{}
 
-	ComponentView ArchetypeView::ComponentRange::Iterator::operator*() const { return ComponentView(m_Scene, *m_Ptr, *m_ComponentData[*m_Ptr]); }
-	ComponentView ArchetypeView::ComponentRange::Iterator::operator->() const { return ComponentView(m_Scene, *m_Ptr, *m_ComponentData[*m_Ptr]); }
+	ComponentView ArchetypeView::ComponentRange::Iterator::operator*() const { return ComponentView(m_Scene, *m_Ptr, *Scene::s_ComponentMap[*m_Ptr]); }
+	ComponentView ArchetypeView::ComponentRange::Iterator::operator->() const { return ComponentView(m_Scene, *m_Ptr, *Scene::s_ComponentMap[*m_Ptr]); }
 
 	ArchetypeView::ComponentRange::Iterator& ArchetypeView::ComponentRange::Iterator::operator++()
 	{ 
