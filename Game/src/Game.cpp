@@ -102,8 +102,11 @@ void Game::Initialize()
 			{
 				auto data = compIt.GetVoid(reflEntityID);
 				std::any dataAny = compIt.ToAny(data);
-				LAG::DefaultComponent* defComp = std::any_cast<LAG::DefaultComponent*>(dataAny);
-				INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
+				if (dataAny.type() == typeid(LAG::DefaultComponent*))
+				{
+					LAG::DefaultComponent* defComp = std::any_cast<LAG::DefaultComponent*>(dataAny);
+					INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
+				}
 			}
 		}
 	}

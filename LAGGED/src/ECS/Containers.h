@@ -1,7 +1,6 @@
 #pragma once
 
 #include <any>
-#include <functional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -29,12 +28,10 @@ namespace LAG
 	{
 		size_t size = -1;
 
-		// TODO: Should I swap std::function with a function pointer? Measure performance difference!
+		void(*CreateObjectInMemory)(unsigned char* dest);
+		void(*MoveData)(unsigned char* src, unsigned char* dest);
+		void(*DestructData)(unsigned char* data);
 
-		std::function<void(unsigned char* dest)> CreateObjectInMemory;
-		std::function<void(unsigned char* src, unsigned char* dest)> MoveData;
-		std::function<void(unsigned char* data)> DestructData;
-		//std::function<std::any(void* data)> VoidToAny;
 		std::any(*VoidToAny)(void*) = nullptr;
 #ifdef DEBUG
 		std::string debugName;
