@@ -13,10 +13,10 @@ namespace LAG
 	bool DefaultComponent::InitializeReflection()
 	{
 		SceneReflect& refl = SceneReflect::Get();
-		refl.Register<DefaultComponent>().SetDisplayName("General data");
+		refl.ReflectComponent<DefaultComponent>().SetDisplayName("General data");
 
-		refl.RegisterVariable(&DefaultComponent::name).SetDisplayName("Name");
-		refl.RegisterVariable(&DefaultComponent::visible).SetDisplayName("Is Visible");
+		refl.ReflectVariable(&DefaultComponent::name).SetDisplayName("Name");
+		refl.ReflectVariable(&DefaultComponent::visible).SetDisplayName("Is Visible");
 
 		return true;
 	}
@@ -64,13 +64,13 @@ namespace LAG
 	bool TransformComponent::InitializeReflection()
 	{
 		SceneReflect& refl = SceneReflect::Get();
-		refl.Register<TransformComponent>().SetDisplayName("Transform Component");
+		refl.ReflectComponent<TransformComponent>().SetDisplayName("Transform Component");
 
-		refl.RegisterVariable(&TransformComponent::translation).SetDisplayName("Translation");
-		refl.RegisterVariable(&TransformComponent::rotation).SetDisplayName("Rotation");
-		refl.RegisterVariable(&TransformComponent::scale).SetDisplayName("Scale");
+		refl.ReflectVariable(&TransformComponent::translation).SetDisplayName("Translation");
+		refl.ReflectVariable(&TransformComponent::rotation).SetDisplayName("Rotation");
+		refl.ReflectVariable(&TransformComponent::scale).SetDisplayName("Scale");
 
-		refl.RegisterVariable(&TransformComponent::m_Dirty).SetHidden(true).SetReadOnly(true);
+		refl.ReflectVariable(&TransformComponent::m_Dirty).SetHidden(true).SetReadOnly(true);
 
 		return true;
 	}
@@ -78,13 +78,13 @@ namespace LAG
 	bool SinWaveComponent::InitializeReflection()
 	{
 		SceneReflect& refl = SceneReflect::Get();
-		refl.Register<SinWaveComponent>().SetDisplayName("Sinwave Component");
+		refl.ReflectComponent<SinWaveComponent>().SetDisplayName("Sinwave Component");
 
-		refl.RegisterVariable(&SinWaveComponent::amplitude).SetDisplayName("Amplitude");
-		refl.RegisterVariable(&SinWaveComponent::frequency).SetDisplayName("Frequency");
+		refl.ReflectVariable(&SinWaveComponent::amplitude).SetDisplayName("Amplitude");
+		refl.ReflectVariable(&SinWaveComponent::frequency).SetDisplayName("Frequency");
 
-		refl.RegisterVariable(&SinWaveComponent::time).SetHidden(true);
-		refl.RegisterVariable(&SinWaveComponent::sinValue).SetHidden(true);
+		refl.ReflectVariable(&SinWaveComponent::time).SetHidden(true);
+		refl.ReflectVariable(&SinWaveComponent::sinValue).SetHidden(true);
 
 		return true;
 	}

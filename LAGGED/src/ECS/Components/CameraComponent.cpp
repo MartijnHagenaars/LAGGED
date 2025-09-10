@@ -9,12 +9,12 @@ namespace LAG
     bool CameraComponent::InitializeReflection()
     {
         SceneReflect& refl = SceneReflect::Get();
-        refl.Register<CameraComponent>().SetDisplayName("Camera Component");
+        refl.ReflectComponent<CameraComponent>().SetDisplayName("Camera Component");
 
-        refl.RegisterVariable(&CameraComponent::isActive).SetDisplayName("Is active?");
-        refl.RegisterVariable(&CameraComponent::fov).SetDisplayName("FOV");
-        refl.RegisterVariable(&CameraComponent::movementSpeed).SetDisplayName("Movement speed");
-        refl.RegisterVariable(&CameraComponent::rotationSpeed).SetDisplayName("Rotation speed");
+        refl.ReflectVariable(&CameraComponent::isActive).SetDisplayName("Is active?");
+        refl.ReflectVariable(&CameraComponent::fov).SetDisplayName("FOV");
+        refl.ReflectVariable(&CameraComponent::movementSpeed).SetDisplayName("Movement speed");
+        refl.ReflectVariable(&CameraComponent::rotationSpeed).SetDisplayName("Rotation speed");
 
         return true;
     }

@@ -11,17 +11,16 @@ namespace LAG
 
 	class SceneReflect
 	{
-		friend class Entity;
 	public:
 		~SceneReflect() = default;
 
 		static SceneReflect& Get();
 
 		template<typename Comp>
-		ComponentReflectionSetup Register();
+		ComponentReflectionSetup ReflectComponent();
 
 		template <typename Comp, typename Var>
-		VariableReflectionSetup RegisterVariable(Var Comp::* var);
+		VariableReflectionSetup ReflectVariable(Var Comp::* var);
 
 		struct VariableReflectionData
 		{

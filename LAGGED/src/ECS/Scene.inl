@@ -362,8 +362,7 @@ namespace LAG
 		ComponentID compID = GetComponentID<Comp>();
 
 		//Check if component has already been registered. 
-		const auto& compDataIt = s_ComponentMap.find(compID);
-		if (compDataIt != s_ComponentMap.end())
+		if (const auto& compDataIt = s_ComponentMap.find(compID); compDataIt != s_ComponentMap.end())
 			return compDataIt->second;
 
 		// Create and insert new data into the s_ComponentMap map
@@ -372,6 +371,7 @@ namespace LAG
 		newCompData->CreateObjectInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
 		newCompData->MoveData = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
 		newCompData->DestructData = [](unsigned char* data) { reinterpret_cast<Comp*>(data)->~Comp(); };
+		newCompData->VoidToAny = [](void* data) { return std::any(static_cast<Comp*>(data)); };
 #ifdef DEBUG
 		newCompData->debugName = typeid(Comp).name();
 #endif

@@ -17,6 +17,7 @@ namespace LAG
 	class Scene
 	{
 		class ArchetypeRange;
+		friend class SceneReflect;
 		friend class ArchetypeView;
 		friend class ComponentView;
 	public:
@@ -126,7 +127,7 @@ namespace LAG
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
 		template<typename Comp>
-		ComponentData* RegisterComponent();
+		static ComponentData* RegisterComponent();
 
 		void RemoveEntityFromArchetype(EntityID id, Archetype& archetype);
 		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);

@@ -6,9 +6,9 @@ namespace LAG
 	bool ModelComponent::InitializeReflection()
 	{
 		SceneReflect& refl = SceneReflect::Get();
-		refl.Register<ModelComponent>().SetDisplayName("Model Component");
+		refl.ReflectComponent<ModelComponent>().SetDisplayName("Model Component");
 
-		refl.RegisterVariable(&ModelComponent::modelHandle).SetDisplayName("Model");
+		refl.ReflectVariable(&ModelComponent::modelHandle).SetDisplayName("Model");
 
 		return true;
 	}
