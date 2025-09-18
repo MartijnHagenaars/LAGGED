@@ -38,81 +38,24 @@ namespace LAG
 #endif
 	};
 
-	// Proxy class for Archetype
-	class Scene;
-	class ComponentView;
-	class ArchetypeView
+	struct ReflectionData
 	{
-		class ComponentRange;
-	public:
-		ArchetypeView() = delete;
-		ArchetypeView(Scene& scene, Archetype& archetype);
-
-	public:
-		ComponentRange Types();
-
-		bool Contains(EntityID id) const;
-
-	private:
-		class ComponentRange
+		struct MemberData
 		{
-			using CompIdContainer = std::vector<ComponentID>;
-			class Iterator
+			size_t byteOffset = -1;
+			struct Properties
 			{
-			public:
-				using difference_type = std::ptrdiff_t;
-				using iterator_category = std::bidirectional_iterator_tag;
-				using InnerIterator = CompIdContainer::iterator;
-
-				explicit Iterator(Scene& scene, InnerIterator it);
-
-				ComponentView operator*() const;
-				ComponentView operator->() const;
-
-				Iterator& operator++();
-				Iterator& operator--();
-				Iterator operator++(int);
-				Iterator operator--(int);
-
-				friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; }
-				friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
-
-			private:
-				Scene& m_Scene;
-				InnerIterator m_Ptr;
-			};
-
-		public:
-			ComponentRange() = delete;
-			ComponentRange(Scene& scene, CompIdContainer& idContainer);
-
-			Iterator begin() const { return Iterator(m_Scene, m_IdContainer.begin()); }
-			Iterator end() const { return Iterator(m_Scene, m_IdContainer.end()); }
-
-		private:
-			Scene& m_Scene;
-			CompIdContainer& m_IdContainer;
+				bool isHidden = false;
+				bool isReadOnly = false;
+				std::string displayName;
+			} props;
 		};
+		std::vector<MemberData> members;
 
-		Scene& m_Scene;
-		Archetype& m_Archetype;
-	};
-
-	class ComponentView
-	{
-	public: 
-		ComponentView() = delete;
-		ComponentView(Scene& scene, ComponentID id, ComponentData& compData);
-
-		void* GetVoid(EntityID id);
-		std::any ToAny(void* data);
-
-		size_t Size() const { return m_ComponentData.size; }
-		const std::string_view Name() const { return m_ComponentData.debugName; }
-
-	private:
-		Scene& m_Scene;
-		ComponentID m_ID;
-		ComponentData& m_ComponentData;
+		struct Properties
+		{
+			bool isHidden = false;
+			std::string displayName;
+		} props;
 	};
 }

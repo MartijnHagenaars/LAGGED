@@ -4,6 +4,8 @@
 
 #include "Containers.h"
 #include "TypeDefines.h"
+#include "Views.h"
+
 #include "Utility/Logger.h"
 
 namespace LAG
@@ -134,8 +136,8 @@ namespace LAG
 		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& componentData, int componentIndex, size_t targetSize);
 
 	private:
-		static inline EntityID s_EntityCounter = 0;
-		static inline ComponentID s_ComponentCounter = 0;
+		inline static EntityID s_EntityCounter = 0;
+		inline static ComponentID s_ComponentCounter = 0;
 
 		// This vector stores all possible archetypes
 		std::vector<Archetype*> m_Archetypes;
@@ -151,6 +153,9 @@ namespace LAG
 		// This map links all ComponentIDs to the correct ComponentData struct. 
 		// The ComponentData struct contains useful information / functions for managing component data.
 		inline static std::unordered_map<ComponentID, ComponentData*> s_ComponentMap;
+
+		// Holds info like component reflection properties, reflected member pointers, etc. 
+		inline static std::unordered_map<ComponentID, ReflectionData> s_ReflectionMap;
 
 	};
 }

@@ -6,8 +6,8 @@ namespace LAG
 	// COMPONENT REFLECTION SETUP //
 	////////////////////////////////
 
-	ComponentReflectionSetup::ComponentReflectionSetup(SceneReflect::ComponentReflectionData& compProperties) : 
-		m_Data(compProperties)
+	ComponentReflectionSetup::ComponentReflectionSetup(ReflectionData& data) :
+		m_Data(data)
 	{
 	}
 
@@ -28,8 +28,8 @@ namespace LAG
 	// VARIABLE REFLECTION SETUP //
 	///////////////////////////////
 
-	VariableReflectionSetup::VariableReflectionSetup(SceneReflect::VariableReflectionData& vars) :
-		m_Data(vars)
+	VariableReflectionSetup::VariableReflectionSetup(ReflectionData::MemberData& data) :
+		m_Data(data)
 	{
 	}
 
@@ -55,10 +55,5 @@ namespace LAG
 	{
 		static SceneReflect sceneReflect;
 		return sceneReflect;
-	}
-
-	std::unordered_map<ComponentID, SceneReflect::ComponentReflectionData>& SceneReflect::GetComponentProperties()
-	{
-		return m_CompProperties;
 	}
 }

@@ -107,6 +107,12 @@ void Game::Initialize()
 					LAG::DefaultComponent* defComp = std::any_cast<LAG::DefaultComponent*>(dataAny);
 					INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
 				}
+
+				for (LAG::MemberView varIt : compIt.Members())
+				{
+					auto& props = varIt.Properties();
+					const auto& name = props.displayName;
+				}
 			}
 		}
 	}
