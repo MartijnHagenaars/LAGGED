@@ -82,7 +82,12 @@ namespace LAG
 		std::any ToAny(void* data);
 
 		size_t Size() const { return m_ComponentData.size; }
+
+#ifdef DEBUG
 		const std::string_view Name() const { return m_ComponentData.debugName; }
+#else
+		const std::string_view Name() const { return std::string(); }
+#endif	
 
 	private:
 		class MemberRange
