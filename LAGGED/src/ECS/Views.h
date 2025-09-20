@@ -100,7 +100,7 @@ namespace LAG
 				using iterator_category = std::bidirectional_iterator_tag;
 				using InnerIterator = DataContainer::iterator;
 
-				explicit Iterator(InnerIterator it);
+				explicit Iterator(InnerIterator it, ComponentView& parentCompView);
 
 				MemberView operator*() const;
 				MemberView operator->() const;
@@ -115,17 +115,19 @@ namespace LAG
 
 			private:
 				InnerIterator m_Ptr;
+				ComponentView& m_ParentCompView;
 			};
 
 		public:
 			MemberRange() = delete;
-			MemberRange(DataContainer& dataContainer);
+			MemberRange(DataContainer& dataContainer, ComponentView& parentCompView);
 
-			Iterator begin() const { return Iterator(m_Container.begin()); }
-			Iterator end() const { return Iterator(m_Container.end()); }
+			Iterator begin() const { return Iterator(m_Container.begin(), m_ParentCompView); }
+			Iterator end() const { return Iterator(m_Container.end(), m_ParentCompView); }
 
 		private:
 			DataContainer& m_Container;
+			ComponentView& m_ParentCompView;
 		};
 
 	private:
@@ -141,11 +143,15 @@ namespace LAG
 	{
 	public:
 		MemberView() = delete;
-		MemberView(ReflectionData::MemberData& memberData);
+		MemberView(ReflectionData::MemberData& memberData, ComponentView& parentCompView);
 
 		ReflectionData::MemberData::Properties& Properties() const { return m_MemberData.props; }
 
+		void* GetVoid(EntityID id);
+		std::any ToAny(void* data);
+
 	private:
 		ReflectionData::MemberData& m_MemberData;
+		ComponentView& m_ParentCompView;
 	};
 }

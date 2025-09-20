@@ -111,6 +111,13 @@ void Game::Initialize()
 				for (LAG::MemberView varIt : compIt.Members())
 				{
 					auto& props = varIt.Properties();
+					std::any varAny = varIt.ToAny(varIt.GetVoid(reflEntityID));
+					if (varAny.type() == typeid(std::string))
+					{
+						std::string str = std::any_cast<std::string>(varAny);
+						INFO("String: {}", str);
+					}
+
 					const auto& name = props.displayName;
 				}
 			}

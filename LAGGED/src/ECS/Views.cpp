@@ -79,7 +79,7 @@ namespace LAG
 
 	ComponentView::MemberRange ComponentView::Members()
 	{
-		return ComponentView::MemberRange(m_ReflectionData.members);
+		return ComponentView::MemberRange(m_ReflectionData.members, *this);
 	}
 
 	void* ComponentView::GetVoid(EntityID id)
@@ -99,18 +99,18 @@ namespace LAG
 		return m_ComponentData.VoidToAny(data);
 	}
 
-	ComponentView::MemberRange::MemberRange(DataContainer& dataContainer) :
-		m_Container(dataContainer)
+	ComponentView::MemberRange::MemberRange(DataContainer& dataContainer, ComponentView& parentCompView) :
+		m_Container(dataContainer), m_ParentCompView(parentCompView)
 	{
 	}
 
-	ComponentView::MemberRange::Iterator::Iterator(InnerIterator it) : 
-		m_Ptr(it)
+	ComponentView::MemberRange::Iterator::Iterator(InnerIterator it, ComponentView& parentCompView) :
+		m_Ptr(it), m_ParentCompView(parentCompView)
 	{
 	}
 
-	MemberView ComponentView::MemberRange::Iterator::operator*() const { return MemberView(*m_Ptr); }
-	MemberView ComponentView::MemberRange::Iterator::operator->() const { return MemberView(*m_Ptr); }
+	MemberView ComponentView::MemberRange::Iterator::operator*() const { return MemberView(*m_Ptr, m_ParentCompView); }
+	MemberView ComponentView::MemberRange::Iterator::operator->() const { return MemberView(*m_Ptr, m_ParentCompView); }
 
 	ComponentView::MemberRange::Iterator& ComponentView::MemberRange::Iterator::operator++()
 	{
@@ -143,8 +143,22 @@ namespace LAG
 	// MemberView implementations //
 	////////////////////////////////
 
-	MemberView::MemberView(ReflectionData::MemberData& memberData) : 
-		m_MemberData(memberData)
+	MemberView::MemberView(ReflectionData::MemberData& memberData, ComponentView& parentCompView) :
+		m_MemberData(memberData), m_ParentCompView(parentCompView)
 	{
+	}
+
+	void* MemberView::GetVoid(EntityID id)
+	{
+		if (id == ENTITY_NULL)
+			return nullptr;
+		return reinterpret_cast<void*>(reinterpret_cast<size_t>(m_ParentCompView.GetVoid(id)) + m_MemberData.byteOffset);
+	}
+
+	std::any MemberView::ToAny(void* data)
+	{
+		if (!m_MemberData.ops.VoidToAny)
+			return nullptr;
+		return m_MemberData.ops.VoidToAny(data);	
 	}
 }

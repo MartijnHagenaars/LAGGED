@@ -49,6 +49,11 @@ namespace LAG
 				bool isReadOnly = false;
 				std::string displayName;
 			} props;
+
+			struct Operations
+			{
+				std::any(*VoidToAny)(void*) = nullptr;
+			} ops;
 		};
 		std::vector<MemberData> members;
 

@@ -54,6 +54,8 @@ namespace LAG
 		varData.props.displayName = typeid(Var).name();
 		varData.byteOffset = byteOffset;
 
+		varData.ops.VoidToAny = [](void* data) { return std::any(*static_cast<Var*>(data)); };
+
 		return VariableReflectionSetup(varData);
 	}
 }
