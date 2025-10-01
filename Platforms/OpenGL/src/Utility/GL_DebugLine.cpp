@@ -16,9 +16,9 @@ namespace LAG
 {
 	void DebugLine::Initialize()
 	{
-		if (!GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/LineRender")))
+		if (!GetResourceManager()->AddResource<Shader>(StringHash("res/Shaders/OpenGL/LineRender")))
 			CRITICAL("Failed to load line drawing shader.");
-		m_LineShader = GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/LineRender"));
+		m_LineShader = GetResourceManager()->GetResource<Shader>(StringHash("res/Shaders/OpenGL/LineRender"));
 
 		LAG_GRAPHICS_CHECK(glGenVertexArrays(1, &m_VAO));
 		LAG_GRAPHICS_CHECK(glGenBuffers(1, &m_VBO));

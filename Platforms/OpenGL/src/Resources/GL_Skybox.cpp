@@ -15,7 +15,7 @@
 
 namespace LAG
 {
-	const HashedString skyboxShader = HashedString("res/Shaders/OpenGL/Skybox");
+	const StringHash skyboxShader = StringHash("res/Shaders/OpenGL/Skybox");
 
 	void Skybox::Load()
 	{
@@ -52,7 +52,7 @@ namespace LAG
 		m_Buffer.Initialize(vb, ib);
 
 		// Create the skybox shader
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/Skybox"));
+		GetResourceManager()->AddResource<Shader>(StringHash("res/Shaders/OpenGL/Skybox"));
 	}
 
 	void Skybox::Unload()
@@ -60,7 +60,7 @@ namespace LAG
 		m_Buffer.Shutdown();
 	}
 
-	void Skybox::SetCubemap(const HashedString& path)
+	void Skybox::SetCubemap(const StringHash& path)
 	{
 		ResourceManager* pResources = GetResourceManager();
 		if (!pResources->Contains(path))

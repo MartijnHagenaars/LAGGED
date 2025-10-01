@@ -143,7 +143,7 @@ namespace LAG
 	{
 	public:
 		MemberView() = delete;
-		MemberView(ReflectionData::MemberData& memberData, ComponentView& parentCompView);
+		MemberView(ReflectionData::MemberData& memberData, ReflectionTypesData& reflTypeData, ComponentView& parentCompView);
 
 		ReflectionData::MemberData::Properties& Properties() const { return m_MemberData.props; }
 
@@ -152,6 +152,7 @@ namespace LAG
 
 	private:
 		ReflectionData::MemberData& m_MemberData;
+		ReflectionTypesData& m_ReflectionTypeData;
 		ComponentView& m_ParentCompView;
 	};
 }

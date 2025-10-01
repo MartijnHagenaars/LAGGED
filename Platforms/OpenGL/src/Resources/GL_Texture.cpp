@@ -16,12 +16,12 @@ namespace LAG
 		unsigned int id = 0;
 	};
 
-	Texture::Texture(const HashedString& path) :
+	Texture::Texture(const StringHash& path) :
 		Resource(path)
 	{
 	}
 
-	Texture::Texture(const HashedString& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) :
+	Texture::Texture(const StringHash& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) :
 		Resource(handle)
 	{
 		if (handle.GetString().empty())

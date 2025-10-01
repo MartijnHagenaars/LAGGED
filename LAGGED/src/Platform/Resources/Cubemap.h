@@ -9,7 +9,7 @@ namespace LAG
 		friend class Model;
 		friend class ResourceManager;
 	public:
-		Cubemap(const HashedString& path);
+		Cubemap(const StringHash& path);
 		~Cubemap() = default;
 
 		bool Load() override;

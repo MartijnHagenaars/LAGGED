@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "ECS/TypeDefines.h"
+#include "Utility/Hash.h"
 
 namespace LAG
 {
@@ -28,9 +29,9 @@ namespace LAG
 	{
 		size_t size = -1;
 
-		void(*CreateObjectInMemory)(unsigned char* dest);
-		void(*MoveData)(unsigned char* src, unsigned char* dest);
-		void(*DestructData)(unsigned char* data);
+		void(*CreateObjectInMemory)(unsigned char* dest) = nullptr;
+		void(*MoveData)(unsigned char* src, unsigned char* dest) = nullptr;
+		void(*DestructData)(unsigned char* data) = nullptr;
 
 		std::any(*VoidToAny)(void*) = nullptr;
 #ifdef DEBUG
@@ -42,6 +43,7 @@ namespace LAG
 	{
 		struct MemberData
 		{
+			Hash64 typeID = 0;
 			size_t byteOffset = -1;
 			struct Properties
 			{
@@ -49,11 +51,6 @@ namespace LAG
 				bool isReadOnly = false;
 				std::string displayName;
 			} props;
-
-			struct Operations
-			{
-				std::any(*VoidToAny)(void*) = nullptr;
-			} ops;
 		};
 		std::vector<MemberData> members;
 
@@ -62,5 +59,10 @@ namespace LAG
 			bool isHidden = false;
 			std::string displayName;
 		} props;
+	};
+
+	struct ReflectionTypesData
+	{
+		std::any(*VoidToAny)(void*) = nullptr;
 	};
 }

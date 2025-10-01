@@ -80,7 +80,7 @@ namespace LAG
 			Texture* texture = nullptr;
 			if (ImGui::BeginCombo("Textures", value.m_TextureLookup.GetValue() != 0 ? value.m_TextureLookup.GetString().c_str() : "No texture selected..."))
 			{
-				std::vector<HashedString> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
+				std::vector<StringHash> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
 				for (int i = 0; i < textures.size(); i++)
 				{
 					const bool isSelected = (texture != nullptr) && (texture->GetPath().GetValue() == textures[i].GetValue());
@@ -114,7 +114,7 @@ namespace LAG
 			Model* model = nullptr;
 			if (ImGui::BeginCombo("Models", value.m_ModelLookup.GetValue() != 0 ? value.m_ModelLookup.GetString().c_str() : "No model selected..."))
 			{
-				std::vector<HashedString> models = GetEngine().GetResources()->GetResourceNames<Model>();
+				std::vector<StringHash> models = GetEngine().GetResources()->GetResourceNames<Model>();
 				for (int i = 0; i < models.size(); i++)
 				{
 					const bool isSelected = (model != nullptr) && (model->GetPath().GetValue() == models[i].GetValue());

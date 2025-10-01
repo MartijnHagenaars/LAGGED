@@ -6,6 +6,7 @@
 #include "TypeDefines.h"
 #include "Views.h"
 
+#include "Utility/Hash.h"
 #include "Utility/Logger.h"
 
 namespace LAG
@@ -154,11 +155,13 @@ namespace LAG
 		// The ComponentData struct contains useful information / functions for managing component data.
 		inline static std::unordered_map<ComponentID, ComponentData*> s_ComponentMap;
 
-		//// TODO: There should be a similar unordered_map for 
-		//inline static std::unordered_map<ComponentID, MemberData*> s_MemberData;
 
-		// Holds info like component reflection properties, reflected member pointers, etc. 
-		inline static std::unordered_map<ComponentID, ReflectionData> s_ReflectionMap;
+		// Holds info like (component) type reflection properties, reflected member pointers, etc. 
+		// TODO: Revisit this name; it may not be very fitting
+		inline static std::unordered_map<ComponentID, ReflectionData> s_ReflectTypes;
+
+		// Holds info like (component) member reflection properties, function pointers, etc.
+		inline static std::unordered_map<Hash64, ReflectionTypesData> s_ReflectMembers;
 
 	};
 }

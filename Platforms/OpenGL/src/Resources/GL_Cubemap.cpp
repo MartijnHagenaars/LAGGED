@@ -33,7 +33,7 @@ namespace LAG
 		{"nz.png", GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}
 	} };
 
-	Cubemap::Cubemap(const HashedString& path) :
+	Cubemap::Cubemap(const StringHash& path) :
 		Resource(path)
 	{
 	}

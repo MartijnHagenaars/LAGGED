@@ -11,7 +11,7 @@ namespace LAG
 		static void Load();
 		static void Unload();
 
-		static void SetCubemap(const HashedString& path);
+		static void SetCubemap(const StringHash& path);
 
 		static void Render(EntityID camEntityID);
 

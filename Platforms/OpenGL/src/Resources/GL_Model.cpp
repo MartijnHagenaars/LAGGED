@@ -28,7 +28,7 @@
 
 namespace LAG
 {
-	Model::Model(const HashedString& path) :
+	Model::Model(const StringHash& path) :
 		Resource(path)
 	{
 	}

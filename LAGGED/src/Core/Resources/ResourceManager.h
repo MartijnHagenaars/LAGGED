@@ -1,5 +1,5 @@
 #pragma once
-#include "Utility/HashedString.h"
+#include "Utility/Hash.h"
 
 #include <unordered_map>
 #include <memory>
@@ -23,7 +23,7 @@ namespace LAG
 		/// <param name="...args">The arguments for constructing the resource object.</param>
 		/// <returns>A pointer to the resource is returned if the object was created and stored correctly. If the object cannot be created, a nullptr is returned.</returns>
 		template<typename T, typename... Args>
-		T* AddResource(const HashedString& path, Args&&... args)
+		T* AddResource(const StringHash& path, Args&&... args)
 		{
 			//Check if template type is of type "Resource"
 			constexpr bool validResType = std::is_base_of<LAG::Resource, T>::value; 
@@ -62,17 +62,17 @@ namespace LAG
 		}
 
 		template<typename T>
-		T* GetResource(const HashedString& path) const
+		T* GetResource(const StringHash& path) const
 		{
 			return GetResource<T>(path.GetValue());
 		}
 
-		bool Contains(const HashedString& path);
+		bool Contains(const StringHash& path);
 
 		template<typename T>
-		std::vector<HashedString> GetResourceNames() const
+		std::vector<StringHash> GetResourceNames() const
 		{
-			std::vector<HashedString> nameVec;
+			std::vector<StringHash> nameVec;
 			for (const auto& it : m_Resources)
 			{
 				T* resourcePtr = dynamic_cast<T*>(it.second.get());

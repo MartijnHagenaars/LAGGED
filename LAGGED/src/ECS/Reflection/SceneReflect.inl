@@ -2,6 +2,7 @@
 #include <algorithm>
 
 #include "Core/Defines.h"
+#include "Utility/Hash.h"
 
 namespace LAG
 {
@@ -15,14 +16,14 @@ namespace LAG
 		if (const auto& compDataIt = Scene::s_ComponentMap.find(compID); compDataIt == Scene::s_ComponentMap.end())
 			Scene::RegisterComponent<Comp>();
 
-		auto& compProperties = Scene::s_ReflectionMap;
-		if (const auto& it = compProperties.find(compID); it != compProperties.end())
+		auto& compReflData = Scene::s_ReflectTypes;
+		if (const auto& it = compReflData.find(compID); it != compReflData.end())
 		{
 			CRITICAL("Attempted to reflect component '{}', but this operation has already been completed. Reflecting a component more than once is not allowed.", typeid(Comp).name());
 			return ComponentReflectionSetup(it->second);
 		}
 
-		auto& compRefl = compProperties[compID];
+		auto& compRefl = compReflData[compID];
 		compRefl.props.displayName = typeid(Comp).name();
 		return ComponentReflectionSetup(compRefl);
 	}
@@ -33,13 +34,22 @@ namespace LAG
 		static_assert(std::is_member_object_pointer<decltype(var)>::value, "Type needs to be a non-static member object pointer.");
 
 		ComponentID compID = Scene::GetComponentID<Comp>();
-		auto compIt = Scene::s_ReflectionMap.find(compID);
-		if (compIt == Scene::s_ReflectionMap.end())
+		auto compReflData = Scene::s_ReflectTypes.find(compID);
+		if (compReflData == Scene::s_ReflectTypes.end())
 		{
-			LAG_ASSERT("Cannot register variable: variable already registered.");
+			CRITICAL("Component type \"{}\" is not registered. Make sure this is set-up correctly.", typeid(Comp).name());
+			ReflectComponent<Comp>();
 		}
 
-		auto& varVec = compIt->second.members;
+		Hash64 memberTypeHash = GetTypeHash64<Var>();
+		auto memberReflData = Scene::s_ReflectMembers.find(memberTypeHash);
+		if (memberReflData == Scene::s_ReflectMembers.end())
+		{
+			auto& reflectMemberData = Scene::s_ReflectMembers[memberTypeHash];
+			reflectMemberData.VoidToAny = [](void* data) { return std::any(*static_cast<Var*>(data)); };
+		}
+
+		auto& varVec = compReflData->second.members;
 		size_t byteOffset = reinterpret_cast<size_t>(&(reinterpret_cast<Comp*>(0)->*var));
 		auto varIt = std::find_if(varVec.begin(), varVec.end(), [&byteOffset](ReflectionData::MemberData& var) { return var.byteOffset == byteOffset; });
 
@@ -52,9 +62,8 @@ namespace LAG
 		varVec.emplace_back(ReflectionData::MemberData());
 		ReflectionData::MemberData& varData = varVec[varVec.size() - 1];
 		varData.props.displayName = typeid(Var).name();
+		varData.typeID = memberTypeHash;
 		varData.byteOffset = byteOffset;
-
-		varData.ops.VoidToAny = [](void* data) { return std::any(*static_cast<Var*>(data)); };
 
 		return VariableReflectionSetup(varData);
 	}

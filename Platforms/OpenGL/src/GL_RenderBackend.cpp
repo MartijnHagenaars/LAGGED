@@ -37,8 +37,8 @@ namespace LAG
 	ErrResult Renderer::Initialize()
 	{
 		//Create some essential shaders.
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
+		GetResourceManager()->AddResource<Shader>(StringHash("res/Shaders/OpenGL/ObjectShader"));
+		GetResourceManager()->AddResource<Shader>(StringHash("res/Shaders/OpenGL/SurfaceShader"));
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -68,7 +68,7 @@ namespace LAG
 		return ErrResult::SUCCESS;
 	}
 
-	void LAG::Renderer::SetSkyboxCubemap(const HashedString& path)
+	void LAG::Renderer::SetSkyboxCubemap(const StringHash& path)
 	{
 		if (!m_Skybox)
 		{
@@ -151,7 +151,7 @@ namespace LAG
 				{
 					GetResourceManager()->GetResource<Model>(modelPtr->modelHandle.m_ModelLookup)->Render(
 						entityID, camEntityID,
-						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
+						*GetResourceManager()->GetResource<Shader>(StringHash("res/Shaders/OpenGL/ObjectShader")),
 						lights);
 				}
 			}
@@ -159,13 +159,13 @@ namespace LAG
 			SurfaceComponent* surfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
 			if (surfacePtr)
 			{
-				surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(StringHash("res/Shaders/OpenGL/SurfaceShader")), lights);
 			}
 
 			ProceduralSurfaceComponent* procSurfacePtr = GetScene()->GetComponent<ProceduralSurfaceComponent>(entityID);
 			if (procSurfacePtr)
 			{
-				procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(StringHash("res/Shaders/OpenGL/SurfaceShader")), lights);
 			}
 		}
 

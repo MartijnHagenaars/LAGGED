@@ -1,15 +1,15 @@
 #pragma once
-#include "Utility/HashedString.h"
+#include "Utility/Hash.h"
 
 namespace LAG
 {
 	struct TextureHandle
 	{
-		HashedString m_TextureLookup;
+		StringHash m_TextureLookup;
 	};
 
 	struct ModelHandle
 	{
-		HashedString m_ModelLookup;
+		StringHash m_ModelLookup;
 	};
 }

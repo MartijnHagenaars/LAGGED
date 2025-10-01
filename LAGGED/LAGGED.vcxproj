@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="src\ECS\Containers.h" />
     <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
+    <ClInclude Include="src\Utility\Hash.h" />
     <ClInclude Include="src\Utility\Profiler.h" />
     <ClInclude Include="src\Editor\UI\EditorGuiHelper.h" />
     <ClInclude Include="src\ECS\Components\EditorComponent.h" />
@@ -212,7 +213,6 @@
     <ClInclude Include="src\Core\EntryPoint.h" />
     <ClInclude Include="src\Platform\Window.h" />
     <ClInclude Include="src\Platform\Utility\PlatformIncludes.h" />
-    <ClInclude Include="src\Utility\HashedString.h" />
     <ClInclude Include="src\Utility\Noise.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\Utility\Timer.h" />

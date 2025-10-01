@@ -17,7 +17,7 @@ namespace LAG
 		unsigned int pixelID = 0;
 	};
 
-	Shader::Shader(const HashedString& shaderPath) : Resource(shaderPath)
+	Shader::Shader(const StringHash& shaderPath) : Resource(shaderPath)
 	{
 	}
 

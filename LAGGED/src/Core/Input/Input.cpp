@@ -11,7 +11,7 @@ namespace LAG::Input
 	std::unordered_map<size_t, InputActionData> inputActions;
 
 
-	bool AddInputAction(InputType inputType, HashedString actionName, const char* debugDisplayName)
+	bool AddInputAction(InputType inputType, StringHash actionName, const char* debugDisplayName)
 	{
 		//Check if input action already exists
 		if (inputActions.find(actionName.GetValue()) != inputActions.end())
@@ -49,7 +49,7 @@ namespace LAG::Input
 		else return nullptr;
 	}
 
-	bool IsActionPressed(HashedString actionName)
+	bool IsActionPressed(StringHash actionName)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
 		if (GetWindow() != nullptr && IsInputActionValid(actionName.GetValue(), it))
@@ -57,7 +57,7 @@ namespace LAG::Input
 		else return false;
 	}
 
-	bool IsActionPressedOnce(HashedString actionName)
+	bool IsActionPressedOnce(StringHash actionName)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
 		if (GetWindow() != nullptr && IsInputActionValid(actionName.GetValue(), it))

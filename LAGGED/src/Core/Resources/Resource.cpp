@@ -4,7 +4,7 @@
 
 namespace LAG
 {
-	Resource::Resource(const HashedString& path)
+	Resource::Resource(const StringHash& path)
 		: m_Path(path)
 	{};
 
@@ -13,7 +13,7 @@ namespace LAG
 		return (Unload() && Load());
 	}
 
-	const HashedString& Resource::GetPath() const
+	const StringHash& Resource::GetPath() const
 	{
 		return m_Path;
 	}

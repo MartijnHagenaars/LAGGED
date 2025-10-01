@@ -1,5 +1,5 @@
 #pragma once
-#include "Utility/HashedString.h"
+#include "Utility/Hash.h"
 
 namespace LAG
 {
@@ -8,7 +8,7 @@ namespace LAG
 		friend class ResourceManager;
 	public: 
 		Resource() = delete;
-		explicit Resource(const HashedString& path);
+		explicit Resource(const StringHash& path);
 		virtual ~Resource() {};
 
 		virtual bool Load() = 0;
@@ -16,14 +16,14 @@ namespace LAG
 		virtual bool Reload();
 
 		bool IsLoaded() const { return m_Loaded; }
-		const HashedString& GetPath() const;
+		const StringHash& GetPath() const;
 
 	protected:
-		void SetPath(const HashedString& path) { m_Path = path; }
+		void SetPath(const StringHash& path) { m_Path = path; }
 		void SetLoaded(bool loaded) { m_Loaded = loaded; }
 
 	private:
 		bool m_Loaded = false;
-		HashedString m_Path;
+		StringHash m_Path;
 	};
 }

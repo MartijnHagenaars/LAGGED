@@ -73,7 +73,7 @@ namespace LAG
 	///////////////////////////////////
 
 	ComponentView::ComponentView(Scene& scene, ComponentID id, ComponentData& compData) :
-		m_Scene(scene), m_ID(id), m_ComponentData(compData), m_ReflectionData(Scene::s_ReflectionMap[id])
+		m_Scene(scene), m_ID(id), m_ComponentData(compData), m_ReflectionData(Scene::s_ReflectTypes[id])
 	{
 	}
 
@@ -109,8 +109,8 @@ namespace LAG
 	{
 	}
 
-	MemberView ComponentView::MemberRange::Iterator::operator*() const { return MemberView(*m_Ptr, m_ParentCompView); }
-	MemberView ComponentView::MemberRange::Iterator::operator->() const { return MemberView(*m_Ptr, m_ParentCompView); }
+	MemberView ComponentView::MemberRange::Iterator::operator*() const { return MemberView(*m_Ptr, Scene::s_ReflectMembers[m_Ptr->typeID], m_ParentCompView); }
+	MemberView ComponentView::MemberRange::Iterator::operator->() const { return MemberView(*m_Ptr, Scene::s_ReflectMembers[m_Ptr->typeID], m_ParentCompView); }
 
 	ComponentView::MemberRange::Iterator& ComponentView::MemberRange::Iterator::operator++()
 	{
@@ -143,8 +143,8 @@ namespace LAG
 	// MemberView implementations //
 	////////////////////////////////
 
-	MemberView::MemberView(ReflectionData::MemberData& memberData, ComponentView& parentCompView) :
-		m_MemberData(memberData), m_ParentCompView(parentCompView)
+	MemberView::MemberView(ReflectionData::MemberData& memberData, ReflectionTypesData& reflTypeData, ComponentView& parentCompView) :
+		m_MemberData(memberData), m_ReflectionTypeData(reflTypeData), m_ParentCompView(parentCompView)
 	{
 	}
 
@@ -157,8 +157,6 @@ namespace LAG
 
 	std::any MemberView::ToAny(void* data)
 	{
-		if (!m_MemberData.ops.VoidToAny)
-			return nullptr;
-		return m_MemberData.ops.VoidToAny(data);	
+		return m_ReflectionTypeData.VoidToAny(data);
 	}
 }
