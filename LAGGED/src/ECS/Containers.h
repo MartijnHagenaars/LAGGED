@@ -39,9 +39,9 @@ namespace LAG
 #endif
 	};
 
-	struct ReflectionData
+	struct ReflectedCompInfo
 	{
-		struct MemberData
+		struct MemberInfo
 		{
 			Hash64 typeID = 0;
 			size_t byteOffset = -1;
@@ -52,7 +52,7 @@ namespace LAG
 				std::string displayName;
 			} props;
 		};
-		std::vector<MemberData> members;
+		std::vector<MemberInfo> members;
 
 		struct Properties
 		{
@@ -61,7 +61,7 @@ namespace LAG
 		} props;
 	};
 
-	struct ReflectionTypesData
+	struct ReflectedTypeInfo
 	{
 		std::any(*VoidToAny)(void*) = nullptr;
 	};

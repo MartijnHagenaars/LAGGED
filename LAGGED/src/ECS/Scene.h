@@ -156,12 +156,11 @@ namespace LAG
 		inline static std::unordered_map<ComponentID, ComponentData*> s_ComponentMap;
 
 
-		// Holds info like (component) type reflection properties, reflected member pointers, etc. 
-		// TODO: Revisit this name; it may not be very fitting
-		inline static std::unordered_map<ComponentID, ReflectionData> s_ReflectTypes;
+		// This map links a ComponentID to its Component-type reflection info
+		inline static std::unordered_map<ComponentID, ReflectedCompInfo> s_ReflectedCompInfo;
 
-		// Holds info like (component) member reflection properties, function pointers, etc.
-		inline static std::unordered_map<Hash64, ReflectionTypesData> s_ReflectMembers;
+		// This map links a hashed member type name (Hash64) to its type reflection info
+		inline static std::unordered_map<Hash64, ReflectedTypeInfo> s_ReflectedTypeInfo;
 
 	};
 }

@@ -92,7 +92,7 @@ namespace LAG
 	private:
 		class MemberRange
 		{
-			using DataContainer = std::vector<ReflectionData::MemberData>;
+			using DataContainer = std::vector<ReflectedCompInfo::MemberInfo>;
 			class Iterator
 			{
 			public:
@@ -134,7 +134,7 @@ namespace LAG
 		Scene& m_Scene;
 		ComponentID m_ID;
 		ComponentData& m_ComponentData;
-		ReflectionData& m_ReflectionData;
+		ReflectedCompInfo& m_ReflectionData;
 
 		//Something where variables are stored
 	};
@@ -143,16 +143,16 @@ namespace LAG
 	{
 	public:
 		MemberView() = delete;
-		MemberView(ReflectionData::MemberData& memberData, ReflectionTypesData& reflTypeData, ComponentView& parentCompView);
+		MemberView(ReflectedCompInfo::MemberInfo& memberData, ReflectedTypeInfo& reflTypeData, ComponentView& parentCompView);
 
-		ReflectionData::MemberData::Properties& Properties() const { return m_MemberData.props; }
+		ReflectedCompInfo::MemberInfo::Properties& Properties() const { return m_MemberData.props; }
 
 		void* GetVoid(EntityID id);
 		std::any ToAny(void* data);
 
 	private:
-		ReflectionData::MemberData& m_MemberData;
-		ReflectionTypesData& m_ReflectionTypeData;
+		ReflectedCompInfo::MemberInfo& m_MemberData;
+		ReflectedTypeInfo& m_ReflectionTypeData;
 		ComponentView& m_ParentCompView;
 	};
 }

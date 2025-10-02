@@ -6,19 +6,19 @@ namespace LAG
 	// COMPONENT REFLECTION SETUP //
 	////////////////////////////////
 
-	ComponentReflectionSetup::ComponentReflectionSetup(ReflectionData& data) :
-		m_Data(data)
+	ComponentReflectionSetup::ComponentReflectionSetup(ReflectedCompInfo& info) :
+		m_Info(info)
 	{
 	}
 
 	ComponentReflectionSetup& ComponentReflectionSetup::SetDisplayName(const std::string& displayName)
 	{
-		m_Data.props.displayName = displayName;
+		m_Info.props.displayName = displayName;
 		return *this;
 	}
 	ComponentReflectionSetup& ComponentReflectionSetup::SetHidden(bool isHidden)
 	{
-		m_Data.props.isHidden = isHidden;
+		m_Info.props.isHidden = isHidden;
 		return *this;
 	}
 
@@ -28,26 +28,26 @@ namespace LAG
 	// VARIABLE REFLECTION SETUP //
 	///////////////////////////////
 
-	VariableReflectionSetup::VariableReflectionSetup(ReflectionData::MemberData& data) :
-		m_Data(data)
+	VariableReflectionSetup::VariableReflectionSetup(ReflectedCompInfo::MemberInfo& info) :
+		m_Info(info)
 	{
 	}
 
 	VariableReflectionSetup& VariableReflectionSetup::SetDisplayName(const std::string& displayName)
 	{
-		m_Data.props.displayName = displayName;
+		m_Info.props.displayName = displayName;
 		return *this;
 	}
 
 	VariableReflectionSetup& VariableReflectionSetup::SetHidden(bool isHidden)
 	{
-		m_Data.props.isHidden = isHidden;
+		m_Info.props.isHidden = isHidden;
 		return *this;
 	}
 
 	VariableReflectionSetup& VariableReflectionSetup::SetReadOnly(bool isReadOnly)
 	{
-		m_Data.props.isReadOnly = isReadOnly;
+		m_Info.props.isReadOnly = isReadOnly;
 		return *this;
 	}
 

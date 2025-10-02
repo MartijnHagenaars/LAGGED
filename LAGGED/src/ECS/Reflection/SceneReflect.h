@@ -28,7 +28,7 @@ namespace LAG
 	private:
 		// Returns the map containing component properties
 		// Done through a getter function to avoid Static Initialization Order Fiasco
-		std::unordered_map<ComponentID, ReflectionData> m_CompProperties;
+		std::unordered_map<ComponentID, ReflectedCompInfo> m_CompProperties;
 	};
 
 	class ComponentReflectionSetup
@@ -51,9 +51,9 @@ namespace LAG
 
 	private:
 		ComponentReflectionSetup() = delete;
-		ComponentReflectionSetup(ReflectionData& data);
+		ComponentReflectionSetup(ReflectedCompInfo& info);
 
-		ReflectionData& m_Data;
+		ReflectedCompInfo& m_Info;
 	};
 
 	class VariableReflectionSetup
@@ -83,9 +83,9 @@ namespace LAG
 
 	private:
 		VariableReflectionSetup() = delete;
-		VariableReflectionSetup(ReflectionData::MemberData& data);
+		VariableReflectionSetup(ReflectedCompInfo::MemberInfo& info);
 
-		ReflectionData::MemberData& m_Data;
+		ReflectedCompInfo::MemberInfo& m_Info;
 	};
 
 }

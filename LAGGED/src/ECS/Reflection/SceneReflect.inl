@@ -16,16 +16,16 @@ namespace LAG
 		if (const auto& compDataIt = Scene::s_ComponentMap.find(compID); compDataIt == Scene::s_ComponentMap.end())
 			Scene::RegisterComponent<Comp>();
 
-		auto& compReflData = Scene::s_ReflectTypes;
-		if (const auto& it = compReflData.find(compID); it != compReflData.end())
+		auto& reflCompInfoMap = Scene::s_ReflectedCompInfo;
+		if (const auto& it = reflCompInfoMap.find(compID); it != reflCompInfoMap.end())
 		{
 			CRITICAL("Attempted to reflect component '{}', but this operation has already been completed. Reflecting a component more than once is not allowed.", typeid(Comp).name());
 			return ComponentReflectionSetup(it->second);
 		}
 
-		auto& compRefl = compReflData[compID];
-		compRefl.props.displayName = typeid(Comp).name();
-		return ComponentReflectionSetup(compRefl);
+		auto& reflCompInfo = reflCompInfoMap[compID];
+		reflCompInfo.props.displayName = typeid(Comp).name();
+		return ComponentReflectionSetup(reflCompInfo);
 	}
 
 	template<typename Comp, typename Var>
@@ -34,37 +34,37 @@ namespace LAG
 		static_assert(std::is_member_object_pointer<decltype(var)>::value, "Type needs to be a non-static member object pointer.");
 
 		ComponentID compID = Scene::GetComponentID<Comp>();
-		auto compReflData = Scene::s_ReflectTypes.find(compID);
-		if (compReflData == Scene::s_ReflectTypes.end())
+		auto reflCompInfo = Scene::s_ReflectedCompInfo.find(compID);
+		if (reflCompInfo == Scene::s_ReflectedCompInfo.end())
 		{
 			CRITICAL("Component type \"{}\" is not registered. Make sure this is set-up correctly.", typeid(Comp).name());
 			ReflectComponent<Comp>();
 		}
 
 		Hash64 memberTypeHash = GetTypeHash64<Var>();
-		auto memberReflData = Scene::s_ReflectMembers.find(memberTypeHash);
-		if (memberReflData == Scene::s_ReflectMembers.end())
+		auto reflTypeInfo = Scene::s_ReflectedTypeInfo.find(memberTypeHash);
+		if (reflTypeInfo == Scene::s_ReflectedTypeInfo.end())
 		{
-			auto& reflectMemberData = Scene::s_ReflectMembers[memberTypeHash];
-			reflectMemberData.VoidToAny = [](void* data) { return std::any(*static_cast<Var*>(data)); };
+			auto& newReflTypeInfo = Scene::s_ReflectedTypeInfo[memberTypeHash];
+			newReflTypeInfo.VoidToAny = [](void* data) { return std::any(*static_cast<Var*>(data)); };
 		}
 
-		auto& varVec = compReflData->second.members;
+		auto& memberVec = reflCompInfo->second.members;
 		size_t byteOffset = reinterpret_cast<size_t>(&(reinterpret_cast<Comp*>(0)->*var));
-		auto varIt = std::find_if(varVec.begin(), varVec.end(), [&byteOffset](ReflectionData::MemberData& var) { return var.byteOffset == byteOffset; });
+		auto varIt = std::find_if(memberVec.begin(), memberVec.end(), [&byteOffset](ReflectedCompInfo::MemberInfo& var) { return var.byteOffset == byteOffset; });
 
-		if (varIt != varVec.end())
+		if (varIt != memberVec.end())
 		{
 			WARNING("Attempted to register variable {} again.", typeid(var).name());
 			return VariableReflectionSetup(*varIt);
 		}
 
-		varVec.emplace_back(ReflectionData::MemberData());
-		ReflectionData::MemberData& varData = varVec[varVec.size() - 1];
-		varData.props.displayName = typeid(Var).name();
-		varData.typeID = memberTypeHash;
-		varData.byteOffset = byteOffset;
+		memberVec.emplace_back(ReflectedCompInfo::MemberInfo());
+		ReflectedCompInfo::MemberInfo& memberInfo = memberVec[memberVec.size() - 1];
+		memberInfo.props.displayName = typeid(Var).name();
+		memberInfo.typeID = memberTypeHash;
+		memberInfo.byteOffset = byteOffset;
 
-		return VariableReflectionSetup(varData);
+		return VariableReflectionSetup(memberInfo);
 	}
 }
