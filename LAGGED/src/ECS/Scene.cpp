@@ -108,7 +108,7 @@ namespace LAG
 		return (m_EntityArchetypes.find(id) != m_EntityArchetypes.end());
 	}
 
-	TypeID Scene::Count() const
+	size_t Scene::Count() const
 	{
 		return m_EntityArchetypes.size();
 	}

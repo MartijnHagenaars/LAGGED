@@ -8,7 +8,7 @@ namespace LAG
 	inline Comp* Scene::AddComponent(const EntityID entityID, Args && ...compArgs)
 	{
 		TypeInfo* compData = nullptr;
-		const TypeID newTypeID = GetTypeID<Comp>();
+		constexpr TypeID newTypeID = GetTypeID<Comp>();
 
 		// Get the component data structure.
 		if (auto compDataIt = s_TypeInfo.find(newTypeID); compDataIt != s_TypeInfo.end())
@@ -16,7 +16,7 @@ namespace LAG
 		else 
 		{
 			// Register component in the case it hasn't been done yet.
-			compData = &RegisterComponent<Comp>();
+			compData = &RegisterType<Comp>();
 			WARNING("Registering component {} (ID: {}) at runtime.", typeid(Comp).name(), newTypeID);
 		}
 
@@ -147,7 +147,7 @@ namespace LAG
 	template<typename Comp>
 	inline void Scene::RemoveComponent(const EntityID entityID)
 	{
-		const TypeID typeID = GetTypeID<Comp>();
+		constexpr TypeID typeID = GetTypeID<Comp>();
 
 		const auto& compDataIt = s_TypeInfo.find(typeID);
 		if (compDataIt == s_TypeInfo.end())
@@ -243,7 +243,7 @@ namespace LAG
 			return false;
 
 		Archetype* archetype = recordIt->second.archetype;
-		TypeID typeID = Scene::GetTypeID<Comp>();
+		constexpr TypeID typeID = Scene::GetTypeID<Comp>();
 		return (std::find(archetype->typeID.begin(), archetype->typeID.end(), typeID)) != archetype->typeID.end();
 	}
 
@@ -349,17 +349,16 @@ namespace LAG
 		return results;
 	}
 
-	template<typename Comp>
-	inline const TypeID Scene::GetTypeID()
+	template<typename T>
+	inline constexpr TypeID Scene::GetTypeID()
 	{
-		static const TypeID typeID = s_ComponentCounter++;
-		return typeID;
+		return GetTypeHash64<T>();
 	}
 
-	template<typename Comp>
-	inline TypeInfo& Scene::RegisterComponent()
+	template<typename Type>
+	inline TypeInfo& Scene::RegisterType()
 	{
-		TypeID typeID = GetTypeID<Comp>();
+		constexpr TypeID typeID = GetTypeID<Type>();
 
 		// Check if component has already been registered. 
 		if (const auto& typeInfoIt = s_TypeInfo.find(typeID); typeInfoIt != s_TypeInfo.end())
@@ -368,15 +367,15 @@ namespace LAG
 		// Create and insert new data into the s_TypeInfo map
 		TypeInfo newTypeInfo = {};
 
-		newTypeInfo.size = sizeof(Comp);
+		newTypeInfo.size = sizeof(Type);
 #ifdef DEBUG
-		newTypeInfo.debugName = typeid(Comp).name();
+		newTypeInfo.debugName = typeid(Type).name();
 #endif
 
-		newTypeInfo.EmplaceInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
-		newTypeInfo.MoveData = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
-		newTypeInfo.DestructData = [](unsigned char* data) { reinterpret_cast<Comp*>(data)->~Comp(); };
-		newTypeInfo.VoidToAny = [](void* data) { return std::any(static_cast<Comp*>(data)); };
+		newTypeInfo.EmplaceInMemory = [](unsigned char* dest) { new (&dest[0]) Type(); };
+		newTypeInfo.MoveData = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Type(std::move(*reinterpret_cast<Type*>(src))); };
+		newTypeInfo.DestructData = [](unsigned char* data) { reinterpret_cast<Type*>(data)->~Type(); };
+		newTypeInfo.VoidToAny = [](void* data) { return std::any(static_cast<Type*>(data)); };
 
 		return s_TypeInfo.insert({ typeID, newTypeInfo }).first->second;
 	}

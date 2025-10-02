@@ -58,7 +58,7 @@ namespace LAG
 		/// <summary>
 		/// Return the number of active entities
 		/// </summary>
-		TypeID Count() const;
+		size_t Count() const;
 
 		void RemoveAll();
 
@@ -73,8 +73,9 @@ namespace LAG
 		template<typename ...Comps>
 		std::vector<EntityID> QueryEntities();
 
-		template<typename Comp>
-		static const TypeID GetTypeID();
+		// Helper function for getting the hash64 of a type
+		template<typename T>
+		static constexpr TypeID GetTypeID();
 
 		/// <summary>
 		/// Returns a range of archetypes
@@ -129,8 +130,8 @@ namespace LAG
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
-		template<typename Comp>
-		static TypeInfo& RegisterComponent();
+		template<typename Type>
+		static TypeInfo& RegisterType();
 
 		void RemoveEntityFromArchetype(EntityID id, Archetype& archetype);
 		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);
@@ -138,7 +139,6 @@ namespace LAG
 
 	private:
 		inline static EntityID s_EntityCounter = 0;
-		inline static TypeID s_ComponentCounter = 0;
 
 		// This vector stores all possible archetypes
 		std::vector<Archetype*> m_Archetypes;

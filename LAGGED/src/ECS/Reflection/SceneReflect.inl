@@ -12,10 +12,12 @@ namespace LAG
 		static_assert(!std::is_fundamental<Comp>::value, "Component type cannot be a fundamental type.");
 		static_assert(std::is_default_constructible<Comp>::value, "Component type is not constructible.");
 		
-		TypeID typeID = Scene::GetTypeID<Comp>();
-		if (const auto& compDataIt = Scene::s_TypeInfo.find(typeID); compDataIt == Scene::s_TypeInfo.end())
-			Scene::RegisterComponent<Comp>();
+		// Ensure that the component type has been registered before we proceed
+		constexpr TypeID typeID = Scene::GetTypeID<Comp>();
+		if (const auto& typeInfoIt = Scene::s_TypeInfo.find(typeID); typeInfoIt == Scene::s_TypeInfo.end())
+			Scene::RegisterType<Comp>();
 
+		// Return early in case component is already reflected
 		auto& reflCompInfoMap = Scene::s_ReflectedCompInfo;
 		if (const auto& it = reflCompInfoMap.find(typeID); it != reflCompInfoMap.end())
 		{
@@ -33,23 +35,22 @@ namespace LAG
 	{
 		static_assert(std::is_member_object_pointer<decltype(var)>::value, "Type needs to be a non-static member object pointer.");
 
-		TypeID typeID = Scene::GetTypeID<Comp>();
-		auto reflCompInfo = Scene::s_ReflectedCompInfo.find(typeID);
-		if (reflCompInfo == Scene::s_ReflectedCompInfo.end())
+		// Ensure that the component type has been registered before we proceed
+		constexpr TypeID compTypeID = Scene::GetTypeID<Comp>();
+		auto reflCompInfoIt = Scene::s_ReflectedCompInfo.find(compTypeID);
+		if (reflCompInfoIt == Scene::s_ReflectedCompInfo.end())
 		{
 			CRITICAL("Component type \"{}\" is not registered. Make sure this is set-up correctly.", typeid(Comp).name());
 			ReflectComponent<Comp>();
 		}
 
-		Hash64 memberTypeHash = GetTypeHash64<Var>();
-		auto reflTypeInfo = Scene::s_TypeInfo.find(memberTypeHash);
-		if (reflTypeInfo == Scene::s_TypeInfo.end())
-		{
-			auto& newReflTypeInfo = Scene::s_TypeInfo[memberTypeHash];
-			newReflTypeInfo.VoidToAny = [](void* data) { return std::any(*static_cast<Var*>(data)); };
-		}
+		// Also ensure that the variable type has been registered before we proceed
+		constexpr TypeID varTypeID = Scene::GetTypeID<Var>();
+		if (const auto& typeInfoIt = Scene::s_TypeInfo.find(varTypeID); typeInfoIt == Scene::s_TypeInfo.end())
+			Scene::RegisterType<Var>();
 
-		auto& memberVec = reflCompInfo->second.members;
+		// Check if this variable has already been reflected
+		auto& memberVec = reflCompInfoIt->second.members;
 		size_t byteOffset = reinterpret_cast<size_t>(&(reinterpret_cast<Comp*>(0)->*var));
 		auto varIt = std::find_if(memberVec.begin(), memberVec.end(), [&byteOffset](ReflectedCompInfo::MemberInfo& var) { return var.byteOffset == byteOffset; });
 
@@ -59,10 +60,9 @@ namespace LAG
 			return VariableReflectionSetup(*varIt);
 		}
 
-		memberVec.emplace_back(ReflectedCompInfo::MemberInfo());
-		ReflectedCompInfo::MemberInfo& memberInfo = memberVec[memberVec.size() - 1];
+		ReflectedCompInfo::MemberInfo& memberInfo = memberVec.emplace_back(ReflectedCompInfo::MemberInfo());
 		memberInfo.props.displayName = typeid(Var).name();
-		memberInfo.typeID = memberTypeHash;
+		memberInfo.typeID = varTypeID;
 		memberInfo.byteOffset = byteOffset;
 
 		return VariableReflectionSetup(memberInfo);
