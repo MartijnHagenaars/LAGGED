@@ -12,18 +12,18 @@ namespace LAG
 		static_assert(!std::is_fundamental<Comp>::value, "Component type cannot be a fundamental type.");
 		static_assert(std::is_default_constructible<Comp>::value, "Component type is not constructible.");
 		
-		ComponentID compID = Scene::GetComponentID<Comp>();
-		if (const auto& compDataIt = Scene::s_ComponentMap.find(compID); compDataIt == Scene::s_ComponentMap.end())
+		TypeID typeID = Scene::GetTypeID<Comp>();
+		if (const auto& compDataIt = Scene::s_TypeInfo.find(typeID); compDataIt == Scene::s_TypeInfo.end())
 			Scene::RegisterComponent<Comp>();
 
 		auto& reflCompInfoMap = Scene::s_ReflectedCompInfo;
-		if (const auto& it = reflCompInfoMap.find(compID); it != reflCompInfoMap.end())
+		if (const auto& it = reflCompInfoMap.find(typeID); it != reflCompInfoMap.end())
 		{
 			CRITICAL("Attempted to reflect component '{}', but this operation has already been completed. Reflecting a component more than once is not allowed.", typeid(Comp).name());
 			return ComponentReflectionSetup(it->second);
 		}
 
-		auto& reflCompInfo = reflCompInfoMap[compID];
+		auto& reflCompInfo = reflCompInfoMap[typeID];
 		reflCompInfo.props.displayName = typeid(Comp).name();
 		return ComponentReflectionSetup(reflCompInfo);
 	}
@@ -33,8 +33,8 @@ namespace LAG
 	{
 		static_assert(std::is_member_object_pointer<decltype(var)>::value, "Type needs to be a non-static member object pointer.");
 
-		ComponentID compID = Scene::GetComponentID<Comp>();
-		auto reflCompInfo = Scene::s_ReflectedCompInfo.find(compID);
+		TypeID typeID = Scene::GetTypeID<Comp>();
+		auto reflCompInfo = Scene::s_ReflectedCompInfo.find(typeID);
 		if (reflCompInfo == Scene::s_ReflectedCompInfo.end())
 		{
 			CRITICAL("Component type \"{}\" is not registered. Make sure this is set-up correctly.", typeid(Comp).name());
@@ -42,10 +42,10 @@ namespace LAG
 		}
 
 		Hash64 memberTypeHash = GetTypeHash64<Var>();
-		auto reflTypeInfo = Scene::s_ReflectedTypeInfo.find(memberTypeHash);
-		if (reflTypeInfo == Scene::s_ReflectedTypeInfo.end())
+		auto reflTypeInfo = Scene::s_TypeInfo.find(memberTypeHash);
+		if (reflTypeInfo == Scene::s_TypeInfo.end())
 		{
-			auto& newReflTypeInfo = Scene::s_ReflectedTypeInfo[memberTypeHash];
+			auto& newReflTypeInfo = Scene::s_TypeInfo[memberTypeHash];
 			newReflTypeInfo.VoidToAny = [](void* data) { return std::any(*static_cast<Var*>(data)); };
 		}
 

@@ -25,7 +25,7 @@ namespace LAG
 	private:
 		class ComponentRange
 		{
-			using CompIdContainer = std::vector<ComponentID>;
+			using CompIdContainer = std::vector<TypeID>;
 			class Iterator
 			{
 			public:
@@ -74,7 +74,7 @@ namespace LAG
 	public:
 		ComponentView() = delete;
 		// TODO: Consider removing Scene reference
-		ComponentView(Scene& scene, ComponentID id, ComponentData& compData);
+		ComponentView(Scene& scene, TypeID id, TypeInfo& compData);
 
 		MemberRange Members();
 
@@ -132,8 +132,8 @@ namespace LAG
 
 	private:
 		Scene& m_Scene;
-		ComponentID m_ID;
-		ComponentData& m_ComponentData;
+		TypeID m_ID;
+		TypeInfo& m_ComponentData;
 		ReflectedCompInfo& m_ReflectionData;
 
 		//Something where variables are stored
@@ -143,7 +143,7 @@ namespace LAG
 	{
 	public:
 		MemberView() = delete;
-		MemberView(ReflectedCompInfo::MemberInfo& memberData, ReflectedTypeInfo& reflTypeData, ComponentView& parentCompView);
+		MemberView(ReflectedCompInfo::MemberInfo& memberData, TypeInfo& typeInfo, ComponentView& parentCompView);
 
 		ReflectedCompInfo::MemberInfo::Properties& Properties() const { return m_MemberData.props; }
 
@@ -152,7 +152,7 @@ namespace LAG
 
 	private:
 		ReflectedCompInfo::MemberInfo& m_MemberData;
-		ReflectedTypeInfo& m_ReflectionTypeData;
+		TypeInfo& m_TypeInfo;
 		ComponentView& m_ParentCompView;
 	};
 }

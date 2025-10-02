@@ -74,7 +74,7 @@ namespace LAG
 		std::vector<EntityID> QueryEntities();
 
 		template<typename Comp>
-		static const ComponentID GetComponentID();
+		static const TypeID GetTypeID();
 
 		/// <summary>
 		/// Returns a range of archetypes
@@ -130,15 +130,15 @@ namespace LAG
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
 		template<typename Comp>
-		static ComponentData* RegisterComponent();
+		static TypeInfo& RegisterComponent();
 
 		void RemoveEntityFromArchetype(EntityID id, Archetype& archetype);
 		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);
-		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& componentData, int componentIndex, size_t targetSize);
+		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const TypeInfo& componentData, int componentIndex, size_t targetSize);
 
 	private:
 		inline static EntityID s_EntityCounter = 0;
-		inline static ComponentID s_ComponentCounter = 0;
+		inline static TypeID s_ComponentCounter = 0;
 
 		// This vector stores all possible archetypes
 		std::vector<Archetype*> m_Archetypes;
@@ -151,16 +151,11 @@ namespace LAG
 		// This map stores all entities and the archetypes that they use.
 		std::unordered_map<EntityID, EntityRecord> m_EntityArchetypes;
 
-		// This map links all ComponentIDs to the correct ComponentData struct. 
-		// The ComponentData struct contains useful information / functions for managing component data.
-		inline static std::unordered_map<ComponentID, ComponentData*> s_ComponentMap;
+		// TODO: Good description.
+		inline static std::unordered_map<Hash64, TypeInfo> s_TypeInfo;
 
-
-		// This map links a ComponentID to its Component-type reflection info
-		inline static std::unordered_map<ComponentID, ReflectedCompInfo> s_ReflectedCompInfo;
-
-		// This map links a hashed member type name (Hash64) to its type reflection info
-		inline static std::unordered_map<Hash64, ReflectedTypeInfo> s_ReflectedTypeInfo;
+		// This map links a (Component-class) TypeID to its Component-type reflection info
+		inline static std::unordered_map<TypeID, ReflectedCompInfo> s_ReflectedCompInfo;
 
 	};
 }

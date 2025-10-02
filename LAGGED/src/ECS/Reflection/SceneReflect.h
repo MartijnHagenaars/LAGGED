@@ -24,11 +24,6 @@ namespace LAG
 
 	private:
 		SceneReflect() = default;
-
-	private:
-		// Returns the map containing component properties
-		// Done through a getter function to avoid Static Initialization Order Fiasco
-		std::unordered_map<ComponentID, ReflectedCompInfo> m_CompProperties;
 	};
 
 	class ComponentReflectionSetup

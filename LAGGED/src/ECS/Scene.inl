@@ -7,17 +7,17 @@ namespace LAG
 	template<typename Comp, typename ...Args>
 	inline Comp* Scene::AddComponent(const EntityID entityID, Args && ...compArgs)
 	{
-		ComponentData* compData = nullptr;
-		const ComponentID newCompID = GetComponentID<Comp>();
+		TypeInfo* compData = nullptr;
+		const TypeID newTypeID = GetTypeID<Comp>();
 
 		// Get the component data structure.
-		if (auto compDataIt = s_ComponentMap.find(newCompID); compDataIt != s_ComponentMap.end())
-			compData = compDataIt->second;
+		if (auto compDataIt = s_TypeInfo.find(newTypeID); compDataIt != s_TypeInfo.end())
+			compData = &compDataIt->second;
 		else 
 		{
 			// Register component in the case it hasn't been done yet.
-			compData = RegisterComponent<Comp>();
-			WARNING("Registering component {} (ID: {}) at runtime.", typeid(Comp).name(), newCompID);
+			compData = &RegisterComponent<Comp>();
+			WARNING("Registering component {} (ID: {}) at runtime.", typeid(Comp).name(), newTypeID);
 		}
 
 		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
@@ -35,7 +35,7 @@ namespace LAG
 		{
 			//This is the first time we're adding a component to this entity. 
 			//Create a new archetypeID which contains this component ID
-			ArchetypeID newArchetypeID = { newCompID };
+			ArchetypeID newArchetypeID = { newTypeID };
 
 			newArchetype = GetArchetype(newArchetypeID);
 			if (newArchetype == nullptr)
@@ -65,14 +65,14 @@ namespace LAG
 		{
 			//Check if this component already exists on the entity.
 			//If that's the case, log a warning and return the component
-			if (std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), newCompID) != oldArchetype->typeID.end())
+			if (std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), newTypeID) != oldArchetype->typeID.end())
 			{
-				WARNING("Component ({}) already exists on entity with ID {}", typeid(Comp).name(), GetComponentID<Comp>());
+				WARNING("Component ({}) already exists on entity with ID {}", typeid(Comp).name(), GetTypeID<Comp>());
 				return GetComponent<Comp>(entityID);
 			}
 
 			ArchetypeID newArchetypeID = oldArchetype->typeID;
-			newArchetypeID.push_back(newCompID);
+			newArchetypeID.push_back(newTypeID);
 			std::sort(newArchetypeID.begin(), newArchetypeID.end());
 
 			newArchetype = GetArchetype(newArchetypeID);
@@ -90,10 +90,10 @@ namespace LAG
 			// In the end, after everything has been moved, the new component is added. 
 			for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 			{
-				const ComponentID compID = newArchetypeID[compIndex];
-				ComponentData* newCompData = s_ComponentMap.at(compID);
+				const TypeID typeID = newArchetypeID[compIndex];
+				TypeInfo& newCompData = s_TypeInfo.at(typeID);
 
-				size_t newCompDataSize = newCompData->size;
+				size_t newCompDataSize = newCompData.size;
 				size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
 				size_t newSize = currentSize + newCompDataSize;
 
@@ -102,7 +102,7 @@ namespace LAG
 				if (newSize > newArchetype->compDataSize[compIndex])
 				{
 					size_t targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
-					ResizeAndReallocateComponentBuffer(*newArchetype, *newCompData, compIndex, targetSize);
+					ResizeAndReallocateComponentBuffer(*newArchetype, newCompData, compIndex, targetSize);
 				}
 
 
@@ -111,12 +111,12 @@ namespace LAG
 				ArchetypeID oldArchetypeId = oldArchetype->typeID;
 				for (int i = 0; i < oldArchetype->typeID.size(); i++)
 				{
-					ComponentID oldCompID = oldArchetype->typeID[i];
-					bool matchingIDs = (oldCompID == compID);
+					TypeID oldTypeID = oldArchetype->typeID[i];
+					bool matchingIDs = (oldTypeID == typeID);
 					if (matchingIDs)
 					{
-						ComponentData* oldCompData = s_ComponentMap.at(oldArchetype->typeID[i]);
-						oldCompData->MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompData->size], &newArchetype->compData[compIndex][currentSize]);
+						TypeInfo& oldCompData = s_TypeInfo.at(oldArchetype->typeID[i]);
+						oldCompData.MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompData.size], &newArchetype->compData[compIndex][currentSize]);
 						break;
 					}
 					else if (i == (oldArchetype->typeID.size() - 1) && !matchingIDs)
@@ -147,13 +147,13 @@ namespace LAG
 	template<typename Comp>
 	inline void Scene::RemoveComponent(const EntityID entityID)
 	{
-		const ComponentID compID = GetComponentID<Comp>();
+		const TypeID typeID = GetTypeID<Comp>();
 
-		const auto& compDataIt = s_ComponentMap.find(compID);
-		if (compDataIt == s_ComponentMap.end())
+		const auto& compDataIt = s_TypeInfo.find(typeID);
+		if (compDataIt == s_TypeInfo.end())
 			CRITICAL("Failed to remove component: Component {} is not registered.", typeid(Comp).name());
 
-		const ComponentData* compDataPtr = compDataIt->second;
+		const TypeInfo* compDataPtr = compDataIt->second;
 		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
 		if (entityRecordIt == m_EntityArchetypes.end())
 			CRITICAL("Failed to remove component: Record for entity ({}) could not be found.", entityID);
@@ -165,14 +165,14 @@ namespace LAG
 			return;
 
 		// Check if this entity contains the component.
-		const ArchetypeID::iterator& archetypeIdIt = std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), compID);
+		const ArchetypeID::iterator& archetypeIdIt = std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), typeID);
 		if (archetypeIdIt == oldArchetype->typeID.end())
 		{
 			WARNING("Failed to remove component: Entity ({}) does not contain {} component.", entityID, typeid(Comp).name());
 			return;
 		}
 
-		// Remove the old ComponentID and construct the new ArchetypeID
+		// Remove the old TypeID and construct the new ArchetypeID
 		ArchetypeID newArchetypeID = oldArchetype->typeID;
 		newArchetypeID.erase(newArchetypeID.begin() + (archetypeIdIt - oldArchetype->typeID.begin()));
 		std::sort(newArchetypeID.begin(), newArchetypeID.end());
@@ -189,8 +189,8 @@ namespace LAG
 
 		for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 		{
-			const ComponentID newCompID = newArchetypeID[compIndex];
-			ComponentData* newComp = s_ComponentMap.at(newCompID);
+			const TypeID newTypeID = newArchetypeID[compIndex];
+			TypeInfo* newComp = s_TypeInfo.at(newTypeID);
 
 			size_t newCompDataSize = newComp->size;
 			size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
@@ -205,19 +205,19 @@ namespace LAG
 				ResizeAndReallocateComponentBuffer(*newArchetype, *newComp, compIndex, targetSize);
 			}
 
-			newComp->CreateObjectInMemory(&newArchetype->compData[compIndex][currentSize]);
+			newComp->EmplaceInMemory(&newArchetype->compData[compIndex][currentSize]);
 
 			ArchetypeID oldArchetypeId = oldArchetype->typeID;
 			for (size_t i = 0; i < oldArchetype->typeID.size(); i++)
 			{
-				ComponentID oldCompId = oldArchetype->typeID[i];
+				TypeID oldTypeId = oldArchetype->typeID[i];
 
-				if (oldCompId == newCompID)
+				if (oldTypeId == newTypeID)
 				{
-					size_t oldCompDataSize = s_ComponentMap.at(oldCompId)->size;
-					ComponentData* oldCompData = s_ComponentMap.at(oldCompId);
+					size_t oldCompDataSize = s_TypeInfo.at(oldTypeId)->size;
+					TypeInfo* oldCompData = s_TypeInfo.at(oldTypeId);
 
-					oldCompData->MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompDataSize], &newArchetype->compData[compIndex][currentSize]);
+					oldCompData.MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompDataSize], &newArchetype->compData[compIndex][currentSize]);
 
 					break;
 				}
@@ -243,8 +243,8 @@ namespace LAG
 			return false;
 
 		Archetype* archetype = recordIt->second.archetype;
-		ComponentID compID = Scene::GetComponentID<Comp>();
-		return (std::find(archetype->typeID.begin(), archetype->typeID.end(), compID)) != archetype->typeID.end();
+		TypeID typeID = Scene::GetTypeID<Comp>();
+		return (std::find(archetype->typeID.begin(), archetype->typeID.end(), typeID)) != archetype->typeID.end();
 	}
 
 	template<typename Comp>
@@ -269,7 +269,7 @@ namespace LAG
 
 		for (int i = 0; i < archetype->typeID.size(); i++)
 		{
-			if (archetype->typeID[i] == Scene::GetComponentID<Comp>())
+			if (archetype->typeID[i] == Scene::GetTypeID<Comp>())
 				return reinterpret_cast<Comp*>(&archetype->compData[dataOffset][record.index * sizeof(Comp)]);
 			else
 				++dataOffset;
@@ -285,7 +285,7 @@ namespace LAG
 		// Create the archetypeID key. This is only executed once for this specific template type...
 		static const ArchetypeID archetypeID = []()
 			{
-				ArchetypeID id = { { GetComponentID<Comps>()... } };
+				ArchetypeID id = { { GetTypeID<Comps>()... } };
 				std::sort(id.begin(), id.end());
 				return id;
 			}();
@@ -308,7 +308,7 @@ namespace LAG
 					func(entity,
 						(reinterpret_cast<Comps*>(
 							&archetype->compData
-							[archetype->systemCompIndices[GetComponentID<Comps>()]]
+							[archetype->systemCompIndices[GetTypeID<Comps>()]]
 							[entityRecordIt->second.index * sizeof(Comps)]))...);
 				}
 			}
@@ -330,7 +330,7 @@ namespace LAG
 	inline std::vector<EntityID> Scene::QueryEntities()
 	{
 		//Create key
-		ArchetypeID archetypeID = { { GetComponentID<Comps>()... } };
+		ArchetypeID archetypeID = { { GetTypeID<Comps>()... } };
 		std::sort(archetypeID.begin(), archetypeID.end());
 
 		std::vector<EntityID> results;
@@ -350,33 +350,34 @@ namespace LAG
 	}
 
 	template<typename Comp>
-	inline const ComponentID Scene::GetComponentID()
+	inline const TypeID Scene::GetTypeID()
 	{
-		static const ComponentID compID = s_ComponentCounter++;
-		return compID;
+		static const TypeID typeID = s_ComponentCounter++;
+		return typeID;
 	}
 
 	template<typename Comp>
-	inline ComponentData* Scene::RegisterComponent()
+	inline TypeInfo& Scene::RegisterComponent()
 	{
-		ComponentID compID = GetComponentID<Comp>();
+		TypeID typeID = GetTypeID<Comp>();
 
-		//Check if component has already been registered. 
-		if (const auto& compDataIt = s_ComponentMap.find(compID); compDataIt != s_ComponentMap.end())
-			return compDataIt->second;
+		// Check if component has already been registered. 
+		if (const auto& typeInfoIt = s_TypeInfo.find(typeID); typeInfoIt != s_TypeInfo.end())
+			return typeInfoIt->second;
 
-		// Create and insert new data into the s_ComponentMap map
-		ComponentData* newCompData = new ComponentData;
-		newCompData->size = sizeof(Comp);
-		newCompData->CreateObjectInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
-		newCompData->MoveData = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
-		newCompData->DestructData = [](unsigned char* data) { reinterpret_cast<Comp*>(data)->~Comp(); };
-		newCompData->VoidToAny = [](void* data) { return std::any(static_cast<Comp*>(data)); };
+		// Create and insert new data into the s_TypeInfo map
+		TypeInfo newTypeInfo = {};
+
+		newTypeInfo.size = sizeof(Comp);
 #ifdef DEBUG
-		newCompData->debugName = typeid(Comp).name();
+		newTypeInfo.debugName = typeid(Comp).name();
 #endif
 
-		s_ComponentMap.insert({ compID, newCompData });
-		return newCompData;
+		newTypeInfo.EmplaceInMemory = [](unsigned char* dest) { new (&dest[0]) Comp(); };
+		newTypeInfo.MoveData = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Comp(std::move(*reinterpret_cast<Comp*>(src))); };
+		newTypeInfo.DestructData = [](unsigned char* data) { reinterpret_cast<Comp*>(data)->~Comp(); };
+		newTypeInfo.VoidToAny = [](void* data) { return std::any(static_cast<Comp*>(data)); };
+
+		return s_TypeInfo.insert({ typeID, newTypeInfo }).first->second;
 	}
 }

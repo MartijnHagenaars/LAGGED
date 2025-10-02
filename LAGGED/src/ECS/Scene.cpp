@@ -82,13 +82,13 @@ namespace LAG
 
 				for (int i = 0; i < archetype->typeID.size(); i++)
 				{
-					ComponentID compID = archetype->typeID[i];
-					ComponentData* compData = s_ComponentMap.at(compID);
+					TypeID typeID = archetype->typeID[i];
+					TypeInfo& compData = s_TypeInfo.at(typeID);
 
-					compData->DestructData(&archetype->compData[i][entityRecord.index * compData->size]);
-					compData->MoveData(
-						&archetype->compData[i][endIndex * compData->size],
-						&archetype->compData[i][entityRecord.index * compData->size]);
+					compData.DestructData(&archetype->compData[i][entityRecord.index * compData.size]);
+					compData.MoveData(
+						&archetype->compData[i][endIndex * compData.size],
+						&archetype->compData[i][entityRecord.index * compData.size]);
 				}
 				archetype->entityIDs.erase(archetype->entityIDs.begin() + endIndex);
 
@@ -193,10 +193,10 @@ namespace LAG
 	{
 		for (int typeIndex = 0; typeIndex < archetype.typeID.size(); typeIndex++)
 		{
-			const ComponentData* compData = s_ComponentMap.at(archetype.typeID[typeIndex]);
+			const TypeInfo& compData = s_TypeInfo.at(archetype.typeID[typeIndex]);
 
 			unsigned char* newData;
-			const size_t compDataSize = compData->size;
+			const size_t compDataSize = compData.size;
 			const size_t targetSize = (archetype.entityIDs.size() - 1) * compDataSize;
 
 			if (targetSize > 0)
@@ -215,7 +215,7 @@ namespace LAG
 					if (entIndex == entityRecord.index)
 						continue;
 
-					compData->MoveData(&archetype.compData[typeIndex][entIndex * compDataSize], &newData[offsetIndex * compDataSize]);
+					compData.MoveData(&archetype.compData[typeIndex][entIndex * compDataSize], &newData[offsetIndex * compDataSize]);
 					offsetIndex += 1;
 				}
 			}
@@ -237,7 +237,7 @@ namespace LAG
 
 	//TODO: These names are really bad. newArchetype should not include "NEW" since it's just moving data.
 	// INFO log message is also super vague. It's not allocating more memory in some cases.
-	void Scene::ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& compData, int compIndex, size_t targetSize)
+	void Scene::ResizeAndReallocateComponentBuffer(Archetype& archetype, const TypeInfo& compData, int compIndex, size_t targetSize)
 	{
 #ifdef DEBUG
 		//INFO("Archetype component buffer is too small. Allocating more memory ({} -> {}) for ({})...",

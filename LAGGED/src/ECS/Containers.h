@@ -22,21 +22,21 @@ namespace LAG
 		std::vector<unsigned char*> compData; //The data of all the components
 		std::vector<size_t> compDataSize; //The size of all components
 
-		std::unordered_map<ComponentID, size_t> systemCompIndices; //Determines the order of components when running a system
+		std::unordered_map<TypeID, size_t> systemCompIndices; //Determines the order of components when running a system
 	};
 
-	struct ComponentData
+	struct TypeInfo
 	{
-		size_t size = -1;
+		size_t size = 0;
+#ifdef DEBUG
+		std::string debugName;
+#endif
 
-		void(*CreateObjectInMemory)(unsigned char* dest) = nullptr;
+		void(*EmplaceInMemory)(unsigned char* dest) = nullptr;
 		void(*MoveData)(unsigned char* src, unsigned char* dest) = nullptr;
 		void(*DestructData)(unsigned char* data) = nullptr;
 
 		std::any(*VoidToAny)(void*) = nullptr;
-#ifdef DEBUG
-		std::string debugName;
-#endif
 	};
 
 	struct ReflectedCompInfo
@@ -61,8 +61,9 @@ namespace LAG
 		} props;
 	};
 
-	struct ReflectedTypeInfo
-	{
-		std::any(*VoidToAny)(void*) = nullptr;
-	};
+	//struct ReflectedTypeInfo
+	//{
+	//	std::any(*VoidToAny)(void*) = nullptr;
+	//	//std::unordered_map<Hash64, >
+	//};
 }
