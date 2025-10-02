@@ -17,7 +17,7 @@ namespace LAG
 		friend class ResourceManager;
 	public:
 		Model() = delete;
-		explicit Model(const StringHash& path);
+		explicit Model(const StringHash64& path);
 
 		void Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights);
 

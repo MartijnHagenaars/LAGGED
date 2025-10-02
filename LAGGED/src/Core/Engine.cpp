@@ -91,16 +91,16 @@ namespace LAG
 		m_Renderer->RegisterImGuiRenderCallback(std::bind(&ToolsManager::PresentEditor, m_ToolsManager));
 
 		//Add some input actions that'll be used by the engine and the editor. 
-		Input::AddInputAction(Input::InputType::LAG_W, StringHash("cameraMoveForward"));
-		Input::AddInputAction(Input::InputType::LAG_S, StringHash("cameraMoveBackward"));
-		Input::AddInputAction(Input::InputType::LAG_A, StringHash("cameraMoveLeft"));
-		Input::AddInputAction(Input::InputType::LAG_D, StringHash("cameraMoveRight"));
-		Input::AddInputAction(Input::InputType::LAG_SHIFT_L, StringHash("cameraMoveUp"));
-		Input::AddInputAction(Input::InputType::LAG_CONTROL_L, StringHash("cameraMoveDown"));
-		Input::AddInputAction(Input::InputType::LAG_UP, StringHash("cameraLookUp"));
-		Input::AddInputAction(Input::InputType::LAG_DOWN, StringHash("cameraLookDown"));
-		Input::AddInputAction(Input::InputType::LAG_LEFT, StringHash("cameraLookLeft"));
-		Input::AddInputAction(Input::InputType::LAG_RIGHT, StringHash("cameraLookRight"));
+		Input::AddInputAction(Input::InputType::LAG_W, StringHash64("cameraMoveForward"));
+		Input::AddInputAction(Input::InputType::LAG_S, StringHash64("cameraMoveBackward"));
+		Input::AddInputAction(Input::InputType::LAG_A, StringHash64("cameraMoveLeft"));
+		Input::AddInputAction(Input::InputType::LAG_D, StringHash64("cameraMoveRight"));
+		Input::AddInputAction(Input::InputType::LAG_SHIFT_L, StringHash64("cameraMoveUp"));
+		Input::AddInputAction(Input::InputType::LAG_CONTROL_L, StringHash64("cameraMoveDown"));
+		Input::AddInputAction(Input::InputType::LAG_UP, StringHash64("cameraLookUp"));
+		Input::AddInputAction(Input::InputType::LAG_DOWN, StringHash64("cameraLookDown"));
+		Input::AddInputAction(Input::InputType::LAG_LEFT, StringHash64("cameraLookLeft"));
+		Input::AddInputAction(Input::InputType::LAG_RIGHT, StringHash64("cameraLookRight"));
 
 		//Application setup. Should be the last object to be initialized!
 		m_Application = applicationPtr;

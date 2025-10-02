@@ -23,7 +23,7 @@ namespace LAG
 		/// <param name="...args">The arguments for constructing the resource object.</param>
 		/// <returns>A pointer to the resource is returned if the object was created and stored correctly. If the object cannot be created, a nullptr is returned.</returns>
 		template<typename T, typename... Args>
-		T* AddResource(const StringHash& path, Args&&... args)
+		T* AddResource(const StringHash64& path, Args&&... args)
 		{
 			//Check if template type is of type "Resource"
 			constexpr bool validResType = std::is_base_of<LAG::Resource, T>::value; 
@@ -32,7 +32,7 @@ namespace LAG
 				T* resPtr = new T(path, args...);
 				if (!resPtr->Load())
 					CRITICAL("Failed to load resource: {}", path);
-				m_Resources.emplace(path.GetValue(), std::move(resPtr));
+				m_Resources.emplace(path.Value(), std::move(resPtr));
 				return resPtr;
 			}
 			else if (!validResType)
@@ -62,17 +62,17 @@ namespace LAG
 		}
 
 		template<typename T>
-		T* GetResource(const StringHash& path) const
+		T* GetResource(const StringHash64& path) const
 		{
-			return GetResource<T>(path.GetValue());
+			return GetResource<T>(path.Value());
 		}
 
-		bool Contains(const StringHash& path);
+		bool Contains(const StringHash64& path);
 
 		template<typename T>
-		std::vector<StringHash> GetResourceNames() const
+		std::vector<StringHash64> GetResourceNames() const
 		{
-			std::vector<StringHash> nameVec;
+			std::vector<StringHash64> nameVec;
 			for (const auto& it : m_Resources)
 			{
 				T* resourcePtr = dynamic_cast<T*>(it.second.get());

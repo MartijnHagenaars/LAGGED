@@ -33,15 +33,15 @@ namespace LAG
 		{"nz.png", GL_TEXTURE_CUBE_MAP_NEGATIVE_Z}
 	} };
 
-	Cubemap::Cubemap(const StringHash& path) :
+	Cubemap::Cubemap(const StringHash64& path) :
 		Resource(path)
 	{
 	}
 
 	bool Cubemap::Load()
 	{
-		const std::string& pathStr = GetPath().GetString();
-		if (!FileIO::IsValid(GetPath().GetString()))
+		const std::string& pathStr = GetPath().String();
+		if (!FileIO::IsValid(GetPath().String()))
 		{
 			CRITICAL("Cannot load cubemap: directory {} is invalid.", pathStr);
 			return false;

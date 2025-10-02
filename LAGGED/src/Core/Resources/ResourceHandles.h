@@ -5,11 +5,11 @@ namespace LAG
 {
 	struct TextureHandle
 	{
-		StringHash m_TextureLookup;
+		StringHash64 m_TextureLookup;
 	};
 
 	struct ModelHandle
 	{
-		StringHash m_ModelLookup;
+		StringHash64 m_ModelLookup;
 	};
 }

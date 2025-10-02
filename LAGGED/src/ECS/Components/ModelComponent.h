@@ -7,7 +7,7 @@ namespace LAG
 	{
 		ModelComponent() = default;
 		ModelComponent(const std::string& path) :
-			modelHandle({ StringHash(path) })
+			modelHandle({ StringHash64(path) })
 		{
 		}
 

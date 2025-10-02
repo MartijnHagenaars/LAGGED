@@ -15,7 +15,7 @@
 
 namespace LAG
 {
-	const StringHash skyboxShader = StringHash("res/Shaders/OpenGL/Skybox");
+	const StringHash64 skyboxShader = StringHash64("res/Shaders/OpenGL/Skybox");
 
 	void Skybox::Load()
 	{
@@ -52,7 +52,7 @@ namespace LAG
 		m_Buffer.Initialize(vb, ib);
 
 		// Create the skybox shader
-		GetResourceManager()->AddResource<Shader>(StringHash("res/Shaders/OpenGL/Skybox"));
+		GetResourceManager()->AddResource<Shader>(StringHash64("res/Shaders/OpenGL/Skybox"));
 	}
 
 	void Skybox::Unload()
@@ -60,7 +60,7 @@ namespace LAG
 		m_Buffer.Shutdown();
 	}
 
-	void Skybox::SetCubemap(const StringHash& path)
+	void Skybox::SetCubemap(const StringHash64& path)
 	{
 		ResourceManager* pResources = GetResourceManager();
 		if (!pResources->Contains(path))
@@ -71,7 +71,7 @@ namespace LAG
 
 	void Skybox::Render(EntityID camEntityID)
 	{
-		Shader* pShader = GetResourceManager()->GetResource<Shader>(skyboxShader.GetValue());
+		Shader* pShader = GetResourceManager()->GetResource<Shader>(skyboxShader.Value());
 		CameraComponent* pCamera = GetScene()->GetComponent<CameraComponent>(camEntityID);
 
 		if (!pShader || !pCamera || !m_Cubemap)

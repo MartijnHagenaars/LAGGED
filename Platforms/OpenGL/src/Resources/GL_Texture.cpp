@@ -16,15 +16,15 @@ namespace LAG
 		unsigned int id = 0;
 	};
 
-	Texture::Texture(const StringHash& path) :
+	Texture::Texture(const StringHash64& path) :
 		Resource(path)
 	{
 	}
 
-	Texture::Texture(const StringHash& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) :
+	Texture::Texture(const StringHash64& handle, const unsigned char* buffer, size_t bufferSize, int width, int height, TextureFormat format) :
 		Resource(handle)
 	{
-		if (handle.GetString().empty())
+		if (handle.String().empty())
 			ERROR("Empty handle used for texture.");
 
 		if (!SetBuffer(buffer, bufferSize, width, height, format))
@@ -47,9 +47,9 @@ namespace LAG
 		GlTextureData* textureData = static_cast<GlTextureData*>(m_DataPtr);
 
 		//Load from file
-		if (m_LoadFromFile && GetPath().GetString().length() > 0)
+		if (m_LoadFromFile && GetPath().String().length() > 0)
 		{
-			std::string filePath = GetPath().GetString();
+			std::string filePath = GetPath().String();
 			//Check if the texture hasn't been loaded yet. 
 			if (textureData->id != 0)
 			{

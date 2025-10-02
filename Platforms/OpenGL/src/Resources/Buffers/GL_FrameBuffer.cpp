@@ -91,7 +91,7 @@ namespace LAG
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pData->colorBuffer, 0);
 
 		bool bufferStatusSucceeded = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
-		bool shaderSucceeded = GetResourceManager()->AddResource<Shader>(StringHash("res/Shaders/OpenGL/FrameBuffer")) != nullptr;
+		bool shaderSucceeded = GetResourceManager()->AddResource<Shader>(StringHash64("res/Shaders/OpenGL/FrameBuffer")) != nullptr;
 
 		if (!(bufferStatusSucceeded && shaderSucceeded))
 			CRITICAL("Failed to create frame buffer.");
@@ -150,7 +150,7 @@ namespace LAG
 
 		//Bind VAO and Shader
 		LAG_GRAPHICS_CHECK(glBindVertexArray(pData->VAO));
-		Shader* shader = GetResourceManager()->GetResource<Shader>(StringHash("res/Shaders/OpenGL/FrameBuffer"));
+		Shader* shader = GetResourceManager()->GetResource<Shader>(StringHash64("res/Shaders/OpenGL/FrameBuffer"));
 		shader->Bind();
 
 		//Assign post-processing values

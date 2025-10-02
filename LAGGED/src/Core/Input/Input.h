@@ -107,17 +107,17 @@ namespace LAG::Input
 	
 	//Add a new input action.
 	//Returns true/false based on if the input action was added successfully or not. 
-	bool AddInputAction(InputType inputType, StringHash actionName, const char* debugDisplayName = "InputAction");
+	bool AddInputAction(InputType inputType, StringHash64 actionName, const char* debugDisplayName = "InputAction");
 	
 	//Get an input action using it's ID.
 	const InputActionData* GetInputAction(size_t inputID);
 
 	//Returns true/false based on whether the action is pressed or not.
-	bool IsActionPressed(StringHash actionName);
+	bool IsActionPressed(StringHash64 actionName);
 
 	//Returns true/false based on whether the action is pressed once. 
 	//Will automatically turn false again when the button is held down for more than one frame.
-	bool IsActionPressedOnce(StringHash actionName);
+	bool IsActionPressedOnce(StringHash64 actionName);
 
 	//Contains two argument references that return the position of the cursor on the x- and y-axis.
 	void GetMousePosition(float& xPos, float& yPos);

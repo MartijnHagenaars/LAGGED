@@ -78,13 +78,13 @@ namespace LAG
 		static void DrawWidgetType<TextureHandle>(LAG::Entity* entity, TextureHandle& value, const std::string& name)
 		{
 			Texture* texture = nullptr;
-			if (ImGui::BeginCombo("Textures", value.m_TextureLookup.GetValue() != 0 ? value.m_TextureLookup.GetString().c_str() : "No texture selected..."))
+			if (ImGui::BeginCombo("Textures", value.m_TextureLookup.Value() != 0 ? value.m_TextureLookup.String().c_str() : "No texture selected..."))
 			{
-				std::vector<StringHash> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
+				std::vector<StringHash64> textures = GetEngine().GetResources()->GetResourceNames<Texture>();
 				for (int i = 0; i < textures.size(); i++)
 				{
-					const bool isSelected = (texture != nullptr) && (texture->GetPath().GetValue() == textures[i].GetValue());
-					if (ImGui::Selectable(textures[i].GetString().c_str(), isSelected))
+					const bool isSelected = (texture != nullptr) && (texture->GetPath().Value() == textures[i].Value());
+					if (ImGui::Selectable(textures[i].String().c_str(), isSelected))
 					{
 						value.m_TextureLookup = textures[i];
 					}
@@ -92,8 +92,8 @@ namespace LAG
 				ImGui::EndCombo();
 			}
 
-			if (!value.m_TextureLookup.GetString().empty())
-				texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureLookup.GetValue());
+			if (!value.m_TextureLookup.String().empty())
+				texture = GetEngine().GetResources()->GetResource<Texture>(value.m_TextureLookup.Value());
 			if (texture != nullptr)
 			{
 				//Draw texture in ImGui window
@@ -112,13 +112,13 @@ namespace LAG
 		static void DrawWidgetType<ModelHandle>(LAG::Entity* entity, ModelHandle& value, const std::string& name)
 		{
 			Model* model = nullptr;
-			if (ImGui::BeginCombo("Models", value.m_ModelLookup.GetValue() != 0 ? value.m_ModelLookup.GetString().c_str() : "No model selected..."))
+			if (ImGui::BeginCombo("Models", value.m_ModelLookup.Value() != 0 ? value.m_ModelLookup.String().c_str() : "No model selected..."))
 			{
-				std::vector<StringHash> models = GetEngine().GetResources()->GetResourceNames<Model>();
+				std::vector<StringHash64> models = GetEngine().GetResources()->GetResourceNames<Model>();
 				for (int i = 0; i < models.size(); i++)
 				{
-					const bool isSelected = (model != nullptr) && (model->GetPath().GetValue() == models[i].GetValue());
-					if (ImGui::Selectable(models[i].GetString().c_str(), isSelected))
+					const bool isSelected = (model != nullptr) && (model->GetPath().Value() == models[i].Value());
+					if (ImGui::Selectable(models[i].String().c_str(), isSelected))
 					{
 						value.m_ModelLookup = models[i];
 					}

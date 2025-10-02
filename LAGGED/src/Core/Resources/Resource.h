@@ -8,7 +8,7 @@ namespace LAG
 		friend class ResourceManager;
 	public: 
 		Resource() = delete;
-		explicit Resource(const StringHash& path);
+		explicit Resource(const StringHash64& path);
 		virtual ~Resource() {};
 
 		virtual bool Load() = 0;
@@ -16,14 +16,14 @@ namespace LAG
 		virtual bool Reload();
 
 		bool IsLoaded() const { return m_Loaded; }
-		const StringHash& GetPath() const;
+		const StringHash64& GetPath() const;
 
 	protected:
-		void SetPath(const StringHash& path) { m_Path = path; }
+		void SetPath(const StringHash64& path) { m_Path = path; }
 		void SetLoaded(bool loaded) { m_Loaded = loaded; }
 
 	private:
 		bool m_Loaded = false;
-		StringHash m_Path;
+		StringHash64 m_Path;
 	};
 }

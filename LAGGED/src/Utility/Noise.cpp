@@ -35,7 +35,7 @@ namespace LAG::Noise
 	Texture Noise::GeneratePreviewTexture(const Properties& noiseProperties, const glm::vec2& position, const glm::vec2& size, int surfaceSubdivision)
 	{
 		GeneratedData noiseData = GenerateNoiseData(noiseProperties, position, size, surfaceSubdivision);
-		Texture texture(StringHash(""));
+		Texture texture(StringHash64(""));
 
 		std::vector<unsigned char> ucharVec(noiseData.data.size());
 		for (int i = 0; i < noiseData.data.size(); i++)

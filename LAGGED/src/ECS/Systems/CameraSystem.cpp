@@ -39,17 +39,17 @@ namespace LAG::CameraSystem
 			CRITICAL("Camera Entity ID does not contain TransformComponent.");
 
 		glm::vec3 camPosAdjustment = glm::vec3(0.f);
-		if (Input::IsActionPressed(StringHash("cameraMoveForward")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveForward")))
 			camPosAdjustment += camera->forwardVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(StringHash("cameraMoveBackward")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveBackward")))
 			camPosAdjustment -= camera->forwardVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(StringHash("cameraMoveLeft")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveLeft")))
 			camPosAdjustment += camera->rightVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(StringHash("cameraMoveRight")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveRight")))
 			camPosAdjustment -= camera->rightVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(StringHash("cameraMoveUp")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveUp")))
 			camPosAdjustment.y -= cameraMovementSpeed;
-		if (Input::IsActionPressed(StringHash("cameraMoveDown")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveDown")))
 			camPosAdjustment.y += cameraMovementSpeed;
 
 		if (camPosAdjustment != glm::vec3(0.f))
@@ -59,13 +59,13 @@ namespace LAG::CameraSystem
 		}
 
 		glm::vec3 camRotAdjustment = glm::vec3(0.f);
-		if (Input::IsActionPressed(StringHash("cameraLookUp")))
+		if (Input::IsActionPressed(StringHash64("cameraLookUp")))
 			camRotAdjustment.x -= cameraRotationSpeed;
-		if (Input::IsActionPressed(StringHash("cameraLookDown")))
+		if (Input::IsActionPressed(StringHash64("cameraLookDown")))
 			camRotAdjustment.x += cameraRotationSpeed;
-		if (Input::IsActionPressed(StringHash("cameraLookLeft")))
+		if (Input::IsActionPressed(StringHash64("cameraLookLeft")))
 			camRotAdjustment.y -= cameraRotationSpeed;
-		if (Input::IsActionPressed(StringHash("cameraLookRight")))
+		if (Input::IsActionPressed(StringHash64("cameraLookRight")))
 			camRotAdjustment.y += cameraRotationSpeed;
 
 		if (camRotAdjustment != glm::vec3(0.f))

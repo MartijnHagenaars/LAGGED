@@ -20,7 +20,7 @@ namespace LAG
 
 		static void PresentFrame();
 
-		static void SetSkyboxCubemap(const StringHash& path);
+		static void SetSkyboxCubemap(const StringHash64& path);
 		static void DrawDebugLine(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color);
 
 		// TODO: This is currently public, which shouldn't be the case.

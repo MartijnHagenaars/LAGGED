@@ -35,15 +35,15 @@ Game::~Game()
 
 void Game::Initialize()
 {
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::StringHash("UpButton"));
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::StringHash("DownButton"));
-	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::StringHash("LMB"));
+	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::StringHash64("UpButton"));
+	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_S, LAG::StringHash64("DownButton"));
+	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_LMB, LAG::StringHash64("LMB"));
 
-	LAG::GetRenderer()->SetSkyboxCubemap(LAG::StringHash("res/Assets/Cubemaps/Sky_2k"));
-	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
-	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash("res/Assets/Models/Avocado/Avocado.gltf"));
-	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash("res/Assets/Models/BoomBox/BoomBox.gltf"));
-	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash("res/Assets/Models/ChessGame/ABeautifulGame.gltf"));
+	LAG::GetRenderer()->SetSkyboxCubemap(LAG::StringHash64("res/Assets/Cubemaps/Sky_2k"));
+	LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash64("res/Assets/Models/Helmet/DamagedHelmet.gltf"));
+	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash64("res/Assets/Models/Avocado/Avocado.gltf"));
+	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash64("res/Assets/Models/BoomBox/BoomBox.gltf"));
+	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash64("res/Assets/Models/ChessGame/ABeautifulGame.gltf"));
 
 	//Load an entity with a model and a transform
 	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");

@@ -11,21 +11,21 @@ namespace LAG::Input
 	std::unordered_map<size_t, InputActionData> inputActions;
 
 
-	bool AddInputAction(InputType inputType, StringHash actionName, const char* debugDisplayName)
+	bool AddInputAction(InputType inputType, StringHash64 actionName, const char* debugDisplayName)
 	{
 		//Check if input action already exists
-		if (inputActions.find(actionName.GetValue()) != inputActions.end())
+		if (inputActions.find(actionName.Value()) != inputActions.end())
 		{
-			WARNING("Input action with ID \"{0}\" already exists.", actionName.GetValue());
+			WARNING("Input action with ID \"{0}\" already exists.", actionName.Value());
 			return false;
 		}
 
 #ifndef DEBUG
-		InputActionData actionData = { inputType, actionName.GetValue() };
+		InputActionData actionData = { inputType, actionName.Value() };
 #else
-		InputActionData actionData = { inputType, actionName.GetValue(), debugDisplayName };
+		InputActionData actionData = { inputType, actionName.Value(), debugDisplayName };
 #endif
-		inputActions.emplace(actionName.GetValue(), actionData);
+		inputActions.emplace(actionName.Value(), actionData);
 
 		return true;
 	}
@@ -49,18 +49,18 @@ namespace LAG::Input
 		else return nullptr;
 	}
 
-	bool IsActionPressed(StringHash actionName)
+	bool IsActionPressed(StringHash64 actionName)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
-		if (GetWindow() != nullptr && IsInputActionValid(actionName.GetValue(), it))
+		if (GetWindow() != nullptr && IsInputActionValid(actionName.Value(), it))
 			return GetWindow()->CheckButtonPress(it->second, false);
 		else return false;
 	}
 
-	bool IsActionPressedOnce(StringHash actionName)
+	bool IsActionPressedOnce(StringHash64 actionName)
 	{
 		std::unordered_map<size_t, LAG::Input::InputActionData>::iterator it;
-		if (GetWindow() != nullptr && IsInputActionValid(actionName.GetValue(), it))
+		if (GetWindow() != nullptr && IsInputActionValid(actionName.Value(), it))
 			return GetWindow()->CheckButtonPress(it->second, true);
 		else return false;
 	}

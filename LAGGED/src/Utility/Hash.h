@@ -22,43 +22,39 @@ namespace LAG
 		return StringToHash64(Utility::GetCleanTypeName<T>());
 	}
 
-	class StringHash
+	// TODO / FIXME: This class is currently NOT using constexpr's and needs to be fixed ASAP!
+	class StringHash64
 	{
 	public:
-		StringHash() :
-			m_HashValue(0), m_String("")
+		StringHash64() :
+			m_Value(0), m_String("")
 		{
 		}
 
-		explicit StringHash(const std::string& str) :
-			m_HashValue(0), m_String(str)
+		explicit StringHash64(const std::string& str) :
+			m_Value(0), m_String(str)
 		{
-			m_HashValue = Hash(str);
+			// FIXME: Needs to be moved to initializer list
+			m_Value = StringToHash64(str);
 		}
 
-		StringHash(const StringHash& other) :
-			m_String(other.m_String), m_HashValue(other.m_HashValue)
+		StringHash64(const StringHash64& other) :
+			m_Value(other.m_Value), m_String(other.m_String)
 		{
 		}
 
-		size_t GetValue() const
+		Hash64 Value() const
 		{
-			return m_HashValue;
+			return m_Value;
 		}
 
-		std::string GetString() const
+		std::string String() const
 		{
 			return std::string(m_String);
 		}
 
 	private:
-		size_t Hash(const std::string& str)
-		{
-			std::hash<std::string> hasher;
-			return hasher(str);
-		}
-
+		Hash64 m_Value;
 		std::string m_String;
-		size_t m_HashValue;
 	};
 }
