@@ -50,10 +50,4 @@ namespace LAG
 		m_Info.props.isReadOnly = isReadOnly;
 		return *this;
 	}
-
-	SceneReflect& SceneReflect::Get()
-	{
-		static SceneReflect sceneReflect;
-		return sceneReflect;
-	}
 }

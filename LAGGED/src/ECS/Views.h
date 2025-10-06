@@ -150,6 +150,12 @@ namespace LAG
 		void* GetVoid(EntityID id);
 		std::any ToAny(void* data);
 
+		template<typename... Args>
+		void InvokeFunc(Hash64 funcNameHash, Args&&... args) 
+		{ 
+			m_TypeInfo.funcs[funcNameHash]({ args... });
+		}
+
 	private:
 		ReflectedCompInfo::MemberInfo& m_MemberData;
 		TypeInfo& m_TypeInfo;

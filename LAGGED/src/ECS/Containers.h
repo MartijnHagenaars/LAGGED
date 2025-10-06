@@ -1,6 +1,7 @@
 #pragma once
 
 #include <any>
+#include <functional>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -27,16 +28,17 @@ namespace LAG
 
 	struct TypeInfo
 	{
-		size_t size = 0;
 #ifdef DEBUG
 		std::string debugName;
 #endif
+		size_t size = 0;
 
 		void(*EmplaceInMemory)(unsigned char* dest) = nullptr;
 		void(*MoveData)(unsigned char* src, unsigned char* dest) = nullptr;
 		void(*DestructData)(unsigned char* data) = nullptr;
 
 		std::any(*VoidToAny)(void*) = nullptr;
+		std::unordered_map<Hash64, std::function<void(const std::vector<std::any>&)>> funcs;
 	};
 
 	struct ReflectedCompInfo
@@ -60,10 +62,4 @@ namespace LAG
 			std::string displayName;
 		} props;
 	};
-
-	//struct ReflectedTypeInfo
-	//{
-	//	std::any(*VoidToAny)(void*) = nullptr;
-	//	//std::unordered_map<Hash64, >
-	//};
 }

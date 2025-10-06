@@ -12,18 +12,18 @@ namespace LAG
 	class SceneReflect
 	{
 	public:
-		~SceneReflect() = default;
-
-		static SceneReflect& Get();
-
 		template<typename Comp>
-		ComponentReflectionSetup ReflectComponent();
+		static ComponentReflectionSetup ReflectComponent();
 
 		template <typename Comp, typename Var>
-		VariableReflectionSetup ReflectVariable(Var Comp::* var);
+		static VariableReflectionSetup ReflectVariable(Var Comp::* var);
+
+		template <typename T, typename... Args>
+		static void RegisterFunc(Hash64 funcNameID, void (*func)(Args...));
 
 	private:
-		SceneReflect() = default;
+		SceneReflect() = delete;
+
 	};
 
 	class ComponentReflectionSetup

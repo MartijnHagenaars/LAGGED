@@ -3,6 +3,7 @@
 
 #include "Core/Defines.h"
 #include "Utility/Hash.h"
+#include "SceneReflect.h"
 
 namespace LAG
 {
@@ -66,5 +67,29 @@ namespace LAG
 		memberInfo.byteOffset = byteOffset;
 
 		return VariableReflectionSetup(memberInfo);
+	}
+
+	template<typename... Args, size_t... Indices>
+	void FuncAdapter(void (*func)(Args...), const std::vector<std::any>& args, std::index_sequence<Indices...>)
+	{
+		func(std::any_cast<Args>(args[Indices])...);
+	}
+
+	template<typename Type, typename ...Args>
+	inline void LAG::SceneReflect::RegisterFunc(Hash64 funcNameID, void(*func)(Args...))
+	{
+		// Ensure that the variable type has been registered before we proceed
+		auto typeInfoIt = Scene::s_TypeInfo.find(GetTypeHash64<Type>());
+		if (typeInfoIt == Scene::s_TypeInfo.end())
+			Scene::RegisterType<Type>();
+
+		auto& funcMap = typeInfoIt->second.funcs;
+		funcMap[funcNameID] = [func](const std::vector<std::any>& args)
+			{
+				if (sizeof...(Args) != args.size())
+					LAG_ASSERT("Cannot run function: argument count mismatch.");
+
+				FuncAdapter(func, args, std::make_index_sequence<sizeof...(Args)>());
+			};
 	}
 }

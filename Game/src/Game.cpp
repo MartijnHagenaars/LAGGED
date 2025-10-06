@@ -33,6 +33,24 @@ Game::~Game()
 {
 }
 
+template <typename T>
+[[maybe_unused]] static void ReflFuncTest(LAG::EntityID id, T& value)
+{
+	INFO("No type found!");
+}
+
+template <>
+[[maybe_unused]] static void ReflFuncTest<bool>(LAG::EntityID id, bool& value)
+{
+	INFO("Reflection function found! Reflecting a boolean, right? Or wrong??? ???????????");
+}
+
+template <>
+[[maybe_unused]] static void ReflFuncTest<glm::vec3>(LAG::EntityID id, glm::vec3& value)
+{
+	INFO("Reflection function found! Reflecting a vec3! That's triple the floats!");
+}
+
 void Game::Initialize()
 {
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::StringHash64("UpButton"));
@@ -83,6 +101,8 @@ void Game::Initialize()
 	m_World = new World(12, true);
 	LAG::Scene* sc = LAG::GetEngine().GetScene();
 
+	LAG::SceneReflect::RegisterFunc<bool>(LAG::StringToHash64("REFL_FUNC_TEST"), &ReflFuncTest);
+
 	sc->ForEach<LAG::TransformComponent>([](LAG::EntityID entID, LAG::TransformComponent* transformCmp)
 		{
 			INFO("TransformComponent ForEach - {}", entID);
@@ -119,6 +139,8 @@ void Game::Initialize()
 					}
 
 					const auto& name = props.displayName;
+
+					varIt.InvokeFunc(LAG::StringToHash64("REFL_FUNC_TEST"));
 				}
 			}
 		}

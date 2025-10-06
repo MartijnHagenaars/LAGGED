@@ -7,21 +7,19 @@ namespace LAG
 {
     bool SurfaceComponent::InitializeReflection()
     {
-        SceneReflect& refl = SceneReflect::Get();
-        refl.ReflectComponent<SurfaceComponent>().SetDisplayName("Model Component");
-        refl.ReflectVariable(&SurfaceComponent::surfaceTexture).SetDisplayName("Texture");
+        SceneReflect::ReflectComponent<SurfaceComponent>().SetDisplayName("Model Component");
+        SceneReflect::ReflectVariable(&SurfaceComponent::surfaceTexture).SetDisplayName("Texture");
 
         return true;
     }
 
     bool ProceduralSurfaceComponent::InitializeReflection()
     {
-        SceneReflect& refl = SceneReflect::Get();
-        refl.ReflectComponent<ProceduralSurfaceComponent>().SetDisplayName("Procedural Surface Component");
+        SceneReflect::ReflectComponent<ProceduralSurfaceComponent>().SetDisplayName("Procedural Surface Component");
 
-        refl.ReflectVariable(&ProceduralSurfaceComponent::surfaceSubdivisions).SetDisplayName("Subdivision");
-        refl.ReflectVariable(&ProceduralSurfaceComponent::noiseProperties).SetDisplayName("Noise properties");
-        refl.ReflectVariable(&ProceduralSurfaceComponent::surfaceTexture).SetDisplayName("Texture");
+        SceneReflect::ReflectVariable(&ProceduralSurfaceComponent::surfaceSubdivisions).SetDisplayName("Subdivision");
+        SceneReflect::ReflectVariable(&ProceduralSurfaceComponent::noiseProperties).SetDisplayName("Noise properties");
+        SceneReflect::ReflectVariable(&ProceduralSurfaceComponent::surfaceTexture).SetDisplayName("Texture");
 
         return true;
     }
