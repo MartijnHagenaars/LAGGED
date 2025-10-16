@@ -104,7 +104,7 @@ namespace LAG
 
 				MemberView operator*() const;
 				MemberView operator->() const;
-				 
+
 				Iterator& operator++();
 				Iterator& operator--();
 				Iterator operator++(int);
@@ -150,11 +150,33 @@ namespace LAG
 		void* GetVoid(EntityID id);
 		std::any ToAny(void* data);
 
-		template<typename... Args>
-		void InvokeFunc(Hash64 funcNameHash, Args&&... args) 
-		{ 
-			m_TypeInfo.funcs[funcNameHash]({ args... });
-		}
+		class ReflectionFuncs
+		{
+		public:
+			//TODO: Add bool overload to check if a valid function exists...
+			ReflectionFuncs() = delete;
+			ReflectionFuncs(std::function<void(const std::vector<std::any>&)> func, bool valid) :
+				m_Func(func), m_IsValid(valid)
+			{
+			}
+
+			explicit operator bool() const 
+			{
+				return (m_Func != nullptr);
+			}
+
+			template<typename... Args>
+			void Invoke(Args&&... args)
+			{
+				m_Func({ args... });
+			}
+
+		private:
+			std::function<void(const std::vector<std::any>&)> m_Func;
+			bool m_IsValid;
+		};
+		ReflectionFuncs Func(Hash64 funcNameHash) const;
+
 
 	private:
 		ReflectedCompInfo::MemberInfo& m_MemberData;

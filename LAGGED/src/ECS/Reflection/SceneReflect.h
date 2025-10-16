@@ -18,8 +18,8 @@ namespace LAG
 		template <typename Comp, typename Var>
 		static VariableReflectionSetup ReflectVariable(Var Comp::* var);
 
-		template <typename T, typename... Args>
-		static void RegisterFunc(Hash64 funcNameID, void (*func)(Args...));
+		template <typename T, auto Func>
+		static void RegisterFunc(Hash64 funcNameID);
 
 	private:
 		SceneReflect() = delete;

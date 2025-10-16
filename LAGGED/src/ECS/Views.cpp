@@ -159,4 +159,18 @@ namespace LAG
 	{
 		return m_TypeInfo.VoidToAny(data);
 	}
+
+	MemberView::ReflectionFuncs MemberView::Func(Hash64 funcNameHash) const
+	{
+		bool validFunc = true;
+		auto funcIt = m_TypeInfo.funcs.find(funcNameHash);
+		if (funcIt == m_TypeInfo.funcs.end())
+		{
+			validFunc = false;
+			WARNING("Failed to find reflection function!");
+			return ReflectionFuncs(nullptr, validFunc);
+		}
+
+		return ReflectionFuncs(funcIt->second, validFunc);
+	}
 }

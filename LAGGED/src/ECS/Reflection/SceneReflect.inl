@@ -69,14 +69,38 @@ namespace LAG
 		return VariableReflectionSetup(memberInfo);
 	}
 
+
+	/////////////////////////////////////////////////////////////////
+	// TODO: MOVE THIS STUFF INTO THE HEADER AS PRIVATE DATA
+
+	template <typename T>
+	struct FuncTraits; // primary template (undefined)
+
+	template <typename... Args>
+	struct FuncTraits<void(*)(Args...)>
+	{
+		static constexpr std::size_t ArgsCount = sizeof...(Args);
+	};
+
+
 	template<typename... Args, size_t... Indices>
 	void FuncAdapter(void (*func)(Args...), const std::vector<std::any>& args, std::index_sequence<Indices...>)
 	{
+#ifdef DEBUG
+		([&]
+		{
+			auto& anyType = args[Indices];
+			if (anyType.type() != typeid(Args))
+				CRITICAL("Mismatch between {} and {}", anyType.type().name(), typeid(Args).name());
+		}(), ...);
+#endif
 		func(std::any_cast<Args>(args[Indices])...);
 	}
 
-	template<typename Type, typename ...Args>
-	inline void LAG::SceneReflect::RegisterFunc(Hash64 funcNameID, void(*func)(Args...))
+	/////////////////////////////////////////////////////////////////
+
+	template<typename Type, auto Func>
+	inline void LAG::SceneReflect::RegisterFunc(Hash64 funcNameID)
 	{
 		// Ensure that the variable type has been registered before we proceed
 		auto typeInfoIt = Scene::s_TypeInfo.find(GetTypeHash64<Type>());
@@ -84,12 +108,13 @@ namespace LAG
 			Scene::RegisterType<Type>();
 
 		auto& funcMap = typeInfoIt->second.funcs;
-		funcMap[funcNameID] = [func](const std::vector<std::any>& args)
+		funcMap[funcNameID] = [](const std::vector<std::any>& args)
 			{
-				if (sizeof...(Args) != args.size())
+				constexpr size_t ArgsCount = FuncTraits<decltype(Func)>::ArgsCount;
+				if (ArgsCount != args.size())
 					LAG_ASSERT("Cannot run function: argument count mismatch.");
 
-				FuncAdapter(func, args, std::make_index_sequence<sizeof...(Args)>());
+				FuncAdapter(Func, args, std::make_index_sequence<ArgsCount>());
 			};
 	}
 }
