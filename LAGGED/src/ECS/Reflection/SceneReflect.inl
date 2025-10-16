@@ -73,18 +73,18 @@ namespace LAG
 	/////////////////////////////////////////////////////////////////
 	// TODO: MOVE THIS STUFF INTO THE HEADER AS PRIVATE DATA
 
-	template <typename T>
-	struct FuncTraits; // primary template (undefined)
+	//template <typename T>
+	//struct LAG::SceneReflect::FuncTraits;
 
-	template <typename... Args>
-	struct FuncTraits<void(*)(Args...)>
-	{
-		static constexpr std::size_t ArgsCount = sizeof...(Args);
-	};
+	//template <typename... Args>
+	//struct LAG::SceneReflect::FuncTraits<void(*)(Args...)>
+	//{
+	//	static constexpr std::size_t ArgsCount = sizeof...(Args);
+	//};
 
 
 	template<typename... Args, size_t... Indices>
-	void FuncAdapter(void (*func)(Args...), const std::vector<std::any>& args, std::index_sequence<Indices...>)
+	void LAG::SceneReflect::FuncAdapter(void (*func)(Args...), const std::vector<std::any>& args, std::index_sequence<Indices...>)
 	{
 #ifdef DEBUG
 		([&]

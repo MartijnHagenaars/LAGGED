@@ -153,17 +153,12 @@ namespace LAG
 		class ReflectionFuncs
 		{
 		public:
-			//TODO: Add bool overload to check if a valid function exists...
 			ReflectionFuncs() = delete;
-			ReflectionFuncs(std::function<void(const std::vector<std::any>&)> func, bool valid) :
-				m_Func(func), m_IsValid(valid)
-			{
-			}
+			ReflectionFuncs(std::function<void(const std::vector<std::any>&)> func) :
+				m_Func(func)
+			{}
 
-			explicit operator bool() const 
-			{
-				return (m_Func != nullptr);
-			}
+			explicit operator bool() const { return (m_Func != nullptr); }
 
 			template<typename... Args>
 			void Invoke(Args&&... args)
@@ -173,7 +168,6 @@ namespace LAG
 
 		private:
 			std::function<void(const std::vector<std::any>&)> m_Func;
-			bool m_IsValid;
 		};
 		ReflectionFuncs Func(Hash64 funcNameHash) const;
 

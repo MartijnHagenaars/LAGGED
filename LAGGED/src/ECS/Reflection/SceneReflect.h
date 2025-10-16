@@ -24,6 +24,21 @@ namespace LAG
 	private:
 		SceneReflect() = delete;
 
+
+		/////////////////////////////////////////////////////////////////////////
+		// Helper classes and functions for registering (reflection) functions //
+		/////////////////////////////////////////////////////////////////////////
+
+		template <typename T> struct FuncTraits;
+
+		template <typename... Args>
+		struct FuncTraits<void(*)(Args...)>
+		{
+			static constexpr std::size_t ArgsCount = sizeof...(Args);
+		};
+
+		template<typename... Args, size_t... Indices>
+		static void FuncAdapter(void (*func)(Args...), const std::vector<std::any>& args, std::index_sequence<Indices...>);
 	};
 
 	class ComponentReflectionSetup
