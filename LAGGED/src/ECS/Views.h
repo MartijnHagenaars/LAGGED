@@ -76,6 +76,8 @@ namespace LAG
 		// TODO: Consider removing Scene reference
 		ComponentView(Scene& scene, TypeID id, TypeInfo& compData);
 
+		ReflectedCompInfo::Properties& Properties() const { return m_ReflectionData.props; }
+
 		MemberRange Members();
 
 		void* GetVoid(EntityID id);

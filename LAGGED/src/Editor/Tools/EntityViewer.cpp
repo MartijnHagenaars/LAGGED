@@ -12,7 +12,7 @@
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
-		ToolBase(ToolType::LEVEL, "Entity Editor", "EntView"), 
+		ToolBase(ToolType::LEVEL, "Entity Editor", "EntView"),
 		m_SelectedEntityID(ENTITY_NULL)
 	{
 		memset(m_NewEntityName, 0, sizeof(m_NewEntityName));
@@ -22,50 +22,39 @@ namespace LAG
 	{
 		Scene* scene = GetEngine().GetScene();
 
-		ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 		EditorGui::SeparatorText("Entity list");
-
 		if (ImGui::Button("Add object"))
 		{
 			GetScene()->AddEntity(std::string((m_NewEntityName[0] != '\0') ? m_NewEntityName : "Unnamed entity"));
 			memset(m_NewEntityName, 0, sizeof(m_NewEntityName));
 		}
-		ImGui::SameLine();
-		ImGui::InputTextWithHint("##InputText", "Enter name here...", m_NewEntityName, sizeof(m_NewEntityName));
 
-		std::string totalEntities = "Total entities: " + std::to_string(scene->Count());
-		ImGui::Text(totalEntities.c_str());
+		ImGui::SameLine(); ImGui::InputTextWithHint("##InputText", "Enter name here...", m_NewEntityName, sizeof(m_NewEntityName));
+		ImGui::Text("Total entities: %i", scene->Count());
 
 		if (ImGui::BeginChild("ResizableChild", ImVec2(-FLT_MIN, ImGui::GetTextLineHeightWithSpacing() * 8), ImGuiChildFlags_Border | ImGuiChildFlags_ResizeY))
 		{
-			ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1);
-			ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::GetStyleColorVec4(ImGuiCol_FrameBg));
-			//for (const auto& entIt : *scene)
-			//{
-			//	ImGui::PushID(entIt.ID());
+			scene->ForEach<>([&scene, &selId = m_SelectedEntityID](EntityID id)
+				{
+					ImGui::PushID(id);
 
-			//	// FIXME: THIS WILL CAUSE A CRASH IF ENTITY DOESNT HAVE DEFAULTCOMPONENT.
-			//	DefaultComponent* defaultComp = entIt.GetComponent<DefaultComponent>();
-			//	if (ImGui::Button(defaultComp->visible ? "Hide" : "Show"))
-			//		defaultComp->visible = !defaultComp->visible;
-
-			//	ImGui::SameLine();
-			//	if (ImGui::Button(defaultComp->name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
-			//	{
-			//		if (m_SelectedEntityID != entIt.ID())
-			//			m_SelectedEntityID = entIt.ID();
-			//	}
-			//	ImGui::PopID();
-			//}
-
-			ImGui::PopStyleColor();
-			ImGui::PopStyleVar();
+					// FIXME: THIS WILL CAUSE A CRASH IF ENTITY DOESNT HAVE DEFAULTCOMPONENT.
+					DefaultComponent* defaultComp = scene->GetComponent<DefaultComponent>(id);
+					if (ImGui::Button(defaultComp->visible ? "Hide" : "Show"))
+						defaultComp->visible = !defaultComp->visible;
+					ImGui::SameLine();
+					if (ImGui::Button(defaultComp->name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
+					{
+						if (selId != id)
+							selId = id;
+					}
+					ImGui::PopID();
+				}
+			);
 			ImGui::EndChild();
 		}
 
 		RenderProperties();
-
-		ImGui::PopStyleVar();
 	}
 
 	void EntityViewer::RenderProperties()
@@ -98,37 +87,48 @@ namespace LAG
 
 		if (ImGui::BeginPopup("AddComponentPopup"))
 		{
-			// TODO: RE-IMPLEMENT THIS!!! >:( 
+			ImGui::SeparatorText("Select a component");
 
-			//ImGui::SeparatorText("Select a component");
-			//for (auto it : SceneReflect::Get())
-			//{
-			//	if (ImGui::Button(it->props.displayName.c_str()))
-			//	{
-			//		INFO("Add {} to Entity {}", it->props.displayName, m_SelectedEntityID);
-			//	}
-			//}
-			//ImGui::EndPopup();
+			// TODO: Implement functionality for showing and adding components
+
+			ImGui::EndPopup();
 		}
 
 		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
 		ImGui::Text(selectedEntityDisplay.c_str());
 
-		/*for (auto varIt : entity)
+		Scene* scene = GetEngine().GetScene();
+		for (ArchetypeView archIt : scene->Range())
 		{
-			const auto& properties = varIt->props;
-			if (properties.isHidden)
+			if (archIt.Contains(m_SelectedEntityID))
 			{
-				continue;
+				for (ComponentView compIt : archIt.Types())
+				{
+					const auto& compProps = compIt.Properties();
+					bool isHeaderOpen = (!compProps.isHidden && ImGui::CollapsingHeader(compProps.displayName.c_str(), ImGuiTreeNodeFlags_None));
+					
+					// Context menu when right-clicking on header
+					if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+					{
+						ImGui::Text("%s (%s)", compProps.displayName.c_str(), compIt.Name().data());
+
+						// TODO: Add extra functionality like removing and/or resetting component data
+
+						ImGui::EndPopup();
+					}
+
+					// Contents of opened header
+					if (isHeaderOpen)
+					{
+						for (const MemberView& varIt : compIt.Members())
+						{
+							const auto& varProps = varIt.Properties();
+							if (!varProps.isHidden)
+								ImGui::Text(varIt.Properties().displayName.c_str());
+						}
+					}
+				}
 			}
-
-
-			if (ImGui::CollapsingHeader(properties.displayName.c_str(), ImGuiTreeNodeFlags_None))
-			{
-				EditorGui::Indent indent;
-
-				ImGui::Text("Hello there!");
-			}
-		}*/
+		}
 	}
 }

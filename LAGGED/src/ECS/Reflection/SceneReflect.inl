@@ -91,7 +91,7 @@ namespace LAG
 		{
 			auto& anyType = args[Indices];
 			if (anyType.type() != typeid(Args))
-				CRITICAL("Mismatch between {} and {}", anyType.type().name(), typeid(Args).name());
+				CRITICAL("Mismatch between type ({}) and argument ({}).", typeid(Args).name(), anyType.type().name());
 		}(), ...);
 #endif
 		func(std::any_cast<Args>(args[Indices])...);
