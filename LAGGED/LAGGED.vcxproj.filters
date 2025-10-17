@@ -55,7 +55,7 @@
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
     <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
-    <ClInclude Include="src\ECS\Reflection\ReflectionTypeWidgets.h" />
+    <ClInclude Include="src\Editor\Reflection\EditorTypesReflectionWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
     <ClInclude Include="src\Editor\Tools\EntityViewer.h" />

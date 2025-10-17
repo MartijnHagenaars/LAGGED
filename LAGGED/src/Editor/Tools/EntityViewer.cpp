@@ -1,13 +1,14 @@
 #include "EntityViewer.h"
 
+#include <ImGui/imgui.h>
+
+#include "Core/Engine.h"
 #include "ECS/Entity.h"
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 
-#include "Core/Engine.h"
-
-#include <ImGui/imgui.h>
 #include "Editor/UI/EditorGuiHelper.h"
+#include "Editor/Reflection/EditorTypesReflectionWidgets.h"
 
 namespace LAG
 {
@@ -111,7 +112,7 @@ namespace LAG
 					if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 					{
 						ImGui::Text("%s (%s)", compProps.displayName.c_str(), compIt.Name().data());
-
+						
 						// TODO: Add extra functionality like removing and/or resetting component data
 
 						ImGui::EndPopup();
@@ -120,11 +121,14 @@ namespace LAG
 					// Contents of opened header
 					if (isHeaderOpen)
 					{
+						EditorGui::Indent indent;
 						for (const MemberView& varIt : compIt.Members())
 						{
 							const auto& varProps = varIt.Properties();
 							if (!varProps.isHidden)
-								ImGui::Text(varIt.Properties().displayName.c_str());
+							{
+								varIt.Func(HANDLE_EDITOR_WIDGET_FUNC).Invoke(m_SelectedEntityID, varIt.ToAny(varIt.GetVoid(m_SelectedEntityID)), varIt.Properties().displayName);
+							}
 						}
 					}
 				}

@@ -148,14 +148,14 @@ namespace LAG
 	{
 	}
 
-	void* MemberView::GetVoid(EntityID id)
+	void* MemberView::GetVoid(EntityID id) const
 	{
 		if (id == ENTITY_NULL)
 			return nullptr;
 		return reinterpret_cast<void*>(reinterpret_cast<size_t>(m_ParentCompView.GetVoid(id)) + m_MemberData.byteOffset);
 	}
 
-	std::any MemberView::ToAny(void* data)
+	std::any MemberView::ToAny(void* data) const
 	{
 		return m_TypeInfo.VoidToAny(data);
 	}

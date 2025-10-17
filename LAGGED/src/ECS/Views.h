@@ -149,8 +149,8 @@ namespace LAG
 
 		ReflectedCompInfo::MemberInfo::Properties& Properties() const { return m_MemberData.props; }
 
-		void* GetVoid(EntityID id);
-		std::any ToAny(void* data);
+		void* GetVoid(EntityID id) const;
+		std::any ToAny(void* data) const;
 
 		class ReflectionFuncs
 		{
