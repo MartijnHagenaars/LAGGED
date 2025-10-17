@@ -1,6 +1,5 @@
 #include "Scene.h"
 #include "ECS/Entity.h"
-#include "Core/Engine.h"
 
 #include "Components/BasicComponents.h"
 

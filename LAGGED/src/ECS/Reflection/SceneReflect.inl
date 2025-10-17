@@ -69,20 +69,6 @@ namespace LAG
 		return VariableReflectionSetup(memberInfo);
 	}
 
-
-	/////////////////////////////////////////////////////////////////
-	// TODO: MOVE THIS STUFF INTO THE HEADER AS PRIVATE DATA
-
-	//template <typename T>
-	//struct LAG::SceneReflect::FuncTraits;
-
-	//template <typename... Args>
-	//struct LAG::SceneReflect::FuncTraits<void(*)(Args...)>
-	//{
-	//	static constexpr std::size_t ArgsCount = sizeof...(Args);
-	//};
-
-
 	template<typename... Args, size_t... Indices>
 	void LAG::SceneReflect::FuncAdapter(void (*func)(Args...), const std::vector<std::any>& args, std::index_sequence<Indices...>)
 	{
@@ -96,8 +82,6 @@ namespace LAG
 #endif
 		func(std::any_cast<Args>(args[Indices])...);
 	}
-
-	/////////////////////////////////////////////////////////////////
 
 	template<typename Type, auto Func>
 	inline void LAG::SceneReflect::RegisterFunc(Hash64 funcNameID)
