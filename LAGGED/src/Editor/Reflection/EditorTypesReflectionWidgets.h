@@ -20,9 +20,10 @@ namespace LAG
 	namespace Reflection
 	{
 		const float IMAGE_MAX_SIZE = 360.f;
-		inline const int REFLECTION_CHAR_ARRAY_SIZE = 256;
-		static char reflectionWidgetTextBuffer[REFLECTION_CHAR_ARRAY_SIZE];
+		const int REFLECTION_CHAR_ARRAY_SIZE = 256;
 
+		static char g_StringTextBuffer[REFLECTION_CHAR_ARRAY_SIZE];
+		
 		////////////////////////
 		// Drawing of widgets //
 		////////////////////////
@@ -56,12 +57,11 @@ namespace LAG
 		[[maybe_unused]] static void DrawWidgetType<std::string>(LAG::EntityID entityID, std::string* value, const std::string& name)
 		{
 			//Clear the text buffer and copy the current value into it
-			memset(reflectionWidgetTextBuffer, 0, REFLECTION_CHAR_ARRAY_SIZE);
-			value->copy(reflectionWidgetTextBuffer, REFLECTION_CHAR_ARRAY_SIZE);
-
-			if (ImGui::InputText(name.c_str(), reflectionWidgetTextBuffer, REFLECTION_CHAR_ARRAY_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
+			memset(g_StringTextBuffer, 0, REFLECTION_CHAR_ARRAY_SIZE);
+			value->copy(g_StringTextBuffer, REFLECTION_CHAR_ARRAY_SIZE);
+			if (ImGui::InputText(name.c_str(), g_StringTextBuffer, REFLECTION_CHAR_ARRAY_SIZE, ImGuiInputTextFlags_EnterReturnsTrue))
 			{
-				//value = &std::string(reflectionWidgetTextBuffer);
+				value->assign(g_StringTextBuffer);
 			}
 		}
 

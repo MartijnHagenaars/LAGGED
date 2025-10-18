@@ -12,7 +12,7 @@ namespace LAG
 {
 	bool DefaultComponent::InitializeReflection()
 	{
-		SceneReflect::ReflectComponent<DefaultComponent>().SetDisplayName("General data");
+		SceneReflect::ReflectComponent<DefaultComponent>().SetDisplayName("General data").SetHidden("true");
 
 		SceneReflect::ReflectVariable(&DefaultComponent::name).SetDisplayName("Name");
 		SceneReflect::ReflectVariable(&DefaultComponent::visible).SetDisplayName("Is Visible");
