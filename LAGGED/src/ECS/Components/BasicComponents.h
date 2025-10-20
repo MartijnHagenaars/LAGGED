@@ -15,7 +15,7 @@ namespace LAG
 		};
 
 		std::string name;
-		bool visible;
+		bool visible = true;
 		
 		static bool InitializeReflection();
 		static inline bool m_ReflectionState = InitializeReflection();

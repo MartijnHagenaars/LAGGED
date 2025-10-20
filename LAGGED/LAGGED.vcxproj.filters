@@ -28,7 +28,6 @@
     <ClCompile Include="imgui\ImGui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\ImGui\imgui_tables.cpp" />
     <ClCompile Include="imgui\ImGui\imgui_widgets.cpp" />
-    <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
@@ -76,7 +75,6 @@
     <ClInclude Include="src\ECS\Components\CameraComponent.h" />
     <ClInclude Include="src\ECS\Components\LightComponent.h" />
     <ClInclude Include="src\ECS\Components\ModelComponent.h" />
-    <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
@@ -135,7 +133,6 @@
     <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\Skybox.pixel.glsl" />
     <None Include="src\ECS\Scene.inl" />
-    <None Include="src\ECS\Entity.inl" />
     <None Include="src\ECS\Reflection\SceneReflect.inl" />
   </ItemGroup>
 </Project>

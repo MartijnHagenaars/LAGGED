@@ -16,7 +16,6 @@ namespace LAG
 		enum class WidgetModes;
 	}
 
-	class Entity;
 	class Scene
 	{
 		class ArchetypeRange;
@@ -27,15 +26,13 @@ namespace LAG
 		Scene();
 		~Scene();
 
-		Entity AddEntity();
+		EntityID AddEntity();
 
 		//TODO: Consider removing this + the automatic adding of the DefaultComponent. I might want to handle this some other way.
-		Entity AddEntity(const std::string& name);
+		EntityID AddEntity(const std::string& name);
 
 		void RemoveEntity(EntityID id);
-		Entity DuplicateEntity(EntityID id);
-
-		Entity GetEntity(EntityID id);
+		EntityID DuplicateEntity(EntityID id);
 
 		template<typename Comp, typename ...Args>
 		Comp* AddComponent(const EntityID id, Args&&... compArgs);

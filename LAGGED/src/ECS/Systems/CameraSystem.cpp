@@ -11,7 +11,6 @@
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
-#include "ECS/Components/BasicComponents.h"
 
 namespace LAG::CameraSystem
 {

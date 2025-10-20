@@ -183,7 +183,6 @@
     <ClInclude Include="src\ECS\Components\CameraComponent.h" />
     <ClInclude Include="src\ECS\Components\LightComponent.h" />
     <ClInclude Include="src\ECS\Components\ModelComponent.h" />
-    <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
@@ -293,7 +292,6 @@
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">Level3</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">Level3</WarningLevel>
     </ClCompile>
-    <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
@@ -335,7 +333,6 @@
     <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
-    <None Include="src\ECS\Entity.inl" />
     <None Include="src\ECS\Reflection\SceneReflect.inl" />
     <None Include="src\ECS\Scene.inl" />
   </ItemGroup>

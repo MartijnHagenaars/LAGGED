@@ -7,7 +7,6 @@
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
 #include "ECS/Scene.h"
-#include "ECS/Entity.h" //FIXME: This include directive shouldn't be necessary
 #include "ECS/Components/CameraComponent.h"
 
 #include "Platform/Resources/Shader.h"

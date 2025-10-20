@@ -10,7 +10,6 @@
 #include "Platform/Resources/Model.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/ModelComponent.h"
 #include "ECS/Components/CameraComponent.h"
@@ -33,24 +32,6 @@ Game::~Game()
 {
 }
 
-template <typename T>
-[[maybe_unused]] static void ReflFuncTest(LAG::EntityID id, T* value)
-{
-	INFO("No type found!");
-}
-
-template <>
-[[maybe_unused]] static void ReflFuncTest<bool>(LAG::EntityID id, bool* value)
-{
-	INFO("Reflection function found! Reflecting a boolean, right? Or wrong??? ???????????");
-}
-
-template <>
-[[maybe_unused]] static void ReflFuncTest<glm::vec3>(LAG::EntityID id, glm::vec3* value)
-{
-	INFO("Reflection function found! Reflecting a vec3! That's triple the floats!");
-}
-
 void Game::Initialize()
 {
 	LAG::Input::AddInputAction(LAG::Input::InputType::LAG_W, LAG::StringHash64("UpButton"));
@@ -63,46 +44,56 @@ void Game::Initialize()
 	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash64("res/Assets/Models/BoomBox/BoomBox.gltf"));
 	//LAG::GetResourceManager()->AddResource<LAG::Model>(LAG::StringHash64("res/Assets/Models/ChessGame/ABeautifulGame.gltf"));
 
-	//Load an entity with a model and a transform
-	LAG::Entity ent1 = LAG::GetEngine().GetScene()->AddEntity("Helmet");
-	ent1.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, 0.f));
-	ent1.AddComponent<LAG::TransformComponent>()->SetScale(glm::vec3(1.f));
-	//ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/ChessGame/ABeautifulGame.gltf");
-	ent1.AddComponent<LAG::ModelComponent>("res/Assets/Models/Helmet/DamagedHelmet.gltf");
-	ent1.AddComponent<LAG::SinWaveComponent>(6.f, 1.f);
+	LAG::Scene* sc = LAG::GetScene();
+	
+	LAG::EntityID ent1 = sc->AddEntity("Helmet");
+	{
+		LAG::TransformComponent* transformComp = sc->AddComponent<LAG::TransformComponent>(ent1);
+		transformComp->SetPosition(glm::vec3(0.f, 0.f, 0.f));
+		transformComp->SetScale(glm::vec3(1.f));
 
-	LAG::Entity ent2 = LAG::GetEngine().GetScene()->AddEntity("Light1");
-	ent2.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, 0.f, -5.f));
-	auto ent2Light = ent2.AddComponent<LAG::LightComponent>();
-	ent2Light->lightAttenuation = 5.f;
-	ent2Light->lightIntensity = 2.f;
+		sc->AddComponent<LAG::ModelComponent>(ent1, "res/Assets/Models/Helmet/DamagedHelmet.gltf");
+		sc->AddComponent<LAG::SinWaveComponent>(ent1, 6.f, 1.f);
+	}
 
-	LAG::Entity ent3 = LAG::GetEngine().GetScene()->AddEntity("Light2");
-	auto ent3Light = ent3.AddComponent<LAG::LightComponent>();
-	ent3Light->lightAttenuation = 0.1f;
-	ent3Light->lightIntensity = 2.f;
-	ent3Light->lightColor = glm::vec3(0.f, 1.f, 0.f);
-	ent3.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(-5.f, -2.f, -7.f));
+	LAG::EntityID ent2 = sc->AddEntity("Light1");
+	{
+		sc->AddComponent<LAG::TransformComponent>(ent2)->SetPosition(glm::vec3(0.f, 0.f, -5.f));
+		LAG::LightComponent* lightComp = sc->AddComponent<LAG::LightComponent>(ent2);
+		lightComp->lightAttenuation = 5.f;
+		lightComp->lightIntensity = 2.f;
+	}
 
-	LAG::Entity ent4 = LAG::GetEngine().GetScene()->AddEntity("Light3");
-	ent4.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(5.f, 40.f, -7.f));
-	auto ent4Light = ent4.AddComponent<LAG::LightComponent>();
-	ent4Light->lightAttenuation = 0.0001f;
-	ent4Light->lightIntensity = 1.f;
-	ent4Light->lightColor = glm::vec3(1.f, 1.f, 1.f);
+	LAG::EntityID ent3 = sc->AddEntity("Light2");
+	{
+		sc->AddComponent<LAG::TransformComponent>(ent3)->SetPosition(glm::vec3(-5.f, -2.f, -7.f));
+		LAG::LightComponent* lightComp = sc->AddComponent<LAG::LightComponent>(ent3);
+		lightComp->lightAttenuation = 0.1f;
+		lightComp->lightIntensity = 2.f;
+		lightComp->lightColor = glm::vec3(0.f, 1.f, 0.f);
+	}
 
-	LAG::Entity ent5 = LAG::GetEngine().GetScene()->AddEntity("Camera");
-	ent5.AddComponent<LAG::TransformComponent>()->SetPosition(glm::vec3(0.f, -2.f, 0.f));
-	ent5.GetComponent<LAG::TransformComponent>()->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
-	ent5.AddComponent<LAG::CameraComponent>()->movementSpeed = 50.f;
+	LAG::EntityID ent4 = sc->AddEntity("Light3");
+	{
+		sc->AddComponent<LAG::TransformComponent>(ent4)->SetPosition(glm::vec3(5.f, 40.f, -7.f));
+		LAG::LightComponent* lightComp = sc->AddComponent<LAG::LightComponent>(ent4);
+		lightComp->lightAttenuation = 0.0001f;
+		lightComp->lightIntensity = 1.f;
+		lightComp->lightColor = glm::vec3(1.f, 1.f, 1.f);
+	}
 
-	LAG::GetEngine().GetScene()->AddEntity("Empty Entity");
+	LAG::EntityID ent5 = sc->AddEntity("Camera");
+	{
+		LAG::TransformComponent* transformComp = sc->AddComponent<LAG::TransformComponent>(ent5);
+		transformComp->SetPosition(glm::vec3(0.f, -2.f, 0.f));
+		transformComp->SetRotation(glm::vec3(1.57f, 0.f, 0.f));
+
+		sc->AddComponent<LAG::CameraComponent>(ent5)->movementSpeed = 50.f;
+	}
+
+	sc->AddEntity("Empty Entity");
 
 	m_World = new World(12, true);
-	LAG::Scene* sc = LAG::GetEngine().GetScene();
-
-	//LAG::SceneReflect::RegisterFunc<bool>(LAG::StringToHash64("REFL_FUNC_TEST"), &ReflFuncTest);
-	LAG::SceneReflect::RegisterFunc<bool, &ReflFuncTest<bool>>(LAG::StringToHash64("REFL_FUNC_TEST"));
 
 	sc->ForEach<LAG::TransformComponent>([](LAG::EntityID entID, LAG::TransformComponent* transformCmp)
 		{
@@ -114,7 +105,7 @@ void Game::Initialize()
 			INFO("Undefined ForEach - {}", entID);
 		});
 
-	LAG::EntityID reflEntityID = ent5.ID();
+	LAG::EntityID reflEntityID = ent5;
 	for (LAG::ArchetypeView archIt : sc->Range())
 	{
 		if (archIt.Contains(reflEntityID))
@@ -140,12 +131,17 @@ void Game::Initialize()
 					}
 
 					const auto& name = props.displayName;
-					if (auto func = varIt.Func(LAG::StringToHash64("REFL_FUNC_TEST")))
-					{
-						bool testBool = true;
-						func.Invoke(reflEntityID, &testBool);
-					}
-					
+					//// TODO - FIX: There needs to be a function to check the type of VarIt. For example: IsType<bool>();
+					//// TODO 2: varIt.Func could just be the invoke func that returns true or false based on whether it ran the function.
+					//if (auto func = varIt.Func(LAG::StringToHash64("REFL_FUNC_TEST")))
+					//{
+					//	bool testBool = true;
+
+					//	// Issue here is that we're trying to run a function for Float but it's fetching a Bool one... 
+					//	// This will result in a MISMATCH assert... Bruh...
+					//	func.Invoke(reflEntityID, &testBool);
+					//}
+
 				}
 			}
 		}
@@ -161,4 +157,12 @@ void Game::Update()
 	LAG_PROFILE();
 
 	m_World->Update();
+
+	LAG::GetScene()->ForEach<LAG::SinWaveComponent, LAG::TransformComponent>([](LAG::EntityID entity, LAG::SinWaveComponent* component, LAG::TransformComponent* transform)
+		{
+			component->time += LAG::GetEngine().GetDeltaTime();
+			component->sinValue = component->amplitude * sinf(component->frequency * component->time);
+
+			transform->SetPosition(transform->GetPosition() + glm::vec3(0.f, component->sinValue, 0.f));
+		});
 }

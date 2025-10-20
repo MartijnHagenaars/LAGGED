@@ -8,11 +8,7 @@
 #include "Platform/RenderBackend.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Entity.h"
-
 #include "IO/FileWatch.h"
-
-#include "ECS/Systems/BasicSystems.h"
 
 namespace LAG
 {
@@ -47,9 +43,6 @@ namespace LAG
 			GetWindow()->Update();
 
 			FileWatch::CheckWatches();
-
-			//Update all basic systems
-			BasicSystems::UpdateBasicSystems();
 
 			m_Application->Update();
 

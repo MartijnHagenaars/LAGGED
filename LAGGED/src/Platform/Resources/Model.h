@@ -5,7 +5,7 @@
 #include "Mesh.h"
 
 #include "Core/Resources/Resource.h"
-#include "ECS/Entity.h"
+#include "ECS/TypeDefines.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
 

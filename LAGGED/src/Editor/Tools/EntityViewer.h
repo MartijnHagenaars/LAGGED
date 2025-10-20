@@ -1,6 +1,6 @@
 #pragma once
 #include "Editor/ToolBase.h"
-#include "ECS/Entity.h"
+#include "ECS/TypeDefines.h"
 
 namespace LAG
 {

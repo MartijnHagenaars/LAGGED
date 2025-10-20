@@ -1,9 +1,8 @@
 #include "World.h"
 
 #include "Core/Engine.h"
-#include "ECS/Entity.h"
-#include "ECS/Scene.h"
 
+#include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/TerrainComponents.h"
 #include "ECS/Components/CameraComponent.h"

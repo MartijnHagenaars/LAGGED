@@ -1,5 +1,4 @@
 #include "Scene.h"
-#include "ECS/Entity.h"
 
 #include "Components/BasicComponents.h"
 
@@ -14,7 +13,7 @@ namespace LAG
 		RemoveAll();
 	}
 
-	Entity Scene::AddEntity()
+	EntityID Scene::AddEntity()
 	{
 		EntityID newId = ++s_EntityCounter;
 
@@ -27,21 +26,21 @@ namespace LAG
 		rec.archetype = nullptr;
 		m_EntityArchetypes.insert({ newId, rec });
 
-		return Entity(*this, newId);
+		return newId;
 	}
 
-	Entity Scene::AddEntity(const std::string& name)
+	EntityID Scene::AddEntity(const std::string& name)
 	{
-		Entity newEntity = AddEntity();
-		newEntity.AddComponent<DefaultComponent>(name);
+		EntityID entID = AddEntity();
+		AddComponent<DefaultComponent>(entID)->name = name;
 		
-		return newEntity;
+		return entID;
 	}
 
-	Entity Scene::DuplicateEntity(EntityID id)
+	EntityID Scene::DuplicateEntity(EntityID id)
 	{
 		//TODO: Implement function...
-		return Entity();
+		return EntityID();
 	}
 
 	void Scene::RemoveEntity(EntityID id)
@@ -95,11 +94,6 @@ namespace LAG
 		}
 
 		m_EntityArchetypes.erase(id);
-	}
-
-	Entity Scene::GetEntity(EntityID id)
-	{
-		return Entity(*this, id);
 	}
 
 	bool Scene::IsValid(EntityID id)

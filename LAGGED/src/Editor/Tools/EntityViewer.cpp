@@ -3,7 +3,6 @@
 #include <ImGui/imgui.h>
 
 #include "Core/Engine.h"
-#include "ECS/Entity.h"
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 
@@ -67,9 +66,8 @@ namespace LAG
 			return;
 		}
 
-		Entity entity = GetScene()->GetEntity(m_SelectedEntityID);
-
-		EditorGui::SeparatorText((std::string("Selected Entity: ") + entity.GetComponent<DefaultComponent>()->name).c_str());
+		Scene* scene = GetEngine().GetScene();
+		EditorGui::SeparatorText((std::string("Selected Entity: ") + scene->GetComponent<DefaultComponent>(m_SelectedEntityID)->name).c_str());
 
 		if (ImGui::Button("Duplicate Entity"))
 		{
@@ -98,7 +96,6 @@ namespace LAG
 		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
 		ImGui::Text(selectedEntityDisplay.c_str());
 
-		Scene* scene = GetEngine().GetScene();
 		for (ArchetypeView archIt : scene->Range())
 		{
 			if (archIt.Contains(m_SelectedEntityID))
@@ -106,9 +103,11 @@ namespace LAG
 				for (ComponentView compIt : archIt.Types())
 				{
 					const auto& compProps = compIt.Properties();
-					bool isHeaderOpen = (!compProps.isHidden && ImGui::CollapsingHeader(compProps.displayName.c_str(), ImGuiTreeNodeFlags_None));
-					
+					if (compProps.isHidden)
+						continue;
+
 					// Context menu when right-clicking on header
+					bool isHeaderOpen = ImGui::CollapsingHeader(compProps.displayName.c_str(), ImGuiTreeNodeFlags_None);
 					if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
 					{
 						ImGui::Text("%s (%s)", compProps.displayName.c_str(), compIt.Name().data());
