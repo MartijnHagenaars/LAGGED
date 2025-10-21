@@ -38,8 +38,8 @@ namespace LAG
 	{
 	}
 
-	ComponentView ArchetypeView::ComponentRange::Iterator::operator*() const { return ComponentView(m_Scene, *m_Ptr, Scene::s_TypeInfo[*m_Ptr]); }
-	ComponentView ArchetypeView::ComponentRange::Iterator::operator->() const { return ComponentView(m_Scene, *m_Ptr, Scene::s_TypeInfo[*m_Ptr]); }
+	ComponentView ArchetypeView::ComponentRange::Iterator::operator*() const { return ComponentView(m_Scene, *m_Ptr, Scene::GetTypeInfo()[*m_Ptr]); }
+	ComponentView ArchetypeView::ComponentRange::Iterator::operator->() const { return ComponentView(m_Scene, *m_Ptr, Scene::GetTypeInfo()[*m_Ptr]); }
 
 	ArchetypeView::ComponentRange::Iterator& ArchetypeView::ComponentRange::Iterator::operator++()
 	{
@@ -109,8 +109,8 @@ namespace LAG
 	{
 	}
 
-	MemberView ComponentView::MemberRange::Iterator::operator*() const { return MemberView(*m_Ptr, Scene::s_TypeInfo[m_Ptr->typeID], m_ParentCompView); }
-	MemberView ComponentView::MemberRange::Iterator::operator->() const { return MemberView(*m_Ptr, Scene::s_TypeInfo[m_Ptr->typeID], m_ParentCompView); }
+	MemberView ComponentView::MemberRange::Iterator::operator*() const { return MemberView(*m_Ptr, Scene::GetTypeInfo()[m_Ptr->typeID], m_ParentCompView); }
+	MemberView ComponentView::MemberRange::Iterator::operator->() const { return MemberView(*m_Ptr, Scene::GetTypeInfo()[m_Ptr->typeID], m_ParentCompView); }
 
 	ComponentView::MemberRange::Iterator& ComponentView::MemberRange::Iterator::operator++()
 	{

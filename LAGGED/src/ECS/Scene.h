@@ -148,8 +148,16 @@ namespace LAG
 		// This map stores all entities and the archetypes that they use.
 		std::unordered_map<EntityID, EntityRecord> m_EntityArchetypes;
 
-		// TODO: Good description.
-		inline static std::unordered_map<Hash64, TypeInfo> s_TypeInfo;
+		/// <summary>
+		/// Data structure that contains useful information and functions for data types.
+		/// Implemented as a getter-function to work around SIOF issue
+		/// </summary>
+		/// <returns>Unordered_map, where the key is the TypeID / TypeHash64 of the type</returns>
+		static std::unordered_map<Hash64, TypeInfo>& GetTypeInfo()
+		{
+			static std::unordered_map<Hash64, TypeInfo> map;
+			return map;
+		}
 
 		// This map links a (Component-class) TypeID to its Component-type reflection info
 		inline static std::unordered_map<TypeID, ReflectedCompInfo> s_ReflectedCompInfo;

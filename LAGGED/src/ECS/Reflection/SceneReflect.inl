@@ -15,7 +15,7 @@ namespace LAG
 		
 		// Ensure that the component type has been registered before we proceed
 		constexpr TypeID typeID = Scene::GetTypeID<Comp>();
-		if (const auto& typeInfoIt = Scene::s_TypeInfo.find(typeID); typeInfoIt == Scene::s_TypeInfo.end())
+		if (const auto& typeInfoIt = Scene::GetTypeInfo().find(typeID); typeInfoIt == Scene::GetTypeInfo().end())
 			Scene::RegisterType<Comp>();
 
 		// Return early in case component is already reflected
@@ -47,7 +47,7 @@ namespace LAG
 
 		// Also ensure that the variable type has been registered before we proceed
 		constexpr TypeID varTypeID = Scene::GetTypeID<Var>();
-		if (const auto& typeInfoIt = Scene::s_TypeInfo.find(varTypeID); typeInfoIt == Scene::s_TypeInfo.end())
+		if (const auto& typeInfoIt = Scene::GetTypeInfo().find(varTypeID); typeInfoIt == Scene::GetTypeInfo().end())
 			Scene::RegisterType<Var>();
 
 		// Check if this variable has already been reflected
@@ -87,11 +87,13 @@ namespace LAG
 	inline void LAG::SceneReflect::RegisterFunc(Hash64 funcNameID)
 	{
 		// Ensure that the variable type has been registered before we proceed
-		auto typeInfoIt = Scene::s_TypeInfo.find(GetTypeHash64<Type>());
-		if (typeInfoIt == Scene::s_TypeInfo.end())
-			Scene::RegisterType<Type>();
+		TypeInfo* typeInfo = nullptr;
+		if (const auto& typeInfoIt = Scene::GetTypeInfo().find(Scene::GetTypeID<Type>()); typeInfoIt != Scene::GetTypeInfo().end())
+			typeInfo = &typeInfoIt->second;
+		else 
+			typeInfo = &Scene::RegisterType<Type>();
 
-		auto& funcMap = typeInfoIt->second.funcs;
+		auto& funcMap = typeInfo->funcs;
 		funcMap[funcNameID] = [](const std::vector<std::any>& args)
 			{
 				constexpr size_t ArgsCount = FuncTraits<decltype(Func)>::ArgsCount;

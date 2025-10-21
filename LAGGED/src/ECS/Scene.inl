@@ -11,7 +11,7 @@ namespace LAG
 		constexpr TypeID newTypeID = GetTypeID<Comp>();
 
 		// Get the component data structure.
-		if (auto compDataIt = s_TypeInfo.find(newTypeID); compDataIt != s_TypeInfo.end())
+		if (auto compDataIt = GetTypeInfo().find(newTypeID); compDataIt != GetTypeInfo().end())
 			compData = &compDataIt->second;
 		else 
 		{
@@ -91,7 +91,7 @@ namespace LAG
 			for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 			{
 				const TypeID typeID = newArchetypeID[compIndex];
-				TypeInfo& newCompData = s_TypeInfo.at(typeID);
+				TypeInfo& newCompData = GetTypeInfo().at(typeID);
 
 				size_t newCompDataSize = newCompData.size;
 				size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
@@ -115,7 +115,7 @@ namespace LAG
 					bool matchingIDs = (oldTypeID == typeID);
 					if (matchingIDs)
 					{
-						TypeInfo& oldCompData = s_TypeInfo.at(oldArchetype->typeID[i]);
+						TypeInfo& oldCompData = GetTypeInfo().at(oldArchetype->typeID[i]);
 						oldCompData.MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompData.size], &newArchetype->compData[compIndex][currentSize]);
 						break;
 					}
@@ -149,8 +149,8 @@ namespace LAG
 	{
 		constexpr TypeID typeID = GetTypeID<Comp>();
 
-		const auto& compDataIt = s_TypeInfo.find(typeID);
-		if (compDataIt == s_TypeInfo.end())
+		const auto& compDataIt = GetTypeInfo().find(typeID);
+		if (compDataIt == GetTypeInfo().end())
 			CRITICAL("Failed to remove component: Component {} is not registered.", typeid(Comp).name());
 
 		const TypeInfo* compDataPtr = compDataIt->second;
@@ -190,7 +190,7 @@ namespace LAG
 		for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
 		{
 			const TypeID newTypeID = newArchetypeID[compIndex];
-			TypeInfo* newComp = s_TypeInfo.at(newTypeID);
+			TypeInfo* newComp = GetTypeInfo().at(newTypeID);
 
 			size_t newCompDataSize = newComp->size;
 			size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
@@ -214,8 +214,8 @@ namespace LAG
 
 				if (oldTypeId == newTypeID)
 				{
-					size_t oldCompDataSize = s_TypeInfo.at(oldTypeId)->size;
-					TypeInfo* oldCompData = s_TypeInfo.at(oldTypeId);
+					size_t oldCompDataSize = GetTypeInfo().at(oldTypeId)->size;
+					TypeInfo* oldCompData = GetTypeInfo().at(oldTypeId);
 
 					oldCompData.MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompDataSize], &newArchetype->compData[compIndex][currentSize]);
 
@@ -361,10 +361,10 @@ namespace LAG
 		constexpr TypeID typeID = GetTypeID<Type>();
 
 		// Check if component has already been registered. 
-		if (const auto& typeInfoIt = s_TypeInfo.find(typeID); typeInfoIt != s_TypeInfo.end())
+		if (const auto& typeInfoIt = GetTypeInfo().find(typeID); typeInfoIt != GetTypeInfo().end())
 			return typeInfoIt->second;
 
-		// Create and insert new data into the s_TypeInfo map
+		// Create and insert new data into the GetTypeInfo() map
 		TypeInfo newTypeInfo = {};
 
 		newTypeInfo.size = sizeof(Type);
@@ -377,6 +377,6 @@ namespace LAG
 		newTypeInfo.DestructData = [](unsigned char* data) { reinterpret_cast<Type*>(data)->~Type(); };
 		newTypeInfo.VoidToAny = [](void* data) { return std::any(static_cast<Type*>(data)); };
 
-		return s_TypeInfo.insert({ typeID, newTypeInfo }).first->second;
+		return GetTypeInfo().insert({ typeID, newTypeInfo }).first->second;
 	}
 }
