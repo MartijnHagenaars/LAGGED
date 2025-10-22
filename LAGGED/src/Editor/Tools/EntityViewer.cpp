@@ -112,6 +112,8 @@ namespace LAG
 					{
 						ImGui::Text("%s (%s)", compProps.displayName.c_str(), compIt.Name().data());
 						
+						if(ImGui::Button("Remove Component"))
+							compIt.Func(REMOVE_COMPONENT).Invoke(m_SelectedEntityID);
 						// TODO: Add extra functionality like removing and/or resetting component data
 
 						ImGui::EndPopup();
@@ -126,7 +128,7 @@ namespace LAG
 							const auto& varProps = varIt.Properties();
 							if (!varProps.isHidden)
 							{
-								varIt.Func(HANDLE_EDITOR_WIDGET_FUNC).Invoke(m_SelectedEntityID, varIt.ToAny(varIt.GetVoid(m_SelectedEntityID)), varIt.Properties().displayName);
+								varIt.Func(EDITOR_DRAW_TYPE_WIDGET).Invoke(m_SelectedEntityID, varIt.ToAny(varIt.GetVoid(m_SelectedEntityID)), varIt.Properties().displayName);
 							}
 						}
 					}

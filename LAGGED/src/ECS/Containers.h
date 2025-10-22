@@ -41,7 +41,8 @@ namespace LAG
 		std::unordered_map<Hash64, std::function<void(const std::vector<std::any>&)>> funcs;
 	};
 
-	struct ReflectedCompInfo
+	// TODO: Consider turning this into some generic structure.
+	struct ReflectionCompInfo
 	{
 		struct MemberInfo
 		{
@@ -61,5 +62,26 @@ namespace LAG
 			bool isHidden = false;
 			std::string displayName;
 		} props;
+	};
+
+	class ReflectionFunc
+	{
+	public:
+		ReflectionFunc() = delete;
+		ReflectionFunc(std::function<void(const std::vector<std::any>&)> func) :
+			m_Func(func)
+		{
+		}
+
+		explicit operator bool() const { return (m_Func != nullptr); }
+
+		template<typename... Args>
+		void Invoke(Args&&... args)
+		{
+			m_Func({ args... });
+		}
+
+	private:
+		std::function<void(const std::vector<std::any>&)> m_Func;
 	};
 }

@@ -61,9 +61,9 @@ namespace LAG
 
 	private:
 		ComponentReflectionSetup() = delete;
-		ComponentReflectionSetup(ReflectedCompInfo& info);
+		ComponentReflectionSetup(ReflectionCompInfo& info);
 
-		ReflectedCompInfo& m_Info;
+		ReflectionCompInfo& m_Info;
 	};
 
 	class VariableReflectionSetup
@@ -93,9 +93,9 @@ namespace LAG
 
 	private:
 		VariableReflectionSetup() = delete;
-		VariableReflectionSetup(ReflectedCompInfo::MemberInfo& info);
+		VariableReflectionSetup(ReflectionCompInfo::MemberInfo& info);
 
-		ReflectedCompInfo::MemberInfo& m_Info;
+		ReflectionCompInfo::MemberInfo& m_Info;
 	};
 
 }

@@ -2,8 +2,9 @@
 #include <algorithm>
 
 #include "Core/Defines.h"
-#include "Utility/Hash.h"
+#include "CommonOperations.h"
 #include "SceneReflect.h"
+#include "Utility/Hash.h"
 
 namespace LAG
 {
@@ -13,10 +14,17 @@ namespace LAG
 		static_assert(!std::is_fundamental<Comp>::value, "Component type cannot be a fundamental type.");
 		static_assert(std::is_default_constructible<Comp>::value, "Component type is not constructible.");
 		
-		// Ensure that the component type has been registered before we proceed
+		TypeInfo* typeInfo = nullptr;
 		constexpr TypeID typeID = Scene::GetTypeID<Comp>();
-		if (const auto& typeInfoIt = Scene::GetTypeInfo().find(typeID); typeInfoIt == Scene::GetTypeInfo().end())
-			Scene::RegisterType<Comp>();
+
+		// Ensure that the component type has been registered before we proceed
+		if (const auto& typeInfoIt = Scene::GetTypeInfo().find(typeID); typeInfoIt != Scene::GetTypeInfo().end())
+			typeInfo = &typeInfoIt->second;
+		else
+		{
+			typeInfo = &Scene::RegisterType<Comp>();
+			ReflectInternal::SetupCommonOperations<Comp>();
+		}
 
 		// Return early in case component is already reflected
 		auto& reflCompInfoMap = Scene::s_ReflectedCompInfo;
@@ -53,7 +61,7 @@ namespace LAG
 		// Check if this variable has already been reflected
 		auto& memberVec = reflCompInfoIt->second.members;
 		size_t byteOffset = reinterpret_cast<size_t>(&(reinterpret_cast<Comp*>(0)->*var));
-		auto varIt = std::find_if(memberVec.begin(), memberVec.end(), [&byteOffset](ReflectedCompInfo::MemberInfo& var) { return var.byteOffset == byteOffset; });
+		auto varIt = std::find_if(memberVec.begin(), memberVec.end(), [&byteOffset](ReflectionCompInfo::MemberInfo& var) { return var.byteOffset == byteOffset; });
 
 		if (varIt != memberVec.end())
 		{
@@ -61,7 +69,7 @@ namespace LAG
 			return VariableReflectionSetup(*varIt);
 		}
 
-		ReflectedCompInfo::MemberInfo& memberInfo = memberVec.emplace_back(ReflectedCompInfo::MemberInfo());
+		ReflectionCompInfo::MemberInfo& memberInfo = memberVec.emplace_back(ReflectionCompInfo::MemberInfo());
 		memberInfo.props.displayName = typeid(Var).name();
 		memberInfo.typeID = varTypeID;
 		memberInfo.byteOffset = byteOffset;

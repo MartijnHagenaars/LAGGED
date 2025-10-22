@@ -76,12 +76,14 @@ namespace LAG
 		// TODO: Consider removing Scene reference
 		ComponentView(Scene& scene, TypeID id, TypeInfo& compData);
 
-		ReflectedCompInfo::Properties& Properties() const { return m_ReflectionData.props; }
+		ReflectionCompInfo::Properties& Properties() const { return m_ReflectionData.props; }
 
 		MemberRange Members();
 
 		void* GetVoid(EntityID id);
 		std::any ToAny(void* data);
+
+		ReflectionFunc Func(Hash64 funcNameHash) const;
 
 		size_t Size() const { return m_ComponentData.size; }
 
@@ -94,7 +96,7 @@ namespace LAG
 	private:
 		class MemberRange
 		{
-			using DataContainer = std::vector<ReflectedCompInfo::MemberInfo>;
+			using DataContainer = std::vector<ReflectionCompInfo::MemberInfo>;
 			class Iterator
 			{
 			public:
@@ -136,46 +138,24 @@ namespace LAG
 		Scene& m_Scene;
 		TypeID m_ID;
 		TypeInfo& m_ComponentData;
-		ReflectedCompInfo& m_ReflectionData;
-
-		//Something where variables are stored
+		ReflectionCompInfo& m_ReflectionData;
 	};
 
 	class MemberView
 	{
 	public:
 		MemberView() = delete;
-		MemberView(ReflectedCompInfo::MemberInfo& memberData, TypeInfo& typeInfo, ComponentView& parentCompView);
+		MemberView(ReflectionCompInfo::MemberInfo& memberData, TypeInfo& typeInfo, ComponentView& parentCompView);
 
-		ReflectedCompInfo::MemberInfo::Properties& Properties() const { return m_MemberData.props; }
+		ReflectionCompInfo::MemberInfo::Properties& Properties() const { return m_MemberData.props; }
 
 		void* GetVoid(EntityID id) const;
 		std::any ToAny(void* data) const;
 
-		class ReflectionFuncs
-		{
-		public:
-			ReflectionFuncs() = delete;
-			ReflectionFuncs(std::function<void(const std::vector<std::any>&)> func) :
-				m_Func(func)
-			{}
-
-			explicit operator bool() const { return (m_Func != nullptr); }
-
-			template<typename... Args>
-			void Invoke(Args&&... args)
-			{
-				m_Func({ args... });
-			}
-
-		private:
-			std::function<void(const std::vector<std::any>&)> m_Func;
-		};
-		ReflectionFuncs Func(Hash64 funcNameHash) const;
-
+		ReflectionFunc Func(Hash64 funcNameHash) const;
 
 	private:
-		ReflectedCompInfo::MemberInfo& m_MemberData;
+		ReflectionCompInfo::MemberInfo& m_MemberData;
 		TypeInfo& m_TypeInfo;
 		ComponentView& m_ParentCompView;
 	};

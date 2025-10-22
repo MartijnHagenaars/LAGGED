@@ -6,7 +6,7 @@ namespace LAG
 	// COMPONENT REFLECTION SETUP //
 	////////////////////////////////
 
-	ComponentReflectionSetup::ComponentReflectionSetup(ReflectedCompInfo& info) :
+	ComponentReflectionSetup::ComponentReflectionSetup(ReflectionCompInfo& info) :
 		m_Info(info)
 	{
 	}
@@ -28,7 +28,7 @@ namespace LAG
 	// VARIABLE REFLECTION SETUP //
 	///////////////////////////////
 
-	VariableReflectionSetup::VariableReflectionSetup(ReflectedCompInfo::MemberInfo& info) :
+	VariableReflectionSetup::VariableReflectionSetup(ReflectionCompInfo::MemberInfo& info) :
 		m_Info(info)
 	{
 	}

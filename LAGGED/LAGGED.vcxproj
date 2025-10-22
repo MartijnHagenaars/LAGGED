@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\ECS\Containers.h" />
+    <ClInclude Include="src\ECS\Reflection\CommonOperations.h" />
     <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
     <ClInclude Include="src\Utility\Hash.h" />
     <ClInclude Include="src\Utility\Profiler.h" />

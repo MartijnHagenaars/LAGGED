@@ -160,7 +160,7 @@ namespace LAG
 		}
 
 		// This map links a (Component-class) TypeID to its Component-type reflection info
-		inline static std::unordered_map<TypeID, ReflectedCompInfo> s_ReflectedCompInfo;
+		inline static std::unordered_map<TypeID, ReflectionCompInfo> s_ReflectedCompInfo;
 
 	};
 }
