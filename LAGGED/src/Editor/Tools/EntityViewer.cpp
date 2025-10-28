@@ -88,6 +88,10 @@ namespace LAG
 		{
 			ImGui::SeparatorText("Select a component");
 
+			//for ()
+			//{
+			//	ImGui::Button();
+			//}
 			// TODO: Implement functionality for showing and adding components
 
 			ImGui::EndPopup();
@@ -105,17 +109,17 @@ namespace LAG
 					const auto& compProps = compIt.Properties();
 					if (compProps.isHidden)
 						continue;
-
+					
 					// Context menu when right-clicking on header
-					bool isHeaderOpen = ImGui::CollapsingHeader(compProps.displayName.c_str(), ImGuiTreeNodeFlags_None);
-					if (ImGui::BeginPopupContextItem()) // <-- use last item id as popup id
+					std::string_view displayName = !compProps.displayName.empty() ? compProps.displayName : compIt.Name();
+					bool isHeaderOpen = ImGui::CollapsingHeader(displayName.data(), ImGuiTreeNodeFlags_None);
+					if (ImGui::BeginPopupContextItem())
 					{
-						ImGui::Text("%s (%s)", compProps.displayName.c_str(), compIt.Name().data());
+						ImGui::Text("%s (%s)", displayName.data(), compIt.Name().data());
 						
 						if(ImGui::Button("Remove Component"))
 							compIt.Func(REMOVE_COMPONENT).Invoke(m_SelectedEntityID);
-						// TODO: Add extra functionality like removing and/or resetting component data
-
+						
 						ImGui::EndPopup();
 					}
 
@@ -123,6 +127,11 @@ namespace LAG
 					if (isHeaderOpen)
 					{
 						EditorGui::Indent indent;
+						if (compIt.Members().begin() == compIt.Members().end())
+						{
+							ImGui::Text("No reflection data for %s.", displayName.data());
+							continue;
+						}
 						for (const MemberView& varIt : compIt.Members())
 						{
 							const auto& varProps = varIt.Properties();

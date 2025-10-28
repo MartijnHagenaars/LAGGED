@@ -90,7 +90,7 @@ namespace LAG
 #ifdef DEBUG
 		const std::string_view Name() const { return m_ComponentData.debugName; }
 #else
-		const std::string_view Name() const { return std::string(); }
+		const std::string_view Name() const { return std::string_view("UNDEF"); }
 #endif	
 
 	private:

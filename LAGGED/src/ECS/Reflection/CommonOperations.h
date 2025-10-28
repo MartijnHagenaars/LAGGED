@@ -1,7 +1,6 @@
 #pragma once
 #include "Core/Engine.h"
 
-
 namespace LAG
 {
 	constexpr Hash64 ADD_COMPONENT = StringToHash64("ADD_COMPONENT");
@@ -28,7 +27,6 @@ namespace LAG
 		template <typename T>
 		static void SetupCommonOperations()
 		{
-			printf("meme");;
 			//TODO: This needs to only be a func on components
 			SceneReflect::RegisterFunc<T, &ReflectInternal::AddComponent<T>>(ADD_COMPONENT);
 			SceneReflect::RegisterFunc<T, &ReflectInternal::RemoveComponent<T>>(REMOVE_COMPONENT);
