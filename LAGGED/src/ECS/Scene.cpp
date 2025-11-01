@@ -83,8 +83,8 @@ namespace LAG
 					TypeID typeID = archetype->typeID[i];
 					TypeInfo& compData = GetTypeInfo().at(typeID);
 
-					compData.DestructData(&archetype->compData[i][entityRecord.index * compData.size]);
-					compData.MoveData(
+					compData.Destruct(&archetype->compData[i][entityRecord.index * compData.size]);
+					compData.Move(
 						&archetype->compData[i][endIndex * compData.size],
 						&archetype->compData[i][entityRecord.index * compData.size]);
 				}
@@ -208,7 +208,7 @@ namespace LAG
 					if (entIndex == entityRecord.index)
 						continue;
 
-					compData.MoveData(&archetype.compData[typeIndex][entIndex * compDataSize], &newData[offsetIndex * compDataSize]);
+					compData.Move(&archetype.compData[typeIndex][entIndex * compDataSize], &newData[offsetIndex * compDataSize]);
 					offsetIndex += 1;
 				}
 			}
@@ -242,7 +242,7 @@ namespace LAG
 		unsigned char* newData = new unsigned char[archetype.compDataSize[compIndex]];
 		//If this archetype has entities, we need to loop through all entities and move their data from the old (smaller) to the new (larger) buffer
 		for (int entIndex = 0; entIndex < archetype.entityIDs.size(); entIndex++)
-			compData.MoveData(&archetype.compData[compIndex][entIndex * newCompDataSize], &newData[entIndex * newCompDataSize]);
+			compData.Move(&archetype.compData[compIndex][entIndex * newCompDataSize], &newData[entIndex * newCompDataSize]);
 
 		//The data has been moved so we can delete the old buffer and replace it with the new one.
 		delete[] archetype.compData[compIndex];

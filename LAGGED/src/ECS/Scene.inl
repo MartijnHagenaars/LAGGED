@@ -116,7 +116,7 @@ namespace LAG
 					if (matchingIDs)
 					{
 						TypeInfo& oldCompData = GetTypeInfo().at(oldArchetype->typeID[i]);
-						oldCompData.MoveData(&oldArchetype->compData[i][entityRecord.index * oldCompData.size], &newArchetype->compData[compIndex][currentSize]);
+						oldCompData.Move(&oldArchetype->compData[i][entityRecord.index * oldCompData.size], &newArchetype->compData[compIndex][currentSize]);
 						break;
 					}
 					else if (i == (oldArchetype->typeID.size() - 1) && !matchingIDs)
@@ -198,7 +198,7 @@ namespace LAG
 				ResizeAndReallocateComponentBuffer(*newArchetype, newComp, compIndex, targetSize);
 			}
 
-			newComp.EmplaceInMemory(&newArchetype->compData[compIndex][currentSize]);
+			newComp.Construct(&newArchetype->compData[compIndex][currentSize]);
 
 			ArchetypeID oldArchetypeId = oldArchetype->typeID;
 			for (size_t i = 0; i < oldArchetype->typeID.size(); i++)
@@ -208,7 +208,7 @@ namespace LAG
 				if (oldTypeId == newTypeID)
 				{
 					const TypeInfo& oldComp = GetTypeInfo().at(oldTypeId);
-					oldComp.MoveData(&oldArchetype->compData[i][entityRecord.index * oldComp.size], &newArchetype->compData[compIndex][currentSize]);
+					oldComp.Move(&oldArchetype->compData[i][entityRecord.index * oldComp.size], &newArchetype->compData[compIndex][currentSize]);
 					break;
 				}
 			}
@@ -362,9 +362,9 @@ namespace LAG
 		newTypeInfo.debugName = typeid(Type).name();
 #endif
 
-		newTypeInfo.EmplaceInMemory = [](unsigned char* dest) { new (&dest[0]) Type(); };
-		newTypeInfo.MoveData = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Type(std::move(*reinterpret_cast<Type*>(src))); };
-		newTypeInfo.DestructData = [](unsigned char* data) { reinterpret_cast<Type*>(data)->~Type(); };
+		newTypeInfo.Construct = [](unsigned char* dest) { new (&dest[0]) Type(); };
+		newTypeInfo.Destruct = [](unsigned char* data) { reinterpret_cast<Type*>(data)->~Type(); };
+		newTypeInfo.Move = [](unsigned char* src, unsigned char* dest) { new (&dest[0]) Type(std::move(*reinterpret_cast<Type*>(src))); };
 		newTypeInfo.VoidToAny = [](void* data) { return std::any(static_cast<Type*>(data)); };
 
 		return GetTypeInfo().insert({ typeID, newTypeInfo }).first->second;

@@ -33,9 +33,9 @@ namespace LAG
 #endif
 		size_t size = 0;
 
-		void(*EmplaceInMemory)(unsigned char* dest) = nullptr;
-		void(*MoveData)(unsigned char* src, unsigned char* dest) = nullptr;
-		void(*DestructData)(unsigned char* data) = nullptr;
+		void(*Construct)(unsigned char* dest) = nullptr;
+		void(*Destruct)(unsigned char* data) = nullptr;
+		void(*Move)(unsigned char* src, unsigned char* dest) = nullptr;
 
 		std::any(*VoidToAny)(void*) = nullptr;
 		std::unordered_map<Hash64, std::function<void(const std::vector<std::any>&)>> funcs;
