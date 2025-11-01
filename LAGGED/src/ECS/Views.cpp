@@ -99,16 +99,9 @@ namespace LAG
 		return m_ComponentData.VoidToAny(data);
 	}
 
-	ReflectionFunc ComponentView::Func(Hash64 funcNameHash) const
+	FunctionView ComponentView::Func(Hash64 funcNameHash) const
 	{
-		auto funcIt = m_ComponentData.funcs.find(funcNameHash);
-		if (funcIt == m_ComponentData.funcs.end())
-		{
-			WARNING("Failed to find reflection function!");
-			return ReflectionFunc(nullptr);
-		}
-
-		return ReflectionFunc(funcIt->second);
+		return FunctionView(m_ComponentData.funcs, funcNameHash);
 	}
 
 	ComponentView::MemberRange::MemberRange(DataContainer& dataContainer, ComponentView& parentCompView) :
@@ -172,15 +165,8 @@ namespace LAG
 		return m_TypeInfo.VoidToAny(data);
 	}
 
-	ReflectionFunc MemberView::Func(Hash64 funcNameHash) const
+	FunctionView MemberView::Func(Hash64 funcNameHash) const
 	{
-		auto funcIt = m_TypeInfo.funcs.find(funcNameHash);
-		if (funcIt == m_TypeInfo.funcs.end())
-		{
-			WARNING("Failed to find reflection function!");
-			return ReflectionFunc(nullptr);
-		}
-
-		return ReflectionFunc(funcIt->second);
+		return FunctionView(m_TypeInfo.funcs, funcNameHash);
 	}
 }

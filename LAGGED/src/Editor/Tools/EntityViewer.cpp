@@ -106,7 +106,7 @@ namespace LAG
 			{
 				for (ComponentView compIt : archIt.Types())
 				{
-					const auto& compProps = compIt.Properties();
+					const auto& compProps = compIt.Props();
 					if (compProps.isHidden)
 						continue;
 					
@@ -117,8 +117,11 @@ namespace LAG
 					{
 						ImGui::Text("%s (%s)", displayName.data(), compIt.Name().data());
 						
-						if(ImGui::Button("Remove Component"))
-							compIt.Func(REMOVE_COMPONENT).Invoke(m_SelectedEntityID);
+						if (ImGui::Button("Remove Component"))
+						{
+							if (auto func = compIt.Func(REMOVE_COMPONENT); func.Valid())
+								func.Invoke(m_SelectedEntityID);
+						}
 						
 						ImGui::EndPopup();
 					}
@@ -134,10 +137,12 @@ namespace LAG
 						}
 						for (const MemberView& varIt : compIt.Members())
 						{
-							const auto& varProps = varIt.Properties();
+							const auto& varProps = varIt.Props();
 							if (!varProps.isHidden)
 							{
-								varIt.Func(EDITOR_DRAW_TYPE_WIDGET).Invoke(m_SelectedEntityID, varIt.ToAny(varIt.GetVoid(m_SelectedEntityID)), varIt.Properties().displayName);
+								auto func = varIt.Func(EDITOR_DRAW_TYPE_WIDGET);
+								if (func.Valid())
+									func.Invoke(m_SelectedEntityID, varIt.ToAny(varIt.GetVoid(m_SelectedEntityID)), varIt.Props().displayName);
 							}
 						}
 					}

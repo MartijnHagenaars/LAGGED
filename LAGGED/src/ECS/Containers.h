@@ -41,13 +41,15 @@ namespace LAG
 		std::unordered_map<Hash64, std::function<void(const std::vector<std::any>&)>> funcs;
 	};
 
-	// TODO: Consider turning this into some generic structure.
+	// TODO: Properties should be converted into some generic structure.
+	//		 Example: Properties could be stored in a map as void*
 	struct ReflectionCompInfo
 	{
 		struct MemberInfo
 		{
 			Hash64 typeID = 0;
 			size_t byteOffset = -1;
+
 			struct Properties
 			{
 				bool isHidden = false;
@@ -62,26 +64,5 @@ namespace LAG
 			bool isHidden = false;
 			std::string displayName;
 		} props;
-	};
-
-	class ReflectionFunc
-	{
-	public:
-		ReflectionFunc() = delete;
-		ReflectionFunc(std::function<void(const std::vector<std::any>&)> func) :
-			m_Func(func)
-		{
-		}
-
-		explicit operator bool() const { return (m_Func != nullptr); }
-
-		template<typename... Args>
-		void Invoke(Args&&... args)
-		{
-			m_Func({ args... });
-		}
-
-	private:
-		std::function<void(const std::vector<std::any>&)> m_Func;
 	};
 }

@@ -7,9 +7,9 @@
 
 namespace LAG
 {
-	// Proxy class for Archetype
 	class Scene;
 	class ComponentView;
+	class FunctionView;
 	class ArchetypeView
 	{
 		class ComponentRange;
@@ -76,14 +76,14 @@ namespace LAG
 		// TODO: Consider removing Scene reference
 		ComponentView(Scene& scene, TypeID id, TypeInfo& compData);
 
-		ReflectionCompInfo::Properties& Properties() const { return m_ReflectionData.props; }
+		ReflectionCompInfo::Properties& Props() const { return m_ReflectionData.props; }
 
 		MemberRange Members();
 
 		void* GetVoid(EntityID id);
 		std::any ToAny(void* data);
 
-		ReflectionFunc Func(Hash64 funcNameHash) const;
+		FunctionView Func(Hash64 funcNameHash) const;
 
 		size_t Size() const { return m_ComponentData.size; }
 
@@ -147,16 +147,47 @@ namespace LAG
 		MemberView() = delete;
 		MemberView(ReflectionCompInfo::MemberInfo& memberData, TypeInfo& typeInfo, ComponentView& parentCompView);
 
-		ReflectionCompInfo::MemberInfo::Properties& Properties() const { return m_MemberData.props; }
+		ReflectionCompInfo::MemberInfo::Properties& Props() const { return m_MemberData.props; }
 
 		void* GetVoid(EntityID id) const;
 		std::any ToAny(void* data) const;
 
-		ReflectionFunc Func(Hash64 funcNameHash) const;
+		FunctionView Func(Hash64 funcNameHash) const;
 
 	private:
 		ReflectionCompInfo::MemberInfo& m_MemberData;
 		TypeInfo& m_TypeInfo;
 		ComponentView& m_ParentCompView;
+	};
+
+	class FunctionView
+	{
+		using FuncHashMap = std::unordered_map<Hash64, std::function<void(const std::vector<std::any>&)>>;
+	public:
+		FunctionView() = delete;
+		FunctionView(FuncHashMap& funcMap, Hash64 funcNameHash)
+		{
+			auto funcIt = funcMap.find(funcNameHash);
+			if (funcIt == funcMap.end())
+			{
+				INFO("No reflection function found for function with hash {}", funcNameHash);
+				m_Func = nullptr;
+			}
+			else 
+				m_Func = funcIt->second;
+		}
+
+		template<typename... Args>
+		void Invoke(Args&&... args)
+		{
+			if (!m_Func)
+				CRITICAL("Tried to invoke invalid reflection function.");
+			m_Func({ args... });
+		}
+
+		bool Valid() { return m_Func != nullptr; }
+
+	private:
+		std::function<void(const std::vector<std::any>&)> m_Func;
 	};
 }

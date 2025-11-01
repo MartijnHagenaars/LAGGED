@@ -167,7 +167,7 @@ namespace LAG
 		//}
 
 		//template <>
-		//[[maybe_unused]] static void UnloadWidgetType<Noise::Properties>(EntityID entityID, Noise::Properties* value, const std::string& name)
+		//[[maybe_unused]] static void UnloadWidgetType<Noise::Props>(EntityID entityID, Noise::Props* value, const std::string& name)
 		//{
 		//}
 
