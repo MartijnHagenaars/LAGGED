@@ -2,7 +2,6 @@
 #include <algorithm>
 
 #include "Core/Defines.h"
-#include "CommonOperations.h"
 #include "SceneReflect.h"
 #include "Utility/Hash.h"
 
@@ -21,10 +20,7 @@ namespace LAG
 		if (const auto& typeInfoIt = Scene::GetTypeInfo().find(typeID); typeInfoIt != Scene::GetTypeInfo().end())
 			typeInfo = &typeInfoIt->second;
 		else
-		{
 			typeInfo = &Scene::RegisterType<Comp>();
-			ReflectInternal::SetupCommonOperations<Comp>();
-		}
 
 		// Return early in case component is already reflected
 		auto& reflCompInfoMap = Scene::s_ReflectedCompInfo;

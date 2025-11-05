@@ -100,6 +100,7 @@ namespace LAG
 		std::string selectedEntityDisplay = "Entity ID: " + std::to_string(m_SelectedEntityID);
 		ImGui::Text(selectedEntityDisplay.c_str());
 
+		TypeID compToDelete = 0;
 		for (ArchetypeView archIt : scene->Range())
 		{
 			if (archIt.Contains(m_SelectedEntityID))
@@ -118,10 +119,7 @@ namespace LAG
 						ImGui::Text("%s (%s)", displayName.data(), compIt.Name().data());
 						
 						if (ImGui::Button("Remove Component"))
-						{
-							if (auto func = compIt.Func(REMOVE_COMPONENT); func.Valid())
-								func.Invoke(m_SelectedEntityID);
-						}
+							compToDelete = compIt.ID();
 						
 						ImGui::EndPopup();
 					}
@@ -149,5 +147,9 @@ namespace LAG
 				}
 			}
 		}
+
+		// HACK: Quick workaround for crash when removing component WITHIN archetype loop
+		if(compToDelete != 0)
+			scene->RemoveComponent(m_SelectedEntityID, compToDelete);
 	}
 }

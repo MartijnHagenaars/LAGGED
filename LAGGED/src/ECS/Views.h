@@ -80,6 +80,7 @@ namespace LAG
 
 		MemberRange Members();
 
+		TypeID ID() const { return m_ID; }
 		void* GetVoid(EntityID id);
 		std::any ToAny(void* data);
 

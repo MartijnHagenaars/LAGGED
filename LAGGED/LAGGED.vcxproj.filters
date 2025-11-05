@@ -120,7 +120,6 @@
     <ClInclude Include="src\ECS\Containers.h" />
     <ClInclude Include="src\ECS\Views.h" />
     <ClInclude Include="src\Utility\Hash.h" />
-    <ClInclude Include="src\ECS\Reflection\CommonOperations.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />
