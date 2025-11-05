@@ -34,11 +34,18 @@ namespace LAG
 		void RemoveEntity(EntityID id);
 		EntityID DuplicateEntity(EntityID id);
 
+		// Add a component to an entity using a component template type.
 		template<typename Comp, typename ...Args>
 		Comp* AddComponent(const EntityID id, Args&&... compArgs);
+		// Add a component to an entity using a component type ID. 
+		
+		void* AddComponent(const EntityID id, const TypeID compID);
 
+		// Remove a component from an entity using a component template type. 
 		template<typename Comp>
 		void RemoveComponent(const EntityID id);
+		// Remove a component from an entity using a component type ID. 
+		void RemoveComponent(const EntityID id, const TypeID compID);
 
 		template<typename Comp>
 		bool HasComponent(const EntityID& id);
@@ -132,7 +139,7 @@ namespace LAG
 
 		void RemoveEntityFromArchetype(EntityID id, Archetype& archetype);
 		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);
-		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const TypeInfo& componentData, int componentIndex, size_t targetSize);
+		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const TypeInfo& typeInfo, int componentIndex, size_t targetSize);
 
 	private:
 		inline static EntityID s_EntityCounter = 0;
