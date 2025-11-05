@@ -28,7 +28,8 @@ namespace LAG
 
 		EntityID AddEntity();
 
-		//TODO: Consider removing this + the automatic adding of the DefaultComponent. I might want to handle this some other way.
+		// TODO: Consider removing this + the automatic adding of the DefaultComponent. 
+		//		 I might want to handle this some other way.
 		EntityID AddEntity(const std::string& name);
 
 		void RemoveEntity(EntityID id);
@@ -47,11 +48,14 @@ namespace LAG
 		// Remove a component from an entity using a component type ID. 
 		void RemoveComponent(const EntityID id, const TypeID compID);
 
+		// Check if an entity contains a specific component using a component template type.
 		template<typename Comp>
-		bool HasComponent(const EntityID& id);
+		bool HasComponent(const EntityID id);
+		// Check if an entity contains a specific component using a component type ID. 
+		bool HasComponent(const EntityID id, const TypeID compID);
 
 		template<typename Comp>
-		Comp* GetComponent(const EntityID& id);
+		Comp* GetComponent(const EntityID id);
 
 		/// <summary>
 		/// Checks whether an entity with a specific ID exists.
@@ -77,14 +81,22 @@ namespace LAG
 		template<typename ...Comps>
 		std::vector<EntityID> QueryEntities();
 
-		// Helper function for getting the hash64 of a type
-		template<typename T>
-		static constexpr TypeID GetTypeID();
-
 		/// <summary>
 		/// Returns a range of archetypes
 		/// </summary>
 		ArchetypeRange Range();
+
+		/// <summary>
+		/// Query typeIDs of all reflected components
+		/// </summary>
+		/// <returns>A vector containing all component IDs</returns>
+		static std::vector<TypeID> QueryCompIDs();
+
+
+
+		// Helper function for getting the hash64 of a type
+		template<typename T>
+		static constexpr TypeID GetTypeID();
 
 	private:
 		class ArchetypeRange 

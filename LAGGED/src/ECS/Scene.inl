@@ -36,19 +36,13 @@ namespace LAG
 	}
 
 	template<typename Comp>
-	inline bool Scene::HasComponent(const EntityID& entityID)
+	inline bool Scene::HasComponent(const EntityID entityID)
 	{
-		const auto& recordIt = m_EntityArchetypes.find(entityID);
-		if (recordIt == m_EntityArchetypes.end())
-			return false;
-
-		Archetype* archetype = recordIt->second.archetype;
-		constexpr TypeID typeID = Scene::GetTypeID<Comp>();
-		return (std::find(archetype->typeID.begin(), archetype->typeID.end(), typeID)) != archetype->typeID.end();
+		return HasComponent(entityID, GetTypeID<Comp>());
 	}
 
 	template<typename Comp>
-	inline Comp* Scene::GetComponent(const EntityID& entityID)
+	inline Comp* Scene::GetComponent(const EntityID entityID)
 	{
 		if (entityID == ENTITY_NULL)
 		{

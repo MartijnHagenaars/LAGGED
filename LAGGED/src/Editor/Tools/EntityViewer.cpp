@@ -88,11 +88,17 @@ namespace LAG
 		{
 			ImGui::SeparatorText("Select a component");
 
-			//for ()
-			//{
-			//	ImGui::Button();
-			//}
-			// TODO: Implement functionality for showing and adding components
+			const auto& compIDs = scene->QueryCompIDs();
+			for (int i = 0; i < compIDs.size(); i++)
+			{
+				TypeID compID = compIDs[i];
+				const auto* compProps = SceneReflect::GetComponentProps(compID);
+				if (scene->HasComponent(m_SelectedEntityID, compID) || !compProps || compProps->isHidden)
+					continue;
+
+				if (ImGui::Button(compProps->displayName.c_str()))
+					scene->AddComponent(m_SelectedEntityID, compID);
+			}
 
 			ImGui::EndPopup();
 		}

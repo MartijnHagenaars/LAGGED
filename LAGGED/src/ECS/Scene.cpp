@@ -258,6 +258,16 @@ namespace LAG
 		entityRecord.archetype = newArchetype;
 	}
 
+	bool Scene::HasComponent(const EntityID entityID, const TypeID compID)
+	{
+		const auto& recordIt = m_EntityArchetypes.find(entityID);
+		if (recordIt == m_EntityArchetypes.end())
+			return false;
+
+		Archetype* archetype = recordIt->second.archetype;
+		return (std::find(archetype->typeID.begin(), archetype->typeID.end(), compID)) != archetype->typeID.end();
+	}
+
 	void Scene::RemoveEntity(EntityID id)
 	{
 		const auto& entityRecordIt = m_EntityArchetypes.find(id);
@@ -336,6 +346,15 @@ namespace LAG
 		return ArchetypeRange(*this, m_Archetypes);
 	}
 
+	std::vector<TypeID> Scene::QueryCompIDs()
+	{
+		std::vector<TypeID> compIDs;
+		compIDs.reserve(s_ReflectedCompInfo.size());
+		for (const auto& it : s_ReflectedCompInfo)
+			compIDs.emplace_back(it.first);
+
+		return compIDs;
+	}
 
 	// ======== ARCHETYPES ========
 

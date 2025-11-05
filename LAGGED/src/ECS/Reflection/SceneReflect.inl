@@ -107,4 +107,10 @@ namespace LAG
 				FuncAdapter(Func, args, std::make_index_sequence<ArgsCount>());
 			};
 	}
+
+	template<typename Comp>
+	inline ReflectionCompInfo::Properties* SceneReflect::GetComponentProps()
+	{
+		return GetComponentProps(Scene::GetTypeID<Comp>());
+	}
 }

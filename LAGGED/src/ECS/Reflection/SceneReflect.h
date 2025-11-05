@@ -1,5 +1,6 @@
 #pragma once
 #include "ECS/Scene.h"
+#include "ECS/Containers.h"
 
 #include <unordered_map>
 #include <memory>
@@ -20,6 +21,10 @@ namespace LAG
 
 		template <typename T, auto Func>
 		static void RegisterFunc(Hash64 funcNameID);
+
+		template<typename Comp>
+		static ReflectionCompInfo::Properties* GetComponentProps();
+		static ReflectionCompInfo::Properties* GetComponentProps(TypeID id);
 
 	private:
 		SceneReflect() = delete;

@@ -50,4 +50,13 @@ namespace LAG
 		m_Info.props.isReadOnly = isReadOnly;
 		return *this;
 	}
+
+
+	ReflectionCompInfo::Properties* SceneReflect::GetComponentProps(TypeID id)
+	{
+		if (const auto& compInfoIt = Scene::s_ReflectedCompInfo.find(id); compInfoIt != Scene::s_ReflectedCompInfo.end())
+			return &compInfoIt->second.props;
+		else 
+			return nullptr;
+	}
 }
