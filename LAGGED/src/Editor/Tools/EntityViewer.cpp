@@ -113,12 +113,12 @@ namespace LAG
 			{
 				for (ComponentView compIt : archIt.Types())
 				{
-					const auto& compProps = compIt.Props();
-					if (compProps.isHidden)
+					const auto* compProps = compIt.Props();
+					if (!compProps || compProps->isHidden)
 						continue;
 					
 					// Context menu when right-clicking on header
-					std::string_view displayName = !compProps.displayName.empty() ? compProps.displayName : compIt.Name();
+					std::string_view displayName = !compProps->displayName.empty() ? compProps->displayName : compIt.Name();
 					bool isHeaderOpen = ImGui::CollapsingHeader(displayName.data(), ImGuiTreeNodeFlags_None);
 					if (ImGui::BeginPopupContextItem())
 					{

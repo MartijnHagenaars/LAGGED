@@ -73,13 +73,20 @@ namespace LAG
 	///////////////////////////////////
 
 	ComponentView::ComponentView(Scene& scene, TypeID id, TypeInfo& compData) :
-		m_Scene(scene), m_ID(id), m_ComponentData(compData), m_ReflectionData(Scene::s_ReflectedCompInfo[id])
+		m_Scene(scene), m_ID(id), m_ComponentData(compData)
 	{
+		const auto& reflCompInfoIt = Scene::s_ReflectedCompInfo.find(id);
+		m_ReflectionData = reflCompInfoIt != Scene::s_ReflectedCompInfo.end() ? &reflCompInfoIt->second : nullptr;
+	}
+
+	ReflectionCompInfo::Properties* ComponentView::Props() const
+	{ 
+		return m_ReflectionData ? &m_ReflectionData->props : nullptr;
 	}
 
 	ComponentView::MemberRange ComponentView::Members()
 	{
-		return ComponentView::MemberRange(m_ReflectionData.members, *this);
+		return ComponentView::MemberRange(m_ReflectionData->members, *this);
 	}
 
 	void* ComponentView::GetVoid(EntityID id)

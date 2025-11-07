@@ -76,7 +76,7 @@ namespace LAG
 		// TODO: Consider removing Scene reference
 		ComponentView(Scene& scene, TypeID id, TypeInfo& compData);
 
-		ReflectionCompInfo::Properties& Props() const { return m_ReflectionData.props; }
+		ReflectionCompInfo::Properties* Props() const;
 
 		MemberRange Members();
 
@@ -137,9 +137,11 @@ namespace LAG
 
 	private:
 		Scene& m_Scene;
+		
 		TypeID m_ID;
 		TypeInfo& m_ComponentData;
-		ReflectionCompInfo& m_ReflectionData;
+
+		ReflectionCompInfo* m_ReflectionData;
 	};
 
 	class MemberView

@@ -23,7 +23,7 @@ namespace LAG
 		void* compPtr = AddComponent(entityID, typeID);
 		if constexpr (sizeof...(compArgs) > 0)
 		{
-			new(compPtr)  Comp(std::forward<Args>(compArgs)...);
+			new(compPtr) Comp(std::forward<Args>(compArgs)...);
 		}
 
 		return reinterpret_cast<Comp*>(compPtr);
