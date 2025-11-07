@@ -152,7 +152,7 @@
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
-    <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
+    <ClInclude Include="src\ECS\Components\SurfaceComponent.h" />
     <ClInclude Include="src\Editor\Reflection\EditorTypesReflectionWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
@@ -233,7 +233,7 @@
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
-    <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
+    <ClCompile Include="src\ECS\Components\SurfaceComponent.cpp" />
     <ClCompile Include="src\Editor\ToolsManager.cpp" />
     <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">

@@ -9,15 +9,6 @@ namespace LAG
 {
 	struct SurfaceComponent
 	{
-		Surface surface = {};
-		TextureHandle surfaceTexture = {};
-
-		static bool InitializeReflection();
-		static inline bool m_ReflectionState = InitializeReflection();
-	};
-
-	struct ProceduralSurfaceComponent
-	{
 		Surface surface;
 		int surfaceSubdivisions = 16;
 		glm::vec2 surfaceScale = glm::vec2(1.f);

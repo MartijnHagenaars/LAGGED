@@ -14,7 +14,7 @@
 #include "ECS/Components/ModelComponent.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
-#include "ECS/Components/TerrainComponents.h"
+#include "ECS/Components/SurfaceComponent.h"
 
 #include "ECS/Systems/TerrainSystems.h"
 
@@ -122,7 +122,7 @@ void Game::Initialize()
 
 				for (LAG::MemberView varIt : compIt.Members())
 				{
-					auto& props = varIt.Properties();
+					auto& props = varIt.Props();
 					std::any varAny = varIt.ToAny(varIt.GetVoid(reflEntityID));
 					if (varAny.type() == typeid(std::string))
 					{

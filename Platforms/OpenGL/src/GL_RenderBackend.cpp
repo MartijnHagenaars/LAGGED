@@ -25,7 +25,7 @@
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/ModelComponent.h"
-#include "ECS/Components/TerrainComponents.h"
+#include "ECS/Components/SurfaceComponent.h"
 #include "ECS/Systems/BasicSystems.h"
 #include "ECS/Systems/CameraSystem.h"
 
@@ -156,13 +156,7 @@ namespace LAG
 				}
 			}
 
-			SurfaceComponent* surfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
-			if (surfacePtr)
-			{
-				surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(StringHash64("res/Shaders/OpenGL/SurfaceShader")), lights);
-			}
-
-			ProceduralSurfaceComponent* procSurfacePtr = GetScene()->GetComponent<ProceduralSurfaceComponent>(entityID);
+			SurfaceComponent* procSurfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
 			if (procSurfacePtr)
 			{
 				procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(StringHash64("res/Shaders/OpenGL/SurfaceShader")), lights);

@@ -1,12 +1,12 @@
 #include "World.h"
+#include "Chunk.h"
 
 #include "Core/Engine.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
-#include "ECS/Components/TerrainComponents.h"
 #include "ECS/Components/CameraComponent.h"
-#include "Chunk.h"
+#include "ECS/Components/SurfaceComponent.h"
 
 World::World(int loadDistance, bool infiniteTerrain) :
 	m_LoadDistance(loadDistance), m_UseInfiniteTerrain(infiniteTerrain)

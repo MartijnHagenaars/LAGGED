@@ -4,7 +4,7 @@
 #include "ECS/Scene.h"
 
 #include "ECS/Components/BasicComponents.h"
-#include "ECS/Components/TerrainComponents.h"
+#include "ECS/Components/SurfaceComponent.h"
 #include "ECS/Systems/TerrainSystems.h"
 
 void Chunk::Load(const glm::vec2& position)
@@ -22,8 +22,8 @@ void Chunk::Load(const glm::vec2& position)
 		transformComp->SetPosition(glm::vec3(position.x * 64, 0.f, position.y * 64));
 		transformComp->SetScale(glm::vec3(64));
 
-		//Add procedural surface component
-		LAG::ProceduralSurfaceComponent* procSurface = sc->AddComponent<LAG::ProceduralSurfaceComponent>(m_EntityID);
+		//Add surface component
+		LAG::SurfaceComponent* procSurface = sc->AddComponent<LAG::SurfaceComponent>(m_EntityID);
 		procSurface->surfaceSubdivisions = 64;
 		procSurface->noiseProperties.m_Amplitude = 0.7f;
 		procSurface->noiseProperties.m_Frequency = 0.5f;
@@ -39,7 +39,7 @@ void Chunk::Unload()
 	{
 		//TODO: The user should not have to do this. There should be some sort of function that gets all components and checks if they have unload functions.
 		//		If they do, the Unload function is called.
-		sc->GetComponent<LAG::ProceduralSurfaceComponent>(m_EntityID)->surface.Unload();
+		sc->GetComponent<LAG::SurfaceComponent>(m_EntityID)->surface.Unload();
 		sc->RemoveEntity(m_EntityID);
 	}
 }
