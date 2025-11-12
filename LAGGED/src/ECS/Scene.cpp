@@ -40,10 +40,10 @@ namespace LAG
 	EntityID Scene::DuplicateEntity(EntityID id)
 	{
 		//TODO: Implement function...
-		return EntityID();
+		return ENTITY_NULL;
 	}
 
-	void* Scene::AddComponent(const EntityID entityID, const TypeID compID)
+	void* Scene::AddComponent(EntityID entityID, TypeID compID)
 	{
 		TypeInfo* typeInfo = nullptr;
 		if (auto typeInfoIt = GetTypeInfo().find(compID); typeInfoIt != GetTypeInfo().end())
@@ -171,7 +171,7 @@ namespace LAG
 		return newCompPtr;
 	}
 
-	void Scene::RemoveComponent(const EntityID entityID, const TypeID compID)
+	void Scene::RemoveComponent(EntityID entityID, TypeID compID)
 	{
 		TypeInfo* typeInfo = nullptr;
 		if (auto typeInfoIt = GetTypeInfo().find(compID); typeInfoIt != GetTypeInfo().end())
@@ -269,7 +269,7 @@ namespace LAG
 
 	}
 
-	bool Scene::HasComponent(const EntityID entityID, const TypeID compID)
+	bool Scene::HasComponent(EntityID entityID, TypeID compID)
 	{
 		const auto& recordIt = m_EntityArchetypes.find(entityID);
 		if (recordIt == m_EntityArchetypes.end())

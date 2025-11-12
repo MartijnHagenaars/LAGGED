@@ -24,7 +24,7 @@ namespace LAG
 		auto& reflCompInfoMap = Scene::s_ReflectedCompInfo;
 		if (const auto& it = reflCompInfoMap.find(typeID); it != reflCompInfoMap.end())
 		{
-			CRITICAL("Attempted to reflect component '{}', but this operation has already been completed. Reflecting a component more than once is not allowed.", typeInfo->debugName);
+			CRITICAL("Attempted to reflect component '{}', but this operation has already been completed. Reflecting a component more than once is not allowed.", typeid(Comp).name());
 			return ComponentReflectionSetup(it->second);
 		}
 

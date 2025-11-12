@@ -25,8 +25,7 @@ namespace LAG
 
 		EntityID AddEntity();
 
-		// TODO: Consider removing this + the automatic adding of the EditorComponent. 
-		//		 I might want to handle this some other way.
+		// TODO: Consider removing this + the automatic adding of the EditorComponent in specific Game/Shipping configurations
 		EntityID AddEntity(const std::string& name);
 
 		void RemoveEntity(EntityID id);
@@ -34,25 +33,24 @@ namespace LAG
 
 		// Add a component to an entity using a component template type.
 		template<typename Comp, typename ...Args>
-		Comp* AddComponent(const EntityID id, Args&&... compArgs);
+		Comp* AddComponent(EntityID id, Args&&... compArgs);
 		// Add a component to an entity using a component type ID. 
-		
-		void* AddComponent(const EntityID id, const TypeID compID);
+		void* AddComponent(EntityID id, TypeID compID);
 
 		// Remove a component from an entity using a component template type. 
 		template<typename Comp>
-		void RemoveComponent(const EntityID id);
+		void RemoveComponent(EntityID id);
 		// Remove a component from an entity using a component type ID. 
-		void RemoveComponent(const EntityID id, const TypeID compID);
+		void RemoveComponent(EntityID id, TypeID compID);
 
 		// Check if an entity contains a specific component using a component template type.
 		template<typename Comp>
-		bool HasComponent(const EntityID id);
+		bool HasComponent(EntityID id);
 		// Check if an entity contains a specific component using a component type ID. 
-		bool HasComponent(const EntityID id, const TypeID compID);
+		bool HasComponent(EntityID id, TypeID compID);
 
 		template<typename Comp>
-		Comp* GetComponent(const EntityID id);
+		Comp* GetComponent(EntityID id);
 
 		/// <summary>
 		/// Checks whether an entity with a specific ID exists.

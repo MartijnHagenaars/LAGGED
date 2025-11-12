@@ -94,45 +94,6 @@ void Game::Initialize()
 	sc->AddEntity("Empty Entity");
 
 	m_World = new World(12, true);
-
-	sc->ForEach<LAG::TransformComponent>([](LAG::EntityID entID, LAG::TransformComponent* transformCmp)
-		{
-			INFO("TransformComponent ForEach - {}", entID);
-		});
-
-	sc->ForEach<>([](LAG::EntityID entID)
-		{
-			INFO("Undefined ForEach - {}", entID);
-		});
-
-	LAG::EntityID reflEntityID = ent5;
-	for (LAG::ArchetypeView archIt : sc->Range())
-	{
-		if (archIt.Contains(reflEntityID))
-		{
-			for (LAG::ComponentView compIt : archIt.Types())
-			{
-				auto data = compIt.GetVoid(reflEntityID);
-				std::any dataAny = compIt.ToAny(data);
-				if (dataAny.type() == typeid(LAG::EditorComponent*))
-				{
-					LAG::EditorComponent* editComp = std::any_cast<LAG::EditorComponent*>(dataAny);
-					INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
-				}
-
-				for (const LAG::MemberView& varIt : compIt.Members())
-				{
-					auto& props = varIt.Props();
-					std::any varAny = varIt.ToAny(varIt.GetVoid(reflEntityID));
-					if (varAny.type() == typeid(std::string))
-					{
-						std::string str = std::any_cast<std::string>(varAny);
-						INFO("String: {}", str);
-					}
-				}
-			}
-		}
-	}
 }
 
 void Game::Shutdown()

@@ -6,7 +6,7 @@
 namespace LAG
 {
 	template<typename Comp, typename ...Args>
-	inline Comp* Scene::AddComponent(const EntityID entityID, Args && ...compArgs)
+	inline Comp* Scene::AddComponent(EntityID entityID, Args && ...compArgs)
 	{
 		// Get the component data structure.
 		constexpr TypeID typeID = GetTypeID<Comp>();
@@ -31,19 +31,19 @@ namespace LAG
 	}
 
 	template<typename Comp>
-	inline void Scene::RemoveComponent(const EntityID entityID)
+	inline void Scene::RemoveComponent(EntityID entityID)
 	{
 		RemoveComponent(entityID, GetTypeID<Comp>());
 	}
 
 	template<typename Comp>
-	inline bool Scene::HasComponent(const EntityID entityID)
+	inline bool Scene::HasComponent(EntityID entityID)
 	{
 		return HasComponent(entityID, GetTypeID<Comp>());
 	}
 
 	template<typename Comp>
-	inline Comp* Scene::GetComponent(const EntityID entityID)
+	inline Comp* Scene::GetComponent(EntityID entityID)
 	{
 		if (entityID == ENTITY_NULL)
 		{
