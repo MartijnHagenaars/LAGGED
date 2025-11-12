@@ -73,7 +73,6 @@ namespace LAG
 			{
 				newArchetype = CreateArchetype(newArchetypeID);
 #ifdef DEBUG
-				newArchetype->debugName = typeInfo->debugName;
 				INFO("Creating Archetype with {} component : ({})",
 					newArchetype->typeID.size(), newArchetype->debugName
 				);
@@ -99,7 +98,9 @@ namespace LAG
 			// If that's the case, log a warning and return the component
 			if (std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), compID) != oldArchetype->typeID.end())
 			{
+#ifdef DEBUG
 				CRITICAL("Component ({}) already exists on entity with ID {}", typeInfo->debugName, compID);
+#endif
 				return nullptr; //TODO: Return a valid pointer.
 			}
 
@@ -112,8 +113,8 @@ namespace LAG
 			{
 				newArchetype = CreateArchetype(newArchetypeID);
 #ifdef DEBUG
-				newArchetype->debugName = oldArchetype->debugName + "|" + typeInfo->debugName;
-				INFO("Creating Archetype with {} components: {}", newArchetype->typeID.size(), newArchetype->debugName);
+				INFO("Creating Archetype with {} components: {}",
+					newArchetype->typeID.size(), newArchetype->debugName);
 #endif
 			}
 
@@ -159,8 +160,7 @@ namespace LAG
 				}
 			}
 
-			if (!oldArchetype->entityIDs.empty())
-				RemoveEntityFromArchetype(entityID, *oldArchetype);
+			RemoveEntityFromArchetype(entityID, *oldArchetype);
 		}
 
 		// Update the entity archetype record 
@@ -194,7 +194,9 @@ namespace LAG
 		const ArchetypeID::iterator& archetypeIdIt = std::find(oldArchetype->typeID.begin(), oldArchetype->typeID.end(), compID);
 		if (archetypeIdIt == oldArchetype->typeID.end())
 		{
+#ifdef DEBUG
 			WARNING("Failed to remove component: Entity ({}) does not contain component {} ({}).", entityID, typeInfo->debugName, compID);
+#endif
 			return;
 		}
 
@@ -203,59 +205,69 @@ namespace LAG
 		newArchetypeID.erase(newArchetypeID.begin() + (archetypeIdIt - oldArchetype->typeID.begin()));
 		std::sort(newArchetypeID.begin(), newArchetypeID.end());
 
-		Archetype* newArchetype = GetArchetype(newArchetypeID);
-		if (!newArchetype)
+		Archetype* newArchetype = nullptr;
+		if (!newArchetypeID.empty())
 		{
-			newArchetype = CreateArchetype(newArchetypeID);
+			newArchetype = GetArchetype(newArchetypeID);
+			if (newArchetype == nullptr)
+			{
+				newArchetype = CreateArchetype(newArchetypeID);
 #ifdef DEBUG
-			newArchetype->debugName = typeInfo->debugName;
-			INFO("Creating archetype with {} components: {}", newArchetype->typeID.size(), newArchetype->debugName.c_str());
+				INFO("Creating archetype with {} components: {}",
+					newArchetype->typeID.size(), newArchetype->debugName);
 #endif
+			}
 		}
 
-		for (int compIndex = 0; compIndex < newArchetypeID.size(); compIndex++)
+		for (int i = 0; i < oldArchetype->typeID.size(); i++)
 		{
-			const TypeID newTypeID = newArchetypeID[compIndex];
-			const TypeInfo& newComp = GetTypeInfo().at(newTypeID);
-
-			size_t newCompDataSize = newComp.size;
-			size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
-			size_t newSize = currentSize + newCompDataSize;
-
-			// If there is not enough space in the new archetype, 
-			// allocate some more memory and move the component data 
-			// from the previous archetype to the new one.
-			if (newSize > newArchetype->compDataSize[compIndex])
+			TypeID currTypeID = oldArchetype->typeID[i];
+			const TypeInfo& compTypeInfo = GetTypeInfo().at(currTypeID);
+			if (currTypeID == compID)
+				compTypeInfo.Destruct(&oldArchetype->compData[i][entityRecord.index * compTypeInfo.size]);
+			else
 			{
-				size_t targetSize = (newArchetype->compDataSize[compIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
-				ResizeAndReallocateComponentBuffer(*newArchetype, newComp, compIndex, targetSize);
-			}
-
-			newComp.Construct(&newArchetype->compData[compIndex][currentSize]);
-
-			ArchetypeID oldArchetypeId = oldArchetype->typeID;
-			for (size_t i = 0; i < oldArchetype->typeID.size(); i++)
-			{
-				TypeID oldTypeId = oldArchetype->typeID[i];
-
-				if (oldTypeId == newTypeID)
+				size_t newCompDataSize = compTypeInfo.size;
+				size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
+				size_t nextSize = currentSize + newCompDataSize;
+				if (nextSize > newArchetype->compDataSize[i])
 				{
-					const TypeInfo& oldComp = GetTypeInfo().at(oldTypeId);
-					oldComp.Move(&oldArchetype->compData[i][entityRecord.index * oldComp.size], &newArchetype->compData[compIndex][currentSize]);
-					break;
+					size_t targetSize = (newArchetype->compDataSize[i] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
+					ResizeAndReallocateComponentBuffer(*newArchetype, compTypeInfo, i, targetSize);
+				}
+
+				for (size_t j = 0; j < newArchetype->typeID.size(); j++)
+				{
+					if (currTypeID == newArchetypeID[j])
+					{
+						compTypeInfo.Move(&oldArchetype->compData[i][entityRecord.index * compTypeInfo.size], &newArchetype->compData[j][currentSize]);
+						break;
+					}
 				}
 			}
 		}
 
+		if (newArchetype)
+			newArchetype->entityIDs.push_back(entityID);
+
 		if (!oldArchetype->entityIDs.empty())
 		{
-			ShrinkComponentBuffer(*oldArchetype, entityRecord);
 			RemoveEntityFromArchetype(entityID, *oldArchetype);
+			//ShrinkComponentBuffer(*oldArchetype, entityRecord);
 		}
 
-		newArchetype->entityIDs.push_back(entityID);
-		entityRecord.index = newArchetype->entityIDs.size() - 1;
-		entityRecord.archetype = newArchetype;
+		if (newArchetype)
+		{
+			entityRecord.index = newArchetype->entityIDs.size() - 1;
+			entityRecord.archetype = newArchetype;
+		}
+		else
+		{
+			entityRecord.index = 0;
+			entityRecord.archetype = nullptr;
+		}
+
+
 	}
 
 	bool Scene::HasComponent(const EntityID entityID, const TypeID compID)
@@ -372,6 +384,13 @@ namespace LAG
 			archetype->systemCompIndices.emplace(archetypeID[i], i);
 		}
 
+#ifdef DEBUG
+		std::string debugName = GetTypeInfo().at(archetypeID[0]).debugName;
+		for (int i = 1; i < archetypeID.size(); i++)
+			debugName += "|" + GetTypeInfo().at(archetypeID[i]).debugName;
+		archetype->debugName = debugName;
+#endif
+
 		return archetype;
 	}
 
@@ -405,13 +424,18 @@ namespace LAG
 			size_t endIndex = archetype.entityIDs.size() - 1;
 			size_t ogIdCopy = archetype.entityIDs[entityIndex];
 
+
 			EntityRecord& record = m_EntityArchetypes[archetype.entityIDs[entityIndex]];
-			record.index = entityIndex;
+			EntityRecord& swappedRec = m_EntityArchetypes.at(archetype.entityIDs[endIndex]);
+			for (int i = 0; i < archetype.typeID.size(); i++)
+			{
+				TypeInfo& typeInfo = GetTypeInfo()[archetype.typeID[i]];
+				typeInfo.Move(&archetype.compData[i][swappedRec.index * typeInfo.size], &archetype.compData[i][record.index * typeInfo.size]);
+			}
 
+			swappedRec.index = entityIndex;
 			archetype.entityIDs[entityIndex] = archetype.entityIDs[endIndex];
-			archetype.entityIDs[endIndex] = ogIdCopy;
 			archetype.entityIDs.erase(archetype.entityIDs.begin() + endIndex);
-
 		}
 
 	}
@@ -420,41 +444,36 @@ namespace LAG
 	{
 		for (int typeIndex = 0; typeIndex < archetype.typeID.size(); typeIndex++)
 		{
+			if (archetype.entityIDs.empty())
+			{
+				delete[] archetype.compData[typeIndex];
+				archetype.compData[typeIndex] = nullptr;
+				archetype.compDataSize[typeIndex] = 0;
+				return;
+			}
+
 			const TypeInfo& compData = GetTypeInfo().at(archetype.typeID[typeIndex]);
 
 			unsigned char* newData;
 			const size_t compDataSize = compData.size;
 			const size_t targetSize = (archetype.entityIDs.size() - 1) * compDataSize;
 
-			if (targetSize > 0)
-			{
 #ifdef DEBUG
-				//INFO("Archetype component buffer is too large. Shrinking buffer memory ({} -> {}) for ({})...",
-				//	archetype.compDataSize[typeIndex],
-				//	targetSize, archetype.debugName);
+			//INFO("Archetype component buffer is too large. Shrinking buffer memory ({} -> {}) for ({})...",
+			//	archetype.compDataSize[typeIndex],
+			//	targetSize, archetype.debugName);
 #endif
-				newData = new unsigned char[targetSize];
-				archetype.compDataSize[typeIndex] = targetSize;
+			newData = new unsigned char[targetSize];
+			archetype.compDataSize[typeIndex] = targetSize;
 
-				int offsetIndex = 0;
-				for (int entIndex = 0; entIndex < archetype.entityIDs.size(); entIndex++)
-				{
-					if (entIndex == entityRecord.index)
-						continue;
-
-					compData.Move(&archetype.compData[typeIndex][entIndex * compDataSize], &newData[offsetIndex * compDataSize]);
-					offsetIndex += 1;
-				}
-			}
-			else
+			int offsetIndex = 0;
+			for (int entIndex = 0; entIndex < archetype.entityIDs.size(); entIndex++)
 			{
-#ifdef DEBUG
-				//INFO("Deallocating component buffer ({} -> {}) for ({})...",
-				//	archetype.compDataSize[typeIndex],
-				//	0, archetype.debugName);
-#endif
-				newData = nullptr;
-				archetype.compDataSize[typeIndex] = 0;
+				if (entIndex == entityRecord.index)
+					continue;
+
+				compData.Move(&archetype.compData[typeIndex][entIndex * compDataSize], &newData[offsetIndex * compDataSize]);
+				offsetIndex += 1;
 			}
 
 			delete[] archetype.compData[typeIndex];
@@ -490,14 +509,16 @@ namespace LAG
 
 	Scene::ArchetypeRange::ArchetypeRange(Scene& scene, ArchContainer& container) :
 		m_Scene(scene), m_Container(container)
-	{}
+	{
+	}
 	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::begin() const { return ArchetypeRange::Iterator(m_Scene, m_Container.begin()); }
 	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::end() const { return Iterator(m_Scene, m_Container.end()); }
 
 
 	Scene::ArchetypeRange::Iterator::Iterator(Scene& scene, InnerIterator it)
-		: m_Scene(scene), m_Ptr(it) 
-	{}
+		: m_Scene(scene), m_Ptr(it)
+	{
+	}
 
 	ArchetypeView Scene::ArchetypeRange::Iterator::operator*() const { return ArchetypeView(m_Scene, **m_Ptr); }
 	ArchetypeView Scene::ArchetypeRange::Iterator::operator->() const { return ArchetypeView(m_Scene, **m_Ptr); }
