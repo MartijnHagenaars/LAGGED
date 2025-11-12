@@ -1,5 +1,6 @@
-#include "Scene.h"
 #pragma once
+#include "Scene.h"
+
 #define ARCHETYPE_ALLOC_GROWTH 2
 
 namespace LAG

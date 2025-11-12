@@ -1,6 +1,5 @@
 #include "SurfaceComponent.h"
 
-#include "ECS/Scene.h"
 #include "ECS/Reflection/SceneReflect.h"
 
 namespace LAG

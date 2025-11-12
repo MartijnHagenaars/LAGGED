@@ -1,6 +1,5 @@
 #pragma once
 #include "ECS/Scene.h"
-#include "ECS/Containers.h"
 
 #include <unordered_map>
 #include <memory>
@@ -66,7 +65,7 @@ namespace LAG
 
 	private:
 		ComponentReflectionSetup() = delete;
-		ComponentReflectionSetup(ReflectionCompInfo& info);
+		explicit ComponentReflectionSetup(ReflectionCompInfo& info);
 
 		ReflectionCompInfo& m_Info;
 	};
@@ -98,7 +97,7 @@ namespace LAG
 
 	private:
 		VariableReflectionSetup() = delete;
-		VariableReflectionSetup(ReflectionCompInfo::MemberInfo& info);
+		explicit VariableReflectionSetup(ReflectionCompInfo::MemberInfo& info);
 
 		ReflectionCompInfo::MemberInfo& m_Info;
 	};

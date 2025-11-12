@@ -1,7 +1,5 @@
 #include "CameraComponent.h"
 
-#include "Core/Engine.h"
-#include "ECS/Scene.h"
 #include "ECS/Reflection/SceneReflect.h"
 
 namespace LAG

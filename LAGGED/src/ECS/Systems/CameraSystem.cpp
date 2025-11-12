@@ -2,11 +2,9 @@
 
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
-#include <ImGui/imgui.h>
 
 #include "Core/Engine.h"
 #include "Core/Input/Input.h"
-#include "Platform/Window.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
@@ -22,7 +20,7 @@ namespace LAG::CameraSystem
 			return;
 		}
 
-		CameraComponent* camera = GetEngine().GetScene()->GetComponent<CameraComponent>(entityID);
+		CameraComponent* camera = GetScene()->GetComponent<CameraComponent>(entityID);
 		if (!camera)
 			LAG_ASSERT("Camera Entity ID does not contain CameraComponent.");
 
@@ -33,7 +31,7 @@ namespace LAG::CameraSystem
 		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
 		float cameraRotationSpeed = 1.f * camera->rotationSpeed * GetEngine().GetDeltaTime();
 
-		TransformComponent* transform = GetEngine().GetScene()->GetComponent<TransformComponent>(entityID);
+		TransformComponent* transform = GetScene()->GetComponent<TransformComponent>(entityID);
 		if (!transform)
 			CRITICAL("Camera Entity ID does not contain TransformComponent.");
 
@@ -85,7 +83,7 @@ namespace LAG::CameraSystem
 
 		for (const auto& id : camEntities)
 		{
-			CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(id);
+			CameraComponent const* camComp = GetScene()->GetComponent<CameraComponent>(id);
 			if (camComp != nullptr && camComp->isActive)
 				return id;
 		}

@@ -1,9 +1,7 @@
 #pragma once
-#include <algorithm>
-
-#include "Core/Defines.h"
 #include "SceneReflect.h"
-#include "Utility/Hash.h"
+
+#include <algorithm>
 
 namespace LAG
 {
@@ -26,7 +24,7 @@ namespace LAG
 		auto& reflCompInfoMap = Scene::s_ReflectedCompInfo;
 		if (const auto& it = reflCompInfoMap.find(typeID); it != reflCompInfoMap.end())
 		{
-			CRITICAL("Attempted to reflect component '{}', but this operation has already been completed. Reflecting a component more than once is not allowed.", typeid(Comp).name());
+			CRITICAL("Attempted to reflect component '{}', but this operation has already been completed. Reflecting a component more than once is not allowed.", typeInfo->debugName);
 			return ComponentReflectionSetup(it->second);
 		}
 
@@ -57,7 +55,7 @@ namespace LAG
 		// Check if this variable has already been reflected
 		auto& memberVec = reflCompInfoIt->second.members;
 		size_t byteOffset = reinterpret_cast<size_t>(&(reinterpret_cast<Comp*>(0)->*var));
-		auto varIt = std::find_if(memberVec.begin(), memberVec.end(), [&byteOffset](ReflectionCompInfo::MemberInfo& var) { return var.byteOffset == byteOffset; });
+		auto varIt = std::find_if(memberVec.begin(), memberVec.end(), [&byteOffset](const ReflectionCompInfo::MemberInfo& var) { return var.byteOffset == byteOffset; });
 
 		if (varIt != memberVec.end())
 		{

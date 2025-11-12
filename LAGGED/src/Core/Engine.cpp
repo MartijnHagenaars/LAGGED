@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "Utility/Timer.h"
 
 #include "Resources/ResourceManager.h"
 #include "Editor/ToolsManager.h"
@@ -120,7 +119,7 @@ namespace LAG
 		}
 		m_ToolsManager = nullptr;
 
-		if(m_Scene)
+		if (m_Scene)
 			delete m_Scene;
 		m_Scene = nullptr;
 

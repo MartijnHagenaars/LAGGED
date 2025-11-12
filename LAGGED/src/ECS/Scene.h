@@ -6,9 +6,6 @@
 #include "TypeDefines.h"
 #include "Views.h"
 
-#include "Utility/Hash.h"
-#include "Utility/Logger.h"
-
 namespace LAG
 {
 	namespace Reflection

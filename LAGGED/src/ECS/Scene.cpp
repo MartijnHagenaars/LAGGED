@@ -141,7 +141,6 @@ namespace LAG
 
 				// In this loop, we move all the data from the old archetype to the new one. 
 				// While doing this, the new component is also added to the new archetype at the correct index.
-				ArchetypeID oldArchetypeId = oldArchetype->typeID;
 				for (int i = 0; i < oldArchetype->typeID.size(); i++)
 				{
 					TypeID oldTypeID = oldArchetype->typeID[i];
@@ -422,8 +421,6 @@ namespace LAG
 		if (entityIndex != -1)
 		{
 			size_t endIndex = archetype.entityIDs.size() - 1;
-			size_t ogIdCopy = archetype.entityIDs[entityIndex];
-
 
 			EntityRecord& record = m_EntityArchetypes[archetype.entityIDs[entityIndex]];
 			EntityRecord& swappedRec = m_EntityArchetypes.at(archetype.entityIDs[endIndex]);

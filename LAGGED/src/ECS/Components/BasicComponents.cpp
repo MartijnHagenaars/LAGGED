@@ -4,8 +4,6 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtc/quaternion.hpp>
 
-#include "Core/Engine.h"
-#include "ECS/Scene.h"
 #include "ECS/Reflection/SceneReflect.h"
 
 namespace LAG
