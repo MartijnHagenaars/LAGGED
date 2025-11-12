@@ -28,7 +28,7 @@ namespace LAG
 
 		EntityID AddEntity();
 
-		// TODO: Consider removing this + the automatic adding of the DefaultComponent. 
+		// TODO: Consider removing this + the automatic adding of the EditorComponent. 
 		//		 I might want to handle this some other way.
 		EntityID AddEntity(const std::string& name);
 

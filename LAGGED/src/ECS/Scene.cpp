@@ -32,7 +32,7 @@ namespace LAG
 	EntityID Scene::AddEntity(const std::string& name)
 	{
 		EntityID entID = AddEntity();
-		AddComponent<DefaultComponent>(entID)->name = name;
+		AddComponent<EditorComponent>(entID)->name = name;
 		
 		return entID;
 	}

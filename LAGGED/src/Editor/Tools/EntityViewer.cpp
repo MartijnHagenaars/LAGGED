@@ -38,12 +38,12 @@ namespace LAG
 				{
 					ImGui::PushID(id);
 
-					// FIXME: THIS WILL CAUSE A CRASH IF ENTITY DOESNT HAVE DEFAULTCOMPONENT.
-					DefaultComponent* defaultComp = scene->GetComponent<DefaultComponent>(id);
-					if (ImGui::Button(defaultComp->visible ? "Hide" : "Show"))
-						defaultComp->visible = !defaultComp->visible;
+					// FIXME: THIS WILL CAUSE A CRASH IF ENTITY DOESNT HAVE EDITOR COMPONENT.
+					EditorComponent* editorComp = scene->GetComponent<EditorComponent>(id);
+					if (ImGui::Button(editorComp->visible ? "Hide" : "Show"))
+						editorComp->visible = !editorComp->visible;
 					ImGui::SameLine();
-					if (ImGui::Button(defaultComp->name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
+					if (ImGui::Button(editorComp->name.c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0.f)))
 					{
 						if (selId != id)
 							selId = id;
@@ -67,7 +67,7 @@ namespace LAG
 		}
 
 		Scene* scene = GetEngine().GetScene();
-		EditorGui::SeparatorText((std::string("Selected Entity: ") + scene->GetComponent<DefaultComponent>(m_SelectedEntityID)->name).c_str());
+		EditorGui::SeparatorText((std::string("Selected Entity: ") + scene->GetComponent<EditorComponent>(m_SelectedEntityID)->name).c_str());
 
 		if (ImGui::Button("Duplicate Entity"))
 		{

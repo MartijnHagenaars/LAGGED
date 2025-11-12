@@ -6,10 +6,10 @@
 
 namespace LAG
 {
-	struct DefaultComponent
+	struct EditorComponent
 	{
-		DefaultComponent() = default;
-		explicit DefaultComponent(std::string name) :
+		EditorComponent() = default;
+		explicit EditorComponent(std::string name) :
 			name(name), visible(true)
 		{
 		};

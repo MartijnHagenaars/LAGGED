@@ -10,12 +10,12 @@
 
 namespace LAG
 {
-	bool DefaultComponent::InitializeReflection()
+	bool EditorComponent::InitializeReflection()
 	{
-		SceneReflect::ReflectComponent<DefaultComponent>().SetDisplayName("General data").SetHidden("true");
+		SceneReflect::ReflectComponent<EditorComponent>().SetDisplayName("Editor data").SetHidden("true");
 
-		SceneReflect::ReflectVariable(&DefaultComponent::name).SetDisplayName("Name");
-		SceneReflect::ReflectVariable(&DefaultComponent::visible).SetDisplayName("Is Visible");
+		SceneReflect::ReflectVariable(&EditorComponent::name).SetDisplayName("Name");
+		SceneReflect::ReflectVariable(&EditorComponent::visible).SetDisplayName("Is Visible");
 
 		return true;
 	}

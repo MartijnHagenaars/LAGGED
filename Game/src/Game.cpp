@@ -114,9 +114,9 @@ void Game::Initialize()
 			{
 				auto data = compIt.GetVoid(reflEntityID);
 				std::any dataAny = compIt.ToAny(data);
-				if (dataAny.type() == typeid(LAG::DefaultComponent*))
+				if (dataAny.type() == typeid(LAG::EditorComponent*))
 				{
-					LAG::DefaultComponent* defComp = std::any_cast<LAG::DefaultComponent*>(dataAny);
+					LAG::EditorComponent* editComp = std::any_cast<LAG::EditorComponent*>(dataAny);
 					INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
 				}
 

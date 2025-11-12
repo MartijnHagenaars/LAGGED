@@ -137,8 +137,8 @@ namespace LAG
 		const auto& renderEntities = GetScene()->QueryEntities<TransformComponent>();
 		for (const auto& entityID : renderEntities)
 		{
-			DefaultComponent* defPtr = GetScene()->GetComponent<DefaultComponent>(entityID);
-			if (!defPtr || !defPtr->visible)
+			EditorComponent* editorPtr = GetScene()->GetComponent<EditorComponent>(entityID);
+			if (!editorPtr || !editorPtr->visible)
 				continue;
 
 			TransformComponent* transformPtr = GetScene()->GetComponent<TransformComponent>(entityID);
