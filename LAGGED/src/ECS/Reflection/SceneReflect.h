@@ -48,7 +48,7 @@ namespace LAG
 
 	class ComponentReflectionSetup
 	{
-		friend class SceneReflect; //TODO: Consider removing
+		friend class SceneReflect;
 	public:
 		/// <summary>
 		/// Set the display name of the component in the editor.

@@ -24,7 +24,9 @@ namespace LAG
 		}
 
 
-		// Functions for converting variables into strings
+		/////////////////////////////////////////////////////
+		// Functions for converting variables into strings //
+		/////////////////////////////////////////////////////
 
 		// Specialization for arithmetic types
 		template<typename T>

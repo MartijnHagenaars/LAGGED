@@ -41,8 +41,6 @@ namespace LAG
 		std::unordered_map<Hash64, std::function<void(const std::vector<std::any>&)>> funcs;
 	};
 
-	// TODO: Properties should be converted into some generic structure.
-	//		 Example: Properties could be stored in a map as void*
 	struct ReflectionCompInfo
 	{
 		struct MemberInfo

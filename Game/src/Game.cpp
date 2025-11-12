@@ -120,7 +120,7 @@ void Game::Initialize()
 					INFO("Component info: name({}), size({})", compIt.Name(), compIt.Size());
 				}
 
-				for (LAG::MemberView varIt : compIt.Members())
+				for (const LAG::MemberView& varIt : compIt.Members())
 				{
 					auto& props = varIt.Props();
 					std::any varAny = varIt.ToAny(varIt.GetVoid(reflEntityID));
@@ -129,19 +129,6 @@ void Game::Initialize()
 						std::string str = std::any_cast<std::string>(varAny);
 						INFO("String: {}", str);
 					}
-
-					const auto& name = props.displayName;
-					//// TODO - FIX: There needs to be a function to check the type of VarIt. For example: IsType<bool>();
-					//// TODO 2: varIt.Func could just be the invoke func that returns true or false based on whether it ran the function.
-					//if (auto func = varIt.Func(LAG::StringToHash64("REFL_FUNC_TEST")))
-					//{
-					//	bool testBool = true;
-
-					//	// Issue here is that we're trying to run a function for Float but it's fetching a Bool one... 
-					//	// This will result in a MISMATCH assert... Bruh...
-					//	func.Invoke(reflEntityID, &testBool);
-					//}
-
 				}
 			}
 		}
