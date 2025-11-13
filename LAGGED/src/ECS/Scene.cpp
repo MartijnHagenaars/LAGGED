@@ -220,8 +220,6 @@ namespace LAG
 
 		for (int i = 0; i < oldArchetype->typeID.size(); i++)
 		{
-			// FIXME: Could be fast enough... Profile without noise generation
-			//TypeID currTypeID = oldArchetype->typeID[i];
 			TypeID oldArchTypeID = oldArchetype->typeID[i];
 			if (oldArchTypeID == compID)
 			{
@@ -268,8 +266,6 @@ namespace LAG
 			entityRecord.index = 0;
 			entityRecord.archetype = nullptr;
 		}
-
-
 	}
 
 	bool Scene::HasComponent(EntityID entityID, TypeID compID)
