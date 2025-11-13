@@ -303,6 +303,7 @@
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Utility\stb_image.cpp" />
     <ClCompile Include="src\ECS\Views.cpp" />
+    <ClCompile Include="src\Utility\tiny_gltf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl">
