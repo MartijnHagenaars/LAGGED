@@ -33,7 +33,7 @@ namespace LAG
 	{
 		EntityID entID = AddEntity();
 		AddComponent<EditorComponent>(entID)->name = name;
-		
+
 		return entID;
 	}
 
@@ -220,28 +220,31 @@ namespace LAG
 
 		for (int i = 0; i < oldArchetype->typeID.size(); i++)
 		{
-			TypeID currTypeID = oldArchetype->typeID[i];
-			const TypeInfo& compTypeInfo = GetTypeInfo().at(currTypeID);
-			if (currTypeID == compID)
+			// FIXME: Could be fast enough... Profile without noise generation
+			//TypeID currTypeID = oldArchetype->typeID[i];
+			TypeID oldArchTypeID = oldArchetype->typeID[i];
+			if (oldArchTypeID == compID)
+			{
+				const TypeInfo& compTypeInfo = GetTypeInfo().at(oldArchTypeID);
 				compTypeInfo.Destruct(&oldArchetype->compData[i][entityRecord.index * compTypeInfo.size]);
+			}
 			else
 			{
-				size_t newCompDataSize = compTypeInfo.size;
-				size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
-				size_t nextSize = currentSize + newCompDataSize;
-				if (nextSize > newArchetype->compDataSize[i])
+				size_t newArchTypeIndex = newArchetype->systemCompIndices.at(oldArchTypeID);
+				TypeID newArchTypeID = newArchetype->typeID[newArchTypeIndex];
+				if (oldArchTypeID == newArchTypeID)
 				{
-					size_t targetSize = (newArchetype->compDataSize[i] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
-					ResizeAndReallocateComponentBuffer(*newArchetype, compTypeInfo, i, targetSize);
-				}
-
-				for (size_t j = 0; j < newArchetype->typeID.size(); j++)
-				{
-					if (currTypeID == newArchetypeID[j])
+					const TypeInfo& compTypeInfo = GetTypeInfo().at(newArchTypeID);
+					size_t newCompDataSize = compTypeInfo.size;
+					size_t currentSize = newArchetype->entityIDs.size() * newCompDataSize;
+					size_t nextSize = currentSize + newCompDataSize;
+					if (nextSize > newArchetype->compDataSize[newArchTypeIndex])
 					{
-						compTypeInfo.Move(&oldArchetype->compData[i][entityRecord.index * compTypeInfo.size], &newArchetype->compData[j][currentSize]);
-						break;
+						size_t targetSize = (newArchetype->compDataSize[newArchTypeIndex] * ARCHETYPE_ALLOC_GROWTH) + newCompDataSize;
+						ResizeAndReallocateComponentBuffer(*newArchetype, compTypeInfo, newArchTypeIndex, targetSize);
 					}
+
+					compTypeInfo.Move(&oldArchetype->compData[i][entityRecord.index * compTypeInfo.size], &newArchetype->compData[newArchTypeIndex][currentSize]);
 				}
 			}
 		}
