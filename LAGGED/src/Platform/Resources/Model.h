@@ -5,7 +5,7 @@
 #include "Mesh.h"
 
 #include "Core/Resources/Resource.h"
-#include "ECS/Entity.h"
+#include "ECS/TypeDefines.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/LightComponent.h"
 
@@ -17,7 +17,7 @@ namespace LAG
 		friend class ResourceManager;
 	public:
 		Model() = delete;
-		explicit Model(const HashedString& path);
+		explicit Model(const StringHash64& path);
 
 		void Render(EntityID objectEntityID, EntityID cameraEntityID, Shader& shader, std::vector<std::pair<TransformComponent*, LightComponent*>>& lights);
 

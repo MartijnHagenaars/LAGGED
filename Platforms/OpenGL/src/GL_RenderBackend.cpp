@@ -25,7 +25,7 @@
 #include "ECS/Components/LightComponent.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/ModelComponent.h"
-#include "ECS/Components/TerrainComponents.h"
+#include "ECS/Components/SurfaceComponent.h"
 #include "ECS/Systems/BasicSystems.h"
 #include "ECS/Systems/CameraSystem.h"
 
@@ -37,8 +37,8 @@ namespace LAG
 	ErrResult Renderer::Initialize()
 	{
 		//Create some essential shaders.
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader"));
-		GetResourceManager()->AddResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader"));
+		GetResourceManager()->AddResource<Shader>(StringHash64("res/Shaders/OpenGL/ObjectShader"));
+		GetResourceManager()->AddResource<Shader>(StringHash64("res/Shaders/OpenGL/SurfaceShader"));
 
 		glEnable(GL_DEPTH_TEST);
 
@@ -68,7 +68,7 @@ namespace LAG
 		return ErrResult::SUCCESS;
 	}
 
-	void LAG::Renderer::SetSkyboxCubemap(const HashedString& path)
+	void LAG::Renderer::SetSkyboxCubemap(const StringHash64& path)
 	{
 		if (!m_Skybox)
 		{
@@ -127,44 +127,39 @@ namespace LAG
 		if (m_Properties.useLighting)
 		{
 			lights.reserve(3);
-			GetScene()->RunSystem<LightComponent, TransformComponent>([&lights](EntityID entity, LightComponent* lightComp, TransformComponent* lightTransformComp)
+			GetScene()->ForEach<LightComponent, TransformComponent>([&lights](EntityID entity, LightComponent* lightComp, TransformComponent* lightTransformComp)
 				{
 					if (lights.size() < TOTAL_POINT_LIGHTS)
 						lights.push_back({ lightTransformComp, lightComp });
 				});
 		}
 
-		const auto& renderEntities = GetScene()->GetEntitiesWithComponents<TransformComponent>();
+		const auto& renderEntities = GetScene()->QueryEntities<TransformComponent>();
 		for (const auto& entityID : renderEntities)
 		{
-			DefaultComponent* defPtr = GetScene()->GetComponent<DefaultComponent>(entityID);
+			EditorComponent* editorPtr = GetScene()->GetComponent<EditorComponent>(entityID);
+			if (!editorPtr || !editorPtr->visible)
+				continue;
+
 			TransformComponent* transformPtr = GetScene()->GetComponent<TransformComponent>(entityID);
 
 			ModelComponent* modelPtr = GetScene()->GetComponent<ModelComponent>(entityID);
 			if (modelPtr != nullptr)
 			{
 				//TODO: Really ugly approach. meshComp.modelHandle.m_ModelLookup should be shortened to meshComp.modelHandle;
-				if (defPtr->visible && modelPtr->modelHandle.m_ModelLookup.GetValue() != 0)
+				if (modelPtr->modelHandle.m_ModelLookup.Value() != 0)
 				{
 					GetResourceManager()->GetResource<Model>(modelPtr->modelHandle.m_ModelLookup)->Render(
 						entityID, camEntityID,
-						*GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/ObjectShader")),
+						*GetResourceManager()->GetResource<Shader>(StringHash64("res/Shaders/OpenGL/ObjectShader")),
 						lights);
 				}
 			}
 
-			SurfaceComponent* surfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
-			if (surfacePtr)
-			{
-				if (defPtr->visible)
-					surfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
-			}
-
-			ProceduralSurfaceComponent* procSurfacePtr = GetScene()->GetComponent<ProceduralSurfaceComponent>(entityID);
+			SurfaceComponent* procSurfacePtr = GetScene()->GetComponent<SurfaceComponent>(entityID);
 			if (procSurfacePtr)
 			{
-				if (defPtr->visible)
-					procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(HashedString("res/Shaders/OpenGL/SurfaceShader")), lights);
+				procSurfacePtr->surface.Render(entityID, camEntityID, *GetResourceManager()->GetResource<Shader>(StringHash64("res/Shaders/OpenGL/SurfaceShader")), lights);
 			}
 		}
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "glm/vec2.hpp"
-#include "ECS/Entity.h"
+#include "ECS/TypeDefines.h"
 
 static const int CHUNK_SIZE = 64;
 
@@ -11,6 +11,6 @@ public:
 	void Unload();
 
 private:
-	LAG::Entity m_Entity;
+	LAG::EntityID m_EntityID;
 };
 

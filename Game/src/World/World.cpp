@@ -1,13 +1,12 @@
 #include "World.h"
+#include "Chunk.h"
 
 #include "Core/Engine.h"
-#include "ECS/Entity.h"
-#include "ECS/Scene.h"
 
+#include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
-#include "ECS/Components/TerrainComponents.h"
 #include "ECS/Components/CameraComponent.h"
-#include "Chunk.h"
+#include "ECS/Components/SurfaceComponent.h"
 
 World::World(int loadDistance, bool infiniteTerrain) :
 	m_LoadDistance(loadDistance), m_UseInfiniteTerrain(infiniteTerrain)
@@ -24,7 +23,7 @@ void World::Update()
 		return;
 
 	LAG::EntityID camEntityID = LAG::ENTITY_NULL;
-	LAG::GetEngine().GetScene()->RunSystem<LAG::CameraComponent>([&camEntityID](LAG::EntityID entity, LAG::CameraComponent* cameraComp)
+	LAG::GetEngine().GetScene()->ForEach<LAG::CameraComponent>([&camEntityID](LAG::EntityID entity, LAG::CameraComponent* cameraComp)
 		{
 			if (cameraComp->isActive)
 				camEntityID = entity;

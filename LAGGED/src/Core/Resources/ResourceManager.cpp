@@ -10,9 +10,9 @@ namespace LAG
 		Clear();
 	}
 
-	bool ResourceManager::Contains(const HashedString& path)
+	bool ResourceManager::Contains(const StringHash64& path)
 	{
-		auto resource = m_Resources.find(path.GetValue());
+		auto resource = m_Resources.find(path.Value());
 		return (resource != m_Resources.end());
 	}
 

@@ -1,10 +1,10 @@
 #pragma once
+#include <glm/vec3.hpp>
 #include "Editor/ToolBase.h"
-#include "ECS/Components/CameraComponent.h"
+#include "ECS/TypeDefines.h"
 
 namespace LAG
 {
-	class Entity;
 	class Gizmo : public ToolBase
 	{
 	public: 
@@ -13,12 +13,12 @@ namespace LAG
 		void BeginWindow();
 		void EndWindow();
 
-		void RenderGizmo(Entity* targetEntity);
+		void RenderGizmo(EntityID targetEntityID);
 		void RenderViewManipulator();
 
 		void Render() override;
 
-		void SetCameraEntity(Entity* cameraEntity) { m_CameraEntity = cameraEntity; }
+		void SetCameraEntity(EntityID cameraEntityID) { m_CameraEntityID = cameraEntityID; }
 	private:
 		int m_GizmoOperation;
 		int m_GizmoMode;
@@ -27,8 +27,6 @@ namespace LAG
 		bool m_SplitSnapAxis = false;
 		glm::vec3 m_SnapScale = glm::vec3(1.f);
 
-		Entity* m_CameraEntity = nullptr;
-
-		bool m_UseGizmo = true;
+		EntityID m_CameraEntityID = ENTITY_NULL;
 	};
 }

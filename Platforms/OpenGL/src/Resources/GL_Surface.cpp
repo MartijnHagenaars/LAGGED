@@ -6,7 +6,7 @@
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Components/LightComponent.h"
-#include "ECS/Components/TerrainComponents.h"
+#include "ECS/Components/SurfaceComponent.h"
 #include "ECS/Systems/CameraSystem.h"
 
 #include "Platform/Resources/Shader.h"
@@ -57,7 +57,7 @@ namespace LAG
 	////////////////////////////////////////
 	// Loading height map data from noise //
 	////////////////////////////////////////
-	void Surface::GenerateNoiseSurface(const TransformComponent& transformComp, const ProceduralSurfaceComponent& procSurfaceComp)
+	void Surface::GenerateNoiseSurface(const TransformComponent& transformComp, const SurfaceComponent& procSurfaceComp)
 	{
 		//Set noise positions
 		glm::vec2 noisePos = procSurfaceComp.noiseProperties.m_UseTransformPositionForNoise ?

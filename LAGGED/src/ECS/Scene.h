@@ -1,9 +1,10 @@
 #pragma once
-#include <functional>
 #include <algorithm>
+#include <functional>
 
-#include "Archetype.h"
-#include "Utility/Logger.h"
+#include "Containers.h"
+#include "TypeDefines.h"
+#include "Views.h"
 
 namespace LAG
 {
@@ -12,37 +13,50 @@ namespace LAG
 		enum class WidgetModes;
 	}
 
-	class Entity;
 	class Scene
 	{
-		friend class Entity;
-	public: 
+		class ArchetypeRange;
+		friend class SceneReflect;
+		friend class ArchetypeView;
+		friend class ComponentView;
+	public:
 		Scene();
 		~Scene();
 
-		Entity AddEntity();
-		Entity AddEntity(const std::string& entityName);
+		EntityID AddEntity();
 
-		void RemoveEntity(EntityID entityID);
-		Entity DuplicateEntity(EntityID entityID);
+		// TODO: Consider removing this + the automatic adding of the EditorComponent in specific Game/Shipping configurations
+		EntityID AddEntity(const std::string& name);
 
+		void RemoveEntity(EntityID id);
+		EntityID DuplicateEntity(EntityID id);
+
+		// Add a component to an entity using a component template type.
 		template<typename Comp, typename ...Args>
-		Comp* AddComponent(const EntityID entityID, Args&&... compArgs);
+		Comp* AddComponent(EntityID id, Args&&... compArgs);
+		// Add a component to an entity using a component type ID. 
+		void* AddComponent(EntityID id, TypeID compID);
+
+		// Remove a component from an entity using a component template type. 
+		template<typename Comp>
+		void RemoveComponent(EntityID id);
+		// Remove a component from an entity using a component type ID. 
+		void RemoveComponent(EntityID id, TypeID compID);
+
+		// Check if an entity contains a specific component using a component template type.
+		template<typename Comp>
+		bool HasComponent(EntityID id);
+		// Check if an entity contains a specific component using a component type ID. 
+		bool HasComponent(EntityID id, TypeID compID);
 
 		template<typename Comp>
-		void RemoveComponent(const EntityID entityID);
-
-		template<typename Comp>
-		bool HasComponent(const EntityID& entityID);
-
-		template<typename Comp>
-		Comp* GetComponent(const EntityID& entityID);
+		Comp* GetComponent(EntityID id);
 
 		/// <summary>
 		/// Checks whether an entity with a specific ID exists.
 		/// </summary>
 		/// <returns>Returns true if an entity with EntityID exists.</returns>
-		bool DoesEntityExist(EntityID entityID);
+		bool IsValid(EntityID id);
 
 		/// <summary>
 		/// Return the number of active entities
@@ -52,57 +66,102 @@ namespace LAG
 		void RemoveAll();
 
 		template<typename ...Comps>
-		void RunSystem(std::function<void(EntityID, Comps*...)> func);
+		typename std::enable_if<(sizeof...(Comps) > 0), void>::type
+		ForEach(std::function<void(EntityID, Comps*...)> func);
 
 		template<typename ...Comps>
-		std::vector<EntityID> GetEntitiesWithComponents();
+		typename std::enable_if<(sizeof...(Comps) == 0), void>::type
+		ForEach(std::function<void(EntityID)> func);
+
+		template<typename ...Comps>
+		std::vector<EntityID> QueryEntities();
+
+		/// <summary>
+		/// Returns a range of archetypes
+		/// </summary>
+		ArchetypeRange Range();
+
+		/// <summary>
+		/// Query typeIDs of all reflected components
+		/// </summary>
+		/// <returns>A vector containing all component IDs</returns>
+		static std::vector<TypeID> QueryCompIDs();
+
+		// Helper function for getting the hash64 of a type
+		template<typename T>
+		static constexpr TypeID GetTypeID();
 
 	private:
-		struct EntityRecord;
-		struct ComponentData;
+		class ArchetypeRange 
+		{
+			using ArchContainer = std::vector<Archetype*>;
+			class Iterator 
+			{
+			public:
+				using difference_type = std::ptrdiff_t;
+				using iterator_category = std::bidirectional_iterator_tag;
+				using InnerIterator = ArchContainer::iterator;
 
+				explicit Iterator(InnerIterator it);
+
+				ArchetypeView operator*() const;
+				ArchetypeView operator->() const;
+
+				Iterator& operator++();
+				Iterator& operator--();
+				Iterator operator++(int);
+				Iterator operator--(int);
+
+				friend bool operator==(const Iterator& a, const Iterator& b) { return a.m_Ptr == b.m_Ptr; }
+				friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
+
+			private:
+				InnerIterator m_Ptr;
+			};
+
+		public:
+			explicit ArchetypeRange(ArchContainer& container);
+
+			Iterator begin() const;
+			Iterator end() const;
+
+		private:
+			ArchContainer& m_Container;
+		};
+
+	private:
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
-		template<typename Comp>
-		static const ComponentID GetComponentID();
+		template<typename Type>
+		static TypeInfo& RegisterType();
 
-		template<typename Comp>
-		ComponentData* RegisterComponent();
-
-		void RemoveEntityFromArchetype(EntityID entityID, Archetype& archetype);
+		void RemoveEntityFromArchetype(EntityID id, Archetype& archetype);
 		void ShrinkComponentBuffer(Archetype& archetype, const EntityRecord& entityRecord);
-		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const ComponentData& componentData, int componentIndex, size_t targetSize);
+		void ResizeAndReallocateComponentBuffer(Archetype& archetype, const TypeInfo& typeInfo, int componentIndex, size_t targetSize);
 
 	private:
-		static inline EntityID s_EntityCounter = 0;
-		static inline ComponentID s_ComponentCounter = 0;
-		
+		inline static EntityID s_EntityCounter = 0;
+
 		// This vector stores all possible archetypes
 		std::vector<Archetype*> m_Archetypes;
 
-		struct EntityRecord
-		{
-			size_t index;
-			Archetype* archetype;
-		};
 		// This map stores all entities and the archetypes that they use.
 		std::unordered_map<EntityID, EntityRecord> m_EntityArchetypes;
 
-		struct ComponentData
+		/// <summary>
+		/// Data structure that contains useful information and functions for data types.
+		/// Implemented as a getter-function to work around SIOF issue
+		/// </summary>
+		/// <returns>Unordered_map, where the key is the TypeID / TypeHash64 of the type</returns>
+		static std::unordered_map<Hash64, TypeInfo>& GetTypeInfo()
 		{
-			size_t size = -1;
+			static std::unordered_map<Hash64, TypeInfo> map;
+			return map;
+		}
 
-			std::function<void(unsigned char* dest)> CreateObjectInMemory;
-			std::function<void(unsigned char* src, unsigned char* dest)> MoveData;
-			std::function<void(unsigned char* data)> DestructData;
-#ifdef DEBUG
-			std::string debugName;
-#endif
-		};
-		// This map links all ComponentIDs to the correct ComponentData struct. 
-		// The ComponentData struct contains useful information / functions for managing component data.
-		std::unordered_map<ComponentID, ComponentData*> m_ComponentMap;
+		// This map links a (Component-class) TypeID to its Component-type reflection info
+		inline static std::unordered_map<TypeID, ReflectionCompInfo> s_ReflectedCompInfo;
 
 	};
 }

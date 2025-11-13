@@ -2,16 +2,13 @@
 
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
-#include <ImGui/imgui.h>
 
 #include "Core/Engine.h"
 #include "Core/Input/Input.h"
-#include "Platform/Window.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Components/BasicComponents.h"
 #include "ECS/Components/CameraComponent.h"
-#include "ECS/Components/BasicComponents.h"
 
 namespace LAG::CameraSystem
 {
@@ -23,7 +20,7 @@ namespace LAG::CameraSystem
 			return;
 		}
 
-		CameraComponent* camera = GetEngine().GetScene()->GetComponent<CameraComponent>(entityID);
+		CameraComponent* camera = GetScene()->GetComponent<CameraComponent>(entityID);
 		if (!camera)
 			LAG_ASSERT("Camera Entity ID does not contain CameraComponent.");
 
@@ -34,22 +31,22 @@ namespace LAG::CameraSystem
 		float cameraMovementSpeed = 1.f * camera->movementSpeed * GetEngine().GetDeltaTime();
 		float cameraRotationSpeed = 1.f * camera->rotationSpeed * GetEngine().GetDeltaTime();
 
-		TransformComponent* transform = GetEngine().GetScene()->GetComponent<TransformComponent>(entityID);
+		TransformComponent* transform = GetScene()->GetComponent<TransformComponent>(entityID);
 		if (!transform)
 			CRITICAL("Camera Entity ID does not contain TransformComponent.");
 
 		glm::vec3 camPosAdjustment = glm::vec3(0.f);
-		if (Input::IsActionPressed(HashedString("cameraMoveForward")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveForward")))
 			camPosAdjustment += camera->forwardVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(HashedString("cameraMoveBackward")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveBackward")))
 			camPosAdjustment -= camera->forwardVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(HashedString("cameraMoveLeft")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveLeft")))
 			camPosAdjustment += camera->rightVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(HashedString("cameraMoveRight")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveRight")))
 			camPosAdjustment -= camera->rightVector * cameraMovementSpeed;
-		if (Input::IsActionPressed(HashedString("cameraMoveUp")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveUp")))
 			camPosAdjustment.y -= cameraMovementSpeed;
-		if (Input::IsActionPressed(HashedString("cameraMoveDown")))
+		if (Input::IsActionPressed(StringHash64("cameraMoveDown")))
 			camPosAdjustment.y += cameraMovementSpeed;
 
 		if (camPosAdjustment != glm::vec3(0.f))
@@ -59,13 +56,13 @@ namespace LAG::CameraSystem
 		}
 
 		glm::vec3 camRotAdjustment = glm::vec3(0.f);
-		if (Input::IsActionPressed(HashedString("cameraLookUp")))
+		if (Input::IsActionPressed(StringHash64("cameraLookUp")))
 			camRotAdjustment.x -= cameraRotationSpeed;
-		if (Input::IsActionPressed(HashedString("cameraLookDown")))
+		if (Input::IsActionPressed(StringHash64("cameraLookDown")))
 			camRotAdjustment.x += cameraRotationSpeed;
-		if (Input::IsActionPressed(HashedString("cameraLookLeft")))
+		if (Input::IsActionPressed(StringHash64("cameraLookLeft")))
 			camRotAdjustment.y -= cameraRotationSpeed;
-		if (Input::IsActionPressed(HashedString("cameraLookRight")))
+		if (Input::IsActionPressed(StringHash64("cameraLookRight")))
 			camRotAdjustment.y += cameraRotationSpeed;
 
 		if (camRotAdjustment != glm::vec3(0.f))
@@ -77,7 +74,7 @@ namespace LAG::CameraSystem
 
 	EntityID GetActiveCameraEntityID()
 	{
-		std::vector<EntityID> camEntities = GetScene()->GetEntitiesWithComponents<CameraComponent>();
+		std::vector<EntityID> camEntities = GetScene()->QueryEntities<CameraComponent>();
 		if (camEntities.empty())
 		{
 			WARNING("Failed to find active camera in GetActiveCameraEntity()");
@@ -86,7 +83,7 @@ namespace LAG::CameraSystem
 
 		for (const auto& id : camEntities)
 		{
-			CameraComponent* camComp = GetScene()->GetComponent<CameraComponent>(id);
+			CameraComponent const* camComp = GetScene()->GetComponent<CameraComponent>(id);
 			if (camComp != nullptr && camComp->isActive)
 				return id;
 		}

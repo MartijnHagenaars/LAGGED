@@ -14,9 +14,7 @@
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"
 
-#include "ECS/Entity.h"
-#include "ECS/Components/BasicComponents.h"
-#include "ECS/Components/LightComponent.h"
+#include "ECS/Scene.h"
 #include "ECS/Components/CameraComponent.h"
 #include "ECS/Systems/CameraSystem.h"
 
@@ -28,7 +26,7 @@
 
 namespace LAG
 {
-	Model::Model(const HashedString& path) :
+	Model::Model(const StringHash64& path) :
 		Resource(path)
 	{
 	}
@@ -40,7 +38,7 @@ namespace LAG
 		tinygltf::TinyGLTF modelLoader;
 
 		std::string fileExtension;
-		std::string filePath = GetPath().GetString();
+		std::string filePath = GetPath().String();
 
 		if (filePath.find_last_of(".") != std::string::npos)
 			fileExtension = filePath.substr(filePath.find_last_of(".") + 1);
@@ -66,7 +64,7 @@ namespace LAG
 		m_Meshes.resize(modelData->meshes.size());
 		for (int i = 0; i < modelData->meshes.size(); i++)
 		{
-			m_Meshes[i].Load(GetPath().GetString(), *modelData, i);
+			m_Meshes[i].Load(GetPath().String(), *modelData, i);
 		}
 
 		m_Nodes.resize(modelData->nodes.size());

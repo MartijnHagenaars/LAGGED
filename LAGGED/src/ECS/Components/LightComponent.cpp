@@ -1,15 +1,17 @@
 #include "LightComponent.h"
 
-#include "ECS/Scene.h"
+#include "ECS/Reflection/SceneReflect.h"
 
-bool LAG::LightComponent::InitializeReflection()
+namespace LAG
 {
-    //Reflection::ReflectionSystem<LightComponent> setup;
-    //setup.RegisterComponent().SetDisplayName("Light Component").SetVisibleInEditor(true);
-    //
-    //setup.RegisterVariable<&LightComponent::lightColor>().SetDisplayName("Color");
-    //setup.RegisterVariable<&LightComponent::lightIntensity>().SetDisplayName("Intensity");
-    //setup.RegisterVariable<&LightComponent::lightAttenuation>().SetDisplayName("Attenuation");
+    bool LightComponent::InitializeReflection()
+    {
+        SceneReflect::ReflectComponent<LightComponent>().SetDisplayName("Light Component");
 
-    return true;
+        SceneReflect::ReflectVariable(&LightComponent::lightColor).SetDisplayName("Color");
+        SceneReflect::ReflectVariable(&LightComponent::lightIntensity).SetDisplayName("Intensity");
+        SceneReflect::ReflectVariable(&LightComponent::lightAttenuation).SetDisplayName("Attenuation");
+
+        return true;
+    }
 }

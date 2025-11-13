@@ -137,9 +137,13 @@
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\ECS\Containers.h" />
     <ClInclude Include="src\Editor\Tools\ProfilerViewer.h" />
+    <ClInclude Include="src\Utility\Hash.h" />
     <ClInclude Include="src\Utility\Profiler.h" />
-    <ClInclude Include="src\ECS\Archetype.h" />
+    <ClInclude Include="src\Editor\UI\EditorGuiHelper.h" />
+    <ClInclude Include="src\ECS\Components\EditorComponent.h" />
+    <ClInclude Include="src\ECS\Reflection\SceneReflect.h" />
     <ClInclude Include="src\ECS\TypeDefines.h" />
     <ClInclude Include="src\Editor\Tools\LiveFileEditor.h" />
     <ClInclude Include="src\Core\IO\FileIO.h" />
@@ -148,8 +152,8 @@
     <ClInclude Include="src\Editor\Tools\CameraViewport.h" />
     <ClInclude Include="src\Editor\Tools\ImGuiTools.h" />
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
-    <ClInclude Include="src\ECS\Components\TerrainComponents.h" />
-    <ClInclude Include="src\ECS\Meta\ReflectionTypeWidgets.h" />
+    <ClInclude Include="src\ECS\Components\SurfaceComponent.h" />
+    <ClInclude Include="src\Editor\Reflection\EditorTypesReflectionWidgets.h" />
     <ClInclude Include="src\Editor\ToolsManager.h" />
     <ClInclude Include="src\Editor\ToolBase.h" />
     <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
@@ -179,7 +183,6 @@
     <ClInclude Include="src\ECS\Components\CameraComponent.h" />
     <ClInclude Include="src\ECS\Components\LightComponent.h" />
     <ClInclude Include="src\ECS\Components\ModelComponent.h" />
-    <ClInclude Include="src\ECS\Entity.h" />
     <ClInclude Include="src\ECS\Scene.h" />
     <ClInclude Include="src\Core\Resources\Resource.h" />
     <ClInclude Include="src\Core\Resources\ResourceManager.h" />
@@ -209,16 +212,18 @@
     <ClInclude Include="src\Core\EntryPoint.h" />
     <ClInclude Include="src\Platform\Window.h" />
     <ClInclude Include="src\Platform\Utility\PlatformIncludes.h" />
-    <ClInclude Include="src\Utility\HashedString.h" />
     <ClInclude Include="src\Utility\Noise.h" />
     <ClInclude Include="src\Utility\StringUtility.h" />
     <ClInclude Include="src\Utility\Timer.h" />
     <ClInclude Include="src\ECS\Systems\TerrainSystems.h" />
+    <ClInclude Include="src\ECS\Views.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Editor\ToolBase.cpp" />
     <ClCompile Include="src\Editor\Tools\ProfilerViewer.cpp" />
     <ClCompile Include="src\Utility\Profiler.cpp" />
+    <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
+    <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
     <ClCompile Include="src\Editor\Tools\LiveFileEditor.cpp" />
     <ClCompile Include="src\Core\IO\FileIO.cpp" />
     <ClCompile Include="src\Core\IO\FileWatch.cpp" />
@@ -228,7 +233,7 @@
     <ClCompile Include="src\ECS\Components\BasicComponents.cpp" />
     <ClCompile Include="src\ECS\Components\CameraComponent.cpp" />
     <ClCompile Include="src\ECS\Components\LightComponent.cpp" />
-    <ClCompile Include="src\ECS\Components\TerrainComponents.cpp" />
+    <ClCompile Include="src\ECS\Components\SurfaceComponent.cpp" />
     <ClCompile Include="src\Editor\ToolsManager.cpp" />
     <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp">
@@ -287,7 +292,6 @@
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Debug|x64'">Level3</WarningLevel>
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='OpenGL_Release|x64'">Level3</WarningLevel>
     </ClCompile>
-    <ClCompile Include="src\ECS\Entity.cpp" />
     <ClCompile Include="src\ECS\Scene.cpp" />
     <ClCompile Include="src\Core\Resources\Resource.cpp" />
     <ClCompile Include="src\Core\Resources\ResourceManager.cpp" />
@@ -298,6 +302,7 @@
     <ClCompile Include="src\Utility\Timer.cpp" />
     <ClCompile Include="src\ECS\Systems\TerrainSystems.cpp" />
     <ClCompile Include="src\Utility\stb_image.cpp" />
+    <ClCompile Include="src\ECS\Views.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="res\Shaders\DX12\PixelShader.hlsl">
@@ -328,7 +333,7 @@
     <None Include="res\Shaders\OpenGL\Skybox.vertex.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.pixel.glsl" />
     <None Include="res\Shaders\OpenGL\SurfaceShader.vertex.glsl" />
-    <None Include="src\ECS\Entity.inl" />
+    <None Include="src\ECS\Reflection\SceneReflect.inl" />
     <None Include="src\ECS\Scene.inl" />
   </ItemGroup>
   <ItemGroup>

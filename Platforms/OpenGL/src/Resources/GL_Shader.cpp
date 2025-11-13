@@ -17,7 +17,7 @@ namespace LAG
 		unsigned int pixelID = 0;
 	};
 
-	Shader::Shader(const HashedString& shaderPath) : Resource(shaderPath)
+	Shader::Shader(const StringHash64& shaderPath) : Resource(shaderPath)
 	{
 	}
 
@@ -28,7 +28,7 @@ namespace LAG
 	bool Shader::Load()
 	{
 		//Read all shader files that can be found
-		std::string fileName = GetPath().GetString().substr(GetPath().GetString().find_last_of('/') + 1, GetPath().GetString().length());
+		std::string fileName = GetPath().String().substr(GetPath().String().find_last_of('/') + 1, GetPath().String().length());
 		std::string m_VertexSource = FileIO::Read(FileIO::Directory::Shaders, fileName + ".vertex.glsl");
 		std::string m_PixelSource = FileIO::Read(FileIO::Directory::Shaders, fileName + ".pixel.glsl");
 
@@ -50,7 +50,7 @@ namespace LAG
 		}
 		else
 		{
-			ERROR("Shaders in directory {0} could not be read/found.", GetPath().GetString());
+			ERROR("Shaders in directory {0} could not be read/found.", GetPath().String());
 			return false;
 		}
 	}
@@ -72,7 +72,7 @@ namespace LAG
 		//Check if we can load the new shader files.
 		if (!Load())
 		{
-			ERROR("Failed to reload shader: {0}", GetPath().GetString());
+			ERROR("Failed to reload shader: {0}", GetPath().String());
 			CleanUpCompiledShaders();
 			return false;
 		}
@@ -99,7 +99,7 @@ namespace LAG
 			//Also dump the entire shader code to the console if we're running debug. Might be useful to see the entire shader when debugging.
 			char shaderInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetShaderInfoLog(shaderID, 512, NULL, shaderInfoLog));
-			ERROR("Failed to compile shader for {0} shaders: {1}", GetPath().GetString(), shaderInfoLog);
+			ERROR("Failed to compile shader for {0} shaders: {1}", GetPath().String(), shaderInfoLog);
 #ifdef DEBUG
 			INFO("Dumping shader source: \n{0}", shaderSource);
 #endif
@@ -128,7 +128,7 @@ namespace LAG
 			//Print an error message. After that, delete the shader program.
 			char programInfoLog[512];
 			LAG_GRAPHICS_CHECK(glGetProgramInfoLog(programID, 512, NULL, programInfoLog));
-			CRITICAL("Failed to compile shader program for {0} shaders: {1}", GetPath().GetString(), programInfoLog);
+			CRITICAL("Failed to compile shader program for {0} shaders: {1}", GetPath().String(), programInfoLog);
 
 			glDeleteProgram(programID);
 			return 0;

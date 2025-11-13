@@ -10,7 +10,7 @@
 #include "Platform/Resources/Texture.h"
 
 #include "Utility/Logger.h"
-#include "Utility/HashedString.h"
+#include "Utility/Hash.h"
 
 namespace LAG
 {
@@ -217,9 +217,9 @@ namespace LAG
 
 			//TODO: This is potentially dangerous! Using image.name as the texture handle could be dangerous. 
 			// Should be prefixed with the model name
-			HashedString texHandle = HashedString(image.name);
+			StringHash64 texHandle = StringHash64(image.name);
 			GetResourceManager()->AddResource<Texture>(texHandle, &image.image.data()[0], image.image.size(), image.width, image.height, LAG::TextureFormat::FORMAT_RGBA);
-			textures.emplace_back(texHandle.GetValue());
+			textures.emplace_back(texHandle.Value());
 		}
 
 		return textures;

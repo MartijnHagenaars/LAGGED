@@ -1,0 +1,180 @@
+#include "Views.h"
+#include "Scene.h"
+
+#include "Core/Engine.h"
+
+namespace LAG
+{
+	ArchetypeView::ArchetypeView(Archetype& archetype) :
+		m_Archetype(archetype)
+	{
+	}
+
+	bool ArchetypeView::Contains(EntityID id) const
+	{
+		for (const EntityID& entIt : m_Archetype.entityIDs)
+		{
+			if (entIt == id)
+				return true;
+		}
+		return false;
+	}
+
+	ArchetypeView::ComponentRange ArchetypeView::Types()
+	{
+		return ArchetypeView::ComponentRange(m_Archetype.typeID);
+	}
+
+	ArchetypeView::ComponentRange::ComponentRange(CompIdContainer& idContainer) :
+		m_IdContainer(idContainer)
+	{
+	}
+
+
+	//////////////////////////////////////////////
+	// Component Range Iterator implementations //
+	//////////////////////////////////////////////
+
+	ArchetypeView::ComponentRange::Iterator::Iterator(InnerIterator it) :
+		m_Ptr(it)
+	{
+	}
+
+	ComponentView ArchetypeView::ComponentRange::Iterator::operator*() const { return ComponentView(*m_Ptr, Scene::GetTypeInfo()[*m_Ptr]); }
+	ComponentView ArchetypeView::ComponentRange::Iterator::operator->() const { return ComponentView(*m_Ptr, Scene::GetTypeInfo()[*m_Ptr]); }
+
+	ArchetypeView::ComponentRange::Iterator& ArchetypeView::ComponentRange::Iterator::operator++()
+	{
+		++m_Ptr;
+		return *this;
+	}
+
+	ArchetypeView::ComponentRange::Iterator& ArchetypeView::ComponentRange::Iterator::operator--()
+	{
+		--m_Ptr;
+		return *this;
+	}
+
+	ArchetypeView::ComponentRange::Iterator ArchetypeView::ComponentRange::Iterator::operator++(int)
+	{
+		Iterator tempIt = *this;
+		++(*this);
+		return tempIt;
+	}
+
+	ArchetypeView::ComponentRange::Iterator ArchetypeView::ComponentRange::Iterator::operator--(int)
+	{
+		Iterator tempIt = *this;
+		--(*this);
+		return tempIt;
+	}
+
+
+	///////////////////////////////////
+	// ComponentView implementations //
+	///////////////////////////////////
+
+	ComponentView::ComponentView(TypeID id, TypeInfo& compData) :
+		m_ID(id), m_ComponentData(compData)
+	{
+		const auto& reflCompInfoIt = Scene::s_ReflectedCompInfo.find(id);
+		m_ReflectionData = reflCompInfoIt != Scene::s_ReflectedCompInfo.end() ? &reflCompInfoIt->second : nullptr;
+	}
+
+	ReflectionCompInfo::Properties* ComponentView::Props() const
+	{ 
+		return m_ReflectionData ? &m_ReflectionData->props : nullptr;
+	}
+
+	ComponentView::MemberRange ComponentView::Members()
+	{
+		return ComponentView::MemberRange(m_ReflectionData->members, *this);
+	}
+
+	void* ComponentView::GetVoid(EntityID id)
+	{
+		if (id == ENTITY_NULL)
+			return nullptr;
+
+		EntityRecord& record = GetScene()->m_EntityArchetypes.at(id);
+		size_t index = record.archetype->systemCompIndices.at(m_ID);
+
+		return reinterpret_cast<void*>(&record.archetype->compData[index][record.index * m_ComponentData.size]);
+	}
+
+	std::any ComponentView::ToAny(void* data)
+	{
+		return m_ComponentData.VoidToAny(data);
+	}
+
+	FunctionView ComponentView::Func(Hash64 funcNameHash) const
+	{
+		return FunctionView(m_ComponentData.funcs, funcNameHash);
+	}
+
+	ComponentView::MemberRange::MemberRange(DataContainer& dataContainer, ComponentView& parentCompView) :
+		m_Container(dataContainer), m_ParentCompView(parentCompView)
+	{
+	}
+
+	ComponentView::MemberRange::Iterator::Iterator(InnerIterator it, ComponentView& parentCompView) :
+		m_Ptr(it), m_ParentCompView(parentCompView)
+	{
+	}
+
+	MemberView ComponentView::MemberRange::Iterator::operator*() const { return MemberView(*m_Ptr, Scene::GetTypeInfo()[m_Ptr->typeID], m_ParentCompView); }
+	MemberView ComponentView::MemberRange::Iterator::operator->() const { return MemberView(*m_Ptr, Scene::GetTypeInfo()[m_Ptr->typeID], m_ParentCompView); }
+
+	ComponentView::MemberRange::Iterator& ComponentView::MemberRange::Iterator::operator++()
+	{
+		++m_Ptr;
+		return *this;
+	}
+
+	ComponentView::MemberRange::Iterator& ComponentView::MemberRange::Iterator::operator--()
+	{
+		--m_Ptr;
+		return *this;
+	}
+
+	ComponentView::MemberRange::Iterator ComponentView::MemberRange::Iterator::operator++(int)
+	{
+		Iterator tempIt = *this;
+		++(*this);
+		return tempIt;
+	}
+
+	ComponentView::MemberRange::Iterator ComponentView::MemberRange::Iterator::operator--(int)
+	{
+		Iterator tempIt = *this;
+		--(*this);
+		return tempIt;
+	}
+
+
+	////////////////////////////////
+	// MemberView implementations //
+	////////////////////////////////
+
+	MemberView::MemberView(ReflectionCompInfo::MemberInfo& memberData, TypeInfo& typeInfo, ComponentView& parentCompView) :
+		m_MemberData(memberData), m_TypeInfo(typeInfo), m_ParentCompView(parentCompView)
+	{
+	}
+
+	void* MemberView::GetVoid(EntityID id) const
+	{
+		if (id == ENTITY_NULL)
+			return nullptr;
+		return reinterpret_cast<void*>(reinterpret_cast<size_t>(m_ParentCompView.GetVoid(id)) + m_MemberData.byteOffset);
+	}
+
+	std::any MemberView::ToAny(void* data) const
+	{
+		return m_TypeInfo.VoidToAny(data);
+	}
+
+	FunctionView MemberView::Func(Hash64 funcNameHash) const
+	{
+		return FunctionView(m_TypeInfo.funcs, funcNameHash);
+	}
+}

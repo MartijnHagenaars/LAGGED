@@ -1,7 +1,7 @@
 #pragma once
-#include "glm/glm.hpp"
-#include "ECS/Entity.h"
-#include "ECS/Components/CameraComponent.h"
+#include <glm/mat4x4.hpp>
+
+#include "ECS/TypeDefines.h"
 
 namespace LAG
 {

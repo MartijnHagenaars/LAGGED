@@ -1,22 +1,24 @@
 #include "Gizmo.h"
 
-#include "Core/Engine.h"
-#include "Editor/ToolsManager.h"
+#include <ImGui/imgui.h>
+#include <ImGui/imgui_internal.h>
+#include <ImGuizmo/ImGuizmo.h>
 
-#include "ImGui/imgui.h"
-#include "ImGuizmo/ImGuizmo.h"
+#include "Core/Engine.h"
+
 
 #include "ECS/Scene.h"
-#include "ECS/Entity.h"
 #include "ECS/Components/BasicComponents.h"
-#include "Core/Engine.h"
+#include "ECS/Components/CameraComponent.h"
+#include "Editor/ToolsManager.h"
 
-#include "ImGui/imgui_internal.h"
 
 namespace LAG
 {
 	Gizmo::Gizmo() :
-		ToolBase(ToolType::LEVEL, "Gizmo Properties", "GizmoProperties"), m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), m_GizmoMode(ImGuizmo::MODE::WORLD)
+		ToolBase(ToolType::LEVEL, "Gizmo Properties", "GizmoProperties"), 
+		m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), 
+		m_GizmoMode(ImGuizmo::MODE::WORLD)
 	{
 	}
 
@@ -67,13 +69,14 @@ namespace LAG
 		ImGui::End();
 	}
 
-	void Gizmo::RenderGizmo(Entity* targetEntity)
+	void Gizmo::RenderGizmo(EntityID targetEntityID)
 	{
-		TransformComponent* targetTransform = targetEntity->GetComponent<TransformComponent>();
+		Scene* sc = GetScene();
+		TransformComponent* targetTransform = sc->GetComponent<TransformComponent>(targetEntityID);
 		if (targetTransform == nullptr)
 			return;
 
-		CameraComponent* camera = m_CameraEntity->GetComponent<CameraComponent>();
+		CameraComponent* camera = sc->GetComponent<CameraComponent>(targetEntityID);
 		if (targetTransform == nullptr || camera == nullptr)
 		{
 			ImGuizmo::Enable(false);
@@ -96,18 +99,17 @@ namespace LAG
 
 	void Gizmo::RenderViewManipulator()
 	{
-		TransformComponent* transform = m_CameraEntity->GetComponent<TransformComponent>();
-		CameraComponent* cameraComp = m_CameraEntity->GetComponent<CameraComponent>();
+		Scene* sc = GetScene();
+		TransformComponent* transformComp = sc->GetComponent<TransformComponent>(m_CameraEntityID);
+		CameraComponent* camComp = sc->GetComponent<CameraComponent>(m_CameraEntityID);
 
 		ImVec2 winPos = ImGui::GetWindowPos();
-		glm::mat4 viewMat = transform->GetTransformMatrix();
+		glm::mat4 viewMat = transformComp->GetTransformMatrix();
 		ImGuizmo::ViewManipulate(&viewMat[0][0], 8.f, ImVec2(winPos.x, winPos.y + 12.f), ImVec2(128.f, 128.f), 0x10101010);
 	}
 
 	void Gizmo::Render()
 	{
-		ImGui::Checkbox("Enable Gizmo", &m_UseGizmo);
-
 		ImGui::SeparatorText("Operation");
 		ImGui::RadioButton("Translate", &m_GizmoOperation, static_cast<int>(ImGuizmo::OPERATION::TRANSLATE)); ImGui::SameLine();
 		ImGui::RadioButton("Rotate", &m_GizmoOperation, static_cast<int>(ImGuizmo::OPERATION::ROTATE)); ImGui::SameLine();

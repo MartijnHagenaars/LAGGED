@@ -10,7 +10,7 @@
 
 namespace LAG
 {
-	struct ProceduralSurfaceComponent;
+	struct SurfaceComponent;
 
 	class Texture;
 	class Surface
@@ -19,7 +19,7 @@ namespace LAG
 		//Load a height map from a texture
 		//TODO: Needs to be reworked
 		void GenerateHeightMapSurface(const std::string& heightTexturePath);
-		void GenerateNoiseSurface(const TransformComponent& transformComp, const ProceduralSurfaceComponent& procSurfaceComp);
+		void GenerateNoiseSurface(const TransformComponent& transformComp, const SurfaceComponent& procSurfaceComp);
 
 		virtual bool Load();
 		virtual bool Unload();

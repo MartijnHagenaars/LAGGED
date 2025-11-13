@@ -1,17 +1,18 @@
 #include "CameraComponent.h"
 
-#include "Core/Engine.h"
-#include "ECS/Scene.h"
+#include "ECS/Reflection/SceneReflect.h"
 
-bool LAG::CameraComponent::InitializeReflection()
+namespace LAG
 {
-    //Reflection::ReflectionSystem<CameraComponent> setup;
-    //setup.RegisterComponent().SetDisplayName("Camera Component").SetVisibleInEditor(true);
+    bool CameraComponent::InitializeReflection()
+    {
+        SceneReflect::ReflectComponent<CameraComponent>().SetDisplayName("Camera Component");
 
-    //setup.RegisterVariable<&CameraComponent::isActive>().SetDisplayName("Is active?");
-    //setup.RegisterVariable<&CameraComponent::fov>().SetDisplayName("FOV");
-    //setup.RegisterVariable<&CameraComponent::movementSpeed>().SetDisplayName("Movement speed");
-    //setup.RegisterVariable<&CameraComponent::rotationSpeed>().SetDisplayName("Rotation speed");
+        SceneReflect::ReflectVariable(&CameraComponent::isActive).SetDisplayName("Is active?");
+        SceneReflect::ReflectVariable(&CameraComponent::fov).SetDisplayName("FOV");
+        SceneReflect::ReflectVariable(&CameraComponent::movementSpeed).SetDisplayName("Movement speed");
+        SceneReflect::ReflectVariable(&CameraComponent::rotationSpeed).SetDisplayName("Rotation speed");
 
-    return true;
+        return true;
+    }
 }

@@ -4,6 +4,9 @@
 //Renderer defines
 #define TOTAL_POINT_LIGHTS 3
 
+using Hash32 = uint32_t;
+using Hash64 = uint64_t;
+
 //Assertion defines
 #ifdef DEBUG
 #define LAG_ASSERT(AssertMessage) { CRITICAL("Assertion called on line {0} in file {1}: {2}", __LINE__, __FILE__, AssertMessage); __debugbreak(); }

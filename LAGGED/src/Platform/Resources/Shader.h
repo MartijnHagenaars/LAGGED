@@ -11,7 +11,7 @@ namespace LAG
 		friend class ResourceManager;
 	public:
 		Shader() = delete;
-		explicit Shader(const HashedString& path);
+		explicit Shader(const StringHash64& path);
 		~Shader() override;
 
 		void Bind();

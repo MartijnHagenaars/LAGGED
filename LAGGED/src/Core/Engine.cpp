@@ -1,5 +1,4 @@
 #include "Engine.h"
-#include "Utility/Timer.h"
 
 #include "Resources/ResourceManager.h"
 #include "Editor/ToolsManager.h"
@@ -8,11 +7,7 @@
 #include "Platform/RenderBackend.h"
 
 #include "ECS/Scene.h"
-#include "ECS/Entity.h"
-
 #include "IO/FileWatch.h"
-
-#include "ECS/Systems/BasicSystems.h"
 
 namespace LAG
 {
@@ -47,9 +42,6 @@ namespace LAG
 			GetWindow()->Update();
 
 			FileWatch::CheckWatches();
-
-			//Update all basic systems
-			BasicSystems::UpdateBasicSystems();
 
 			m_Application->Update();
 
@@ -91,16 +83,16 @@ namespace LAG
 		m_Renderer->RegisterImGuiRenderCallback(std::bind(&ToolsManager::PresentEditor, m_ToolsManager));
 
 		//Add some input actions that'll be used by the engine and the editor. 
-		Input::AddInputAction(Input::InputType::LAG_W, HashedString("cameraMoveForward"));
-		Input::AddInputAction(Input::InputType::LAG_S, HashedString("cameraMoveBackward"));
-		Input::AddInputAction(Input::InputType::LAG_A, HashedString("cameraMoveLeft"));
-		Input::AddInputAction(Input::InputType::LAG_D, HashedString("cameraMoveRight"));
-		Input::AddInputAction(Input::InputType::LAG_SHIFT_L, HashedString("cameraMoveUp"));
-		Input::AddInputAction(Input::InputType::LAG_CONTROL_L, HashedString("cameraMoveDown"));
-		Input::AddInputAction(Input::InputType::LAG_UP, HashedString("cameraLookUp"));
-		Input::AddInputAction(Input::InputType::LAG_DOWN, HashedString("cameraLookDown"));
-		Input::AddInputAction(Input::InputType::LAG_LEFT, HashedString("cameraLookLeft"));
-		Input::AddInputAction(Input::InputType::LAG_RIGHT, HashedString("cameraLookRight"));
+		Input::AddInputAction(Input::InputType::LAG_W, StringHash64("cameraMoveForward"));
+		Input::AddInputAction(Input::InputType::LAG_S, StringHash64("cameraMoveBackward"));
+		Input::AddInputAction(Input::InputType::LAG_A, StringHash64("cameraMoveLeft"));
+		Input::AddInputAction(Input::InputType::LAG_D, StringHash64("cameraMoveRight"));
+		Input::AddInputAction(Input::InputType::LAG_SHIFT_L, StringHash64("cameraMoveUp"));
+		Input::AddInputAction(Input::InputType::LAG_CONTROL_L, StringHash64("cameraMoveDown"));
+		Input::AddInputAction(Input::InputType::LAG_UP, StringHash64("cameraLookUp"));
+		Input::AddInputAction(Input::InputType::LAG_DOWN, StringHash64("cameraLookDown"));
+		Input::AddInputAction(Input::InputType::LAG_LEFT, StringHash64("cameraLookLeft"));
+		Input::AddInputAction(Input::InputType::LAG_RIGHT, StringHash64("cameraLookRight"));
 
 		//Application setup. Should be the last object to be initialized!
 		m_Application = applicationPtr;
@@ -127,7 +119,7 @@ namespace LAG
 		}
 		m_ToolsManager = nullptr;
 
-		if(m_Scene)
+		if (m_Scene)
 			delete m_Scene;
 		m_Scene = nullptr;
 
