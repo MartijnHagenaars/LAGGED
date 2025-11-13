@@ -1,15 +1,12 @@
 #include "Platform/Resources/Model.h"
 
-#define TINYGLTF_IMPLEMENTATION
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#define TINYGLTF_NOEXCEPTION
-#define JSON_NOEXCEPTION
-#include <TinyGLTF/tiny_gltf.h>
-
 #include <GL/glew.h>
 #include <glm/gtx/quaternion.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <TinyGLTF/tiny_gltf.h>
+
+#include <filesystem>
 
 #include "Core/Engine.h"
 #include "Core/Resources/ResourceManager.h"

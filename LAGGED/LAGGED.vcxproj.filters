@@ -50,6 +50,7 @@
     <ClCompile Include="src\ECS\Reflection\SceneReflect.cpp" />
     <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
     <ClCompile Include="src\ECS\Views.cpp" />
+    <ClCompile Include="src\Utility\tiny_gltf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />

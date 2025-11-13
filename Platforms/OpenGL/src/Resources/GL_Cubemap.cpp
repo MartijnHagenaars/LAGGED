@@ -3,7 +3,7 @@
 #include <array>
 
 #include <GL/glew.h>
-#include <stb/stb_image.h>
+#include <stb_image.h>
 
 #include "Core/IO/FileIO.h"
 #include "Utility/GL_ErrorChecks.h"
