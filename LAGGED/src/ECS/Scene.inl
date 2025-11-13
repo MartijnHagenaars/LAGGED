@@ -14,7 +14,7 @@ namespace LAG
 		{
 			// Register component in the case it hasn't been done yet.
 			RegisterType<Comp>();
-			WARNING("Registering component {} (ID: {}) at runtime.", typeid(Comp).name(), typeID);
+			INFO("Registering component {} (ID: {}) at runtime.", typeid(Comp).name(), typeID);
 		}
 
 		const auto& entityRecordIt = m_EntityArchetypes.find(entityID);
@@ -59,7 +59,7 @@ namespace LAG
 		}
 
 		int dataOffset = 0;
-		const Scene::EntityRecord& record = recordIt->second;
+		const EntityRecord& record = recordIt->second;
 		Archetype* archetype = record.archetype;
 
 		for (int i = 0; i < archetype->typeID.size(); i++)

@@ -87,8 +87,6 @@ namespace LAG
 		/// <returns>A vector containing all component IDs</returns>
 		static std::vector<TypeID> QueryCompIDs();
 
-
-
 		// Helper function for getting the hash64 of a type
 		template<typename T>
 		static constexpr TypeID GetTypeID();
@@ -104,7 +102,7 @@ namespace LAG
 				using iterator_category = std::bidirectional_iterator_tag;
 				using InnerIterator = ArchContainer::iterator;
 
-				explicit Iterator(Scene& scene, InnerIterator it);
+				explicit Iterator(InnerIterator it);
 
 				ArchetypeView operator*() const;
 				ArchetypeView operator->() const;
@@ -118,26 +116,20 @@ namespace LAG
 				friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
 
 			private:
-				Scene& m_Scene;
 				InnerIterator m_Ptr;
 			};
 
 		public:
-			explicit ArchetypeRange(Scene& scene, ArchContainer& container);
+			explicit ArchetypeRange(ArchContainer& container);
 
 			Iterator begin() const;
 			Iterator end() const;
 
 		private:
-			Scene& m_Scene;
 			ArchContainer& m_Container;
 		};
 
 	private:
-		// Forward declaring some stuff that we'll need later...
-		// TODO: Maybe move this to the Containers header?
-		struct EntityRecord;
-
 		Archetype* CreateArchetype(const ArchetypeID& archetypeID);
 		Archetype* GetArchetype(const ArchetypeID& archetypeID);
 
@@ -154,11 +146,6 @@ namespace LAG
 		// This vector stores all possible archetypes
 		std::vector<Archetype*> m_Archetypes;
 
-		struct EntityRecord
-		{
-			size_t index;
-			Archetype* archetype;
-		};
 		// This map stores all entities and the archetypes that they use.
 		std::unordered_map<EntityID, EntityRecord> m_EntityArchetypes;
 

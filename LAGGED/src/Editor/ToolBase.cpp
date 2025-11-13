@@ -10,7 +10,7 @@ namespace LAG
 
 	void ToolBase::WindowBegin()
 	{
-		ImGui::Begin(GetDisplayName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse);
+		ImGui::Begin(GetDisplayName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
 	}
 

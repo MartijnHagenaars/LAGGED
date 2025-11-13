@@ -15,7 +15,7 @@ namespace LAG
 		class ComponentRange;
 	public:
 		ArchetypeView() = delete;
-		ArchetypeView(Scene& scene, Archetype& archetype);
+		explicit ArchetypeView(Archetype& archetype);
 
 	public:
 		ComponentRange Types();
@@ -33,7 +33,7 @@ namespace LAG
 				using iterator_category = std::bidirectional_iterator_tag;
 				using InnerIterator = CompIdContainer::iterator;
 
-				explicit Iterator(Scene& scene, InnerIterator it);
+				explicit Iterator(InnerIterator it);
 
 				ComponentView operator*() const;
 				ComponentView operator->() const;
@@ -47,23 +47,20 @@ namespace LAG
 				friend bool operator!=(const Iterator& a, const Iterator& b) { return a.m_Ptr != b.m_Ptr; }
 
 			private:
-				Scene& m_Scene;
 				InnerIterator m_Ptr;
 			};
 
 		public:
 			ComponentRange() = delete;
-			ComponentRange(Scene& scene, CompIdContainer& idContainer);
+			explicit ComponentRange(CompIdContainer& idContainer);
 
-			Iterator begin() const { return Iterator(m_Scene, m_IdContainer.begin()); }
-			Iterator end() const { return Iterator(m_Scene, m_IdContainer.end()); }
+			Iterator begin() const { return Iterator(m_IdContainer.begin()); }
+			Iterator end() const { return Iterator(m_IdContainer.end()); }
 
 		private:
-			Scene& m_Scene;
 			CompIdContainer& m_IdContainer;
 		};
 
-		Scene& m_Scene;
 		Archetype& m_Archetype;
 	};
 
@@ -73,8 +70,7 @@ namespace LAG
 		class MemberRange;
 	public:
 		ComponentView() = delete;
-		// TODO: Consider removing Scene reference
-		ComponentView(Scene& scene, TypeID id, TypeInfo& compData);
+		ComponentView(TypeID id, TypeInfo& compData);
 
 		ReflectionCompInfo::Properties* Props() const;
 
@@ -136,8 +132,6 @@ namespace LAG
 		};
 
 	private:
-		Scene& m_Scene;
-		
 		TypeID m_ID;
 		TypeInfo& m_ComponentData;
 

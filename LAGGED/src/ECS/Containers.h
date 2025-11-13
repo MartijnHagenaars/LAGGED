@@ -26,6 +26,12 @@ namespace LAG
 		std::unordered_map<TypeID, size_t> systemCompIndices; //Determines the order of components when running a system
 	};
 
+	struct EntityRecord
+	{
+		size_t index;
+		Archetype* archetype;
+	};
+
 	struct TypeInfo
 	{
 #ifdef DEBUG

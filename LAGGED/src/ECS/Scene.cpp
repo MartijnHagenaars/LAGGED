@@ -39,7 +39,7 @@ namespace LAG
 
 	EntityID Scene::DuplicateEntity(EntityID id)
 	{
-		//TODO: Implement function...
+		// TODO: Implement function...
 		return ENTITY_NULL;
 	}
 
@@ -101,7 +101,7 @@ namespace LAG
 #ifdef DEBUG
 				CRITICAL("Component ({}) already exists on entity with ID {}", typeInfo->debugName, compID);
 #endif
-				return nullptr; //TODO: Return a valid pointer.
+				return nullptr; // TODO: Return a valid pointer.
 			}
 
 			ArchetypeID newArchetypeID = oldArchetype->typeID;
@@ -357,7 +357,7 @@ namespace LAG
 
 	Scene::ArchetypeRange Scene::Range()
 	{
-		return ArchetypeRange(*this, m_Archetypes);
+		return ArchetypeRange(m_Archetypes);
 	}
 
 	std::vector<TypeID> Scene::QueryCompIDs()
@@ -481,8 +481,6 @@ namespace LAG
 		}
 	}
 
-	//TODO: These names are really bad. newArchetype should not include "NEW" since it's just moving data.
-	// INFO log message is also super vague. It's not allocating more memory in some cases.
 	void Scene::ResizeAndReallocateComponentBuffer(Archetype& archetype, const TypeInfo& typeInfo, int compIndex, size_t targetSize)
 	{
 #ifdef DEBUG
@@ -507,21 +505,22 @@ namespace LAG
 	// ITERATOR IMPLEMENTATION //
 	/////////////////////////////
 
-	Scene::ArchetypeRange::ArchetypeRange(Scene& scene, ArchContainer& container) :
-		m_Scene(scene), m_Container(container)
-	{
-	}
-	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::begin() const { return ArchetypeRange::Iterator(m_Scene, m_Container.begin()); }
-	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::end() const { return Iterator(m_Scene, m_Container.end()); }
-
-
-	Scene::ArchetypeRange::Iterator::Iterator(Scene& scene, InnerIterator it)
-		: m_Scene(scene), m_Ptr(it)
+	Scene::ArchetypeRange::ArchetypeRange(ArchContainer& container) :
+		m_Container(container)
 	{
 	}
 
-	ArchetypeView Scene::ArchetypeRange::Iterator::operator*() const { return ArchetypeView(m_Scene, **m_Ptr); }
-	ArchetypeView Scene::ArchetypeRange::Iterator::operator->() const { return ArchetypeView(m_Scene, **m_Ptr); }
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::begin() const { return ArchetypeRange::Iterator(m_Container.begin()); }
+	Scene::ArchetypeRange::Iterator Scene::ArchetypeRange::end() const { return ArchetypeRange::Iterator(m_Container.end()); }
+
+
+	Scene::ArchetypeRange::Iterator::Iterator(InnerIterator it)
+		: m_Ptr(it)
+	{
+	}
+
+	ArchetypeView Scene::ArchetypeRange::Iterator::operator*() const { return ArchetypeView(**m_Ptr); }
+	ArchetypeView Scene::ArchetypeRange::Iterator::operator->() const { return ArchetypeView(**m_Ptr); }
 
 	Scene::ArchetypeRange::Iterator& Scene::ArchetypeRange::Iterator::operator++()
 	{
