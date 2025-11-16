@@ -30,11 +30,11 @@ namespace LAG
 		void PresentEditor();
 
 		/// <summary>
-		/// Check if a tool is open. Uses the internal tool name for lookup. 
+		/// Check if a specific tool is open and visible. Uses the internal tool ID for lookup.
+		/// The tool ID is generated as a Hash64 of the tool's display name.
 		/// </summary>
-		/// <param name="internalToolName">Internal tool name that is used to look up the tool.</param>
 		/// <returns>Boolean that determines whether the tool is open or not.</returns>
-		bool IsToolOpen(const std::string& internalToolName);
+		bool IsToolOpen(Hash64 toolID);
 
 	private:
 		void BeginDockSpace();

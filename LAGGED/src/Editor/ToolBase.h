@@ -1,21 +1,18 @@
 #pragma once
 #include <string>
+#include <array>
+#include "Utility/Hash.h"
 
 namespace LAG
 {
-	enum class ToolType : unsigned char
-	{
-		LEVEL = 0,
-		GRAPHICS,
-		PERFORMANCE,
-		OTHER
-	};
+	// Define the ToolCategory enum, containing the various tool categories
+	DEFINE_ENUM_AND_STRINGS(ToolCategory, Level, Graphics, Debug)
 
 	class ToolBase
 	{
 	public:
 		ToolBase() = delete;
-		ToolBase(ToolType type, const std::string& displayName, const std::string& internalName);
+		ToolBase(ToolCategory category, const std::string&& displayName);
 		virtual ~ToolBase() = default;
 
 		virtual void Render() = 0;
@@ -30,16 +27,26 @@ namespace LAG
 		void ToggleTool() { m_IsOpen = !m_IsOpen; }
 		bool IsOpen() const { return m_IsOpen; }
 
-		ToolType GetType() const { return m_Type; }
+		/// <summary>
+		/// Returns the tool type / category
+		/// </summary>
+		ToolCategory Category() const { return m_Category; }
+
+		/// <summary>
+		/// Returns the unique 64-bit hash ID of the tool.
+		/// The ID is generated as a Hash64 of the tool's display name and is used for internal identification.
+		/// </summary>
+		Hash64 ID() const { return m_ID; }
+
 		const std::string& GetDisplayName() const { return m_DisplayName; }
-		const std::string& GetInternalName() const { return m_InternalName; }
 
 	protected:
 		bool m_IsOpen = false;
 
 	private:
 		std::string m_DisplayName;
-		std::string m_InternalName;
-		ToolType m_Type;
+		ToolCategory m_Category;
+
+		Hash64 m_ID;
 	};
 }

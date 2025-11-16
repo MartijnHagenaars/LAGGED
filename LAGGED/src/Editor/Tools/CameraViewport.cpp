@@ -11,7 +11,7 @@
 
 namespace LAG
 {
-	CameraViewport::CameraViewport() : ToolBase(ToolType::LEVEL, "Camera Viewport", "CamView")
+	CameraViewport::CameraViewport() : ToolBase(ToolCategory::Level, "Camera Viewport")
 	{
 	}
 

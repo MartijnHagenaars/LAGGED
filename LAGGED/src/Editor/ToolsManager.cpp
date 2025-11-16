@@ -46,7 +46,7 @@ namespace LAG
 	{
 		BeginDockSpace();
 		
-		//Create the menu bar, displayed at the top of the window
+		// Create the menu bar, displayed at the top of the window
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
@@ -57,37 +57,20 @@ namespace LAG
                 ImGui::EndMenu();
 			}
 
-			if (ImGui::BeginMenu("Level"))
+			for (int catId = 0; catId < s_ToolCategoryStrings.size(); catId++)
 			{
-				for (int i = 0; i < m_Tools.size(); i++)
-					if (m_Tools[i]->GetType() == ToolType::LEVEL)
+				if (ImGui::BeginMenu(s_ToolCategoryStrings[catId]))
+				{
+					for (int i = 0; i < m_Tools.size(); i++)
 					{
-						if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
-							m_Tools[i]->ToggleTool();
+						if (m_Tools[i]->Category() == static_cast<ToolCategory>(catId))
+						{
+							if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
+								m_Tools[i]->ToggleTool();
+						}
 					}
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Graphics"))
-			{
-				for (int i = 0; i < m_Tools.size(); i++)
-					if (m_Tools[i]->GetType() == ToolType::GRAPHICS)
-					{
-						if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
-							m_Tools[i]->ToggleTool();
-					}
-				ImGui::EndMenu();
-			}
-
-			if (ImGui::BeginMenu("Performance"))
-			{
-				for (int i = 0; i < m_Tools.size(); i++)
-					if (m_Tools[i]->GetType() == ToolType::PERFORMANCE)
-					{
-						if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
-							m_Tools[i]->ToggleTool();
-					}
-				ImGui::EndMenu();
+					ImGui::EndMenu();
+				}
 			}
 
 			ImGui::EndMenuBar();
@@ -121,14 +104,14 @@ namespace LAG
 
 	}
 
-	bool ToolsManager::IsToolOpen(const std::string& internalToolName)
+	bool ToolsManager::IsToolOpen(Hash64 toolID)
 	{
-		for(const auto& it : m_Tools)
-			if (it->GetInternalName() == internalToolName)
+		for (const auto& it : m_Tools)
+			if (it->ID() == toolID)
 				return it->IsOpen();
 
 		//Return false if tool hasn't been found.
-		ERROR("Tool with internal name \"{0}\" not found.", internalToolName);
+		ERROR("Tool with ID \"{0}\" not found.", toolID);
 		return false;
 	}
 

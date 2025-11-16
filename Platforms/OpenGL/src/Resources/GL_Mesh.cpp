@@ -154,13 +154,13 @@ namespace LAG
 		{
 			const uint16_t* indices = reinterpret_cast<const uint16_t*>(&indexBuffer.data[indexBufferView.byteOffset + indexAccessor.byteOffset]);
 			for (size_t i = 0; i < indexAccessor.count; i++)
-				indicesVec.push_back(indices[i]);
+				indicesVec.emplace_back(indices[i]);
 		}
 		else if (indexAccessor.componentType == TINYGLTF_COMPONENT_TYPE_UNSIGNED_INT)
 		{
 			const uint32_t* indices = reinterpret_cast<const uint32_t*>(&indexBuffer.data[indexBufferView.byteOffset + indexAccessor.byteOffset]);
 			for (size_t i = 0; i < indexAccessor.count; i++)
-				indicesVec.push_back(indices[i]);
+				indicesVec.emplace_back(indices[i]);
 		}
 		else CRITICAL("Mesh is using unsupported component type: {}", indexAccessor.componentType);
 

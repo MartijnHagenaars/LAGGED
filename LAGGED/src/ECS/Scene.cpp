@@ -105,7 +105,7 @@ namespace LAG
 			}
 
 			ArchetypeID newArchetypeID = oldArchetype->typeID;
-			newArchetypeID.push_back(compID);
+			newArchetypeID.emplace_back(compID);
 			std::sort(newArchetypeID.begin(), newArchetypeID.end());
 
 			newArchetype = GetArchetype(newArchetypeID);
@@ -164,7 +164,7 @@ namespace LAG
 
 		// Update the entity archetype record 
 		// and add the EntityID to the archetype. 
-		newArchetype->entityIDs.push_back(entityID);
+		newArchetype->entityIDs.emplace_back(entityID);
 
 		entityRec.archetype = newArchetype;
 		entityRec.index = newArchetype->entityIDs.size() - 1;
@@ -248,7 +248,7 @@ namespace LAG
 		}
 
 		if (newArchetype)
-			newArchetype->entityIDs.push_back(entityID);
+			newArchetype->entityIDs.emplace_back(entityID);
 
 		if (!oldArchetype->entityIDs.empty())
 		{

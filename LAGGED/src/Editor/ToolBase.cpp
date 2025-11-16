@@ -3,10 +3,10 @@
 
 namespace LAG
 {
-	ToolBase::ToolBase(ToolType type, const std::string& displayName, const std::string& internalName) :
-		m_Type(type), m_IsOpen(false),
-		m_DisplayName(displayName), m_InternalName(internalName)
-	{};
+	ToolBase::ToolBase(ToolCategory cat, const std::string&& displayName) :
+		m_Category(cat), m_IsOpen(false), m_DisplayName(displayName), m_ID(StringToHash64(displayName))
+	{
+	};
 
 	void ToolBase::WindowBegin()
 	{

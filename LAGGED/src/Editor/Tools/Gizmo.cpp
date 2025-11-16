@@ -16,7 +16,7 @@
 namespace LAG
 {
 	Gizmo::Gizmo() :
-		ToolBase(ToolType::LEVEL, "Gizmo Properties", "GizmoProperties"), 
+		ToolBase(ToolCategory::Level, "Gizmo Properties"),
 		m_GizmoOperation(ImGuizmo::OPERATION::TRANSLATE), 
 		m_GizmoMode(ImGuizmo::MODE::WORLD)
 	{
@@ -28,7 +28,7 @@ namespace LAG
 		ImVec2 viewportPos;
 		ImVec2 viewportSize;
 
-		if (GetToolsManager()->IsToolOpen("CamView"))
+		if (GetToolsManager()->IsToolOpen(StringToHash64("CamView")))
 		{
 			//Not a fan of this, but cannot come up with another approach.
 			ImGuiContext* currentContext = ImGui::GetCurrentContext();

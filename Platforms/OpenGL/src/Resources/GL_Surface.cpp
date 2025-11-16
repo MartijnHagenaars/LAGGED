@@ -165,7 +165,7 @@ namespace LAG
 
 				VertexData vd;
 				vd.vertex = glm::vec3(xVert, yVert, zVert);
-				m_VertexData.push_back(vd);
+				m_VertexData.emplace_back(vd);
 			}
 		}
 	}
@@ -184,14 +184,14 @@ namespace LAG
 				unsigned int bottomRight = bottomLeft + 1;
 
 				//First triangle
-				m_Indices.push_back(topLeft);
-				m_Indices.push_back(bottomLeft);
-				m_Indices.push_back(topRight);
+				m_Indices.emplace_back(topLeft);
+				m_Indices.emplace_back(bottomLeft);
+				m_Indices.emplace_back(topRight);
 
 				//Second triangle
-				m_Indices.push_back(topRight);
-				m_Indices.push_back(bottomLeft);
-				m_Indices.push_back(bottomRight);
+				m_Indices.emplace_back(topRight);
+				m_Indices.emplace_back(bottomLeft);
+				m_Indices.emplace_back(bottomRight);
 			}
 		}
 	}

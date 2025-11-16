@@ -6,7 +6,7 @@
 namespace LAG
 {
 	ProfilerViewer::ProfilerViewer() :
-		ToolBase(ToolType::PERFORMANCE, "Profiler", "Profiler")
+		ToolBase(ToolCategory::Debug, "Profiler")
 	{
 	}
 

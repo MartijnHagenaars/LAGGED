@@ -18,7 +18,7 @@ namespace LAG
 	void RenderDirectoryFiles(FileIO::Directory dir, const std::string& relPath, std::function<void(const std::string&)> callbackFunction);
 
 	LiveFileEditor::LiveFileEditor() :
-		ToolBase(ToolType::GRAPHICS, "Live File Editor", "LiveFileEditor")
+		ToolBase(ToolCategory::Graphics, "Live File Editor")
 	{
 	}
 

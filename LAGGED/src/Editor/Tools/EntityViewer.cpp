@@ -12,7 +12,7 @@
 namespace LAG
 {
 	EntityViewer::EntityViewer() :
-		ToolBase(ToolType::LEVEL, "Entity Editor", "EntView"),
+		ToolBase(ToolCategory::Level, "Entity Editor"),
 		m_SelectedEntityID(ENTITY_NULL)
 	{
 		memset(m_NewEntityName, 0, sizeof(m_NewEntityName));

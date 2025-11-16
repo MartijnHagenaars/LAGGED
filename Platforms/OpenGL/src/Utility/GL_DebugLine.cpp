@@ -38,7 +38,7 @@ namespace LAG
 
 	void DebugLine::AddLineToQueue(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& color)
 	{
-		m_LineRenderList.emplace_back(LineData{ p1, p2, color });
+		m_LineRenderList.push_back(LineData{ p1, p2, color });
 	}
 
 	void DebugLine::PresentDebugLines()
