@@ -54,12 +54,4 @@ namespace LAG
 			GetRenderer()->OnResize(cameraComp->frameBuffer->GetSize().x, cameraComp->frameBuffer->GetSize().y);
 		}
 	}
-
-	void CameraViewport::OnOpen()
-	{
-	}
-
-	void CameraViewport::OnClose()
-	{
-	}
 }

@@ -14,7 +14,7 @@ using Hash64 = uint64_t;
 
 #define DEFINE_ENUM_AND_STRINGS(NAME, ...)          \
     enum class NAME { __VA_ARGS__ };                \
-    static constexpr auto s_##NAME##Strings = MakeArrayFromArgs(FOR_EACH(STRING_ITEM, __VA_ARGS__));
+    static constexpr auto s_##NAME##Strings = MakeArrayFromArgs(FOR_EACH(STRING_ITEM, __VA_ARGS__))
 
 
 //////////////////////////////////////////

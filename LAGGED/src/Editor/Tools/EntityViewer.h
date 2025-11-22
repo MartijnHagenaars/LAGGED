@@ -10,6 +10,8 @@ namespace LAG
 		EntityViewer();
 
 		void Render() override; 
+		
+		EntityID GetSelectedEntityID() const { return m_SelectedEntityID; }
 
 	private:
 		void RenderProperties();

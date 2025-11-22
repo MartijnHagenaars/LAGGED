@@ -1,44 +1,47 @@
 #include "ToolsManager.h"
 
-#include "ToolBase.h"
-#include "ImGui/imgui.h"
+#include <ImGui/imgui.h>
 
 #include "Core/Engine.h"
 #include "Platform/Window.h"
 #include "ECS/Scene.h"
 #include "ECS/Systems/CameraSystem.h"
 
-#include "Tools/Gizmo.h"
-#include "Tools/EntityViewer.h"
-#include "Tools/ImGuiTools.h"
+#include "UI/Gizmo.h"
+
+#include "Utility/Hash.h"
+
 #include "Tools/CameraViewport.h"
+#include "Tools/EntityViewer.h"
+#include "Tools/GizmoViewer.h"
+#include "Tools/ImGuiTools.h"
 #include "Tools/LiveFileEditor.h"
 #include "Tools/ProfilerViewer.h"
 
 namespace LAG
 {
-	//TODO: Rewrite should remove this
-	static Gizmo* m_TempGizmoPtr = nullptr;
-	static EntityViewer* m_TempEntViewerPtr = nullptr;
-
 	void ToolsManager::Initialize()
 	{
-		m_Tools.push_back(m_TempEntViewerPtr = new EntityViewer());
-		m_Tools.push_back(m_TempGizmoPtr = new Gizmo());
-		m_Tools.push_back(new ImGuiDemoViewer());
-		m_Tools.push_back(new ImGuiStyleEditor());
-		m_Tools.push_back(new ImGuiStyleEditor());
-		m_Tools.push_back(new CameraViewport());
-		m_Tools.push_back(new LiveFileEditor());
-		m_Tools.push_back(new ProfilerViewer());
+		m_Gizmo = std::make_unique<Gizmo>();
+
+		RegisterTool<EntityViewer>();
+		RegisterTool<CameraViewport>();
+		RegisterTool<GizmoViewer>(*m_Gizmo);
+
+		RegisterTool<LiveFileEditor>();
+		RegisterTool<ImGuiDemoViewer>();
+		RegisterTool<ImGuiStyleEditor>();
+
+		RegisterTool<ProfilerViewer>();
 	}
 
 	void ToolsManager::Shutdown()
 	{
-		for (int i = 0; i < m_Tools.size(); i++)
+		// m_Tools is an unordered_map
+		for (auto& [key, tool] : m_Tools)
 		{
-			delete m_Tools[i];
-			m_Tools[i] = nullptr;
+			tool.reset();
+			tool = nullptr;
 		}
 	}
 
@@ -57,17 +60,18 @@ namespace LAG
                 ImGui::EndMenu();
 			}
 
+			// Add tool categories to menu bar
 			for (int catId = 0; catId < s_ToolCategoryStrings.size(); catId++)
 			{
 				if (ImGui::BeginMenu(s_ToolCategoryStrings[catId]))
 				{
-					for (int i = 0; i < m_Tools.size(); i++)
+					for (auto const& [key, tool] : m_Tools)
 					{
-						if (m_Tools[i]->Category() == static_cast<ToolCategory>(catId))
-						{
-							if (ImGui::MenuItem(m_Tools[i]->GetDisplayName().c_str()))
-								m_Tools[i]->ToggleTool();
-						}
+						if (tool->Category() != static_cast<ToolCategory>(catId))
+							continue;
+
+						if (ImGui::MenuItem(tool->GetDisplayName().c_str()))
+							tool->ToggleTool();
 					}
 					ImGui::EndMenu();
 				}
@@ -76,10 +80,9 @@ namespace LAG
 			ImGui::EndMenuBar();
         }
 
-
-		for (int i = 0; i < m_Tools.size(); i++)
+		// Draw tool windows
+		for (auto const& [key, tool] : m_Tools)
 		{
-			ToolBase* tool = m_Tools[i];
 			if (tool->IsOpen())
 			{
 				tool->WindowBegin();
@@ -87,6 +90,29 @@ namespace LAG
 				tool->WindowEnd();
 			}
 		}
+
+		// Draw gizmo
+		// TODO: Add toggle for enabling/disabling gizmo
+		if (true) 
+		{
+			EntityID cameraEntityID = CameraSystem::GetActiveCameraEntityID();
+			EntityID targetEntityID = static_cast<EntityViewer*>(m_Tools.at(GetTypeHash64<EntityViewer>()).get())->GetSelectedEntityID();
+			if (targetEntityID != ENTITY_NULL && cameraEntityID != ENTITY_NULL)
+			{
+				const ImGuiViewport* viewport = ImGui::GetMainViewport();
+				ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
+				ImVec2 viewportSize = viewport->Size;
+				ImVec2 viewportPos = viewport->Pos;
+
+				Gizmo::Render(
+					cameraEntityID, targetEntityID, 
+					Frame{ viewport->Pos.x, viewport->Pos.y, viewport->Size.x, viewport->Size.y }
+				);
+			}
+		}
+		
+
+		// TODO: Add Gizmo here...
 
 		////TODO: This has to be fully reworked. This is not good. 
 		//Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
@@ -106,12 +132,11 @@ namespace LAG
 
 	bool ToolsManager::IsToolOpen(Hash64 toolID)
 	{
-		for (const auto& it : m_Tools)
-			if (it->ID() == toolID)
-				return it->IsOpen();
-
-		//Return false if tool hasn't been found.
-		ERROR("Tool with ID \"{0}\" not found.", toolID);
+		if (const auto& it = m_Tools.find(toolID); it != m_Tools.end())
+			return it->second->IsOpen();
+		else
+			CRITICAL("Failed to find tool with ID \"{0}\".", toolID);
+		
 		return false;
 	}
 

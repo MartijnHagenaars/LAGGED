@@ -11,10 +11,16 @@ namespace LAG
 #ifdef _MSC_VER
 			std::string_view funcStr = __FUNCSIG__;
 			
-			std::string_view firstSubStr = "GetCleanTypeName";
-			size_t first = funcStr.find(firstSubStr) + firstSubStr.length() + 1;
+			std::string_view signatureSubStr = "GetCleanTypeName";
+			size_t first = funcStr.find(signatureSubStr) + signatureSubStr.length() + 1;
 			size_t last = funcStr.find_last_of('>') - first;
 			std::string_view cleanStr = funcStr.substr(first, last);
+
+			std::string_view structSigSubStr = "struct ", classSigSubStr = "class ";
+			if (size_t it = cleanStr.find(structSigSubStr); it != cleanStr.npos)
+				cleanStr = cleanStr.substr(it + structSigSubStr.length(), funcStr.length());
+			else if (size_t it = cleanStr.find(classSigSubStr); it != cleanStr.npos)
+				cleanStr = cleanStr.substr(it + classSigSubStr.length(), funcStr.length());
 
 			return cleanStr;
 #else

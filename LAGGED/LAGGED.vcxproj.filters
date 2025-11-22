@@ -18,7 +18,7 @@
     <ClCompile Include="src\Editor\ToolsManager.cpp" />
     <ClCompile Include="src\Editor\Tools\EntityViewer.cpp" />
     <ClCompile Include="imgui\ImGuizmo\ImGuizmo.cpp" />
-    <ClCompile Include="src\Editor\Tools\Gizmo.cpp" />
+    <ClCompile Include="src\Editor\Tools\GizmoViewer.cpp" />
     <ClCompile Include="src\ECS\Systems\BasicSystems.cpp" />
     <ClCompile Include="src\ECS\Systems\CameraSystem.cpp" />
     <ClCompile Include="imgui\ImGui\imgui.cpp" />
@@ -51,6 +51,7 @@
     <ClCompile Include="src\Editor\UI\EditorGuiHelper.cpp" />
     <ClCompile Include="src\ECS\Views.cpp" />
     <ClCompile Include="src\Utility\tiny_gltf.cpp" />
+    <ClCompile Include="src\Editor\UI\Gizmo.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Core\Resources\ResourceHandles.h" />
@@ -60,7 +61,7 @@
     <ClInclude Include="src\Editor\ToolBase.h" />
     <ClInclude Include="src\Editor\Tools\EntityViewer.h" />
     <ClInclude Include="imgui\ImGuizmo\ImGuizmo.h" />
-    <ClInclude Include="src\Editor\Tools\Gizmo.h" />
+    <ClInclude Include="src\Editor\Tools\GizmoViewer.h" />
     <ClInclude Include="src\ECS\Systems\BasicSystems.h" />
     <ClInclude Include="src\ECS\Systems\CameraSystem.h" />
     <ClInclude Include="imgui\ImGui\imconfig.h" />
@@ -121,6 +122,7 @@
     <ClInclude Include="src\ECS\Containers.h" />
     <ClInclude Include="src\ECS\Views.h" />
     <ClInclude Include="src\Utility\Hash.h" />
+    <ClInclude Include="src\Editor\UI\Gizmo.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="res\Shaders\OpenGL\FrameBuffer.pixel.glsl" />

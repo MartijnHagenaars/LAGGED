@@ -1,26 +1,22 @@
 #pragma once
-#include <vector>
+#include <memory>
+#include <unordered_map>
+
 #include "ToolBase.h"
+#include "UI/Gizmo.h"
 
 namespace LAG
 {
-	class Gizmo;
-	class EntityViewer;
-
-	class ImGuiDemoViewer;
-	class ImGuiStyleEditor;
-	class ToolBase;
-
 	class ToolsManager
 	{
 	public: 
-		ToolsManager() = default;
-		~ToolsManager() = default;
-
 		/// <summary>
 		/// Sets up all tools. Needs to be called on startup when the user wants to use the editor. 
 		/// </summary>
 		void Initialize();
+
+		template<typename T, typename... Args>
+		void RegisterTool(Args&& ...args);
 
 		/// <summary>
 		/// Removes all tools. Needs to be called on shutdown of the editor.
@@ -40,13 +36,22 @@ namespace LAG
 		void BeginDockSpace();
 		void EndDockSpace();
 
-		std::vector<ToolBase*> m_Tools;
+		/// <summary>
+		/// Map containing all registered tools as (unique_ptr) values, with an ID as the key. 
+		/// The ID is generated as a Hash64 of the tool's display name and is used for internal identification.
+		/// </summary>
+		std::unordered_map<Hash64, std::unique_ptr<ToolBase>> m_Tools;
 
-		//Gizmo* m_Gizmo = nullptr;
-		//EntityViewer* m_EntityViewer = nullptr;
-
-		//ImGuiDemoViewer* m_ImGuiDemoViewer = nullptr;
-		//ImGuiStyleEditor* m_ImGuiStyleEditor = nullptr;
+		std::unique_ptr<Gizmo> m_Gizmo;
 	};
+
+	template<typename T, typename... Args>
+	inline void ToolsManager::RegisterTool(Args&& ...args)
+	{
+		static_assert(std::is_base_of_v<ToolBase, T>, "Cannot register tool: T must be a subclass of ToolBase.");
+
+		constexpr Hash64 key = GetTypeHash64<T>();
+		auto newTool = m_Tools.emplace(key, std::make_unique<T>(std::forward<Args>(args)...));
+	}
 }
 

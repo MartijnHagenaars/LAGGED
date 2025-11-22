@@ -4,7 +4,9 @@
 namespace LAG
 {
 	ToolBase::ToolBase(ToolCategory cat, const std::string&& displayName) :
-		m_Category(cat), m_IsOpen(false), m_DisplayName(displayName), m_ID(StringToHash64(displayName))
+		m_DisplayName(displayName), 
+		m_Category(cat), 
+		m_IsOpen(false)
 	{
 	};
 
@@ -16,6 +18,7 @@ namespace LAG
 
 	void ToolBase::WindowEnd()
 	{
+		//ImGui::GetWindowSize();
 		ImGui::PopStyleVar();
 		ImGui::End();
 	}
