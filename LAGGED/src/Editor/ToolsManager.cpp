@@ -91,43 +91,12 @@ namespace LAG
 			}
 		}
 
-		// Draw gizmo
-		// TODO: Add toggle for enabling/disabling gizmo
-		if (true) 
-		{
-			EntityID cameraEntityID = CameraSystem::GetActiveCameraEntityID();
-			EntityID targetEntityID = static_cast<EntityViewer*>(m_Tools.at(GetTypeHash64<EntityViewer>()).get())->GetSelectedEntityID();
-			if (targetEntityID != ENTITY_NULL && cameraEntityID != ENTITY_NULL)
-			{
-				const ImGuiViewport* viewport = ImGui::GetMainViewport();
-				ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
-				ImVec2 viewportSize = viewport->Size;
-				ImVec2 viewportPos = viewport->Pos;
-
-				Gizmo::Render(
-					cameraEntityID, targetEntityID, 
-					Frame{ viewport->Pos.x, viewport->Pos.y, viewport->Size.x, viewport->Size.y }
-				);
-			}
-		}
-		
-
-		// TODO: Add Gizmo here...
-
-		////TODO: This has to be fully reworked. This is not good. 
-		//Entity cameraEntity = CameraSystem::GetActiveCameraEntity();
-		//Entity targetEntity = Entity(); //TODO: Implement properly...
-		//if (cameraEntity.Valid() && targetEntity.Valid())
-		//{
-		//	m_TempGizmoPtr->BeginWindow();
-		//	m_TempGizmoPtr->SetCameraEntity(&cameraEntity);
-		//	m_TempGizmoPtr->RenderGizmo(&targetEntity);
-		//	m_TempGizmoPtr->RenderViewManipulator();
-		//	m_TempGizmoPtr->EndWindow();
-		//}
+		// Update gizmo
+		EntityID cameraEntityID = CameraSystem::GetActiveCameraEntityID();
+		Gizmo::SetCameraID(CameraSystem::GetActiveCameraEntityID());
+		Gizmo::SetTargetID(static_cast<EntityViewer*>(m_Tools.at(GetTypeHash64<EntityViewer>()).get())->GetSelectedEntityID());
 
 		EndDockSpace();
-
 	}
 
 	bool ToolsManager::IsToolOpen(Hash64 toolID)

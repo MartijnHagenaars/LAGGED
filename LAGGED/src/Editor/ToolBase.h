@@ -32,8 +32,6 @@ namespace LAG
 
 		const std::string& GetDisplayName() const { return m_DisplayName; }
 
-
-
 	private:
 		std::string m_DisplayName;
 		ToolCategory m_Category;

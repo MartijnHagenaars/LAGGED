@@ -1,21 +1,18 @@
 #include "CameraViewport.h"
 
+#include <ImGui/imgui.h>
+
 #include "Core/Engine.h"
 #include "Platform/RenderBackend.h"
 
 #include "ECS/Scene.h"
 #include "ECS/Systems/CameraSystem.h"
 #include "ECS/Components/CameraComponent.h"
-
-#include "ImGui/imgui.h"
+#include "Editor/UI/Gizmo.h"
 
 namespace LAG
 {
 	CameraViewport::CameraViewport() : ToolBase(ToolCategory::Level, "Camera Viewport")
-	{
-	}
-
-	CameraViewport::~CameraViewport()
 	{
 	}
 
@@ -43,8 +40,10 @@ namespace LAG
 
 			GetRenderer()->OnResize(cameraComp->frameBuffer->GetSize().x, cameraComp->frameBuffer->GetSize().y);
 		}
-
 		ImGui::Image(cameraComp->frameBuffer->GetEditorHandle(), ImGui::GetContentRegionAvail(), ImVec2(0.f, 1.f), ImVec2(1.f, 0.f));
+		//Gizmo::Render( Frame{ ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowSize().x, ImGui::GetWindowSize().y } );
+		//ImGui::GetCurrentContext()->CurrentWindow->Pos
+		Gizmo::Render();
 
 		if (m_IsOpen != isWindowOpen)
 		{

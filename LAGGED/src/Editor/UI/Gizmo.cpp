@@ -26,31 +26,29 @@ namespace LAG
 	};
 
 
-	void Gizmo::Render(EntityID cameraID, EntityID targetID, const Frame& winFrame)
+	void Gizmo::Render()
 	{
-		Scene* sc = GetScene();
-		ImVec2 winPos = ImVec2(winFrame.x, winFrame.y);
-		ImVec2 winSize = ImVec2(winFrame.w, winFrame.h);
-		ImGuizmo::SetRect(winPos.x, winPos.y, winSize.x, winSize.y);
+		if (!s_TargetID || !s_CameraID)
+			return;
 
 		// Check if we have a (valid) camera and target transform
-		CameraComponent* camera = sc->GetComponent<CameraComponent>(cameraID);
-		TransformComponent* targetTransform = sc->GetComponent<TransformComponent>(targetID);
+		Scene* sc = GetScene();
+		CameraComponent* camera = sc->GetComponent<CameraComponent>(s_CameraID);
+		TransformComponent* targetTransform = sc->GetComponent<TransformComponent>(s_TargetID);
 		if (targetTransform == nullptr || camera == nullptr)
 			return;
 
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(winPos);
-		ImGui::SetNextWindowSize(winSize);
-		ImGui::SetNextWindowViewport(ImGui::GetMainViewport()->ID);
-		ImGui::Begin("Gizmo", 0,
-			ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoDecoration |
-			ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove |
-			ImGuiWindowFlags_NoDocking
-		);
+		ImVec2 viewportPos = ImGui::GetWindowPos();
+		ImVec2 viewportSize = ImGui::GetWindowSize();
+		ImVec2 clipMax = ImVec2(viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y);
 
 		ImGuizmo::Enable(true);
-		ImGuizmo::SetDrawlist();
+		ImGuizmo::SetRect(viewportPos.x, viewportPos.y, viewportSize.x, viewportSize.y);
+
+		const auto& sceneDrawList = ImGui::GetWindowDrawList();
+
+		ImGuizmo::SetDrawlist(sceneDrawList);
+		sceneDrawList->PushClipRect(viewportPos, { viewportPos.x + viewportSize.x, viewportPos.y + viewportSize.y });
 
 		glm::mat4 targetEntityMatrix = targetTransform->GetTransformMatrix();
 		if (ImGuizmo::Manipulate(&camera->viewMat[0][0], &camera->projMat[0][0],
@@ -61,8 +59,16 @@ namespace LAG
 		{
 			targetTransform->SetTransformMatrix(targetEntityMatrix);
 		}
+	}
 
-		ImGui::End();
+	void Gizmo::SetCameraID(EntityID camID)
+	{
+		s_CameraID = camID;
+	}
+
+	void Gizmo::SetTargetID(EntityID targetID)
+	{
+		s_TargetID = targetID;
 	}
 
 	GizmoDesc& Gizmo::GetDesc()

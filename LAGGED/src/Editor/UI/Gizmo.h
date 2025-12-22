@@ -8,8 +8,8 @@ namespace LAG
 	// TODO: Consider moving this somewhere else...
 	struct Frame
 	{
-		float x, y; // Position
-		float w, h; // Size
+		float x, y;
+		float w, h;
 	};
 
 	enum class GizmoOperation : unsigned char
@@ -27,7 +27,7 @@ namespace LAG
 
 	struct GizmoDesc
 	{
-		GizmoOperation operation{ GizmoOperation::Scale };
+		GizmoOperation operation{ GizmoOperation::Translate };
 		GizmoMode mode{ GizmoMode::World };
 
 		bool splitSnapAxis = false;
@@ -39,11 +39,17 @@ namespace LAG
 	class Gizmo
 	{
 	public:
-		static void Render(EntityID cameraID, EntityID targetID, const Frame& winFrame);
+		static void Render();
+
+		static void SetCameraID(EntityID camID);
+		static void SetTargetID(EntityID targetID);
 
 		static GizmoDesc& GetDesc();
 
 	private:
 		static inline GizmoDesc s_Desc = {};
+		static inline EntityID s_CameraID = ENTITY_NULL; 
+		static inline EntityID s_TargetID = ENTITY_NULL;
+
 	};
 }

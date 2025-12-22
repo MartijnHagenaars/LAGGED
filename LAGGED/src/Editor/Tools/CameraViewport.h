@@ -8,7 +8,6 @@ namespace LAG
 	{
 	public:
 		CameraViewport();
-		~CameraViewport();
 
 		void Render() override;
 
