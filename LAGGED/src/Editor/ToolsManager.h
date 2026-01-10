@@ -5,23 +5,17 @@
 #include "ToolBase.h"
 #include "UI/Gizmo.h"
 
+
 namespace LAG
 {
 	class ToolsManager
 	{
 	public: 
-		/// <summary>
-		/// Sets up all tools. Needs to be called on startup when the user wants to use the editor. 
-		/// </summary>
 		void Initialize();
+		void Shutdown();
 
 		template<typename T, typename... Args>
 		void RegisterTool(Args&& ...args);
-
-		/// <summary>
-		/// Removes all tools. Needs to be called on shutdown of the editor.
-		/// </summary>
-		void Shutdown();
 
 		void PresentEditor();
 
@@ -35,6 +29,9 @@ namespace LAG
 	private:
 		void BeginDockSpace();
 		void EndDockSpace();
+
+		void LoadToolLayout();
+		void SaveToolLayout();
 
 		/// <summary>
 		/// Map containing all registered tools as (unique_ptr) values, with an ID as the key. 

@@ -56,7 +56,7 @@ namespace LAG
 		/// Checks whether an entity with a specific ID exists.
 		/// </summary>
 		/// <returns>Returns true if an entity with EntityID exists.</returns>
-		bool IsValid(EntityID id);
+		bool Exists(EntityID id);
 
 		/// <summary>
 		/// Return the number of active entities

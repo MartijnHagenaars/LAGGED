@@ -9,7 +9,7 @@ namespace LAG
 {
 	std::string FileIO::Read(Directory dir, const std::string& path)
 	{
-		if (!IsValid(dir, path))
+		if (!Exists(dir, path))
 		{
 			ERROR("Tried to read a file that does not exist: {0}", GetPath(dir, path));
 			return std::string();
@@ -38,12 +38,12 @@ namespace LAG
 			file << data;
 	}
 
-	bool FileIO::IsValid(Directory directory, const std::string& path)
+	bool FileIO::Exists(Directory directory, const std::string& path)
 	{
-		return IsValid(GetPath(directory, path));
+		return Exists(GetPath(directory, path));
 	}
 
-	bool FileIO::IsValid(const std::string& path)
+	bool FileIO::Exists(const std::string& path)
 	{
 		return std::filesystem::exists(path);
 	}
@@ -56,7 +56,7 @@ namespace LAG
 		case Directory::Assets: return "res/Assets/";
 		case Directory::Models: return "res/Assets/Models/";
 		case Directory::Shaders: return "res/Shaders/OpenGL/";
-		case Directory::Saves: return "res/Saves";
+		case Directory::Saves: return "res/Saves/";
 		case Directory::Logs: return "Logs/";
 		default:
 			CRITICAL("Incorrect directory type.");
@@ -71,7 +71,7 @@ namespace LAG
 
 	std::vector<std::string> FileIO::GetAllFilesInDirectory(const std::string& path, bool useRelativePath)
 	{
-		if (!IsValid(path))
+		if (!Exists(path))
 		{
 			CRITICAL("Cannot get all files in directory: path ({0}) is incorrect.", path);
 			return std::vector<std::string>();
@@ -98,7 +98,7 @@ namespace LAG
 
 	std::vector<std::string> FileIO::GetAllSubDirectories(Directory dir, const std::string& path, bool useRelativePath)
 	{
-		if (!IsValid(dir, path))
+		if (!Exists(dir, path))
 		{
 			ERROR("Cannot get all subdirectories in directory: path ({0}) is incorrect.", GetPath(dir, path));
 			return std::vector<std::string>();

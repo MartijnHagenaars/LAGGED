@@ -10,7 +10,7 @@
 void Chunk::Load(const glm::vec2& position)
 {
 	LAG::Scene* sc = LAG::GetScene();
-	if (!sc->IsValid(m_EntityID))
+	if (!sc->Exists(m_EntityID))
 	{
 		std::string entityName = "Terrain (" + std::to_string(static_cast<int>(position.x)) + ", " + std::to_string(static_cast<int>(position.y)) + ")";
 		m_EntityID = sc->AddEntity(entityName);
@@ -35,7 +35,7 @@ void Chunk::Load(const glm::vec2& position)
 void Chunk::Unload()
 {
 	LAG::Scene* sc = LAG::GetScene();
-	if (sc->IsValid(m_EntityID))
+	if (sc->Exists(m_EntityID))
 	{
 		//TODO: The user should not have to do this. There should be some sort of function that gets all components and checks if they have unload functions.
 		//		If they do, the Unload function is called.

@@ -51,8 +51,8 @@ namespace LAG
 					ImGui::PopID();
 				}
 			);
-			ImGui::EndChild();
 		}
+		ImGui::EndChild();
 
 		RenderProperties();
 	}
@@ -116,17 +116,17 @@ namespace LAG
 					const auto* compProps = compIt.Props();
 					if (!compProps || compProps->isHidden)
 						continue;
-					
+
 					// Context menu when right-clicking on header
 					std::string_view displayName = !compProps->displayName.empty() ? compProps->displayName : compIt.Name();
 					bool isHeaderOpen = ImGui::CollapsingHeader(displayName.data(), ImGuiTreeNodeFlags_None);
 					if (ImGui::BeginPopupContextItem())
 					{
 						ImGui::Text("%s (%s)", displayName.data(), compIt.Name().data());
-						
+
 						if (ImGui::Button("Remove Component"))
 							compToDelete = compIt.ID();
-						
+
 						ImGui::EndPopup();
 					}
 
@@ -155,7 +155,7 @@ namespace LAG
 		}
 
 		// HACK: Quick workaround for crash when removing component WITHIN archetype loop
-		if(compToDelete != 0)
+		if (compToDelete != 0)
 			scene->RemoveComponent(m_SelectedEntityID, compToDelete);
 	}
 }

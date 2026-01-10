@@ -53,7 +53,7 @@ void Game::Initialize()
 		transformComp->SetScale(glm::vec3(1.f));
 
 		sc->AddComponent<LAG::ModelComponent>(ent1, "res/Assets/Models/Helmet/DamagedHelmet.gltf");
-		sc->AddComponent<LAG::SinWaveComponent>(ent1, 6.f, 1.f);
+		//sc->AddComponent<LAG::SinWaveComponent>(ent1, 6.f, 1.f);
 	}
 
 	LAG::EntityID ent2 = sc->AddEntity("Light1");

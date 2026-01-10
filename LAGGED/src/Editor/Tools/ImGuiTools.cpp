@@ -13,7 +13,6 @@ namespace LAG
 		ImGui::ShowDemoWindow(&m_IsOpen);
 	}
 
-
 	ImGuiStyleEditor::ImGuiStyleEditor() : 
 		ToolBase(ToolCategory::Graphics, "ImGui Style Editor")
 	{

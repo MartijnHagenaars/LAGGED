@@ -1,6 +1,8 @@
 #pragma once
-#include <string>
+#include <any>
 #include <array>
+#include <deque>
+#include <string>
 
 #include "Utility/Hash.h"
 
@@ -18,10 +20,10 @@ namespace LAG
 
 		virtual void Render() = 0;
 
-		virtual void WindowBegin();
+		virtual bool WindowBegin();
 		virtual void WindowEnd();
 
-		void OpenTool() { m_IsOpen = true; }
+		void Open() { m_IsOpen = true; }
 		void ToggleTool() { m_IsOpen = !m_IsOpen; }
 		bool IsOpen() const { return m_IsOpen; }
 
@@ -30,7 +32,7 @@ namespace LAG
 		/// </summary>
 		ToolCategory Category() const { return m_Category; }
 
-		const std::string& GetDisplayName() const { return m_DisplayName; }
+		const std::string& DisplayName() const { return m_DisplayName; }
 
 	private:
 		std::string m_DisplayName;

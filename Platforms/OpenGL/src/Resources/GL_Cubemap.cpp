@@ -41,7 +41,7 @@ namespace LAG
 	bool Cubemap::Load()
 	{
 		const std::string& pathStr = GetPath().String();
-		if (!FileIO::IsValid(GetPath().String()))
+		if (!FileIO::Exists(GetPath().String()))
 		{
 			CRITICAL("Cannot load cubemap: directory {} is invalid.", pathStr);
 			return false;

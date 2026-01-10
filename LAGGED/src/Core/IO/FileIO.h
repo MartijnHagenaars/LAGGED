@@ -29,14 +29,14 @@ namespace LAG
 		/// <param name="directory">Directory to look in</param>
 		/// <param name="path">Relative path to the file</param>
 		/// <returns>Returns true when file path is valid.</returns>
-		static bool IsValid(Directory directory, const std::string& path);
+		static bool Exists(Directory directory, const std::string& path);
 
 		/// <summary>
 		/// Check if a file path is valid.
 		/// </summary>
 		/// <param name="path">Relative path to the file.</param>
 		/// <returns>Returns true when file path is valid.</returns>
-		static bool IsValid(const std::string& path);
+		static bool Exists(const std::string& path);
 
 		/// <summary>
 		/// Returns the path of the directory enum

@@ -331,7 +331,7 @@ namespace LAG
 		m_EntityArchetypes.erase(id);
 	}
 
-	bool Scene::IsValid(EntityID id)
+	bool Scene::Exists(EntityID id)
 	{
 		return (m_EntityArchetypes.find(id) != m_EntityArchetypes.end());
 	}

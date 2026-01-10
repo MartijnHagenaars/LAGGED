@@ -12,7 +12,7 @@ namespace LAG
 
 		// Overriding functions with empty implementations since 
 		// ImGui::ShowDemoWindow implements ImGui::Begin and ImGui::End itself...
-		void WindowBegin() override {}
+		bool WindowBegin() override { return true; }
 		void WindowEnd() override {}
 	};
 

@@ -10,17 +10,16 @@ namespace LAG
 	{
 	};
 
-	void ToolBase::WindowBegin()
+	bool ToolBase::WindowBegin()
 	{
-		ImGui::Begin(GetDisplayName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
+		bool res = ImGui::Begin(DisplayName().c_str(), &m_IsOpen, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoNav);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		return res;
 	}
 
 	void ToolBase::WindowEnd()
 	{
-		//ImGui::GetWindowSize();
 		ImGui::PopStyleVar();
 		ImGui::End();
 	}
-
 }
